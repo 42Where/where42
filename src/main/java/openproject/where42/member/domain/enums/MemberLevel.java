@@ -1,4 +1,4 @@
-package openproject.where42.members.domain.enums;
+package openproject.where42.member.domain.enums;
 
 public enum MemberLevel {
     administrator, member
