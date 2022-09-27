@@ -1,7 +1,5 @@
 package openproject.where42.members.domain;
 
-import lombok.Getter;
-import lombok.Setter;
 import openproject.where42.groups.domain.Groups;
 import openproject.where42.members.domain.enums.Cluster;
 import openproject.where42.members.domain.enums.Floor;
@@ -12,10 +10,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter @Setter
-public class Members extends Users{
-    @Id @GeneratedValue
+public class Administrators extends Users{
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
@@ -28,7 +25,7 @@ public class Members extends Users{
     private String msg;
 
     @Enumerated
-    private MemberLevel level;
+    private MemberLevel level = MemberLevel.administrator;
 
     @Enumerated
     private Cluster cluster;

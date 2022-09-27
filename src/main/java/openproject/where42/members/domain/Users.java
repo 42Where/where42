@@ -12,10 +12,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter @Setter
-public class Members extends Users{
-    @Id @GeneratedValue
+public abstract class Users {
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
