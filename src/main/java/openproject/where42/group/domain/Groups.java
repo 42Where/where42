@@ -1,6 +1,8 @@
 package openproject.where42.group.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import openproject.where42.member.domain.Member;
 
@@ -10,12 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-//@Table(name = "GROUPS", uniqueConstraints = {
-//        @UniqueConstraint(
-//                name = "groupname owner",
-//                columnNames = {"member_id", "group_name"}
-//        )
-//})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
         name = "GROUPS_SEQ_GENERATOR",
         sequenceName = "GROUPS_SEQ",
@@ -29,11 +26,11 @@ public class Groups {
     @Column(nullable = false)
     private String groupName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member owner;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMembers> groupMembers = new ArrayList<>();
 
 //    public Groups (String groupName, Member owner) { // 이렇게 생성자를 주면 id값이 제대로 발생할까?

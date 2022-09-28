@@ -1,6 +1,8 @@
 package openproject.where42.member.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import openproject.where42.group.domain.GroupMembers;
 import openproject.where42.group.domain.Groups;
@@ -15,8 +17,9 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends User {
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     List<Groups> groups = new ArrayList<>();
 
     private String msg;
