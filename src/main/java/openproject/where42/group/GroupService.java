@@ -18,7 +18,7 @@ public class GroupService {
     @Transactional // 기본적으로 false여서 안쓰면 false임
     public Long saveGroup(String groupName, Long ownerId) {
         Member owner = memberRepository.findById(ownerId);
-        Groups group = new Groups(null, groupName, owner); // 이렇게 하면 id가 자동으로 들어갈지?
+        Groups group = new Groups(groupName, owner); // 이렇게 하면 id가 자동으로 들어갈지?
         validateDuplicateMember(group);
         //groupRepository.save(group);
         return group.getId();

@@ -15,7 +15,7 @@ import javax.persistence.*;
         sequenceName = "GROUP_MEMBERS_SEQ",
         initialValue = 1, allocationSize = 1
 )
-public class GroupMembers {
+public class GroupMember {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GROUP_MEMBERS_SEQ")
     @Column(name = "group_member_id")

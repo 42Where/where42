@@ -1,6 +1,7 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.group.domain.Groups;
 import openproject.where42.member.domain.Member;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,9 @@ public class MemberRepository {
         // 근데 무조건 id로 찾아야 하는게, JPA에서 Entity관리할 때 id를 키로 find를 수행해서 어떻게든 id로 받는 방법을 찾아야할듯?
 
         return em.find(Member.class, name);
+    }
+
+    public Member findById(Long id) {
+        return null;
     }
 }

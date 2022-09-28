@@ -15,4 +15,11 @@ public class GroupRepository {
     public void save(Groups groups) {
         em.persist(groups);
     }
+
+    public void deleteGroup(Groups g) {
+    }
+
+    public Groups findById(Long groupId) {
+        return null;
+    }
 }
