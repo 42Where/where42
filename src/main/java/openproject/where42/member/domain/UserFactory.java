@@ -9,5 +9,6 @@ public class UserFactory {
             user = new Administrator();
         else if (memberLevel == MemberLevel.member)
             user = new Member();
+        return user;
     }
 }

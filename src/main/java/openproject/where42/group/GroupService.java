@@ -17,7 +17,7 @@ public class GroupService {
     @Transactional // 기본적으로 false여서 안쓰면 false임
     public Long saveGroup(Groups group) {
         validateDuplicateMember(group);
-        groupRepository.save(group);
+        //groupRepository.save(group);
         return group.getId();
     }
 
