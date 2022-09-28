@@ -7,5 +7,4 @@ public class MemberRepository {
         // 아이디로 멤버 찾기
         return null;
     }
-
 }

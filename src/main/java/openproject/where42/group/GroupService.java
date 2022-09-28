@@ -20,7 +20,7 @@ public class GroupService {
         Member owner = memberRepository.findById(ownerId);
         Groups group = new Groups(null, groupName, owner); // 이렇게 하면 id가 자동으로 들어갈지?
         validateDuplicateMember(group);
-        groupRepository.save(group);
+        //groupRepository.save(group);
         return group.getId();
     }
 
