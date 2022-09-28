@@ -24,7 +24,7 @@ public class GroupController {
     @PostMapping("/groups/new")
     public String createGroup(GroupForm form) {
         Member owner = memberService.findOne(form.getMemberName());
-        Groups group = new Groups(form.getGroupName(), owner);
+        Groups group = null;//new Groups(form.getGroupName(), owner);
         groupService.saveGroup(group);
         return "redirect:/";
     }

@@ -16,13 +16,6 @@ import java.util.List;
 @Entity
 @Getter @Setter
 public class Member extends User {
-    @Id @GeneratedValue
-    @Column(name = "member_id")
-    private Long id;
-
-    @Column(name = "member_name", nullable = false, unique = true)
-    private String name;
-
     @OneToMany(mappedBy = "owner")
     List<Groups> groups = new ArrayList<>();
 

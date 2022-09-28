@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository = new MemberRepository();
 
     public Member findOne(String name) {
         return memberRepository.findOne(name);

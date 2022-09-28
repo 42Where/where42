@@ -1,38 +1,19 @@
 package openproject.where42.member.domain;
 
-import openproject.where42.group.domain.Groups;
-import openproject.where42.member.domain.enums.Cluster;
-import openproject.where42.member.domain.enums.Floor;
-import openproject.where42.member.domain.enums.Locate;
-import openproject.where42.member.domain.enums.MemberLevel;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
+@MappedSuperclass
+@SequenceGenerator(
+        name = "MEMBERS_SEQ_GENERATOR",
+        sequenceName = "MEMBERS_SEQ",
+        initialValue = 1, allocationSize = 1
+)
 public abstract class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBERS_SEQ_GENERATOR")
     @Column(name = "member_id")
     private Long id;
 
     @Column(name = "member_name", nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "owner")
-    List<Groups> groups = new ArrayList<>();
-
-    private String msg;
-
-    @Enumerated
-    private MemberLevel level;
-
-    @Enumerated
-    private Cluster cluster;
-
-    @Enumerated
-    private Floor floor;
-
-    @Enumerated
-    private Locate locate;
 }
