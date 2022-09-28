@@ -1,18 +1,16 @@
-package openproject.where42.members.domain;
+package openproject.where42.member.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import openproject.where42.groups.domain.Groups;
-import openproject.where42.members.domain.enums.Cluster;
-import openproject.where42.members.domain.enums.Floor;
-import openproject.where42.members.domain.enums.Locate;
-import openproject.where42.members.domain.enums.MemberLevel;
+import openproject.where42.group.domain.Groups;
+import openproject.where42.member.domain.enums.Cluster;
+import openproject.where42.member.domain.enums.Floor;
+import openproject.where42.member.domain.enums.Locate;
+import openproject.where42.member.domain.enums.MemberLevel;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Users {
+public class Administrator extends User {
     @Id
     @GeneratedValue
     @Column(name = "member_id")
@@ -27,7 +25,7 @@ public abstract class Users {
     private String msg;
 
     @Enumerated
-    private MemberLevel level;
+    private MemberLevel level = MemberLevel.administrator;
 
     @Enumerated
     private Cluster cluster;

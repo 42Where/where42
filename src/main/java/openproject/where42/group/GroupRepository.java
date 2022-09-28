@@ -1,10 +1,10 @@
-package openproject.where42.groups;
+package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class GroupsRepository {
+public class GroupRepository {
 
 }

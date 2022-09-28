@@ -1,4 +1,4 @@
-package openproject.where42.groups.domain;
+package openproject.where42.group.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +14,8 @@ public class GroupMembers {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Groups group;
+    private Groups groups;
 
     @Column(nullable = false)
-    private String friend_name;
+    private String friendName;
 }
