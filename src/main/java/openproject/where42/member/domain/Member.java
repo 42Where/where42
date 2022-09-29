@@ -19,13 +19,13 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends User {
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Groups> groups = new ArrayList<>();
-
-    private String msg;
 
     @Enumerated
     private MemberLevel level;
+
+    private String msg;
 
     @Enumerated
     private Cluster cluster;
@@ -35,6 +35,11 @@ public class Member extends User {
 
     @Enumerated
     private Locate locate;
+
+    public Member(String name, MemberLevel level) {
+        this.name = name;
+        this.level = level;
+    }
 
     // 이미 해당 멤버가 그 그룹 이름을 가지고 있는지 확인하는 메서드
     public Boolean findGroupName(String groupName) {

@@ -5,6 +5,7 @@ import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Cluster;
 import openproject.where42.member.domain.enums.Floor;
 import openproject.where42.member.domain.enums.Locate;
+import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

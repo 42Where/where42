@@ -12,8 +12,8 @@ public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBERS_SEQ_GENERATOR")
     @Column(name = "member_id")
-    private Long id;
+    protected Long id;
 
     @Column(name = "member_name", nullable = false, unique = true)
-    private String name;
+    protected String name;
 }

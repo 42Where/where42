@@ -1,4 +1,4 @@
-package openproject.where42.group;
+package openproject.where42.group.repository;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
@@ -16,10 +16,11 @@ public class GroupRepository {
         em.persist(groups);
     }
 
-    public void deleteGroup(Groups g) {
+    public void deleteGroup(Groups group) {
+        em.remove(group);
     }
 
-    public Groups findById(Long groupId) {
-        return null;
+    public Groups findById(Long id) {
+        return em.find(Groups.class, id);
     }
 }
