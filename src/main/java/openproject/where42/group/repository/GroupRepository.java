@@ -23,4 +23,5 @@ public class GroupRepository {
     public Groups findById(Long id) {
         return em.find(Groups.class, id);
     }
+
 }
