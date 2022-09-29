@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.swing.*;
 
 @Entity
 @Getter @Setter
@@ -28,9 +27,4 @@ public class GroupMember {
 
     @Column(nullable = false)
     private String friendName;
-
-    public GroupMember(Groups group, String friendName) {
-        this.group = group;
-        this.friendName = friendName;
-    }
 }
