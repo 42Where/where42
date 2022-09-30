@@ -25,14 +25,14 @@ public class GroupController {
         return "redirect:/";
     }
 
-    @PostMapping("/groups/setting")
-    public String updateGroupName(Long groupId, GroupForm form) {
-        groupService.updateGroupName(groupId, form.getGroupName());
-        return "redirect:/";
-    }
+//    @PostMapping("/groups/setting")
+//    public String updateGroupName(Long groupId, GroupForm form) {
+//        groupService.updateGroupName(groupId, form.getGroupName());
+//        return "redirect:/";
+//    }
     @PostMapping("/groups/{groupId}/delete") // delete이런거 url로 하지 말랬는디..뭐 어떤식으로 구성해야할지 몰게씀.. 예외처리는 다 서비스에서 하는건가?
     public String deleteGroup(@PathVariable("groupId") Long groupId) {
-        groupService.deleteGroup(groupId);
+        //groupService.deleteGroup(groupId);
         return "redirect:/";
     }
 }
