@@ -27,6 +27,12 @@ public class GroupController {
         return "redirect:/";
     }
 
+//    @PostMapping("/groups/setting")
+//    public String updateGroupName(Long groupId, GroupForm form) {
+//        groupService.updateGroupName(groupId, form.getGroupName());
+//        return "redirect:/";
+//    }
+
     @GetMapping("/groups/setting/name")
     public String createUpdateForm(Model model) {
         model.addAttribute("form", new GroupForm());
@@ -46,7 +52,7 @@ public class GroupController {
 
     @PostMapping("/groups/{groupId}/delete") // delete이런거 url로 하지 말랬는디..뭐 어떤식으로 구성해야할지 몰게씀.. 예외처리는 다 서비스에서 하는건가?
     public String deleteGroup(@PathVariable("groupId") Long groupId) { // 이거 겟매핑이 필요한가? 걍 id만 보내주면 되는데
-        groupService.deleteGroup(groupId);
+        //groupService.deleteGroup(groupId);
         return "redirect:/";
     }
 }

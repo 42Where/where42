@@ -17,9 +17,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends User {
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Groups> groups = new ArrayList<>();
-
     @Enumerated
     private MemberLevel level;
 
