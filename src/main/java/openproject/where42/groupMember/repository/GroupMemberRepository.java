@@ -3,6 +3,7 @@ package openproject.where42.groupMember.repository;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.groupMember.domain.GroupMember;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
