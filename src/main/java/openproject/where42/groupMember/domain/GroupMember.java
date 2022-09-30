@@ -29,8 +29,7 @@ public class GroupMember {
     @Column(nullable = false)
     private String friendName;
 
-    public GroupMember(Groups group, String friendName) {
-        this.group = group;
+    public GroupMember(String friendName) {
         this.friendName = friendName;
     }
 }
