@@ -3,15 +3,12 @@ package openproject.where42.member.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.group.domain.Groups;
 import openproject.where42.member.domain.enums.Cluster;
 import openproject.where42.member.domain.enums.Floor;
 import openproject.where42.member.domain.enums.Locate;
 import openproject.where42.member.domain.enums.MemberLevel;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -35,7 +32,6 @@ public class Member extends User {
         this.name = name;
         this.level = level;
     }
-
     public void updatePersonalMsg(String msg) {
         this.msg = msg;
     }

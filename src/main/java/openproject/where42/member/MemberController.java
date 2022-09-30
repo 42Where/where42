@@ -37,4 +37,6 @@ public class MemberController {
         memberService.updateLocate(form.getMemberId(), form.getCluster(), form.getFloor(), form.getLocate());
         return "redirect:/profile";
     }
+
+    // 요청자에 대한 정보 반환해주는 컨트롤러 만들어야 함 (h)
 }
