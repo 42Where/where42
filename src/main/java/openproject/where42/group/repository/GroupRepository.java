@@ -25,4 +25,10 @@ public class GroupRepository {
     public Groups findById(Long id) {
         return em.find(Groups.class, id);
     }
+
+    public Groups findByName(String name) {
+        return em.createQuery("select g from Groups g where g.groupName = :name", Groups.class)
+                .setParameter("name", name)
+                .getSingleResult();
+    }
 }
