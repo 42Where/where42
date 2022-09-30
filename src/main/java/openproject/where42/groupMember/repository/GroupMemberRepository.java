@@ -17,8 +17,8 @@ public class GroupMemberRepository {
         em.persist(groupMember);
     }
 
-    public void deleteGroupMember(Long id) {
-        em.remove(id);
+    public void deleteGroupMember(GroupMember groupMember) {
+        em.remove(groupMember);
     }
 
     public void deleteGroupMembers(List<GroupMember> groupMembers) {

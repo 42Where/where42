@@ -18,10 +18,10 @@ public class MemberRepository {
         em.persist(member);
     }
 
-    public List<Member> findOne(String name) {
+    public Member findName(String name) {
         return em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
                 .setParameter("name", name)
-                .getResultList();
+                .getSingleResult();
     }
 
     public Member findById(Long id) {
