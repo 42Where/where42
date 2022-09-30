@@ -3,8 +3,6 @@ package openproject.where42.member.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import openproject.where42.groupMember.domain.GroupMember;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.member.domain.enums.Cluster;
 import openproject.where42.member.domain.enums.Floor;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends User {
     @Enumerated
@@ -36,5 +34,15 @@ public class Member extends User {
     public Member(String name, MemberLevel level) {
         this.name = name;
         this.level = level;
+    }
+
+    public void updatePersonalMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public void updateLocate(Cluster cluster, Floor floor, Locate locate) {
+        this.cluster = cluster;
+        this.floor = floor;
+        this.locate = locate;
     }
 }
