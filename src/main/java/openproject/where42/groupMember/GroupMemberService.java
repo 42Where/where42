@@ -22,7 +22,7 @@ public class GroupMemberService {
 		// 엔티티 조회
 		Groups group = groupRepository.findById(groupId);
 
-		GroupMember groupMember = new GroupMember(group, friend_name);
+		GroupMember groupMember = new GroupMember(friend_name, group);
 		groupMemberRepository.save(groupMember);
 		return groupMember.getId();
 	}
@@ -34,8 +34,8 @@ public class GroupMemberService {
 //		}
 //	}
 
-	public void deleteGroupMember(Long groupMemberId) {
-		groupMemberRepository.deleteGroupMember(groupMemberId);
+	public void deleteGroupMember(GroupMember groupMember) {
+		groupMemberRepository.deleteGroupMember(groupMember);
 	}
 
 	public void deleteGroupMembers(ArrayList<GroupMember> groupMembers) {

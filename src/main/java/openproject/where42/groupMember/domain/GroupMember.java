@@ -10,7 +10,7 @@ import javax.persistence.*;
 import javax.swing.*;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
         name = "GROUPMEMBERS_SEQ_GENERATOR",
