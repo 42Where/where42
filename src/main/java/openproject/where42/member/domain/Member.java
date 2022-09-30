@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import openproject.where42.group.domain.GroupMember;
+import openproject.where42.groupMember.domain.GroupMember;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.member.domain.enums.Cluster;
 import openproject.where42.member.domain.enums.Floor;

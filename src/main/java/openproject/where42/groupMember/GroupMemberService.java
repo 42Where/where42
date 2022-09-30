@@ -1,10 +1,10 @@
-package openproject.where42.group;
+package openproject.where42.groupMember;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.group.domain.GroupMember;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.group.repository.GroupMemberRepository;
 import openproject.where42.group.repository.GroupRepository;
+import openproject.where42.groupMember.domain.GroupMember;
+import openproject.where42.groupMember.repository.GroupMemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

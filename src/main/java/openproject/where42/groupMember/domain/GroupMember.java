@@ -1,9 +1,10 @@
-package openproject.where42.group.domain;
+package openproject.where42.groupMember.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import openproject.where42.group.domain.Groups;
 
 import javax.persistence.*;
 
