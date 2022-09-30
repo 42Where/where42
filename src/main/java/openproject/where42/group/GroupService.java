@@ -1,7 +1,7 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.group.domain.GroupMember;
+import openproject.where42.groupMember.domain.GroupMember;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.member.repository.MemberRepository;

@@ -1,7 +1,7 @@
-package openproject.where42.group;
+package openproject.where42.groupMember;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.group.dto.GroupMemberForm;
+import openproject.where42.groupMember.dto.GroupMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

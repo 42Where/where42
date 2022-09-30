@@ -1,4 +1,4 @@
-package openproject.where42.group.dto;
+package openproject.where42.groupMember.dto;
 
 import lombok.Getter;
 import lombok.Setter;
