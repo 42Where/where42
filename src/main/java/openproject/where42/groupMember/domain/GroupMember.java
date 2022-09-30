@@ -7,6 +7,7 @@ import lombok.Setter;
 import openproject.where42.group.domain.Groups;
 
 import javax.persistence.*;
+import javax.swing.*;
 
 @Entity
 @Getter @Setter
@@ -29,7 +30,8 @@ public class GroupMember {
     @Column(nullable = false)
     private String friendName;
 
-    public GroupMember(String friendName) {
+    public GroupMember(String friendName, Groups group) {
         this.friendName = friendName;
+        this.group = group;
     }
 }
