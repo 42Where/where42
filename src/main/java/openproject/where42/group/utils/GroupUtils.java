@@ -9,7 +9,7 @@ import java.util.List;
 public class GroupUtils {
     private Groups group;
 
-    public List<String> findAllFriends() {
+    public List<String> findAllFriends(Groups group) {
         List<GroupMember> groupMembers = group.getGroupMembers();
         List<String> friendsName = new ArrayList<String>();
 
@@ -19,5 +19,13 @@ public class GroupUtils {
             friendsName.add(f.getFriendName());
         }
         return friendsName;
+    }
+
+    public Boolean haveFriend(Groups group, String friendName) {
+        for (GroupMember f : group.getGroupMembers()) {
+            if (f.getFriendName() == friendName)
+                return true;
+        }
+        return false;
     }
 }
