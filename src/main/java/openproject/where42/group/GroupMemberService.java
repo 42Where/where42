@@ -22,25 +22,23 @@ public class GroupMemberService {
 		// 엔티티 조회
 		Groups group = groupRepository.findById(groupId);
 
-		validateDuplicateGroup(group, friend_name);
-//		GroupMember groupMember = new GroupMember(group, friend_name);
-//		groupMemberRepository.save(groupMember);
-//		return groupMember.getId();
+		GroupMember groupMember = new GroupMember(group, friend_name);
+		groupMemberRepository.save(groupMember);
+		return groupMember.getId();
 	}
 
-	private void validateDuplicateGroup(Groups group, String friend_name) {
-		for (GroupMember gm: group.getGroupMembers()){
-			if (gm.getFriendName() == friend_name)
-				throw new IllegalStateException("이미 등록된 친구입니다.");
-		}
-	}
+//	private void validateDuplicateGroupMember(Groups group, String friend_name) {
+//		for (GroupMember gm: group.getGroupMembers()){
+//			if (gm.getFriendName() == friend_name)
+//				throw new IllegalStateException("이미 등록된 친구입니다.");
+//		}
+//	}
 
 	public void deleteGroupMember(Long groupMemberId) {
-//		groupMemberRepository.delete(groupMemberId);
+		groupMemberRepository.deleteGroupMember(groupMemberId);
 	}
 
 	public void deleteGroupMembers(ArrayList<GroupMember> groupMembers) {
-//		for(GroupMember g: groupMembers)
-//			groupMemberRepository.delete(g.getId());
+		groupMemberRepository.deleteGroupMembers(groupMembers);
 	}
 }
