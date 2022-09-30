@@ -27,27 +27,16 @@ public class GroupController {
         return "redirect:/";
     }
 
-//    @PostMapping("/groups/setting")
-//    public String updateGroupName(Long groupId, GroupForm form) {
-//        groupService.updateGroupName(groupId, form.getGroupName());
-//        return "redirect:/";
-//    }
-
     @GetMapping("/groups/setting/name")
     public String createUpdateForm(Model model) {
         model.addAttribute("form", new GroupForm());
         return "groups/createGroupForm";
     }
 
-    @PostMapping("/groups/setting/name")
-    public String updateGroupName(GroupForm form) {
-        groupService.updateGroupName(form.getMemberId(), form.getGroupName());
+    @PostMapping("/groups/setting")
+    public String updateGroupName(Long groupId, GroupForm form) {
+        groupService.updateGroupName(groupId, form.getGroupName());
         return "redirect:/";
-    }
-
-    @PostMapping("/groups/setting/add")
-    public List<String> searchPositiveFriends(Long groupId) { // 제이슨으로 고칠거임 아무튼 제이슨임
-        return groupService.findAllNotIncludes(groupId); // 재배와 매개변수 협의 필요
     }
 
     @PostMapping("/groups/{groupId}/delete") // delete이런거 url로 하지 말랬는디..뭐 어떤식으로 구성해야할지 몰게씀.. 예외처리는 다 서비스에서 하는건가?

@@ -16,15 +16,15 @@ public class MemberUtils {// 이미 해당 멤버가 그 그룹 이름을 가지
     private int inOutState;
     private String seat;
 
-    public MemberUtils getMyInfo(Member member) { // 내 상태 조회 메소드
-        if (api ok) // api 자리 정보 있으면 -> 무조건 출근
-            return getMyAutoInfo(member); // api 정보를 같이 넘겨줄 수 있나?
-        else{
-            if (42 hane is 출근)
-                return getMySelfInfo(member);
+    //내 상태 조회 메소드
+    public MemberUtils getMyInfo(Member member) {
+        if (42 hane is 출근) {
+            if (api_ok) // api 자리 정보 있으면
+                return getMyAutoInfo(member); // api 정보 다시 조회 안하게 매개 변수로 넘겨 줄 수 있는지?
             else
-                return getMyOutInfo(member);
+                return getMySelfInfo(member);
         }
+        return getMyOutInfo(member);
     }
     private MemberUtils getMyAutoInfo(Member member) {
         this.flag = 0; // 자동 정보 플래그

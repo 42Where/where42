@@ -3,13 +3,9 @@ package openproject.where42.group.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import openproject.where42.groupMember.domain.GroupMember;
 import openproject.where42.member.domain.Member;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
