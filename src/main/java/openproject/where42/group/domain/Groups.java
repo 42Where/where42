@@ -34,7 +34,8 @@ public class Groups {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> groupMembers = new ArrayList<>();
 
-    public Groups (String groupName) { // 이렇게 생성자를 주면 id값이 제대로 발생할까?
+    public Groups (String groupName, Member owner) { // 이렇게 생성자를 주면 id값이 제대로 발생할까?
+        this.owner = owner;
         this.groupName = groupName;
     }
 
