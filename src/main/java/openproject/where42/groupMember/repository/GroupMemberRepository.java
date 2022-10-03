@@ -1,7 +1,9 @@
 package openproject.where42.groupMember.repository;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.group.domain.Groups;
 import openproject.where42.groupMember.domain.GroupMember;
+import openproject.where42.member.domain.Member;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,12 @@ public class GroupMemberRepository {
 
     public void save(GroupMember groupMember) {
         em.persist(groupMember);
+    }
+
+    public void multiSave(List<GroupMember> groupMembers) {
+        for (GroupMember groupMember : groupMembers) {
+            em.persist(groupMember);
+        }
     }
 
     public void deleteGroupMember(GroupMember groupMember) {
