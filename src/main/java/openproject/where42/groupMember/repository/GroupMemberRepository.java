@@ -8,7 +8,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,23 +20,79 @@ public class GroupMemberRepository {
 
     private final EntityManager em;
 
+    // 객체 생성
     public void save(GroupMember groupMember) {
         em.persist(groupMember);
     }
 
+    // 다중 친구 그룹 추가
     public void multiSave(List<GroupMember> groupMembers) {
         for (GroupMember groupMember : groupMembers) {
             em.persist(groupMember);
         }
     }
 
+    // 해당 친구가 포함되지 않은 그룹 목록 front 반환
+    public List<String> notIncludeGroupByFriend(Member member, GroupMember groupMember) {
+        List<Groups> groups = em.createQuery("select g from Groups g where g.owner = :member", Groups.class)
+                .setParameter("member", member)
+                .getResultList();
+        List<String> result = new ArrayList<>();
+        for (Groups group : groups) {
+            String name = em.createQuery("select gm from GroupMember gm where gm.friendName = :groupMember", GroupMember.class)
+                    .setParameter("groupMember", groupMember)
+                    .getSingleResult()
+                    .getFriendName();
+            if (name == null)
+                result.add(group.getGroupName());
+        }
+        return result;
+    }
+
+    // 해당 그룹에 포함되지 않는 친구 목록 front 반환
+    public List<String> notIncludeFriendByGroup(Member member, Groups group) {
+        List<GroupMember> friends = em.createQuery("select gs from GroupMember gs where gs.group = :group", GroupMember.class)
+                .setParameter("group", "friends")
+                .getResultList();
+        List<GroupMember> groupMembers = em.createQuery("select gs from GroupMember gs where gs.group = :group", GroupMember.class)
+                .setParameter("group", group)
+                .getResultList();
+        Map<String, Boolean> friendsMap = new HashMap<>();
+        for (GroupMember groupMember : friends) {
+            friendsMap.put(groupMember.getFriendName(), true);
+        }
+        List<String> result = new ArrayList<>();
+        for (GroupMember groupMember : groupMembers) {
+            if (friendsMap.get(groupMember.getGroup()) == null)
+                result.add(groupMember.getFriendName());
+        }
+        return result;
+    }
+
+    // 한명 삭제 그룹 멤버 DB 삭제
     public void deleteGroupMember(GroupMember groupMember) {
         em.remove(groupMember);
     }
 
+    // 다중 친구 그룹 삭제
     public void deleteGroupMembers(List<GroupMember> groupMembers) {
         for (GroupMember groupMember : groupMembers) {
             em.remove(groupMember.getId());
+        }
+    }
+
+    // 친구가 해당된 모든 그룹에서 삭제하기
+    public void deleteFriendsGroupByName(Member member, String name) {
+        List<Groups> groups = em.createQuery("select g from Groups g where g.owner = :member", Groups.class)
+                .setParameter("member", member)
+                .getResultList();
+        for (Groups group : groups) {
+            GroupMember groupMember = em.createQuery("select gm from GroupMember gm where gm.group = :group and gm.friendName = :name", GroupMember.class)
+                    .setParameter("group", group)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            if (groupMember != null)
+                em.remove(groupMember);
         }
     }
 }
