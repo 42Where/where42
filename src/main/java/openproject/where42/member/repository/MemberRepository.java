@@ -34,6 +34,25 @@ public class MemberRepository {
         return em.find(Member.class, id);
     }
 
+    public Boolean checkMemberByName(String name) {
+        Member member = em.createQuery("select m from Member m where m.name = :name", Member.class)
+                .setParameter("name", name)
+                .getSingleResult();
+        if (member == null)
+            return false;
+        return true;
+    }
+
+    public Boolean checkFriendByName(String name) {
+        GroupMember friend = em.createQuery("select gm from GroupMember gm where gm.group.groupName = :groupname and gm.friendName = :name", GroupMember.class)
+                .setParameter("groupname", "friends")
+                .setParameter("name", name)
+                .getSingleResult();
+        if (friend == null)
+            return false;
+        return true;
+    }
+
 //    public List<String> findNotIncludes(String groupName) {
 //        List<Groups> groups = em.createQuery("select g from Groups g where g.groupName = :groupName or g.groupName = :friends", Groups.class)
 //                .setParameter("groupName", groupName)
