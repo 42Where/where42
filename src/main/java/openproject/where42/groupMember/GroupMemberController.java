@@ -1,6 +1,7 @@
 package openproject.where42.groupMember;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.groupMember.domain.GroupMember;
 import openproject.where42.groupMember.dto.GroupMemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,4 +30,12 @@ public class GroupMemberController {
 		groupMemberService.saveGroupMember(form.getFriend_name(), form.getGroupId());
 		return "redirect:/"; //영한씨가 홈에 보내라고 했다..
 	}
+
+	@GetMapping("/groupMember/news")
+	public String multicreateForm(Model model) {
+//		List<GroupMember> list;
+//		model.addAttribute("groupMemberForms", list);
+		return "???";
+	}
+
 }
