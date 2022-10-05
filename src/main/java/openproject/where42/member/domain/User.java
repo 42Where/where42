@@ -1,5 +1,7 @@
 package openproject.where42.member.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
 @MappedSuperclass
@@ -8,6 +10,7 @@ import javax.persistence.*;
         sequenceName = "MEMBERS_SEQ",
         initialValue = 1, allocationSize = 1
 )
+@Getter
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MEMBERS_SEQ_GENERATOR")
