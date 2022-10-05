@@ -41,7 +41,7 @@ public class GroupRepository {
     }
 
     public List<String> findGroupsByOwnerName(String name) {
-        return em.createQuery("select gs.groupName from Groups gs where gs.owner = :name", String.class)
+        return em.createQuery("select gs.groupName from Groups gs where gs.owner.name = :name", String.class)
                 .setParameter("name", name)
                 .getResultList();
     }
