@@ -35,7 +35,7 @@ public class GroupMemberService {
 		groupMemberRepository.multiSave(groupMemberList);
 	}
 
-	// 해당 친구가 포함되지 않은 그룹 목록 front 반환
+	// // 해당 친구가 포함되지 않은 그룹 목록 front 반환
 //	public List<String> notIncludeGroupByFriend(Member member, String friendName) {
 //		return groupMemberRepository.notIncludeGroupByFriend(member, friendName);
 //	}
