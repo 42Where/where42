@@ -42,21 +42,20 @@ public class MemberRepository {
                     .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
-            e.getMessage();
             return false;
         }
         return true;
     }
 
-    public Boolean checkFriendByName(String name) {
+    public Boolean checkFriendByMemberIdAndName(Long memberId, String name) {
         GroupMember friend;
         try {
-            friend = em.createQuery("select gm from GroupMember gm where gm.group.groupName = :groupname and gm.friendName = :name", GroupMember.class)
+            friend = em.createQuery("select gm from GroupMember gm where gm.group.owner.id = :memberId and gm.group.groupName = :groupname and gm.friendName = :name", GroupMember.class)
+                    .setParameter("memberId", memberId)
                     .setParameter("groupname", "friends")
                     .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
-            e.getMessage();
             return false;
         }
         return true;

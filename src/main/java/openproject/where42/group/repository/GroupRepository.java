@@ -20,29 +20,30 @@ public class GroupRepository {
         em.persist(groups);
     }
 
-    public void deleteGroup(Groups group) {
-        List<GroupMember> members = em.createQuery("select ms from GroupMember ms where ms.group = :group", GroupMember.class)
-                .setParameter("group", group)
+    public void deleteByGroupId(Long groupId) {
+        List<GroupMember> members = em.createQuery("select ms from GroupMember ms where ms.group.id = :groupId", GroupMember.class)
+                .setParameter("groupId", groupId)
                 .getResultList();
         for (GroupMember member : members) {
             em.remove(member);
         }
-        em.remove(group);
+        em.remove(groupId);
     }
 
     public Groups findById(Long id) {
         return em.find(Groups.class, id);
     }
 
-    public Groups findByName(String name) {
-        return em.createQuery("select g from Groups g where g.groupName = :name", Groups.class)
+    public Groups findByOwnerIdAndName(Long ownerId, String name) {
+        return em.createQuery("select g from Groups g where g.groupName = :name and g.owner.id = :ownerId", Groups.class)
+                .setParameter("ownerId", ownerId)
                 .setParameter("name", name)
                 .getSingleResult();
     }
 
-    public List<String> findGroupsByOwnerName(String name) {
-        return em.createQuery("select gs.groupName from Groups gs where gs.owner.name = :name", String.class)
-                .setParameter("name", name)
+    public List<String> findGroupsByOwnerId(Long ownerId) {
+        return em.createQuery("select gs.groupName from Groups gs where gs.owner.id = :ownerId", String.class)
+                .setParameter("ownerId", ownerId)
                 .getResultList();
     }
 }
