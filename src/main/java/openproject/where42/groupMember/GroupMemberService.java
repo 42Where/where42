@@ -6,6 +6,7 @@ import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupMember.domain.GroupMember;
 import openproject.where42.groupMember.repository.GroupMemberRepository;
 import openproject.where42.member.domain.Member;
+import org.apache.catalina.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,28 +36,31 @@ public class GroupMemberService {
 		groupMemberRepository.multiSave(groupMemberList);
 	}
 
-	// // 해당 친구가 포함되지 않은 그룹 목록 front 반환
-//	public List<String> notIncludeGroupByFriend(Member member, String friendName) {
-//		return groupMemberRepository.notIncludeGroupByFriend(member, friendName);
-//	}
+	// 해당 친구가 포함되지 않은 그룹 목록 front 반환 ---> API
+	public List<String> notIncludeGroupByFriend(Member member, String friendName) {
+		return groupMemberRepository.notIncludeGroupByFriend(member, friendName);
+	}
 
-	// 해당 그룹에 포함되지 않는 친구 목록 front 반환
+	// 해당 그룹에 포함되지 않는 친구 목록 front 반환 ---> API
 	public List<String> notIncludeFriendByGroup(Member member, Long groupId) {
 		Groups group = groupRepository.findById(groupId);
 		return groupMemberRepository.notIncludeFriendByGroup(member, group);
 	}
 
 	@Transactional
+//	public void deleteGroupMember(Long groupId, String friendName) {
 	public void deleteGroupMember(GroupMember groupMember) {
+//		Groups group = groupRepository.findById(groupId);
+//		GroupMember groupMember = groupMemberRepository.findByName(group, friendName); --> GroupMember타입으로 못 받아올 경우
 		groupMemberRepository.deleteGroupMember(groupMember);
 	}
 
 	@Transactional
-	public void deleteGroupMembers(ArrayList<GroupMember> groupMembers) {
+	public void deleteGroupMembers(List<GroupMember> groupMembers) {
 		groupMemberRepository.deleteGroupMembers(groupMembers);
 	}
 
-	// 친구가 해당된 모든 그룹에서 삭제하기
+	// 친구가 해당된 모든 그룹에서 삭제하기 --> 이거 어디서 불리는지 명확하지가 않아서 일단 보류
 	@Transactional
 	public void deleteFriendsGroupByName(Member member, String friendName) {
 		groupMemberRepository.deleteFriendsGroupByName(member, friendName);
