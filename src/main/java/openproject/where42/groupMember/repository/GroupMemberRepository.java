@@ -103,7 +103,7 @@ public class GroupMemberRepository {
     }
 
     // 그룹 속하는 멤버 리스트 리턴
-    public List<String> findGroupMemberListByGroupId(Long groupId) {
+    public List<String> findGroupMembersByGroupId(Long groupId) {
         return em.createQuery("select gm.friendName from GroupMember gm where gm.group.id = :groupId", GroupMember.class)
                 .setParameter("groupId", groupId)
                 .getResultList()
