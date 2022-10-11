@@ -112,4 +112,17 @@ public class GroupMemberRepository {
                 .sorted()
                 .collect(Collectors.toList());
     }
+
+    public List<String> findAllGroupMemberByOwnerId(Long ownerId) {
+        Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                .setParameter("groupName", "friends")
+                .setParameter("ownerId", ownerId)
+                .getSingleResult();
+        return em.createQuery("select gm.friendName from GroupMember gm where gm.group = :group", GroupMember.class)
+                .setParameter("group", group)
+                .getResultList()
+                .stream().map(groupMember -> groupMember.getFriendName())
+                .sorted()
+                .collect(Collectors.toList());
+    }
 }
