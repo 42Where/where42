@@ -1,0 +1,36 @@
+#Desktop {
+    height: 100%;
+}
+
+#Desktop #Icon {
+    left: 100px;
+}
+
+#Desktop #Icon > button {
+    width: 110px;
+    height: 110px;
+}
+
+#Desktop #Logo {
+    position: relative;
+    top: 50px;
+    z-index: 1;
+}
+
+#Desktop #Logo > img {
+    width: 1200px;
+}
+
+#Desktop #Character {
+    position: relative;
+    top: -50px;
+    margin-left: 1%;
+}
+
+#Desktop #Character > img {
+    width: 600px;
+}
+
+#Desktop #Login-button {
+    top: -50px;
+}

@@ -1,6 +1,23 @@
+// import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import './Login.css'
+import './Login_Desktop.css'
+import './Login_Laptop.css'
 
 function Login() {
+    const isDesktop = useMediaQuery({ query: '(min-width: 2561px)'})
+    const isLaptop = useMediaQuery({ query: '(max-width: 2560px)'})
+
+    return (
+        <div className="Login">
+            {isDesktop && <div id="Desktop"><Common/></div>}
+            {isLaptop && <div id="Laptop"><Common/></div>}
+        </div>
+    );
+}
+
+function Common() {
+    // const [modal, setModal] = useState(0);
     function clickDown() {
         const button = document.getElementById('Login-button');
         button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
@@ -13,18 +30,20 @@ function Login() {
     function contactClick() {
         window.open('https://github.com/5ganization', '_blank');
     }
-    function wikiClick() {
-        // #Main을 날리고 <div>를 올려서 텍스트로 사용방법 보여주기
-        // 우리는 친구 자리 찾기 페이지다~
-        // 로그인 하시면 메인에 친구 자리 뜨고~ 친구 검색해서 등록도 되고~
-        // 그룹 설정도 된다~~ 출퇴근을 위한 개인정보가 필요하다~
-        // 바로 가입하시라~~ 저희는 where42이다~
-    }
+    // function wikiClick() {
+    //     // #Main을 날리고 <div>를 올려서 텍스트로 사용방법 보여주기
+    //     // 우리는 친구 자리 찾기 페이지다~
+    //     // 로그인 하시면 메인에 친구 자리 뜨고~ 친구 검색해서 등록도 되고~
+    //     // 그룹 설정도 된다~~ 출퇴근을 위한 개인정보가 필요하다~
+    //     // 바로 가입하시라~~ 저희는 where42이다~
+    // }
+
     return (
-        <div className="Login">
+        <div id="Common">
+            {/* {modal === 1 ? <Modal/> : null} */}
             <div id="Icon">
                 <button id="contact" onClick={contactClick}></button>
-                <button id="wiki" onClick={wikiClick}></button>
+                <button id="wiki" /*onClick={()=>{setModal(1)}*/></button>
             </div>
             <div id="Main">
                 <div id="Logo">
@@ -36,7 +55,15 @@ function Login() {
                 <button id="Login-button" onMouseDown={clickDown} onMouseUp={clickUp}></button>
             </div>
         </div>
-    );
+    )
 }
+
+// function Modal() {
+//     return (
+//         <div id="Modal">
+//             hi!
+//         </div>
+//     )
+// }
 
 export default Login;
