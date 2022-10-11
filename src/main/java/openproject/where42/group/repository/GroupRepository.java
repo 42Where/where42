@@ -16,8 +16,9 @@ public class GroupRepository {
 
     private final EntityManager em;
 
-    public void save(Groups groups) {
+    public Long save(Groups groups) {
         em.persist(groups);
+        return groups.getId();
     }
 
     public void deleteByGroupId(Long groupId) {

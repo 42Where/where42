@@ -23,8 +23,9 @@ public class GroupMemberRepository {
     private final EntityManager em;
 
     // 객체 생성
-    public void save(GroupMember groupMember) {
+    public Long save(GroupMember groupMember) {
         em.persist(groupMember);
+        return groupMember.getId();
     }
 
     // 다중 친구 그룹 추가
