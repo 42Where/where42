@@ -1,13 +1,13 @@
-#Desktop {
+#Tablet {
     width: 100%;
     height: 100%;
 }
 
-#Desktop #Main {
+#Tablet #Main {
     margin-top: 5%;
 }
 
-#Desktop #Common #Main #Wiki {
+#Tablet #Common #Main #Wiki {
     width: 7%;
     max-width: 50px;
     padding-bottom: 7%;
@@ -17,27 +17,28 @@
     margin-left: 85%;
 }
 
-#Desktop #Common #Main #Logo {
+#Tablet #Common #Main #Logo {
     width: 100%;
     text-align: center;
 }
 
-#Desktop #Common #Main #Logo img {
-    width: 60%;
+#Tablet #Common #Main #Logo img {
+    width: 70%;
+    max-width: 600px;
 }
 
-#Desktop #Common #Main #Character {
+#Tablet #Common #Main #Character {
     width: 100%;
     text-align: center;
 }
 
-#Desktop #Common #Main #Character img {
+#Tablet #Common #Main #Character img {
     width: 40%;
     max-width: 340px;
     margin-left: 1.5%;
 }
 
-#Desktop #Common #Main #Login-button {
+#Tablet #Common #Main #Login-button {
     width: 25%;
     max-width: 200px;
     padding-bottom: 9.4%;

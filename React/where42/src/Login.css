@@ -1,15 +1,21 @@
 .Login {
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 100%;
 }
 
 #Common {
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }
 
 #Main {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center; /*컨텐츠 간 수직 정렬 (direction이 column이라 축이 바뀜*/
@@ -17,46 +23,21 @@
     align-items: center; /*컨텐츠 각각의 수평 정렬*/
 }
 
-#Icon {
-    width: 50%;
-    position: relative;
-}
-
-#Icon > button {
-    margin-right: 25px;
+#Wiki {
+    background-image: url("../public/img/wiki.svg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-color: transparent;
     border: 0;
     cursor: pointer;
-}
-
-#Icon #contact {
-    background-image: url("../public/img/contact.svg");
-}
-
-#Icon #wiki {
-    background-image: url("../public/img/wiki.svg");
 }
 
 #Login-button {
-    width: 300px;
-    height: 111px;
     cursor: pointer;
     background-image: url("../public/img/login_button.svg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-color: transparent;
     border: 0;
     position: relative;
-}
-
-#Modal {
-    z-index: 2;
-    width: 50%;
-    height: 100%;
-    position: relative;
-    top: 25%;
-    left: 25%;
-    border: 3px solid black;
 }

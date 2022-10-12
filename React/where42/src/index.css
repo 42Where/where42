@@ -1,13 +1,16 @@
 html {
   height: 100%;
+  width: 100%;
 }
 
 body {
-  margin: 0; /*자동 8px을 위한 강제 설정*/
   height: 100%;
+  width: 100%;
+  margin: 0; /*자동 8px을 위한 강제 설정*/
   background-color: #F6C4B7;
 }
 
 #root {
   height: 100%;
+  width: 100%;
 }
