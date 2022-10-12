@@ -1,0 +1,77 @@
+@font-face {
+    font-family: 'GmarketSansBold';
+    src: url('../public/fonts/GmarketSansBold.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('../public/fonts/GmarketSansMedium.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'GmarketSansLight';
+    src: url('../public/fonts/GmarketSansLight.otf') format('opentype');
+}
+
+#Modal {
+    position: absolute;
+    z-index: 2;
+    width: 70%;
+    height: 70%;
+
+    border : 4px grey;
+    border-style : solid;
+    border-radius: 25px;
+    margin-top : 10%;
+    margin-bottom: 20%;
+    margin-left : 15%;
+    margin-right: 15%;
+    background-color: white;
+}
+
+#ModalCancel {
+    position:absolute;
+    border-radius: 25%;
+    border : 3px grey;
+    border-style: solid;
+    top : 5%;
+    right : 3%;
+    width:50px;
+    height:50px;
+    text-align:center;
+    background-color: white;
+}
+
+#ModalCancel:after {
+    content: "\00d7";
+    font-size: 45pt;
+    color : grey;
+    line-height: 45px;
+}
+
+#ModalHeader {
+    position : absolute;
+    z-index : 4;
+    left : 33%;
+    top : 4%;
+    width : 30%;
+    height : 30%;
+    display : flex;
+    background-size: contain;
+    background-image : url("../public/img/logo_simple.svg");
+    background-repeat : no-repeat;
+}
+
+#ModalContent {
+    position : absolute;
+    font-family : GmarketSansMedium;
+    z-index: 3;
+    width : 94%;
+    height: 75%;
+    top : 20%;
+    left : 3%;
+    padding: 5%;
+    box-sizing: border-box;
+    border-radius : 25px;
+    background-color : grey;
+}
