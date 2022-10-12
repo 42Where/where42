@@ -23,8 +23,9 @@ public class GroupMemberRepository {
     private final EntityManager em;
 
     // 객체 생성
-    public void save(GroupMember groupMember) {
+    public Long save(GroupMember groupMember) {
         em.persist(groupMember);
+        return groupMember.getId();
     }
 
     // 다중 친구 그룹 추가
@@ -104,10 +105,24 @@ public class GroupMemberRepository {
 
     // 그룹 속하는 멤버 리스트 리턴
     public List<String> findGroupMembersByGroupId(Long groupId) {
-        return em.createQuery("select gm.friendName from GroupMember gm where gm.group.id = :groupId", GroupMember.class)
+        return em.createQuery("select gm from GroupMember gm where gm.group.id = :groupId", GroupMember.class)
                 .setParameter("groupId", groupId)
                 .getResultList()
                 .stream().map((groupMember) -> groupMember.getFriendName())
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> findAllGroupMemberByOwnerId(Long ownerId) {
+        Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                .setParameter("groupName", "friends")
+                .setParameter("ownerId", ownerId)
+                .getSingleResult();
+        return em.createQuery("select gm.friendName from GroupMember gm where gm.group = :group", GroupMember.class)
+                .setParameter("group", group)
+                .getResultList()
+                .stream().map(groupMember -> groupMember.getFriendName())
+                .sorted()
                 .collect(Collectors.toList());
     }
 }

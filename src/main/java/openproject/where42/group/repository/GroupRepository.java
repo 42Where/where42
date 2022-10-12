@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,8 +17,9 @@ public class GroupRepository {
 
     private final EntityManager em;
 
-    public void save(Groups groups) {
+    public Long save(Groups groups) {
         em.persist(groups);
+        return groups.getId();
     }
 
     public void deleteByGroupId(Long groupId) {
@@ -44,6 +46,8 @@ public class GroupRepository {
     public List<String> findGroupsByOwnerId(Long ownerId) {
         return em.createQuery("select gs.groupName from Groups gs where gs.owner.id = :ownerId", String.class)
                 .setParameter("ownerId", ownerId)
-                .getResultList();
+                .getResultList()
+                .stream().sorted()
+                .collect(Collectors.toList());
     }
 }
