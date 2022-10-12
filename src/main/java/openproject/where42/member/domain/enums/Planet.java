@@ -1,5 +1,5 @@
 package openproject.where42.member.domain.enums;
 
-public enum Cluster {
+public enum Planet {
     gaepo, seocho;
 }

@@ -48,6 +48,6 @@ public class MemberApiController {
     @GetMapping("/member/{memberId}/profile")
     public MemberForm memberProfile(@PathVariable("memberId") Long memberId) {
         Member member = memberRepository.findById(memberId);
-        return new MemberForm(member.getMsg(), member.getCluster(), member.getFloor(), member.getLocate());
+        return new MemberForm(member.getMsg(), member.getPlanet(), member.getFloor(), member.getPlace());
     }
 }

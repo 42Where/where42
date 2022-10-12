@@ -1,5 +1,5 @@
 package openproject.where42.member.domain.enums;
 
-public enum Locate {
+public enum Place {
     oasis, gyeongbokgung, jupiter;
 }
