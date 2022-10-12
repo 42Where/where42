@@ -2,9 +2,8 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.Cluster;
-import openproject.where42.member.domain.enums.Floor;
-import openproject.where42.member.domain.enums.Locate;
+import openproject.where42.member.domain.enums.Planet;
+import openproject.where42.member.domain.enums.Place;
 import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +22,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateLocate(Long memberId, Cluster cluster, Floor floor, Locate locate) {
+    public void updateLocate(Long memberId, Planet planet, int floor, int cluster, Place place) {
         Member member = memberRepository.findById(memberId);
 
-        member.updateLocate(cluster, floor, locate);
+        member.updateLocate(planet, floor, cluster, place);
     }
 
 }

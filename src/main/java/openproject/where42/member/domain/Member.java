@@ -3,9 +3,8 @@ package openproject.where42.member.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.member.domain.enums.Cluster;
-import openproject.where42.member.domain.enums.Floor;
-import openproject.where42.member.domain.enums.Locate;
+import openproject.where42.member.domain.enums.Planet;
+import openproject.where42.member.domain.enums.Place;
 import openproject.where42.member.domain.enums.MemberLevel;
 
 import javax.persistence.*;
@@ -20,13 +19,14 @@ public class Member extends User {
     private String msg;
 
     @Enumerated
-    private Cluster cluster;
+    private Planet planet;
+
+    private int floor;
+
+    private int cluster;
 
     @Enumerated
-    private Floor floor;
-
-    @Enumerated
-    private Locate locate;
+    private Place place;
 
     public Member(String name, MemberLevel level) {
         this.name = name;
@@ -36,9 +36,10 @@ public class Member extends User {
         this.msg = msg;
     }
 
-    public void updateLocate(Cluster cluster, Floor floor, Locate locate) {
-        this.cluster = cluster;
+    public void updateLocate(Planet planet, int floor, int cluster, Place place) {
+        this.planet = planet;
         this.floor = floor;
-        this.locate = locate;
+        this.cluster = cluster;
+        this.place = place;
     }
 }

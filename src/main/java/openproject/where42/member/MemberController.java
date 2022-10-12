@@ -2,7 +2,6 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.member.dto.LocateForm;
-import openproject.where42.member.dto.MemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,7 @@ public class MemberController {
 
     @PostMapping("/member/{memberId}/profile/locate")
     public String updateLocate(@PathVariable("memberId") Long memberId, @RequestBody LocateForm form) {
-        memberService.updateLocate(memberId, form.getCluster(), form.getFloor(), form.getLocate());
+        memberService.updateLocate(memberId, form.getPlanet(), form.getFloor(), form.getPlace());
         return "/member/{memberId}/profile";
     }
 }
