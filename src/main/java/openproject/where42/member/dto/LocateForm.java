@@ -10,7 +10,6 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter @Setter
 public class LocateForm {
-    private Long memberId;
     @NotEmpty
     private Cluster cluster;
     @NotEmpty

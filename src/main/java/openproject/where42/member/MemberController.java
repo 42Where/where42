@@ -6,7 +6,9 @@ import openproject.where42.member.dto.MemberForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,29 +16,21 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/profile/setting")
-    public String createMsgForm(Model model) {
-        model.addAttribute("form", new MemberForm());
-        return "profile/updateMsg";
+    @PostMapping("/member/{memberId}/profile/msg")
+    public String updatePersonalMsg(@PathVariable ("memberId") Long memberId, @RequestBody String msg) {
+        memberService.updatePersonalMsg(memberId, msg);
+        return "/member/{memberId}/profile";
     }
 
-    @PostMapping("/groups/setting")
-    public String updatePersonalMsg(MemberForm form) {
-        memberService.updatePersonalMsg(form.getMemberId(), form.getMsg());
-        return "redirect:/profile";
-    }
-
-    @GetMapping("/profile/setting")
+    @GetMapping("/member/{memberId}/profile/locate") // front form 객체 필요한지?, {} 매핑주소 뺴도 되는지..
     public String createLocateForm(Model model) {
         model.addAttribute("form", new LocateForm());
-        return "profile/updateLocate";
+        return "/member/{memberId}/profile/updateLocate";
     }
 
-    @PostMapping("/groups/setting")
-    public String updateLocate(LocateForm form) {
-        memberService.updateLocate(form.getMemberId(), form.getCluster(), form.getFloor(), form.getLocate());
-        return "redirect:/profile";
+    @PostMapping("/member/{memberId}/profile/locate")
+    public String updateLocate(@PathVariable("memberId") Long memberId, @RequestBody LocateForm form) {
+        memberService.updateLocate(memberId, form.getCluster(), form.getFloor(), form.getLocate());
+        return "/member/{memberId}/profile";
     }
-
-    // 요청자에 대한 정보 반환해주는 컨트롤러 만들어야 함 (h)
 }
