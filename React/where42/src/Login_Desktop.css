@@ -9,12 +9,12 @@
 
 #Desktop #Common #Main #Wiki {
     width: 5%;
-    max-width: 80px;
+    max-width: 100px;
     padding-bottom: 7%;
     position: absolute;
     top: 0px;
-    margin-top: 3%;
-    margin-left: 85%;
+    margin-top: 2.5%;
+    margin-left: 87%;
 }
 
 #Desktop #Common #Main #Logo {
@@ -24,7 +24,7 @@
 
 #Desktop #Common #Main #Logo img {
     width: 60%;
-    max-width: 1100px;
+    max-width: 1080px;
 }
 
 #Desktop #Common #Main #Character {
@@ -34,12 +34,12 @@
 
 #Desktop #Common #Main #Character img {
     width: 35%;
-    max-width: 500px;
+    max-width: 540px;
     margin-left: 1.5%;
 }
 
 #Desktop #Common #Main #Login-button {
     width: 20%;
-    max-width: 300px;
+    max-width: 320px;
     padding-bottom: 9.4%;
 }

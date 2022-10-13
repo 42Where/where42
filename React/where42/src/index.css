@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'GmarketSansBold';
+  src: url('../public/fonts/GmarketSansBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('../public/fonts/GmarketSansMedium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'GmarketSansLight';
+  src: url('../public/fonts/GmarketSansLight.otf') format('opentype');
+}
+
 html {
   height: 100%;
   width: 100%;

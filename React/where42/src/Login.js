@@ -4,12 +4,22 @@ import './Login.css'
 import './Login_Mobile.css'
 import './Login_Tablet.css'
 import './Login_Desktop.css'
+import './Login_Modal.css'
 
 function Login() {
     const isMobile = useMediaQuery({ query: '(max-width: 480px)'})
     const isTablet = useMediaQuery({ query: '(min-width: 481px) and (max-width: 1023px)'})
     const isDesktop = useMediaQuery({ query: '(min-width: 1024px)'})
     const [modal, setModal] = useState(0);
+    const xmlhttp = new XMLHttpRequest();
+    let   content = null;
+
+    xmlhttp.open("GET", "./wiki.txt", false);
+    xmlhttp.send();
+    if (xmlhttp.status === 200) {
+        content = xmlhttp.responseText;
+    }
+    /*이 방법은 줄바꿈을 무시하게 됨*/
 
     function Common() {
         function clickDown() {
@@ -41,9 +51,15 @@ function Login() {
     function Modal() {
         return (
             <div id="Modal">
-                <div id="ModalHeader"></div>
-                <button id="ModalCancel" onClick={()=>{setModal(0)}}></button>
-                <div id="ModalContent">내용을 쓰면 될것같아요.</div>
+                <div id="ModalWrapper">
+                    <div id="ModalHeader">
+                        <span>어디있니?</span>
+                    </div>
+                    <div id="ModalContent">{content}</div>
+                    <div id="ModalCancel">
+                        <button id="CancelButton" onClick={()=>{setModal(0)}}>닫기</button>
+                    </div>
+                </div>
             </div>
         )
     }
