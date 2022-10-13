@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupMember.domain.GroupMember;
+import openproject.where42.groupMember.domain.GroupMemberInfo;
 import openproject.where42.groupMember.repository.GroupMemberRepository;
 import openproject.where42.member.domain.Member;
+import openproject.where42.member.repository.MemberRepository;
 import org.apache.catalina.Group;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupMemberService {
+	private final MemberRepository memberRepository;
 	private final GroupMemberRepository groupMemberRepository;
 	private final GroupRepository groupRepository;
 
@@ -37,14 +40,13 @@ public class GroupMemberService {
 	}
 
 	// 해당 친구가 포함되지 않은 그룹 목록 front 반환 ---> API
-	public List<String> notIncludeGroupByFriend(Member member, String friendName) {
-		return groupMemberRepository.notIncludeGroupByFriend(member, friendName);
-	}
+//	public List<String> notIncludeGroupByFriend(Member member, String friendName) {
+//		return groupMemberRepository.notIncludeGroupByFriend(member, friendName);
+//	}
 
 	// 해당 그룹에 포함되지 않는 친구 목록 front 반환 ---> API
 	public List<String> notIncludeFriendByGroup(Member member, Long groupId) {
-		Groups group = groupRepository.findById(groupId);
-		return groupMemberRepository.notIncludeFriendByGroup(member, group);
+		return groupMemberRepository.notIncludeFriendByGroup(member, groupId);
 	}
 
 	@Transactional
@@ -65,6 +67,14 @@ public class GroupMemberService {
 	public void deleteFriendsGroupByName(Member member, String friendName) {
 		groupMemberRepository.deleteFriendsGroupByName(member, friendName);
 	}
+
+	public List<GroupMemberInfo> findGroupMemberInfo(List<String> nameList) {
+		List<GroupMemberInfo> result = null;
+		for (String i: nameList)
+			result.add(new GroupMemberInfo(memberRepository.findByName(i)));
+		return result;
+	}
+
 }
 
 //	private void validateDuplicateGroupMember(Groups group, String friend_name) {
