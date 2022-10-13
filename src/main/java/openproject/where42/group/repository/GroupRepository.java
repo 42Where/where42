@@ -43,11 +43,11 @@ public class GroupRepository {
                 .getSingleResult();
     }
 
-    public List<String> findGroupsByOwnerId(Long ownerId) {
-        return em.createQuery("select gs.groupName from Groups gs where gs.owner.id = :ownerId", String.class)
+    public List<Groups> findGroupsByOwnerId(Long ownerId) {
+        return em.createQuery("select gs.groupName from Groups gs where gs.owner.id = :ownerId", Groups.class)
                 .setParameter("ownerId", ownerId)
                 .getResultList()
-                .stream().sorted()
-                .collect(Collectors.toList());
+                .stream().filter((group) -> !(group.getGroupName().equals("friends") || group.getGroupName().equals("starred")))
+                .sorted().collect(Collectors.toList());
     }
 }
