@@ -15,6 +15,7 @@ function Login() {
     let   content = null;
 
     xmlhttp.open("GET", "./wiki.txt", false);
+    xmlhttp.overrideMimeType("text/html;charset=utf-8");
     xmlhttp.send();
     if (xmlhttp.status === 200) {
         content = xmlhttp.responseText;
