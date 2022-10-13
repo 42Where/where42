@@ -1,15 +1,13 @@
-package openproject.where42.groupMember.repository;
+package openproject.where42.groupFriend.repository;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.groupMember.domain.GroupMember;
+import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.member.domain.Member;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,20 +16,20 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class GroupMemberRepository {
+public class GroupFriendRepository {
 
     private final EntityManager em;
 
     // 객체 생성
-    public Long save(GroupMember groupMember) {
-        em.persist(groupMember);
-        return groupMember.getId();
+    public Long save(GroupFriend groupFriend) {
+        em.persist(groupFriend);
+        return groupFriend.getId();
     }
 
     // 다중 친구 그룹 추가
-    public void multiSave(List<GroupMember> groupMembers) {
-        for (GroupMember groupMember : groupMembers) {
-            em.persist(groupMember);
+    public void multiSave(List<GroupFriend> groupFriends) {
+        for (GroupFriend groupFriend : groupFriends) {
+            em.persist(groupFriend);
         }
     }
 
@@ -43,7 +41,7 @@ public class GroupMemberRepository {
         List<String> result = new ArrayList<>();
         for (Groups group : groups) {
             try {
-                GroupMember member2 = em.createQuery("select gm from GroupMember gm where gm.friendName = :friendName and gm.group = :group", GroupMember.class)
+                GroupFriend member2 = em.createQuery("select gm from GroupFriend gm where gm.friendName = :friendName and gm.group = :group", GroupFriend.class)
                         .setParameter("friendName", friendName)
                         .setParameter("group", group)
                         .getSingleResult();
@@ -56,20 +54,20 @@ public class GroupMemberRepository {
 
     // 해당 그룹에 포함되지 않는 친구 목록 front 반환
     public List<String> notIncludeFriendByGroup(Member member, Long groupId) {
-        List<GroupMember> friends = em.createQuery("select gs from GroupMember gs where gs.group.owner = :member and gs.group.groupName = :groupName", GroupMember.class)
+        List<GroupFriend> friends = em.createQuery("select gs from GroupFriend gs where gs.group.owner = :member and gs.group.groupName = :groupName", GroupFriend.class)
                 .setParameter("member", member)
                 .setParameter("groupName", "friends")
                 .getResultList();
-        List<GroupMember> groupMembers = em.createQuery("select gs from GroupMember gs where gs.group.owner = :member and gs.group.id = :groupId", GroupMember.class)
+        List<GroupFriend> groupFriends = em.createQuery("select gs from GroupFriend gs where gs.group.owner = :member and gs.group.id = :groupId", GroupFriend.class)
                 .setParameter("member", member)
                 .setParameter("groupId", groupId)
                 .getResultList();
         Map<String, Boolean> groupMap = new HashMap<>();
-        for (GroupMember groupMember : groupMembers) {
-            groupMap.put(groupMember.getFriendName(), true);
+        for (GroupFriend groupFriend : groupFriends) {
+            groupMap.put(groupFriend.getFriendName(), true);
         }
         List<String> result = new ArrayList<>();
-        for (GroupMember friend : friends) {
+        for (GroupFriend friend : friends) {
             if (groupMap.get(friend.getFriendName()) == null)
                 result.add(friend.getFriendName());
         }
@@ -77,14 +75,14 @@ public class GroupMemberRepository {
     }
 
     // 한명 삭제 그룹 멤버 DB 삭제
-    public void deleteGroupMember(GroupMember groupMember) {
-        em.remove(groupMember);
+    public void deleteGroupFriend(GroupFriend groupFriend) {
+        em.remove(groupFriend);
     }
 
     // 다중 친구 그룹 삭제
-    public void deleteGroupMembers(List<GroupMember> groupMembers) {
-        for (GroupMember groupMember : groupMembers) {
-            em.remove(groupMember.getId());
+    public void deleteGroupFriends(List<GroupFriend> groupFriends) {
+        for (GroupFriend groupFriend : groupFriends) {
+            em.remove(groupFriend.getId());
         }
     }
 
@@ -94,18 +92,18 @@ public class GroupMemberRepository {
                 .setParameter("member", member)
                 .getResultList();
         for (Groups group : groups) {
-            GroupMember groupMember = em.createQuery("select gm from GroupMember gm where gm.group = :group and gm.friendName = :friendName", GroupMember.class)
+            GroupFriend groupFriend = em.createQuery("select gm from GroupFriend gm where gm.group = :group and gm.friendName = :friendName", GroupFriend.class)
                     .setParameter("group", group)
                     .setParameter("friendName", friendName)
                     .getSingleResult();
-            if (groupMember != null)
-                em.remove(groupMember);
+            if (groupFriend != null)
+                em.remove(groupFriend);
         }
     }
 
     // 그룹 속하는 멤버 리스트 리턴
-    public List<String> findGroupMembersByGroupId(Long groupId) {
-        return em.createQuery("select gm from GroupMember gm where gm.group.id = :groupId", GroupMember.class)
+    public List<String> findGroupFriendsByGroupId(Long groupId) {
+        return em.createQuery("select gm from GroupFriend gm where gm.group.id = :groupId", GroupFriend.class)
                 .setParameter("groupId", groupId)
                 .getResultList()
                 .stream().map((groupMember) -> groupMember.getFriendName())
@@ -113,12 +111,12 @@ public class GroupMemberRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<String> findAllGroupMemberByOwnerId(Long ownerId) {
+    public List<String> findAllGroupFriendByOwnerId(Long ownerId) {
         Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
                 .setParameter("groupName", "friends")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm.friendName from GroupMember gm where gm.group = :group", GroupMember.class)
+        return em.createQuery("select gm.friendName from GroupFriend gm where gm.group = :group", GroupFriend.class)
                 .setParameter("group", group)
                 .getResultList()
                 .stream().map(groupMember -> groupMember.getFriendName())

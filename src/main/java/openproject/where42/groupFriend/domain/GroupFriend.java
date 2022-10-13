@@ -1,26 +1,24 @@
-package openproject.where42.groupMember.domain;
+package openproject.where42.groupFriend.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import openproject.where42.group.domain.Groups;
 
 import javax.persistence.*;
-import javax.swing.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
-        name = "GROUPMEMBERS_SEQ_GENERATOR",
-        sequenceName = "GROUP_MEMBERS_SEQ",
+        name = "GROUPFRIEND_SEQ_GENERATOR",
+        sequenceName = "GROUP_FRIEND_SEQ",
         initialValue = 1, allocationSize = 1
 )
-public class GroupMember {
+public class GroupFriend {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GROUP_MEMBERS_SEQ")
-    @Column(name = "group_member_id")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GROUP_FRIEND_SEQ")
+    @Column(name = "group_friend_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,7 +28,7 @@ public class GroupMember {
     @Column(nullable = false)
     private String friendName;
 
-    public GroupMember(String friendName, Groups group) {
+    public GroupFriend(String friendName, Groups group) {
         this.friendName = friendName;
         this.group = group;
     }
