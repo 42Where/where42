@@ -1,14 +1,11 @@
-package openproject.where42.groupMember.domain;
+package openproject.where42.groupFriend.domain;
 
 import lombok.*;
-import openproject.where42.groupMember.GroupMemberService;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.repository.MemberRepository;
-import org.springframework.stereotype.Service;
 
 @Getter
 @NoArgsConstructor
-public class GroupMemberInfo {
+public class GroupFriendInfo {
 
 	private String	name;
 	private String	img;
@@ -21,7 +18,7 @@ public class GroupMemberInfo {
 	private boolean	isMember;
 	private int		flag;
 
-	public GroupMemberInfo(Member member) {
+	public GroupFriendInfo(Member member) {
 		// 이거 그냥 api가 핵심인건가..!?
 //		img = 42api_call;
 //		inOutState = 42hane_api_call;

@@ -2,12 +2,10 @@ package openproject.where42.group.repository;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.groupMember.domain.GroupMember;
+import openproject.where42.groupFriend.domain.GroupFriend;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,10 +21,10 @@ public class GroupRepository {
     }
 
     public void deleteByGroupId(Long groupId) {
-        List<GroupMember> members = em.createQuery("select ms from GroupMember ms where ms.group.id = :groupId", GroupMember.class)
+        List<GroupFriend> members = em.createQuery("select ms from GroupFriend ms where ms.group.id = :groupId", GroupFriend.class)
                 .setParameter("groupId", groupId)
                 .getResultList();
-        for (GroupMember member : members) {
+        for (GroupFriend member : members) {
             em.remove(member);
         }
         em.remove(groupId);

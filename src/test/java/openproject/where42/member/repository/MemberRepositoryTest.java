@@ -2,8 +2,8 @@ package openproject.where42.member.repository;
 
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
-import openproject.where42.groupMember.domain.GroupMember;
-import openproject.where42.groupMember.repository.GroupMemberRepository;
+import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.groupFriend.repository.GroupFriendRepository;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
 import org.junit.Test;
@@ -14,12 +14,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,11 +24,12 @@ import static org.junit.Assert.*;
 public class MemberRepositoryTest {
     @Autowired MemberRepository memberRepository;
     @Autowired GroupRepository groupRepository;
-    @Autowired GroupMemberRepository groupMemberRepository;
+    @Autowired
+    GroupFriendRepository groupFriendRepository;
 
     Map<String, Member> members = new HashMap<>();
     Map<String, Groups> groups = new HashMap<>();
-    Map<String, GroupMember> groupMembers = new HashMap<>();
+    Map<String, GroupFriend> groupMembers = new HashMap<>();
 
     @Test
     @Rollback(value = false)
@@ -48,16 +46,16 @@ public class MemberRepositoryTest {
         Groups study = new Groups("study", jaebae);
         groups.put("study", study);
         groupRepository.save(study);
-        GroupMember sunghkim = new GroupMember("sunghkim", friends);
-        GroupMember hyunjcho = new GroupMember("hyunjcho", friends);
-        GroupMember sojoo = new GroupMember("sojoo", friends);
-        GroupMember heeskim = new GroupMember("heeskim", friends);
-        GroupMember jonkim = new GroupMember("jonkim", friends);
-        GroupMember yyoo = new GroupMember("yyoo", friends);
-        GroupMember dongchoi = new GroupMember("dongchoi", friends);
-        GroupMember jaewchoi = new GroupMember("jaewchoi", friends);
-        List<GroupMember> temp = List.of(sunghkim, hyunjcho, sojoo, heeskim, jonkim, yyoo, dongchoi, jaewchoi);
-        groupMemberRepository.multiSave(temp);
+        GroupFriend sunghkim = new GroupFriend("sunghkim", friends);
+        GroupFriend hyunjcho = new GroupFriend("hyunjcho", friends);
+        GroupFriend sojoo = new GroupFriend("sojoo", friends);
+        GroupFriend heeskim = new GroupFriend("heeskim", friends);
+        GroupFriend jonkim = new GroupFriend("jonkim", friends);
+        GroupFriend yyoo = new GroupFriend("yyoo", friends);
+        GroupFriend dongchoi = new GroupFriend("dongchoi", friends);
+        GroupFriend jaewchoi = new GroupFriend("jaewchoi", friends);
+        List<GroupFriend> temp = List.of(sunghkim, hyunjcho, sojoo, heeskim, jonkim, yyoo, dongchoi, jaewchoi);
+        groupFriendRepository.multiSave(temp);
     }
 
     @Test

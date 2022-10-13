@@ -1,19 +1,12 @@
 package openproject.where42.member.repository;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.group.domain.Groups;
-import openproject.where42.groupMember.domain.GroupMember;
+import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.member.domain.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -49,9 +42,9 @@ public class MemberRepository {
     }
 
     public Boolean checkFriendByMemberIdAndName(Long memberId, String name) {
-        GroupMember friend;
+        GroupFriend friend;
         try {
-            friend = em.createQuery("select gm from GroupMember gm where gm.group.owner.id = :memberId and gm.group.groupName = :groupname and gm.friendName = :name", GroupMember.class)
+            friend = em.createQuery("select gm from GroupFriend gm where gm.group.owner.id = :memberId and gm.group.groupName = :groupname and gm.friendName = :name", GroupFriend.class)
                     .setParameter("memberId", memberId)
                     .setParameter("groupname", "friends")
                     .setParameter("name", name)
