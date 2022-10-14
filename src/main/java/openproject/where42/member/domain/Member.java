@@ -18,15 +18,8 @@ public class Member extends User {
 
     private String msg;
 
-    @Enumerated
-    private Planet planet;
-
-    private int floor;
-
-    private int cluster;
-
-    @Enumerated
-    private Place place;
+    @Embedded
+    private Locate locate;
 
     public Member(String name, MemberLevel level) {
         this.name = name;
@@ -36,10 +29,7 @@ public class Member extends User {
         this.msg = msg;
     }
 
-    public void updateLocate(Planet planet, int floor, int cluster, Place place) {
-        this.planet = planet;
-        this.floor = floor;
-        this.cluster = cluster;
-        this.place = place;
+    public void updateLocate(Planet planet, int floor, int cluster, String spot) {
+        this.locate = new Locate(planet, floor, cluster, spot);
     }
 }
