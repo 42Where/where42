@@ -1,6 +1,7 @@
 package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
@@ -11,6 +12,7 @@ import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +22,7 @@ public class GroupFriendService {
 	private final MemberRepository memberRepository;
 	private final GroupFriendRepository groupFriendRepository;
 	private final GroupRepository groupRepository;
+	private final GroupService groupService;
 
 	// 친구 1명에 대한 그룹 추가
 	@Transactional
@@ -66,10 +69,21 @@ public class GroupFriendService {
 		groupFriendRepository.deleteFriendsGroupByName(member, friendName);
 	}
 
-	public List<GroupFriendInfo> findGroupFriendInfo(List<String> nameList) {
+	public List<GroupFriendInfo> findGroupFriendInfo(Long groupId) {
+		List<String> nameList = groupFriendRepository.findGroupFriendsByGroupId(groupId);
 		List<GroupFriendInfo> result = null;
 		for (String i: nameList)
 			result.add(new GroupFriendInfo(memberRepository.findByName(i)));
+		return result;
+	}
+
+	// 멤버의 모든 Group별 GroupFriend 반환
+	// API로 만들어서 해야하나 아님 페이로 연결해야하나~
+	public List<List<GroupFriendInfo>> findAllGroupFriendInfo(Long ownerId){
+		List<Groups> findGroups = groupService.findGroups(ownerId);
+		List<List<GroupFriendInfo>> result = null;
+		for (Groups i : findGroups)
+			result.add(findGroupFriendInfo(i.getId()));
 		return result;
 	}
 
