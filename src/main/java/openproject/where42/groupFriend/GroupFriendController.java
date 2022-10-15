@@ -3,6 +3,7 @@ package openproject.where42.groupFriend;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupService;
 import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.groupFriend.dto.GroupFriendForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,8 +50,8 @@ public class GroupFriendController {
 
 	@GetMapping("/groupFriend/{groupId}/delete")
 	public String deleteGroupFriend(@PathVariable("groupId") Long groupId, Model model) {
-//		List<GroupFriend> groupFriends = groupFriendService.groupFriendList(groupId); --> 그룹멤버 리스트를 줘야 화면에 뛰움
-//		model.addAttribute("groupFriends", groupFriends);
+		List<GroupFriendInfo> groupFriends = groupFriendService.findGroupFriendInfo(groupId);
+		model.addAttribute("groupFriends", groupFriends);
 		return "???";
 	}
 
@@ -62,8 +63,8 @@ public class GroupFriendController {
 
 	@GetMapping("/groupFriends/{groupId}/delete")
 	public String deleteGroupFriends(@PathVariable("groupId") Long groupId, Model model) {
-//		List<GroupFriend> groupFriends = groupFriendService.groupFriendList(groupId); --> 그룹멤버 리스트를 줘야 화면에 뛰움
-//		model.addAttribute("groupFriends", groupFriends);
+		List<GroupFriendInfo> groupFriends = groupFriendService.findGroupFriendInfo(groupId);
+		model.addAttribute("groupFriends", groupFriends);
 		return "???";
 	}
 
