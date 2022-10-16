@@ -18,6 +18,10 @@ public class Member extends User {
 
     private String msg;
 
+    private Long defaultGroup;
+
+    private Long starredGroup;
+
     @Embedded
     private Locate locate;
 
