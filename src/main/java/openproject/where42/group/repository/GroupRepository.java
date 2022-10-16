@@ -6,6 +6,7 @@ import openproject.where42.groupFriend.domain.GroupFriend;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,5 +48,18 @@ public class GroupRepository {
                 .getResultList()
                 .stream().filter((group) -> !(group.getGroupName().equals("friends") || group.getGroupName().equals("starred")))
                 .sorted().collect(Collectors.toList());
+    }
+
+    public boolean isGroupNameInOwner(Long ownerId, String groupName) {
+        Groups group;
+        try {
+            group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                    .setParameter("ownerId", ownerId)
+                    .setParameter("groupName", groupName)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return false;
+        }
+        return true;
     }
 }
