@@ -16,5 +16,5 @@ public class LocateForm {
     @NotEmpty
     private int cluster;
     @NotEmpty
-    private Place place;
+    private String spot;
 }
