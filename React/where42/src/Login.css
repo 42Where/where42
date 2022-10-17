@@ -1,26 +1,14 @@
 .Login {
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
 }
 
 #Common {
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
     align-items: center;
-}
-
-#Main {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /*컨텐츠 간 수직 정렬 (direction이 column이라 축이 바뀜*/
-    align-content: center; /*컨텐츠 간 수평 정렬*/
-    align-items: center; /*컨텐츠 각각의 수평 정렬*/
 }
 
 #Wiki {

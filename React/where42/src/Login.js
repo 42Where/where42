@@ -20,7 +20,6 @@ function Login() {
     if (xmlhttp.status === 200) {
         content = xmlhttp.responseText;
     }
-    /*이 방법은 줄바꿈을 무시하게 됨*/
 
     function Common() {
         function clickDown() {
@@ -35,16 +34,14 @@ function Login() {
        
         return (
             <div id="Common">
-                <div id="Main">
-                    <button id="Wiki" onClick={()=>{setModal(1)}} ></button>
-                    <div id="Logo">
-                        <img src="img/logo.svg" alt="logo"></img>
-                    </div>
-                   <div id="Character">
-                        <img src="img/character.svg" alt="character"></img>
-                    </div>
-                    <button id="Login-button" onMouseDown={clickDown} onMouseUp={clickUp}></button>
+                <button id="Wiki" onClick={()=>{setModal(1)}} ></button>
+                <div id="Logo">
+                    <img src="img/logo.svg" alt="logo"></img>
                 </div>
+                <div id="Character">
+                    <img src="img/character.svg" alt="character"></img>
+                </div>
+                <button id="Login-button" onMouseDown={clickDown} onMouseUp={clickUp}></button>
             </div>
         )
     }
