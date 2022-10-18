@@ -23,7 +23,7 @@ public class MemberController {
 
     @GetMapping("/member/{memberId}/profile/locate") // front form 객체 필요한지?, {} 매핑주소 뺴도 되는지..
     public String createLocateForm(Model model) {
-        model.addAttribute("form", new LocateForm());
+        model.addAttribute("form", new LocateForm()); // locateform말고 걍 Locate 갖다 써도 되는지?
         return "/member/{memberId}/profile/updateLocate";
     }
 
