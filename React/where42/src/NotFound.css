@@ -24,3 +24,11 @@
     cursor: url("../public/img/bang.png"), auto;
 }
 
+#NotFound .question{
+    width : 10vw;
+    height : 10vh;
+    backgroun-image : url("../public/img/question.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: transparent;
+}

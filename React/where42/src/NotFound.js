@@ -6,6 +6,8 @@ const NotFound=()=>{
         <div id={"NotFound"}>
             <div id={"content"}>404 : NotFound</div>
             <Link to={"/Login"}>
+                <div className={"question"}></div>
+                <div className={"question"}></div>
                 <div id={"character"}></div>
             </Link>
         </div>
