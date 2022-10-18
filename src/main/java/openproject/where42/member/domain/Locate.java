@@ -27,4 +27,11 @@ public class Locate {
         this.cluster = cluster;
         this.spot = spot;
     }
+
+    public void updateLocate(Planet planet, int floor, int cluster, String spot) {
+        this.planet = planet;
+        this.floor = floor;
+        this.cluster = cluster;
+        this.spot = spot;
+    }
 }
