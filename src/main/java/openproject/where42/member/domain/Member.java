@@ -18,9 +18,9 @@ public class Member extends User {
 
     private String msg;
 
-    private Long defaultGroup;
+    private Long defaultGroupId;
 
-    private Long starredGroup;
+    private Long starredGroupId;
 
     @Embedded
     private Locate locate = new Locate(null, -1, -1, null);
@@ -31,5 +31,10 @@ public class Member extends User {
     }
     public void updatePersonalMsg(String msg) {
         this.msg = msg;
+    }
+
+    public void setDefaultGroup(Long defaultGroupId, Long starredGroupId) {
+        this.defaultGroupId = defaultGroupId;
+        this.starredGroupId = starredGroupId;
     }
 }
