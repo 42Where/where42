@@ -23,7 +23,7 @@ public class Member extends User {
     private Long starredGroup;
 
     @Embedded
-    private Locate locate;
+    private Locate locate = new Locate(null, -1, -1, null);
 
     public Member(String name, MemberLevel level) {
         this.name = name;
@@ -31,9 +31,5 @@ public class Member extends User {
     }
     public void updatePersonalMsg(String msg) {
         this.msg = msg;
-    }
-
-    public void updateLocate(Planet planet, int floor, int cluster, String spot) {
-        this.locate = new Locate(planet, floor, cluster, spot);
     }
 }
