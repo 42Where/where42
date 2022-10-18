@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import Login from './Login/Login';
-import Main from './Main/Main';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const login = ReactDOM.createRoot(document.getElementById('root'));
 login.render(
   <React.StrictMode>
-    <Main />
+    <App />
   </React.StrictMode>
 );
 

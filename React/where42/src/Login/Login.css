@@ -12,7 +12,7 @@
 }
 
 #Wiki {
-    background-image: url("../public/img/wiki.svg");
+    background-image: url("../../public/img/wiki.svg");
     background-repeat: no-repeat;
     background-size: contain;
     background-color: transparent;
@@ -22,7 +22,7 @@
 
 #Login-button {
     cursor: pointer;
-    background-image: url("../public/img/login_button.svg");
+    background-image: url("../../public/img/login_button.svg");
     background-repeat: no-repeat;
     background-size: contain;
     background-color: transparent;

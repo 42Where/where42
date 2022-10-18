@@ -1,0 +1,26 @@
+#NotFound{
+    margin:0;
+}
+
+#NotFound #content{
+    font-family: GmarketSansMedium;
+    padding-top : 30vh;
+    text-align: center;
+    font-size : 1rem;
+}
+
+#NotFound #character{
+    width : 50vw;
+    height : 50vh;
+    display : inline-block;
+    margin-left: 32vw;
+    background-image: url("../public/img/character.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: transparent;
+}
+
+#NotFound #character:hover{
+    cursor: url("../public/img/bang.png"), auto;
+}
+
