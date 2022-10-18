@@ -6,7 +6,6 @@ import openproject.where42.group.domain.Groups;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.Planet;
 import openproject.where42.member.dto.LocateForm;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.repository.MemberRepository;
@@ -35,7 +34,7 @@ public class MemberService {
     public void updateLocate(Long memberId, LocateForm form) {
         Member member = memberRepository.findById(memberId);
 
-        member.updateLocate(form.getPlanet(), form.getFloor(), form.getCluster(), form.getSpot());
+        member.getLocate().updateLocate(form.getPlanet(), form.getFloor(), form.getCluster(), form.getSpot());
     }
 
     public List<MemberGroupInfo> findAllGroupFriendsInfo(Long memberId) {
