@@ -21,7 +21,7 @@ public class GroupController {
         return "/member/{memberId}";
     }
 
-    @DeleteMapping("/member/{memberId}/{groupId}") // 아니.. groupcontroller인데 왜 오류가 뜨는거야; 아 재배가 안바꾼건가 리포지터리에서
+    @DeleteMapping("/member/{memberId}/{groupId}")
     public String deleteGroup(@PathVariable("groupId") Long groupId) {
         groupService.deleteByGroupId(groupId);
         return "/member/{memberId}";

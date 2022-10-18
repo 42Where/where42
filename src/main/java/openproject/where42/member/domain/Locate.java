@@ -3,7 +3,6 @@ package openproject.where42.member.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.member.domain.enums.Place;
 import openproject.where42.member.domain.enums.Planet;
 
 import javax.persistence.Embeddable;

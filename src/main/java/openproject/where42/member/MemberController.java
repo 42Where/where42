@@ -29,7 +29,7 @@ public class MemberController {
 
     @PostMapping("/member/{memberId}/profile/locate")
     public String updateLocate(@PathVariable("memberId") Long memberId, @RequestBody LocateForm form) {
-        memberService.updateLocate(memberId, form.getPlanet(), form.getFloor(), form.getPlace());
+        memberService.updateLocate(memberId, form);
         return "/member/{memberId}/profile";
     }
 }
