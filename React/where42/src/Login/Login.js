@@ -7,9 +7,9 @@ import './Login_Desktop.css'
 import './Login_Modal.css'
 
 function Login() {
-    const isMobile = useMediaQuery({ query: '(max-width: 480px)'})
-    const isTablet = useMediaQuery({ query: '(min-width: 481px) and (max-width: 1023px)'})
-    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)'})
+    const isMobile = useMediaQuery({ query: '(max-width: 480px)'});
+    const isTablet = useMediaQuery({ query: '(min-width: 481px) and (max-width: 1023px)'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 1024px)'});
     const [modal, setModal] = useState(0);
     const xmlhttp = new XMLHttpRequest();
     let   content = null;

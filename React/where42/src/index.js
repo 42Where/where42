@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Login from './Login';
+// import Login from './Login/Login';
+import Main from './Main/Main';
 import reportWebVitals from './reportWebVitals';
 
 const login = ReactDOM.createRoot(document.getElementById('root'));
 login.render(
   <React.StrictMode>
-    <Login />
+    <Main />
   </React.StrictMode>
 );
 
