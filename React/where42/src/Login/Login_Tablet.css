@@ -1,4 +1,4 @@
-#Tablet {
+.Login #Tablet {
     width: 100%;
     height: 100vh;
     min-height: 700px;
@@ -9,7 +9,7 @@
     align-items: center;
 }
 
-#Tablet #Common #Wiki {
+.Login #Tablet #Common #Wiki {
     width: 7%;
     max-width: 50px;
     padding-bottom: 7%;
@@ -19,28 +19,28 @@
     margin-left: 85%;
 }
 
-#Tablet #Common #Logo {
+.Login #Tablet #Common #Logo {
     width: 100%;
     text-align: center;
 }
 
-#Tablet #Common #Logo img {
+.Login #Tablet #Common #Logo img {
     width: 70%;
     max-width: 600px;
 }
 
-#Tablet #Common #Character {
+.Login #Tablet #Common #Character {
     width: 100%;
     text-align: center;
 }
 
-#Tablet #Common #Character img {
+.Login #Tablet #Common #Character img {
     width: 40%;
     max-width: 340px;
     margin-left: 1.5%;
 }
 
-#Tablet #Common #Login-button {
+.Login #Tablet #Common #Login-button {
     width: 25%;
     max-width: 200px;
     padding-bottom: 9.4%;

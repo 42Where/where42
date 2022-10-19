@@ -1,4 +1,4 @@
-#Mobile {
+.Login #Mobile {
     width: 100%;
     height: 100vh;
     min-height: 700px;
@@ -9,7 +9,7 @@
     align-items: center;
 }
 
-#Mobile #Common #Wiki {
+.Login #Mobile #Common #Wiki {
     width: 8%;
     padding-bottom: 8%;
     position: absolute;
@@ -18,26 +18,26 @@
     margin-left: 80%;
 }
 
-#Mobile #Common #Logo {
+.Login #Mobile #Common #Logo {
     width: 100%;
     text-align: center;
 }
 
-#Mobile #Common #Logo img {
+.Login #Mobile #Common #Logo img {
     width: 80%;
 }
 
-#Mobile #Common #Character {
+.Login #Mobile #Common #Character {
     width: 100%;
     text-align: center;
 }
 
-#Mobile #Common #Character img {
+.Login #Mobile #Common #Character img {
     width: 60%;
     margin-left: 1.5%;
 }
 
-#Mobile #Common #Login-button {
+.Login #Mobile #Common #Login-button {
     width: 40%;
     height: 10vh;
     min-height: 70px;

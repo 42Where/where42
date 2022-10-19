@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-#Common {
+.Login #Common {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -11,7 +11,7 @@
     align-items: center;
 }
 
-#Wiki {
+.Login #Wiki {
     background-image: url("../../public/img/wiki.svg");
     background-repeat: no-repeat;
     background-size: contain;
@@ -20,7 +20,7 @@
     cursor: pointer;
 }
 
-#Login-button {
+.Login #Login-button {
     cursor: pointer;
     background-image: url("../../public/img/login_button.svg");
     background-repeat: no-repeat;

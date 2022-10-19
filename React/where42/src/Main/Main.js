@@ -9,10 +9,10 @@ function Main() {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
 
     return (
-        <React.Fragment>
+        <div className='Main'>
             {isMobile && <div id="Mobile"><Common/></div>}
             {isDesktop && <div id="Desktop"><Common/></div>}
-        </React.Fragment>
+        </div>
     )
 }
 
