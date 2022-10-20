@@ -95,20 +95,20 @@ public class GroupRepositoryTest {
     @Rollback(value = false)
     public void deleteGroupwhere42() {
         save();
-        groupRepository.deleteGroup(groups.get("where42"));
+        groupRepository.deleteByGroupId(groups.get("where42").getId());
     }
 
     @Test
     @Rollback(value = false)
     public void deleteGroupfriends() { // friends는 삭제되어서는 안되는데 잘 동작함. 처리가 필요할 듯?
         save();
-        groupRepository.deleteGroup(groups.get("friends"));
+        groupRepository.deleteByGroupId(groups.get("friends").getId());
     }
 
     @Test
     @Rollback(value = false)
     public void deleteGroupstudy() { // 존재하지 않은 그룹을 삭제할 떄 IllegalArgumentException가 발생하는데, 신경써야하는가? 발생할 여지가 없나?
-        groupRepository.deleteGroup(groups.get("study"));
+        groupRepository.deleteByGroupId(groups.get("study").getId());
     }
 
     @Test
@@ -119,16 +119,37 @@ public class GroupRepositoryTest {
     }
 
     @Test
-    public void findByName() {
+    public void findByOwnerIdAndName() {
         save();
-        Groups group = groupRepository.findByName("friends");
+        Groups group = groupRepository.findByOwnerIdAndName(members.get("jaebae").getId(), "friends");
         System.out.println(group.getGroupName());
     }
 
     @Test
-    public void findGroupsByOwnerName() {
+    // NullPointerException 확인해야할 듯
+    public void findByOwnerIdAndNameFalse() {
         save();
-        List<String> groupsList = groupRepository.findGroupsByOwnerName("jaebae");
-        System.out.println(groupsList.toString());
+        Groups group = groupRepository.findByOwnerIdAndName(members.get("jaebae2").getId(), "friends");
+        System.out.println(group.getGroupName());
+    }
+
+    @Test
+    // https://m.blog.naver.com/tmondev/220393974518 확인요망
+    public void findGroupsByOwnerId() {
+        save();
+        List<Groups> groups = groupRepository.findGroupsByOwnerId(members.get("jaebae").getId());
+        for (Groups group : groups) {
+            System.out.print(group.getGroupName());
+        }
+        System.out.println();
+    }
+
+    @Test
+    public void isGroupNameInOwner() {
+        save();
+        System.out.println(groupRepository.isGroupNameInOwner(members.get("jaebae").getId(), "friends"));
+        System.out.println(groupRepository.isGroupNameInOwner(members.get("jaebae").getId(), "starred"));
+        System.out.println(groupRepository.isGroupNameInOwner(members.get("jaebae").getId(), "study"));
+
     }
 }
