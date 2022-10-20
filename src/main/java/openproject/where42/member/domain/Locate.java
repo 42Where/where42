@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import openproject.where42.member.domain.enums.Planet;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Locate {
-    @Enumerated
+    @Enumerated(EnumType.ORDINAL)
     private Planet planet;
 
     private int floor;
