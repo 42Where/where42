@@ -24,8 +24,7 @@ import java.util.List;
 public class MemberRepositoryTest {
     @Autowired MemberRepository memberRepository;
     @Autowired GroupRepository groupRepository;
-    @Autowired
-    GroupFriendRepository groupFriendRepository;
+    @Autowired GroupFriendRepository groupFriendRepository;
 
     Map<String, Member> members = new HashMap<>();
     Map<String, Groups> groups = new HashMap<>();
@@ -73,6 +72,14 @@ public class MemberRepositoryTest {
     }
 
     @Test
+    public void findByIdFalse() {
+        // Optional 씌워야할듯?
+        save();
+        Member member = memberRepository.findById(Long.valueOf(2));
+        System.out.println(member.getName());
+    }
+
+    @Test
     public void checkMemberByNameTrue() {
         save();
         Boolean result = memberRepository.checkMemberByName("jaebae");
@@ -88,14 +95,14 @@ public class MemberRepositoryTest {
     @Test
     public void checkFriendByNameTrue() {
         save();
-        Boolean result = memberRepository.checkFriendByName("hyunjcho");
+        Boolean result = memberRepository.checkMemberByName("hyunjcho");
         System.out.println("hyunjcho = " + result);
     }
 
     @Test
     public void checkFriendByNameFalse() {
         save();
-        Boolean result = memberRepository.checkFriendByName("jujo");
+        Boolean result = memberRepository.checkMemberByName("jujo");
         System.out.println("jujo = " + result);
     }
 }

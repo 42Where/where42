@@ -103,11 +103,10 @@ public class GroupFriendRepository {
 
     // 그룹 속하는 멤버 리스트 리턴
     public List<String> findGroupFriendsByGroupId(Long groupId) {
-        return em.createQuery("select gm from GroupFriend gm where gm.group.id = :groupId", GroupFriend.class)
+        return em.createQuery("select gm.friendName from GroupFriend gm where gm.group.id = :groupId", String.class)
                 .setParameter("groupId", groupId)
                 .getResultList()
-                .stream().map((groupMember) -> groupMember.getFriendName())
-                .sorted()
+                .stream().sorted()
                 .collect(Collectors.toList());
     }
 
@@ -116,11 +115,10 @@ public class GroupFriendRepository {
                 .setParameter("groupName", "friends")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm.friendName from GroupFriend gm where gm.group = :group", GroupFriend.class)
+        return em.createQuery("select gm.friendName from GroupFriend gm where gm.group = :group", String.class)
                 .setParameter("group", group)
                 .getResultList()
-                .stream().map(groupMember -> groupMember.getFriendName())
-                .sorted()
+                .stream().sorted()
                 .collect(Collectors.toList());
     }
 }

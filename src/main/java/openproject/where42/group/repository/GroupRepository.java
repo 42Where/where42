@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,11 +44,16 @@ public class GroupRepository {
     }
 
     public List<Groups> findGroupsByOwnerId(Long ownerId) {
-        return em.createQuery("select gs.groupName from Groups gs where gs.owner.id = :ownerId", Groups.class)
+        List<Groups> groups =  em.createQuery("select gs from Groups gs where gs.owner.id = :ownerId", Groups.class)
                 .setParameter("ownerId", ownerId)
-                .getResultList()
-                .stream().filter((group) -> !(group.getGroupName().equals("friends") || group.getGroupName().equals("starred")))
-                .sorted().collect(Collectors.toList());
+                .getResultList();
+        for (Groups group : groups) {
+            if (group.getGroupName().equals("friends") || group.getGroupName().equals("starred")) {
+                groups.remove(group);
+            }
+        }
+
+        return groups;
     }
 
     public boolean isGroupNameInOwner(Long ownerId, String groupName) {
