@@ -180,7 +180,7 @@
 }
 
 #name-Circle #Name {
-    margin-right: 2px;
+    margin-right: 2px; /*생략가능?*/
     display: inline-block;
 }
 

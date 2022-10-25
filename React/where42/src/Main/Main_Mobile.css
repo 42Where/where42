@@ -1,0 +1,135 @@
+#Main #Mobile {
+    width: 100%;
+}
+
+#Main #Mobile #Wrapper #Burger {
+    position: absolute;
+    right: 2%;
+    top: 1%;
+    padding: 0;
+    font-size: min(6vw, 50px);
+    cursor: pointer;
+    border: 0;
+    background-color: transparent;
+}
+
+#Main #Mobile #Wrapper #Logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 7vh 0 4vh 0;
+}
+
+#Main #Mobile #Wrapper #Logo img {
+    width: 60%;
+    max-width: 300px;
+}
+
+#Main #Mobile #Wrapper #Logo p {
+    margin-top: 2%;
+    font-family: GmarketsansLight;
+    font-size: 2.5vw;
+    color: white;
+}
+
+#Main #Mobile #Wrapper #my-Profile {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#Main #Mobile #Wrapper #my-Profile #Setting {
+    position: absolute;
+    right: 12%;
+    top: 20%;
+    padding: 0;
+    font-size: max(20px, 4vw);
+    cursor: pointer;
+    border: 0;
+    background-color: transparent;
+}
+
+#Main #Mobile #Wrapper #Profile {
+    width: 85%;
+    display: flex;
+    height: 14vw;
+    max-height: 80px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    background-color: white;
+}
+
+#Main #Mobile #Wrapper #Profile #Photo {
+    display: flex;
+    width: 12.5%;
+    max-width: 60px;
+    border-radius: 70%;
+    margin: 2%;
+    overflow: hidden;
+}
+
+#Main #Mobile #Wrapper #Profile #Photo img {
+    width: 100%;
+    object-fit: cover;
+}
+
+#Main #Mobile #Wrapper #Profile #Info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 70%;
+    padding: 1.5%;
+}
+
+#Main #Mobile #Wrapper #Profile #Info div {
+    margin: 0.5% 0 0.5% 0;
+}
+
+#Main #Mobile #Wrapper #Profile #Info #Name {
+    font-family: GmarketSansBold;
+    font-size: max(8px, 1.8vw);
+}
+
+#Main #Mobile #Wrapper #Profile #Info #Locate {
+    font-family: GmarketSansMedium;
+    font-size: max(8px, 1.8vw);
+}
+
+#Main #Mobile #Wrapper #Profile #Info #Msg {
+    font-family: GmarketSansLight;
+    font-size: max(6px, 1.7vw);
+}
+
+#Main #Mobile #Wrapper #profile-Wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+#Main #Mobile #Wrapper #profile-Wrapper #Profile {
+    margin-bottom: 10px;
+}
+
+#Main #Mobile #Wrapper #group-Name {
+    font-family: GmarketSansLight;
+    font-size: max(12px, 1.5vw);
+    margin-left: 10%;
+    margin-bottom: 20px;
+}
+
+#Mobile #name-Circle #Circle {
+    width: 3px;
+    height: 3px;
+    top: 5px;
+}
+
+/* #Main #Mobile #Wrapper #profile-Wrapper #Profile {
+    display: flex;
+    width: 85%;
+    height: 14vw;
+    max-height: 80px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    background-color: white;
+} */

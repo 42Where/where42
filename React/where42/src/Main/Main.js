@@ -8,31 +8,32 @@ function Main() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
 
+    function Common() {
+        return (
+            <div id="Wrapper">
+                <button id="Burger">🔍</button>
+                <div id="Logo">
+                    <img src="img/logo_simple.svg" alt="logo"></img>
+                    {isMobile && <p>42서울 자리 찾기 서비스</p>}
+                </div>
+                <div id="my-Profile">
+                    <button id="Setting">⚙️</button>
+                    <Profile/>
+                </div>
+                <div id="group-Name">즐겨찾기 (3)</div>
+                <div id="profile-Wrapper">
+                    <Profile/>
+                    <Profile/>
+                    <Profile/>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div id="Main">
             {isMobile && <div id="Mobile"><Common/></div>}
             {isDesktop && <div id="Desktop"><Common/></div>}
-        </div>
-    )
-}
-
-function Common() {
-    return (
-        <div id="Wrapper">
-            <button id="Burger">🔍</button>
-            <div id="Logo">
-                <img src="img/logo_simple.svg" alt="logo"></img>
-            </div>
-            <div id="my-Profile">
-                <button id="Setting">⚙️</button>
-                <Profile/>
-            </div>
-            <div id="group-Name">즐겨찾기 (3)</div>
-            <div id="profile-Wrapper">
-                <Profile/>
-                <Profile/>
-                <Profile/>
-            </div>
         </div>
     )
 }
