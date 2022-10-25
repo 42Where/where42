@@ -63,7 +63,7 @@ function Login() {
     }
 
     return (
-        <div className="Login">
+        <div id="Login">
             {modal === 1 ? <Modal/> : null}
             {isMobile && <div id="Mobile"><Common/></div>}
             {isTablet && <div id="Tablet"><Common/></div>}

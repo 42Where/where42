@@ -1,10 +1,10 @@
-.Main #Desktop {
+#Main #Desktop {
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.Main #Desktop #Wrapper {
+#Main #Desktop #Wrapper {
     position: relative;
     width: 70%;
     max-width: 1300px;
@@ -12,7 +12,7 @@
     background-color: white;
 }
 
-.Main #Desktop #Wrapper #Burger {
+#Main #Desktop #Wrapper #Burger {
     position: absolute;
     right: 2%;
     top: 1%;
@@ -23,7 +23,7 @@
     background-color: transparent;
 }
 
-.Main #Desktop #Wrapper #Logo {
+#Main #Desktop #Wrapper #Logo {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -31,6 +31,188 @@
     margin: 5% 0 5% 0;
 }
 
-.Main #Desktop #Wrapper #Logo img {
+#Main #Desktop #Wrapper #Logo img {
     width: 40%;
+}
+
+#Main #Desktop #Wrapper #my-Profile {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Setting {
+    position: absolute;
+    right: 12%;
+    top: 17%;
+    padding: 0;
+    font-size: min(60px, 3.5vw);
+    cursor: pointer;
+    border: 0;
+    background-color: transparent;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile {
+    width: 84%;
+    display: flex;
+    height: 6.5vw;
+    max-height: 125px;
+    margin-bottom: 20px;
+    border: 1.5px solid grey;
+    border-radius: 20px;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Photo {
+    display: flex;
+    width: 9.5%;
+    border-radius: 70%;
+    margin: 1%;
+    overflow: hidden;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Photo img {
+    width: 100%;
+    object-fit: cover;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 70%;
+    padding: 1.5%;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Info div {
+    margin: 0.5% 0 0.5% 0;
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Info #Name {
+    font-family: GmarketSansBold;
+    font-size: max(15px, 1vw);
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Info #Locate {
+    font-family: GmarketSansMedium;
+    font-size: max(15px, 0.9vw);
+}
+
+#Main #Desktop #Wrapper #my-Profile #Profile #Info #Msg {
+    font-family: GmarketSansLight;
+    font-size: max(12px, 0.7vw);
+}
+
+#Main #Desktop #Wrapper #group-Name {
+    font-family: GmarketSansLight;
+    font-size: max(12px, 0.7vw);
+    margin-left: 10%;
+    margin-bottom: 20px;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile:nth-child(odd){
+    margin-left: 8%;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile:nth-child(even){
+    margin-right: 8%;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile {
+    display: flex;
+    width: 40%;
+    height: 6.5vw;
+    max-height: 125px;
+    margin-bottom: 20px;
+    border: 1.5px solid grey;
+    border-radius: 20px;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Photo {
+    display: flex;
+    width: 20%;
+    border-radius: 70%;
+    margin: 2%;
+    overflow: hidden;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Photo img {
+    width: 100%;
+    object-fit: cover;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 70%;
+    padding: 3%;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Info div {
+    margin: 1% 0 1% 0;
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Name {
+    font-family: GmarketSansBold;
+    font-size: max(15px, 1vw);
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Locate {
+    font-family: GmarketSansMedium;
+    font-size: max(15px, 0.9vw);
+}
+
+#Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Msg {
+    font-family: GmarketSansLight;
+    font-size: max(12px, 0.7vw);
+}
+
+#name-Circle {
+    display: inline;
+    position: relative;
+}
+
+#name-Circle #Name {
+    margin-right: 2px;
+    display: inline-block;
+}
+
+#name-Circle #Circle {
+    position: absolute;
+    top: 0;
+    display: inline-block;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+    background-color: #5FE95C;
+}
+
+#Locate {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+
+#Locate::before {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 10px;
+    bottom: 3px;
+    z-index: -1;
+    /*??? -1이면 다른 것들에 묻혀서 안뜨고 그렇다고 0주면 글씨 위로 올라오고 그래서 글씨나 info에 1주고 0줘도 기어오른다요ㅠ*/
+    background-color: #f6e298;
+    transition: 0.2s all;
+}
+
+#Locate:hover:before {
+    width: 70%;
 }
