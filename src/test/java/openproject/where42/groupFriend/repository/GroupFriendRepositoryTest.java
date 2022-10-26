@@ -126,7 +126,6 @@ public class GroupFriendRepositoryTest {
     }
 
     @Test
-    // sort할 때 굳이 stream을 안쓰는 방향으로 가야할듯?
     public void findGroupFriendsByGroupId() {
         save();
         List<String> friends = groupFriendRepository.findGroupFriendsByGroupId(groups.get("where42").getId());
