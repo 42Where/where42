@@ -11,13 +11,13 @@ function Main() {
     function Common() {
         return (
             <div id="Wrapper">
-                <button id="Burger">🔍</button>
+                <button id="Burger"></button>
                 <div id="Logo">
                     <img src="img/logo_simple.svg" alt="logo"></img>
                     {isMobile && <p>42서울 자리 찾기 서비스</p>}
                 </div>
                 <div id="my-Profile">
-                    <button id="Setting">⚙️</button>
+                    <button id="Setting"></button>
                     <Profile/>
                 </div>
                 <div id="group-Name">즐겨찾기 (3)</div>
