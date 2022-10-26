@@ -17,7 +17,7 @@
     cursor: pointer;
     border: 0;
     background-color: transparent;
-    background-image: url("../../public/img/zoom.svg");
+    background-image: url("../../public/img/search-white.svg");
     background-size: cover;
 }
 
@@ -50,11 +50,20 @@
     position: absolute;
     right: 12%;
     top: 20%;
+    width: 8vw;
+    min-width: 20px;
+    max-width: 40px;
+    height: 8vw;
+    min-height: 20px;
+    max-height: 40px;
+    /*이것도 clamp로 수정*/
     padding: 0;
-    font-size: max(20px, 4vw);
     cursor: pointer;
     border: 0;
     background-color: transparent;
+    background-image: url("../../public/img/setting-grey.svg");
+    background-size: cover;
+    z-index: 2;
 }
 
 #Main #Mobile #Wrapper #Profile {
@@ -66,6 +75,7 @@
     margin-bottom: 20px;
     border-radius: 20px;
     background-color: white;
+    z-index: 1;
 }
 
 #Main #Mobile #Wrapper #Profile #Photo {
@@ -89,27 +99,28 @@
     flex-direction: column;
     justify-content: center;
     width: 70%;
-    margin-top: 1.5%;
+    margin-top: min(6px, 1.5%);
 }
 
 #Main #Mobile #Wrapper #Profile #Info > div {
-    margin: 0 2% 1.5% 2%;
+    margin: 0 2% 0 2%;
+    margin-bottom: min(6px, 1.5%);
 }
 
 #Main #Mobile #Wrapper #Profile #Info #Name {
     font-family: GmarketSansBold;
-    font-size: clamp(8px, 3vw, 15px);
+    font-size: clamp(8px, 3.5vw, 15px);
     margin-right: 2px;
 }
 
 #Main #Mobile #Wrapper #Profile #Info #Locate {
     font-family: GmarketSansMedium;
-    font-size: clamp(8px, 3vw, 15px);
+    font-size: clamp(8px, 3.5vw, 15px);
 }
 
 #Main #Mobile #Wrapper #Profile #Info #Msg {
     font-family: GmarketSansLight;
-    font-size: clamp(6px, 2.5vw, 13px);
+    font-size: clamp(6px, 3vw, 13px);
 }
 
 #Main #Mobile #Wrapper #profile-Wrapper {
@@ -131,21 +142,14 @@
 }
 
 #name-Circle #Name {
-    display: inline-block;
+    margin-right: 2px;
 }
 
 #Mobile #name-Circle #Circle {
-    width: 3px;
-    height: 3px;
-    top: 7px;
+    width: 3vw;
+    min-width: 8px;
+    max-width: 13px;
+    height: 3vw;
+    min-height: 8px;
+    max-height: 13px;
 }
-
-/* #Main #Mobile #Wrapper #profile-Wrapper #Profile {
-    display: flex;
-    width: 85%;
-    height: 14vw;
-    max-height: 80px;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    background-color: white;
-} */

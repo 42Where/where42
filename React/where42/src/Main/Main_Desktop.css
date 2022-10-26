@@ -55,14 +55,14 @@
     cursor: pointer;
     border: 0;
     background-color: transparent;
-    background-image: url("../../public/img/setting.svg");
+    background-image: url("../../public/img/setting-grey.svg");
     background-size: cover;
 }
 
 #Main #Desktop #Wrapper #my-Profile #Profile {
     width: 84%;
     display: flex;
-    height: 6.5vw;
+    height: 7vw;
     max-height: 125px;
     margin-bottom: 20px;
     border: 1.5px solid grey;
@@ -72,9 +72,9 @@
 
 #Main #Desktop #Wrapper #my-Profile #Profile #Photo {
     display: flex;
-    width: 9.5%;
+    width: 9%;
     border-radius: 70%;
-    margin: 1%;
+    margin: 1.5%;
     overflow: hidden;
 }
 
@@ -92,23 +92,23 @@
 }
 
 #Main #Desktop #Wrapper #my-Profile #Profile #Info > div {
-    margin: 0.5% 0 0.5% 0;
+    margin: 0.7% 0 0.7% 0;
 }
 
 #Main #Desktop #Wrapper #my-Profile #Profile #Info #Name {
     font-family: GmarketSansBold;
-    font-size: max(15px, 1vw);
+    font-size: clamp(8px, 1.5vw, 30px);
 }
 
 #Main #Desktop #Wrapper #my-Profile #Profile #Info #Locate {
     font-family: GmarketSansMedium;
-    font-size: max(15px, 0.9vw);
+    font-size: clamp(8px, 1.3vw, 30px);
     width: max-content;
 }
 
 #Main #Desktop #Wrapper #my-Profile #Profile #Info #Msg {
     font-family: GmarketSansLight;
-    font-size: max(12px, 0.7vw);
+    font-size: clamp(6px, 1.1vw, 28px);
 }
 
 #Main #Desktop #Wrapper #group-Name {
@@ -136,7 +136,7 @@
 #Main #Desktop #Wrapper #profile-Wrapper #Profile {
     display: flex;
     width: 40%;
-    height: 6.5vw;
+    height: 7vw;
     max-height: 125px;
     margin-bottom: 20px;
     border: 1.5px solid grey;
@@ -146,9 +146,9 @@
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Photo {
     display: flex;
-    width: 20%;
+    width: 18.7%;
     border-radius: 70%;
-    margin: 2%;
+    margin: 3.3% 2% 3.3% 3.3%;
     overflow: hidden;
 }
 
@@ -171,37 +171,36 @@
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Name {
     font-family: GmarketSansBold;
-    font-size: max(15px, 1vw);
+    font-size: clamp(8px, 1.5vw, 30px);
 }
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Locate {
     font-family: GmarketSansMedium;
-    font-size: max(15px, 0.9vw);
+    font-size: clamp(8px, 1.3vw, 30px);
 }
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Msg {
     font-family: GmarketSansLight;
-    font-size: max(12px, 0.7vw);
+    font-size: clamp(6px, 1.1vw, 28px);
 }
 
+/*폰트 아이맥에서 다시 확인*/
+
 #name-Circle {
-    display: inline;
-    position: relative;
+    display: flex;
 }
 
 #name-Circle #Name {
-    display: inline-block;
+    margin-right: 3px;
 }
 
 #name-Circle #Circle {
-    position: absolute;
-    top: 2px;
-    display: inline-block;
-    border-radius: 50%;
-    width: 5px;
-    height: 5px;
-    background-color: #5FE95C;
+    width: 13px;
+    height: 13px;
+    background-image: url("../../public/img/green.svg");
+    background-size: cover;
 }
+/*아이맥에서 확인 필요*/
 
 #Locate {
     cursor: pointer;
