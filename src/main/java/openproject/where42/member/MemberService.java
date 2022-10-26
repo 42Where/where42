@@ -3,6 +3,7 @@ package openproject.where42.member;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
+import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.member.domain.Member;
@@ -23,6 +24,8 @@ public class MemberService {
     private final GroupService groupService;
     private final GroupFriendService groupFriendService;
 
+    private final GroupRepository groupRepository;
+
     @Transactional
     public void updatePersonalMsg(Long memberId, String msg) {
         Member member = memberRepository.findById(memberId);
@@ -40,8 +43,14 @@ public class MemberService {
     public List<MemberGroupInfo> findAllGroupFriendsInfo(Long memberId) {
         List<MemberGroupInfo> groupList = new ArrayList<MemberGroupInfo>();
         List<Groups> groups = groupService.findGroups(memberId);
-//        for (Groups g : groups) // 그룹하나 당 groupInfo 만들어서 리스트에 추가해서 반환
-//            groupList.add(new MemberGroupInfo(g, groupFriendService.findAllGroupFriendNameByGroupId(g.getId())));
+        Member member = memberRepository.findById(memberId);
+
+        groupList.add(new MemberGroupInfo(groupRepository.findById(member.getStarredGroupId()),
+                groupFriendService.findAllGroupFriendNameByGroupId(member.getStarredGroupId())));
+        for (Groups g : groups) // 그룹하나 당 groupInfo 만들어서 리스트에 추가해서 반환
+            groupList.add(new MemberGroupInfo(g, groupFriendService.findAllGroupFriendNameByGroupId(g.getId())));
+        groupList.add(new MemberGroupInfo(groupRepository.findById(member.getDefaultGroupId()),
+                groupFriendService.findAllGroupFriendNameByGroupId(member.getDefaultGroupId())));
         return groupList;
     }
 

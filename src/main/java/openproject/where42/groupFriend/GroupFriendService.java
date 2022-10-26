@@ -77,16 +77,9 @@ public class GroupFriendService {
 		return result;
 	}
 
-	// 멤버의 모든 Group별 GroupFriend 반환
-	// API로 만들어서 해야하나 아님 페이로 연결해야하나~
-	public List<List<GroupFriendInfo>> findAllGroupFriendInfo(Long ownerId){
-		List<Groups> findGroups = groupService.findGroups(ownerId);
-		List<List<GroupFriendInfo>> result = null;
-		for (Groups i : findGroups)
-			result.add(findGroupFriendInfo(i.getId()));
-		return result;
+	public List<String> findAllGroupFriendNameByGroupId(Long groupId) {
+		return groupFriendRepository.findGroupFriendsByGroupId(groupId);
 	}
-
 }
 
 //	private void validateDuplicateGroupFriend(Groups group, String friend_name) {
