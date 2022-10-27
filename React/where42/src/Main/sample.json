@@ -1,0 +1,87 @@
+
+ {
+    "memeberInfo": {
+      "name": "hyunjcho",
+      "id": "1",
+      "img" : "url",
+      "msg": "hello",
+      "inOutState": "1",
+      "locate": {
+        "planet": "0",
+        "floor": "1",
+        "cluster": "0",
+        "spot": "오픈스튜디오"
+      }
+    },
+    "groupInfo": [
+      {
+        "groupName": "즐겨찾기",
+        "groupId": "1",
+        "count" : "2",
+        "groupFriends": [
+          "heeskim",
+          "sojoo"
+        ]
+      },
+      {
+        "groupName": "수리남",
+        "groupId": "2",
+        "count" : "2",
+        "groupFriends": [
+          "sunghkim",
+          "sojoo"
+        ]
+      },
+      {
+        "groupName": "기본",
+        "groupId": "3",
+        "count" : "3",
+        "groupFriends": [
+          "sojoo",
+          "sunghkim",
+          "heeskim"
+        ]
+      }
+    ],
+    "groupFriendInfo": [
+      {
+        "id" :"1",
+        "name": "heeskim",
+        "img": "url",
+        "inOutState": "0",
+        "msg": "집에 가고 싶다. 오늘 몇시에 가지?",
+        "locate": {
+          "planet": "1",
+          "floor": "-1",
+          "cluster": "0",
+          "spot": "오픈 스튜디오"
+        } 
+      },
+      {
+        "id" : "2",
+        "name": "sojoo",
+        "img": "url",
+        "inOutState": "0",
+        "msg": "holly",
+        "locate": {
+          "planet": "1",
+          "floor": "1",
+          "cluster": "0",
+          "spot": "경복궁"
+        }
+      },
+      {
+        "id" : "3",
+        "name": "sunghkim",
+        "img": "url",
+        "inOutState": "0",
+        "msg": "holly",
+        "locate": {
+          "planet": "2",
+          "floor": "4",
+          "cluster": "0",
+          "spot": "유투브 스튜디오"
+        }
+      }
+    ]
+  }

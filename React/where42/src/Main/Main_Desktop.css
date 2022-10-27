@@ -197,9 +197,9 @@
 #name-Circle #Circle {
     width: 13px;
     height: 13px;
-    background-image: url("../../public/img/green.svg");
     background-size: cover;
 }
+
 /*아이맥에서 확인 필요*/
 
 #Locate {
