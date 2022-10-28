@@ -3,7 +3,6 @@ package openproject.where42.member.dto;
 import lombok.Getter;
 import lombok.Setter;
 import openproject.where42.member.domain.enums.Planet;
-import openproject.where42.member.domain.enums.Place;
 
 import javax.validation.constraints.NotEmpty;
 

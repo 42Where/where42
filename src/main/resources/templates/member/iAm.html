@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="jumbotron"> <h1>HELLO SHOP</h1>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead> <tr>
+                <th>ID</th> <th>이름</th> <th>기본</th> <th>즐겨찾기</th> <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${member}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.name}"></td>
+                <td th:text="${member.defaultGroupId}"></td>
+                <td th:text="${member.starredGroupId}"></td>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->

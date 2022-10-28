@@ -22,15 +22,21 @@ public class MemberApiController {
     private final MemberRepository memberRepository;
     private final GroupFriendService groupFriendService;
 
-    @GetMapping("/member/{memberId}")
-    public ResponseMemberInfo memberInformation(@PathVariable ("memberId") Long memberId) { // 자기 상태랑 친구 정보 싹다 반환해 주는거
-        Member member = memberRepository.findById(memberId); // repo 직접 접근하는데 서비스에 함수 만들어야 하나;
-        MemberInfo memberInfo = new MemberInfo(member);
-        List<MemberGroupInfo> groupList = memberService.findAllGroupFriendsInfo(memberId); // 그룹별 친구 오름차순 된거
-        List<GroupFriendInfo> groupFriendsList = memberService.findAllFriendsInfo(memberId); // 해당 오너의 기본 그룹에 속한 친구들 정보 DTO로 정리 된 ㄱ
+//    @GetMapping("/member/{memberId}")
+//    public ResponseMemberInfo memberInformation(@PathVariable ("memberId") Long memberId) { // 자기 상태랑 친구 정보 싹다 반환해 주는거
+//        Member member = memberRepository.findById(memberId); // repo 직접 접근하는데 서비스에 함수 만들어야 하나;
+//        MemberInfo memberInfo = new MemberInfo(member);
+//        List<MemberGroupInfo> groupList = memberService.findAllGroupFriendsInfo(memberId); // 그룹별 친구 오름차순 된거
+//        List<GroupFriendInfo> groupFriendsList = memberService.findAllFriendsInfo(memberId); // 해당 오너의 기본 그룹에 속한 친구들 정보 DTO로 정리 된 ㄱ
+//
+//        return new ResponseMemberInfo(memberInfo, groupList, groupFriendsList);
+//    }
 
-        return new ResponseMemberInfo(memberInfo, groupList, groupFriendsList);
-    }
+//    @GetMapping("member/{memberName}")
+//    public String memberTest(@PathVariable ("memberName") String name) {
+//        System.out.println("is it possible?");
+//        return "member/iAm";
+//    }
 
     private static class ResponseMemberInfo {
         MemberInfo memberInfo;
