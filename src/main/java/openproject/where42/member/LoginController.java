@@ -103,10 +103,11 @@ public class LoginController {
             seoul42.setLocation("자리에 없음");
         if (!memberRepository.checkMemberByName(seoul42.getLogin())) {
             model.addAttribute("seoul42", seoul42);
-            return "member/checkAgree";
+            return "member/checkAgree"; // 동의하지 않을 경우는 front에서 처리하나?
         }
-        Long id = memberRepository.findByName(seoul42.getLogin()).getId();
-        return "member/" + id;
+        Member member = memberRepository.findByName(seoul42.getLogin());
+        model.addAttribute("member", member); // member dto 만들어서 반환할 수 있도록!
+        return "member/iAm";
     }
 
 
