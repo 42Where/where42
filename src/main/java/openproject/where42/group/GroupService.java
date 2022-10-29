@@ -21,7 +21,7 @@ public class GroupService {
 
     @Transactional
     public Long createDefaultGroup(Member member, String groupName) {
-        if (groupName.equalsIgnoreCase("기본") || groupName.equalsIgnoreCase("즐겨찾기")) // 기본이나 즐겨찾기 아닌 다른 그룹 혹시 잘못 호출 시 예외 터트릴 건데 어디서 잡을 지 모르겠어서 일단 걍 리턴 나중에 에러처리 필요
+        if (!(groupName.equalsIgnoreCase("기본") || groupName.equalsIgnoreCase("즐겨찾기"))) // 기본이나 즐겨찾기 아닌 다른 그룹 혹시 잘못 호출 시 예외 터트릴 건데 어디서 잡을 지 모르겠어서 일단 걍 리턴 나중에 에러처리 필요
             return Long.valueOf(0);
         Groups group = new Groups(groupName, member);
         return groupRepository.save(group); // 얘 id 반환 안해주나?

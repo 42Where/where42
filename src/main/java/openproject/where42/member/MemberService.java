@@ -22,7 +22,11 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final GroupService groupService;
-    private final GroupFriendService groupFriendService;
+
+    @Transactional
+    public void createMember(Member member) {
+        memberRepository.save(member);
+    }
 
     private final GroupRepository groupRepository;
 
