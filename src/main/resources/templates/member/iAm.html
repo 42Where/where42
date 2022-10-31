@@ -22,10 +22,10 @@
                 <td th:text="${member.defaultGroupId}"></td>
                 <td th:text="${member.starredGroupId}"></td>
                 <td>
-                    <a href="#" th:href="@{/member/{id}/groups (id=${member.id})}" class="btn btn-primary" role="button">그룹 확인</a>
+                    <a href="#" th:href="@{/member/{id}/allGroup (id=${member.id})}" class="btn btn-primary" role="button">그룹 확인</a>
                 </td>
                 <td>
-                    <a href="#" th:href="@{/member/{id}/groupCreate (id=${member.id})}" class="btn btn-primary" role="button">그룹 추가</a>
+                    <a href="#" th:href="@{/member/{id}/group (id=${member.id})}" class="btn btn-primary" role="button">그룹 추가</a>
                 </td>
             </tr>
             </tbody>
