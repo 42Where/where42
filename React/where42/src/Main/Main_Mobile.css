@@ -49,13 +49,13 @@
 #Main #Mobile #Wrapper #my-Profile #Setting {
     position: absolute;
     right: 12%;
-    top: 20%;
-    width: 8vw;
-    min-width: 20px;
-    max-width: 40px;
-    height: 8vw;
-    min-height: 20px;
-    max-height: 40px;
+    top: 25%;
+    width: 5vw;
+    max-width: 35px;
+    min-width: 18px;
+    height: 5vw;
+    max-height: 35px;
+    min-height: 18px;
     /*이것도 clamp로 수정*/
     padding: 0;
     cursor: pointer;
@@ -137,8 +137,7 @@
 #Main #Mobile #Wrapper #group-Name {
     font-family: GmarketSansLight;
     font-size: max(12px, 1.5vw);
-    margin-left: 10%;
-    margin-bottom: 8px;
+    margin: 10px 0 10px 10%;
 }
 
 #name-Circle #Name {

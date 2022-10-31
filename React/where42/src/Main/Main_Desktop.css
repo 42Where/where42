@@ -114,8 +114,7 @@
 #Main #Desktop #Wrapper #group-Name {
     font-family: GmarketSansLight;
     font-size: max(12px, 0.7vw);
-    margin-left: 10%;
-    margin-bottom: 20px;
+    margin: 10px 0 10px 9%;
 }
 
 #Main #Desktop #Wrapper #profile-Wrapper {
@@ -217,7 +216,6 @@
     height: 10px;
     bottom: 3px;
     z-index: -1;
-    /*??? -1이면 다른 것들에 묻혀서 안뜨고 그렇다고 0주면 글씨 위로 올라오고 그래서 글씨나 info에 1주고 0줘도 기어오른다요ㅠ*/
     background-color: #f6e298;
     transition: 0.2s all;
 }
