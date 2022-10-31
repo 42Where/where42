@@ -43,19 +43,23 @@ public class MemberController {
     @PostMapping("/member/{name}")
     public String createMember(@PathVariable("name") String name, Model model) {
         Member member = new Member(name, MemberLevel.member);
+        memberService.createMember(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
-        System.out.println("defaultGroupId = " + defaultGroupId + " starred = " + starredGroupId);
         member.setDefaultGroup(defaultGroupId, starredGroupId);
-        memberService.createMember(member);
+        System.out.println("defaultGroupId = " + member.getDefaultGroupId() + " starred = " + member.getStarredGroupId());
         model.addAttribute(member); // member dto ? id ?
         return "member/iAm"; // 해당 멤버 메인화면으로 반환되어야 함
     }
 
-    @GetMapping("/member/{id}/groups")
+    @GetMapping("/member/{id}/allGroup")
     public String groupList(@PathVariable("id") Long id, Model model) {
         List<Groups> groups = groupRepository.findGroupsByOwnerId(id);
+        System.out.println("groups = ");
+        for (Groups g: groups)
+            System.out.println(g.getGroupName());
         model.addAttribute("groups", groups);
+        model.addAttribute("memberId", id);
         return "member/groupList";
     }
 }

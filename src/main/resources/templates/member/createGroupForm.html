@@ -4,7 +4,10 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <form th:object="${name}" method="post">
+    <div class="jumbotron"> <h1>HELLO SHOP</h1>
+    </div>
+    <div>
+    <form th:object="${groupForm}" method="post">
 <!--        &lt;!&ndash; id &ndash;&gt;-->
 <!--        <input type="hidden" th:field="*{id}" />-->
         <div class="form-group">
