@@ -7,6 +7,7 @@ import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.groupFriend.repository.GroupFriendRepository;
+import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupFriendService {
 	private final MemberRepository memberRepository;
+	private final MemberService memberService;
 	private final GroupFriendRepository groupFriendRepository;
 	private final GroupRepository groupRepository;
 	private final GroupService groupService;
@@ -73,7 +75,7 @@ public class GroupFriendService {
 		List<String> nameList = groupFriendRepository.findGroupFriendsByGroupId(groupId);
 		List<GroupFriendInfo> result = null;
 		for (String i: nameList)
-			result.add(new GroupFriendInfo(memberRepository.findByName(i)));
+			result.add(new GroupFriendInfo(memberRepository, memberService));
 		return result;
 	}
 

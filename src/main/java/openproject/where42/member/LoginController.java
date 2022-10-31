@@ -72,28 +72,11 @@ public class LoginController {
             e.printStackTrace();
         }
 
-        HttpHeaders tokenHeaders = new HttpHeaders();
-        tokenHeaders.add("Authorization", "Bearer " + oauthToken.getAccess_token());
-        tokenHeaders.add("Content-type", "application/json;charset=utf-8");
-        MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
-        HttpEntity<MultiValueMap<String, String>> request =
-                new HttpEntity<>(params2, tokenHeaders);
-
-        // HTTP 요청할 떄 생성한 Header 설정
-        //        ResponseEntity<String> responseEntity = restTemplate.exchange("요청 URL"
-        //                , HttpMethod.GET, new HttpEntity<>(headers), String.class);
-        URI url = UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/me")
-                .build()
-                .toUri();
-
-        ResponseEntity<String> response2 = rt.exchange(
-                url.toString(),
-                HttpMethod.GET,
-                request,
-                String.class);
+        // v2/me 부르는 로직
+        ResponseEntity<String> response2 = memberService.callMeInfo(oauthToken);
 
         Seoul42 seoul42 = null;
-//        //Model과 다르게 되있으면 그리고 getter setter가 없으면 오류가 날 것이다.
+        //Model과 다르게 되있으면 그리고 getter setter가 없으면 오류가 날 것이다.
         try {
             seoul42 = objectMapper.readValue(response2.getBody(), Seoul42.class);
         } catch (JsonProcessingException e) {
