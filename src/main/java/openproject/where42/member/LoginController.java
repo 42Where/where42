@@ -72,6 +72,8 @@ public class LoginController {
             e.printStackTrace();
         }
 
+        System.out.println(oauthToken.getAccess_token());
+
         HttpHeaders tokenHeaders = new HttpHeaders();
         tokenHeaders.add("Authorization", "Bearer " + oauthToken.getAccess_token());
         tokenHeaders.add("Content-type", "application/json;charset=utf-8");

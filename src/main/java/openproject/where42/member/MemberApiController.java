@@ -1,10 +1,11 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.groupFriend.GroupFriendService;
-import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.group.GroupService;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
+import openproject.where42.groupFriend.repository.GroupFriendRepository;
 import openproject.where42.member.domain.Member;
+import openproject.where42.member.dto.MemberAll;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.dto.MemberProfile;
 import openproject.where42.member.dto.MemberInfo;
@@ -18,9 +19,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
-    private final GroupFriendService groupFriendService;
+    private final GroupService groupService;
+    private final GroupFriendRepository groupFriendRepository;
 
 //    @GetMapping("/member/{memberId}")
 //    public ResponseMemberInfo memberInformation(@PathVariable ("memberId") Long memberId) { // 자기 상태랑 친구 정보 싹다 반환해 주는거
@@ -53,6 +54,12 @@ public class MemberApiController {
     @GetMapping("/member/{memberId}/profile")
     public MemberProfile memberProfile(@PathVariable("memberId") Long memberId) {
         Member member = memberRepository.findById(memberId);
-        return new MemberProfile(member.getMsg(), member.getLocate());
+        return new MemberProfile(member.getId(), member.getMsg(), member.getLocate());
+    }
+
+    @GetMapping("/member/{memberId}/all")
+    public MemberAll memberAll(@PathVariable("memberId") Long memberId) {
+        Member member = memberRepository.findById(Long.valueOf(1));
+        return new MemberAll(member.getName(), groupService.findGroups(Long.valueOf(1)), groupFriendRepository.findGroupFriendsByGroupId(Long.valueOf(1)));
     }
 }
