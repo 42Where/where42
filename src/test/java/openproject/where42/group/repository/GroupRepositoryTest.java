@@ -127,6 +127,7 @@ public class GroupRepositoryTest {
 
     @Test
     // NullPointerException 확인해야할 듯
+    // 이거는 기능 상 모든 멤버에는 필수적으로 friends와 starred 그룹이 존재하기 때문에 신경 안써도 될듯?
     public void findByOwnerIdAndNameFalse() {
         save();
         Groups group = groupRepository.findByOwnerIdAndName(members.get("jaebae2").getId(), "friends");
@@ -139,9 +140,8 @@ public class GroupRepositoryTest {
         save();
         List<Groups> groups = groupRepository.findGroupsByOwnerId(members.get("jaebae").getId());
         for (Groups group : groups) {
-            System.out.print(group.getGroupName());
+            System.out.println(group.getGroupName());
         }
-        System.out.println();
     }
 
     @Test
