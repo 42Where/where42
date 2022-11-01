@@ -17,7 +17,9 @@
     right: 2%;
     top: 2%;
     width: 3vw;
+    max-width: 70px;
     height: 3vw;
+    max-height: 70px;
     padding: 0;
     cursor: pointer;
     border: 0;
@@ -42,15 +44,25 @@
 #Main #Desktop #Wrapper #my-Profile {
     display: flex;
     justify-content: center;
-    position: relative;
+    /* position: relative; */
 }
 
-#Main #Desktop #Wrapper #my-Profile #Setting {
-    position: absolute;
-    right: 12%;
-    top: 22%;
+#Main #Desktop #Wrapper #my-Profile #setting-Wrapper {
+    width: 21%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Main #Desktop #Wrapper #my-Profile #setting-Wrapper #Setting {
+    /* position: absolute; */
+    /* right: 12%; */
+    /* top: 22%; */
     width: 3vw;
+    max-width: 70px;
     height: 3vw;
+    max-height: 70px;
     padding: 0;
     cursor: pointer;
     border: 0;
@@ -170,20 +182,18 @@
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Name {
     font-family: GmarketSansBold;
-    font-size: clamp(8px, 1.5vw, 30px);
+    font-size: clamp(8px, 1.5vw, 25px);
 }
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Locate {
     font-family: GmarketSansMedium;
-    font-size: clamp(8px, 1.3vw, 30px);
+    font-size: clamp(8px, 1.3vw, 25px);
 }
 
 #Main #Desktop #Wrapper #profile-Wrapper #Profile #Info #Msg {
     font-family: GmarketSansLight;
-    font-size: clamp(6px, 1.1vw, 28px);
+    font-size: clamp(6px, 1.1vw, 23px);
 }
-
-/*폰트 아이맥에서 다시 확인*/
 
 #name-Circle {
     display: flex;
@@ -194,21 +204,19 @@
 }
 
 #name-Circle #Circle {
-    width: 13px;
-    height: 13px;
+    width: clamp(10px, 1vw, 15px);
+    height: clamp(10px, 1vw, 15px);
     background-size: cover;
 }
 
-/*아이맥에서 확인 필요*/
-
-#Locate {
+#Desktop #Locate {
     cursor: pointer;
     display: inline-block;
     position: relative;
     width: max-content;
 }
 
-#Locate::before {
+#Desktop #Locate::before {
     display: inline-block;
     content: "";
     position: absolute;
@@ -220,6 +228,6 @@
     transition: 0.2s all;
 }
 
-#Locate:hover:before {
+#Desktop #Locate:hover:before {
     width: 100%;
 }

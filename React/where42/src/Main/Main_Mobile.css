@@ -46,16 +46,24 @@
     position: relative;
 }
 
+#Main #Mobile #Wrapper #my-Profile #setting-Wrapper {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 #Main #Mobile #Wrapper #my-Profile #Setting {
-    position: absolute;
+    /* position: absolute;
     right: 12%;
-    top: 25%;
+    top: 25%; */
     width: 5vw;
     max-width: 35px;
-    min-width: 18px;
+    min-width: 15px;
     height: 5vw;
     max-height: 35px;
-    min-height: 18px;
+    min-height: 15px;
     /*이것도 clamp로 수정*/
     padding: 0;
     cursor: pointer;
@@ -151,4 +159,27 @@
     height: 3vw;
     min-height: 8px;
     max-height: 13px;
+}
+
+#Mobile #Locate::before {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    width: 0;
+    height: clamp(3px, 1.5vw, 9px);
+    bottom: 3px;
+    z-index: -1;
+    background-color: #f6e298;
+    transition: 0.2s all;
+}
+
+#Mobile #Locate {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    width: max-content;
+}
+
+#Mobile #Locate:hover:before {
+    width: 100%;
 }
