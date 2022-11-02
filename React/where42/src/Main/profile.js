@@ -1,9 +1,9 @@
 const Profile = (props) => {
     const Info = props.Info;
     // locate 분기나눠서 하나의 string으로 만들기 완료!
-    const locate = CombineLocate(Info.locate);
+    const locate = CombineLocate(Info.locate, Info.inOutState);
     // circle 이미지를 출근/퇴근에 따라서 바꿔주기 완료!
-    const background = GetBackgroundImage(Info.inOutState, Info.locate.spot);
+    // const background = GetBackgroundImage(Info.inOutState, Info.locate.spot);
     let meOrNot = null;
     if (props.Me) {
         meOrNot = ( 
@@ -22,7 +22,7 @@ const Profile = (props) => {
             <div id="Info">
                 <div id="name-Circle">
                     <div id="Name">{Info.name}</div>
-                    <div id="Circle" style={background}></div>
+                    {/* <div id="Circle" style={background}></div> */}
                 </div>
                 <div id="Locate">{locate}</div>
                 <div id="Msg">{Info.msg}</div>
@@ -34,15 +34,27 @@ const Profile = (props) => {
 
 function GetBackgroundImage(inOutState, spot)
 {
-    //inoutstate가 비회원일 경우엔 어떻게 오지..?
+    //inoutstate : 
+    // 0 퇴근
+    // 1 출근
+    // 2 비회원
     let background = {backgroundImage:"url('img/circle_grey.svg')"};
     if (inOutState === "1")
         background = {backgroundImage:"url('img/circle_green.svg')"};
     return background;
 }
 
-function CombineLocate(locate){
+function CombineLocate(locate, inOutState){
     let position = "";
+    // if (inOutState === "2")
+    // {
+    //     position += "자리정보없음";
+    //     return position;
+    // }
+    // else if (inOutState === "1")
+    // {
+    //     position += 
+    // }
     if (locate.planet === "0")
         return position;
     if (locate.planet === "1")
