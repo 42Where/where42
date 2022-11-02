@@ -2,7 +2,7 @@
     width: 100%;
 }
 
-#Main #Mobile #Wrapper #Burger {
+#Main #Mobile #Wrapper #Search {
     position: absolute;
     right: 5%;
     top: 3%;
@@ -40,13 +40,13 @@
     color: white;
 }
 
-#Main #Mobile #Wrapper #my-Profile {
+#Main #Mobile #Wrapper #MyProfile {
     display: flex;
     justify-content: center;
     position: relative;
 }
 
-#Main #Mobile #Wrapper #my-Profile #setting-Wrapper {
+#Main #Mobile #Wrapper #MyProfile #SettingWrapper {
     width: 20%;
     height: 100%;
     display: flex;
@@ -54,7 +54,7 @@
     justify-content: center;
 }
 
-#Main #Mobile #Wrapper #my-Profile #Setting {
+#Main #Mobile #Wrapper #MyProfile #Setting {
     /* position: absolute;
     right: 12%;
     top: 25%; */
@@ -131,28 +131,28 @@
     font-size: clamp(6px, 3vw, 13px);
 }
 
-#Main #Mobile #Wrapper #profile-Wrapper {
+#Main #Mobile #Wrapper #ProfileWrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
 }
 
-#Main #Mobile #Wrapper #profile-Wrapper #Profile {
+#Main #Mobile #Wrapper #ProfileWrapper #Profile {
     margin-bottom: 10px;
 }
 
-#Main #Mobile #Wrapper #group-Name {
+#Main #Mobile #Wrapper #GroupName {
     font-family: GmarketSansLight;
     font-size: max(12px, 1.5vw);
     margin: 10px 0 10px 10%;
 }
 
-#name-Circle #Name {
+#NameCircle #Name {
     margin-right: 2px;
 }
 
-#Mobile #name-Circle #Circle {
+#Mobile #NameCircle #Circle {
     width: 3vw;
     min-width: 8px;
     max-width: 13px;

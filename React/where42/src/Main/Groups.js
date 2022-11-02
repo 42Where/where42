@@ -1,14 +1,14 @@
 import sample from './sample.json';
 import Profile from './Profile';
 
-function Groups({Info}){
-    // const Info = props.Info;
+function Groups(props){
+    const info = props.info;
     return (
         <>
-        {Info.map(group=>(
+        {info.map(group=>(
             <div key={group.groupName}>
-                <MakeGroupName Name={group.groupName} Count={group.count}/>
-                <GroupProfile Info={group}/>
+                <MakeGroupName name={group.groupName} count={group.count}/>
+                <GroupProfile info={group}/>
             </div>
         ))}
         </>
@@ -19,36 +19,31 @@ function MakeGroupName(props)
 {
     let groupName;
 
-    if (props.Name === "기본")
+    if (props.name === "기본")
         groupName = "친구 목록";
     else
-        groupName = props.Name;
-
+        groupName = props.name;
     return (
-        <div id="group-Name">{groupName} ({props.Count})</div>
+        <div id="GroupName">{groupName} ({props.count})</div>
     )
 }
 
 function GetFrinedInfo(data, value){
-    // 대체로 json 파일에서 type : 성공 실패 여부인데 넣을건지?
-    // if (data.TYPE=="S"){
-    return data.filter(function(Friend){
-        return Friend.name === value;
+    return data.filter(function(friend){
+        return friend.name === value;
     });
-    // }
 }
 
 function GroupProfile(props) {
-    const Info = props.Info;
-    // // 여기에서 한개의 groupfriends 마다 group friend를 검색해야함 완료!
-    const FriendList = Info.groupFriends.map(Friend => {
-        const FriendInfo = GetFrinedInfo(sample.groupFriendInfo, Friend);
-        return <Profile key={Info.groupName+Friend} Info={FriendInfo[0]} Me={0}/>
+    const info = props.info;
+    const friendList = info.groupFriends.map(friend => {
+        const friendInfo = GetFrinedInfo(sample.groupFriendInfo, friend);
+        return <Profile key={info.groupName + friend} info={friendInfo[0]} me={0}/>
     });
 
     return (
-        <div id="profile-Wrapper">
-            {FriendList}
+        <div id="ProfileWrapper">
+            {friendList}
         </div>
     )
 }

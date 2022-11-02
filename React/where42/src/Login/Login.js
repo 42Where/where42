@@ -31,7 +31,7 @@ function Login() {
             button.style = "background-image: url('img/login_button.svg')";
             window.location.href = 'https://profile.intra.42.fr/users/sojoo';
         }
-       
+
         return (
             <div id="Common">
                 <button id="Wiki" onClick={()=>{setModal(1)}} ></button>
@@ -41,7 +41,7 @@ function Login() {
                 <div id="Character">
                     <img src="img/character.svg" alt="character"></img>
                 </div>
-                <button id="Login-button" onMouseDown={clickDown} onMouseUp={clickUp}></button>
+                <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
             </div>
         )
     }

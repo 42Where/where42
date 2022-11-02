@@ -7,7 +7,7 @@
     align-items: center;
 }
 
-#NotFound #content{
+#NotFound #Content{
     text-shadow: 0.4vw 0.4vh 1px #767676;
     margin: 5% 0 5% 0;
     font-family: GmarketSansBold;
@@ -16,7 +16,7 @@
     font-size : max(30px, 7vw);
 }
 
-#NotFound #character{
+#NotFound #Character{
     width : 50%;
     min-width: 200px;
     min-height : 200px;
@@ -29,6 +29,6 @@
     background-position: center;
 }
 
-#NotFound #character:hover{
+#NotFound #Character:hover{
     background-image: url("../public/img/character_notfound_boom.svg");
 }

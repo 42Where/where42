@@ -14,16 +14,16 @@ function Main() {
     function Common() {
         return (
             <div id="Wrapper">
-                <button id="Burger"></button>
+                <button id="Search"></button>
                 <div id="Logo">
                     {/* 로고 선택시 메인페이지 이동하도록 할건지? */}
                     <img src="img/logo_simple.svg" alt="logo"></img>
                     {isMobile && <p>42서울 자리 찾기 서비스</p>}
                 </div>
-                <div id="my-Profile">
-                    <Profile key={sample.memeberInfo.id} Info={sample.memeberInfo} Me={1}/>
+                <div id="MyProfile">
+                    <Profile key={sample.memeberInfo.id} info={sample.memeberInfo} me={1}/>
                 </div>
-                <Groups Info={sample.groupInfo}/>
+                <Groups info={sample.groupInfo}/>
             </div>
 
         )
