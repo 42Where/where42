@@ -24,7 +24,7 @@ function MakeGroupName(props)
     else
         groupName = props.name;
     return (
-        <div id="GroupName">{groupName} ({props.count})</div>
+        <div className="GroupName">{groupName} ({props.count})</div>
     )
 }
 

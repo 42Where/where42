@@ -2,7 +2,7 @@
     "memeberInfo": {
       "name": "hyunjcho",
       "id": "1",
-      "img" : "url",
+      "image_url": "null",
       "msg": "hello",
       "inOutState": 1,
       "locate": {

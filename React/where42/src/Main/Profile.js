@@ -1,28 +1,26 @@
 const Profile = (props) => {
     const info = props.info;
     const locate = CombineLocate(info.locate, info.inOutState);
-
     let meOrNot = null;
+
     if (props.me) {
         meOrNot = ( 
         <div id="SettingWrapper">
             <button id="Setting"></button>
-        </div>  
+        </div>
         )
     }
     
     return (
-        <div id="Profile">
-            <div id="Photo">
-                {/* url : https://cdn.intra.42.fr/users/{Info.name}.jpg */}
+        <div className="Profile">
+            <div className="Photo">
+                {/* <img src={info.image_url} alt="user-face"></img> */}
                 <img src="img/erase.png" alt="user-face"></img>
             </div>
-            <div id="Info">
-                <div id="NameCircle">
-                    <div id="Name">{info.name}</div>
-                </div>
-                <div id="Locate">{locate}</div>
-                <div id="Msg">{info.msg}</div>
+            <div className="Info">
+                <div className="Name">{info.name}</div>
+                <div className="Locate">{locate}</div>
+                <div className="Msg">{info.msg}</div>
             </div>
             {meOrNot}
         </div>

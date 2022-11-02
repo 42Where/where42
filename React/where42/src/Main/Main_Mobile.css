@@ -55,9 +55,6 @@
 }
 
 #Main #Mobile #Wrapper #MyProfile #Setting {
-    /* position: absolute;
-    right: 12%;
-    top: 25%; */
     width: 5vw;
     max-width: 35px;
     min-width: 15px;
@@ -74,7 +71,7 @@
     z-index: 2;
 }
 
-#Main #Mobile #Wrapper #Profile {
+#Main #Mobile #Wrapper .Profile {
     width: 85%;
     display: flex;
     align-items: center;
@@ -86,7 +83,7 @@
     z-index: 1;
 }
 
-#Main #Mobile #Wrapper #Profile #Photo {
+#Main #Mobile #Wrapper .Profile .Photo {
     display: flex;
     width: 15%;
     max-width: 60px;
@@ -97,12 +94,12 @@
     overflow: hidden;
 }
 
-#Main #Mobile #Wrapper #Profile #Photo img {
+#Main #Mobile #Wrapper .Profile .Photo img {
     width: 100%;
     object-fit: cover;
 }
 
-#Main #Mobile #Wrapper #Profile #Info {
+#Main #Mobile #Wrapper .Profile .Info {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -110,23 +107,22 @@
     margin-top: min(6px, 1.5%);
 }
 
-#Main #Mobile #Wrapper #Profile #Info > div {
+#Main #Mobile #Wrapper .Profile .Info > div {
     margin: 0 2% 0 2%;
     margin-bottom: min(6px, 1.5%);
 }
 
-#Main #Mobile #Wrapper #Profile #Info #Name {
+#Main #Mobile #Wrapper .Profile .Info .Name {
     font-family: GmarketSansBold;
     font-size: clamp(8px, 3.5vw, 15px);
-    margin-right: 2px;
 }
 
-#Main #Mobile #Wrapper #Profile #Info #Locate {
+#Main #Mobile #Wrapper .Profile .Info .Locate {
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 3.5vw, 15px);
 }
 
-#Main #Mobile #Wrapper #Profile #Info #Msg {
+#Main #Mobile #Wrapper .Profile .Info .Msg {
     font-family: GmarketSansLight;
     font-size: clamp(6px, 3vw, 13px);
 }
@@ -138,27 +134,14 @@
     width: 100%;
 }
 
-#Main #Mobile #Wrapper #ProfileWrapper #Profile {
+#Main #Mobile #Wrapper #ProfileWrapper .Profile {
     margin-bottom: 10px;
 }
 
-#Main #Mobile #Wrapper #GroupName {
+#Main #Mobile #Wrapper .GroupName {
     font-family: GmarketSansLight;
     font-size: max(12px, 1.5vw);
     margin: 10px 0 10px 10%;
-}
-
-#NameCircle #Name {
-    margin-right: 2px;
-}
-
-#Mobile #NameCircle #Circle {
-    width: 3vw;
-    min-width: 8px;
-    max-width: 13px;
-    height: 3vw;
-    min-height: 8px;
-    max-height: 13px;
 }
 
 #Mobile #Locate::before {

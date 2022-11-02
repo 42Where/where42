@@ -44,7 +44,6 @@
 #Main #Desktop #Wrapper #MyProfile {
     display: flex;
     justify-content: center;
-    /* position: relative; */
 }
 
 #Main #Desktop #Wrapper #MyProfile #SettingWrapper {
@@ -56,9 +55,6 @@
 }
 
 #Main #Desktop #Wrapper #MyProfile #SettingWrapper #Setting {
-    /* position: absolute; */
-    /* right: 12%; */
-    /* top: 22%; */
     width: 3vw;
     max-width: 70px;
     height: 3vw;
@@ -71,7 +67,7 @@
     background-size: cover;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile {
+#Main #Desktop #Wrapper #MyProfile .Profile {
     width: 84%;
     display: flex;
     height: 7vw;
@@ -82,7 +78,7 @@
     z-index: 1;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Photo {
+#Main #Desktop #Wrapper #MyProfile .Profile .Photo {
     display: flex;
     width: 9%;
     border-radius: 70%;
@@ -90,12 +86,12 @@
     overflow: hidden;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Photo img {
+#Main #Desktop #Wrapper #MyProfile .Profile .Photo img {
     width: 100%;
     object-fit: cover;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Info {
+#Main #Desktop #Wrapper #MyProfile .Profile .Info {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -103,27 +99,27 @@
     padding: 1.5%;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Info > div {
+#Main #Desktop #Wrapper #MyProfile .Profile .Info > div {
     margin: 0.7% 0 0.7% 0;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Info #Name {
+#Main #Desktop #Wrapper #MyProfile .Profile .Info .Name {
     font-family: GmarketSansBold;
     font-size: clamp(8px, 1.5vw, 30px);
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Info #Locate {
+#Main #Desktop #Wrapper #MyProfile .Profile .Info .Locate {
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 1.3vw, 30px);
     width: max-content;
 }
 
-#Main #Desktop #Wrapper #MyProfile #Profile #Info #Msg {
+#Main #Desktop #Wrapper #MyProfile .Profile .Info .Msg {
     font-family: GmarketSansLight;
     font-size: clamp(6px, 1.1vw, 28px);
 }
 
-#Main #Desktop #Wrapper #GroupName {
+#Main #Desktop #Wrapper .GroupName {
     font-family: GmarketSansLight;
     font-size: max(12px, 0.7vw);
     margin: 10px 0 10px 9%;
@@ -136,15 +132,15 @@
     width: 100%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile:nth-child(odd){
+#Main #Desktop #Wrapper #ProfileWrapper .Profile:nth-child(odd){
     margin-left: 8%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile:nth-child(even){
+#Main #Desktop #Wrapper #ProfileWrapper .Profile:nth-child(even){
     margin-right: 8%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile {
     display: flex;
     width: 40%;
     height: 7vw;
@@ -155,7 +151,7 @@
     z-index: 1;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Photo {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Photo {
     display: flex;
     width: 18.7%;
     border-radius: 70%;
@@ -163,12 +159,12 @@
     overflow: hidden;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Photo img {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Photo img {
     width: 100%;
     object-fit: cover;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Info {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -176,37 +172,23 @@
     padding: 3%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Info > div {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info > div {
     margin: 1% 0 1% 0;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Info #Name {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info .Name {
     font-family: GmarketSansBold;
     font-size: clamp(8px, 1.5vw, 25px);
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Info #Locate {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info .Locate {
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 1.3vw, 25px);
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper #Profile #Info #Msg {
+#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info .Msg {
     font-family: GmarketSansLight;
     font-size: clamp(6px, 1.1vw, 23px);
-}
-
-#NameCircle {
-    display: flex;
-}
-
-#NameCircle #Name {
-    margin-right: 3px;
-}
-
-#NameCircle #Circle {
-    width: clamp(10px, 1vw, 15px);
-    height: clamp(10px, 1vw, 15px);
-    background-size: cover;
 }
 
 #Desktop #Locate {
