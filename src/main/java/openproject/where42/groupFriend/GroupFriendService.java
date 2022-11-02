@@ -1,19 +1,16 @@
 package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.groupFriend.repository.GroupFriendRepository;
-import openproject.where42.member.MemberService;
+import openproject.where42.member.OAuthToken;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,10 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupFriendService {
 	private final MemberRepository memberRepository;
-	private final MemberService memberService;
 	private final GroupFriendRepository groupFriendRepository;
 	private final GroupRepository groupRepository;
-	private final GroupService groupService;
 
 	// 친구 1명에 대한 그룹 추가
 	@Transactional
@@ -75,7 +70,7 @@ public class GroupFriendService {
 		List<String> nameList = groupFriendRepository.findGroupFriendsByGroupId(groupId);
 		List<GroupFriendInfo> result = null;
 		for (String i: nameList)
-			result.add(new GroupFriendInfo(memberRepository, memberService));
+			result.add(new GroupFriendInfo().setting(i));
 		return result;
 	}
 
