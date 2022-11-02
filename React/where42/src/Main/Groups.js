@@ -2,13 +2,13 @@ import sample from './sample.json';
 import Profile from './Profile';
 
 function Groups(props){
-    const info = props.info;
+    const groupInfo = props.groupInfo;
     return (
         <>
-        {info.map(group=>(
+        {groupInfo.map(group=>(
             <div key={group.groupName}>
                 <MakeGroupName name={group.groupName} count={group.count}/>
-                <GroupProfile info={group}/>
+                <GroupProfile groupInfo={group} friendInfo={props.friendInfo}/>
             </div>
         ))}
         </>
@@ -35,14 +35,14 @@ function GetFrinedInfo(data, value){
 }
 
 function GroupProfile(props) {
-    const info = props.info;
-    const friendList = info.groupFriends.map(friend => {
-        const friendInfo = GetFrinedInfo(sample.groupFriendInfo, friend);
-        return <Profile key={info.groupName + friend} info={friendInfo[0]} me={0}/>
+    const groupInfo = props.groupInfo;
+    const friendList = groupInfo.groupFriends.map(friend => {
+        const oneFriendInfo = GetFrinedInfo(props.friendInfo, friend);
+        return <Profile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
     });
 
     return (
-        <div id="ProfileWrapper">
+        <div className="ProfileWrapper">
             {friendList}
         </div>
     )

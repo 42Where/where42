@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import './Main.css';
 import './Main_Desktop.css';
@@ -14,7 +15,9 @@ function Main() {
     function Common() {
         return (
             <div id="Wrapper">
-                <button id="Search"></button>
+                <Link to="/Search" state={{name : sample.memeberInfo.name}}>
+                    <button id="Search"></button>
+                </Link>
                 <div id="Logo">
                     <img src="img/logo_simple.svg" alt="logo"></img>
                     {isMobile && <p>42서울 자리 찾기 서비스</p>}
@@ -22,7 +25,7 @@ function Main() {
                 <div id="MyProfile">
                     <Profile key={sample.memeberInfo.id} info={sample.memeberInfo} me={1}/>
                 </div>
-                <Groups info={sample.groupInfo}/>
+                <Groups groupInfo={sample.groupInfo} friendInfo={sample.groupFriendInfo}/>
             </div>
 
         )

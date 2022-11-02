@@ -1,37 +1,46 @@
-import React from "react";
-import {Link} from "react-router-dom";
-
+import React from 'react';
+import { useState } from 'react';
+import select from './select.json';
 
 const Profile = (props) => {
     const info = props.info;
-    const locate = CombineLocate(info.locate, info.inOutState);
-    let meOrNot = null;
+    const [detail, setDetail] = useState(0);
+    let friendOrNot;
 
-    if (props.me) {
-        meOrNot = ( 
-        <div id="SettingWrapper">
-            <Link to="/Login" state={{name : info.name}}>
-                <button id="Setting"> </button>
-            </Link>
-        </div>
-        )
-    }
-    
+    if (info.friend)
+        friendOrNot = (<button className="AddDone">친구 추가 완료</button>);
+    else
+        friendOrNot = (<button className="AddFriend">친구 추가</button>);
+
     return (
         <div className="Profile">
             <div className="Photo">
-                {/* <img src={info.image_url} alt="user-face"></img> */}
-                <img src="img/erase.png" alt="user-face"></img>
+                <img src={info.image_url} alt="user-face"></img>
             </div>
             <div className="Info">
-                <div className="Name">{info.name}</div>
-                <div className="Locate">{locate}</div>
-                <div className="Msg">{info.msg}</div>
+                <div className="Name">{info.login}</div>
+                {detail ===1 ? <Detail info={info}/> : null}
             </div>
-            {meOrNot}
+            <div className="ButtonWrapper">
+                {friendOrNot}
+                {detail === 0? <button className="CheckSpot" onClick={()=>{setDetail(1)}}>자리 확인</button> : null}
+            </div>
         </div>
     );
 };
+
+const Detail = (props) => {
+    // const info = props.info;
+    const info = select;
+    const locate = CombineLocate(info.locate, info.inOutState);
+
+    return (
+        <>
+            <div className="Locate">{locate}</div>
+            <div className="Msg">{info.msg}</div>
+        </>
+    )
+}
 
 function CombineLocate(locate, inOutState){
     let position = "";

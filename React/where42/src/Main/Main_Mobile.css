@@ -127,14 +127,14 @@
     font-size: clamp(6px, 3vw, 13px);
 }
 
-#Main #Mobile #Wrapper #ProfileWrapper {
+#Main #Mobile #Wrapper .ProfileWrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
 }
 
-#Main #Mobile #Wrapper #ProfileWrapper .Profile {
+#Main #Mobile #Wrapper .ProfileWrapper .Profile {
     margin-bottom: 10px;
 }
 
@@ -144,7 +144,7 @@
     margin: 10px 0 10px 10%;
 }
 
-#Mobile #Locate::before {
+#Mobile .Locate::before {
     display: inline-block;
     content: "";
     position: absolute;
@@ -156,13 +156,13 @@
     transition: 0.2s all;
 }
 
-#Mobile #Locate {
+#Mobile .Locate {
     cursor: pointer;
     display: inline-block;
     position: relative;
     width: max-content;
 }
 
-#Mobile #Locate:hover:before {
+#Mobile .Locate:hover:before {
     width: 100%;
 }

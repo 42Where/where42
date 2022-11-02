@@ -125,22 +125,22 @@
     margin: 10px 0 10px 9%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper {
+#Main #Desktop #Wrapper .ProfileWrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile:nth-child(odd){
+#Main #Desktop #Wrapper .ProfileWrapper .Profile:nth-child(odd){
     margin-left: 8%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile:nth-child(even){
+#Main #Desktop #Wrapper .ProfileWrapper .Profile:nth-child(even){
     margin-right: 8%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile {
     display: flex;
     width: 40%;
     height: 7vw;
@@ -151,7 +151,7 @@
     z-index: 1;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Photo {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Photo {
     display: flex;
     width: 18.7%;
     border-radius: 70%;
@@ -159,12 +159,12 @@
     overflow: hidden;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Photo img {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Photo img {
     width: 100%;
     object-fit: cover;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Info {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -172,33 +172,33 @@
     padding: 3%;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info > div {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Info > div {
     margin: 1% 0 1% 0;
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info .Name {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Info .Name {
     font-family: GmarketSansBold;
     font-size: clamp(8px, 1.5vw, 25px);
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info .Locate {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Info .Locate {
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 1.3vw, 25px);
 }
 
-#Main #Desktop #Wrapper #ProfileWrapper .Profile .Info .Msg {
+#Main #Desktop #Wrapper .ProfileWrapper .Profile .Info .Msg {
     font-family: GmarketSansLight;
     font-size: clamp(6px, 1.1vw, 23px);
 }
 
-#Desktop #Locate {
+#Desktop .Locate {
     cursor: pointer;
     display: inline-block;
     position: relative;
     width: max-content;
 }
 
-#Desktop #Locate::before {
+#Desktop .Locate::before {
     display: inline-block;
     content: "";
     position: absolute;
@@ -210,6 +210,6 @@
     transition: 0.2s all;
 }
 
-#Desktop #Locate:hover:before {
+#Desktop .Locate:hover:before {
     width: 100%;
 }
