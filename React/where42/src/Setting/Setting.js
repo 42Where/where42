@@ -12,7 +12,7 @@ function Setting() {
     function Common() {
         return (
             <div id="Wrapper">
-                <div id="Comment">반가워요, hyunjcho{name}! 👋</div>
+                <div id="Comment">반가워요, {name}! 👋</div>
                 <div id="BoxWrapper">
                     <div id="SetLocate" className='Box'>
                         <div className='BoxCap'>

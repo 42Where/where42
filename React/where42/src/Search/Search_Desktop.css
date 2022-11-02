@@ -99,7 +99,13 @@
     font-family: GmarketSansLight;
     font-size: clamp(6px, 1.0vw, 23px);
     margin-right: 7px;
-    padding:1;
+    padding : 1;
+    cursor: pointer;
+}
+
+#Search #Desktop #Wrapper .ProfileWrapper .Profile .ButtonWrapper .AddDone {
+    cursor : auto;
+    /* 크기 늘려야함 */
 }
 
 #Search #Desktop #Wrapper .ProfileWrapper .Profile .Info .Locate {

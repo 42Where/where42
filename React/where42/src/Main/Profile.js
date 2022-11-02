@@ -10,7 +10,7 @@ const Profile = (props) => {
     if (props.me) {
         meOrNot = ( 
         <div id="SettingWrapper">
-            <Link to="/Login" state={{name : info.name}}>
+            <Link to="/Setting" state={{name : info.name}}>
                 <button id="Setting"> </button>
             </Link>
         </div>

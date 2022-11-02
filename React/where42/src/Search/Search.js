@@ -13,7 +13,7 @@ function Search() {
 
     const location = useLocation();
     const name = location.state?.name;
-    //여기서 name을 api 요청시에 같이 보내줘야함
+    //여기서 name을 api 요청시에 백엔드로 같이 보내줘야함
     
     function Common() {
         return (

@@ -1,5 +1,5 @@
 {"matchUser":[
-    {"login":"heecjang","image_url":"https://cdn.intra.42.fr/users/4c77e34e93f7f4a566042d1f85e16b84/heecjang.jpg","location":null,"inOutState":0,"msg":null,"locate":null,"friend":false},
+    {"login":"heecjang","image_url":"https://cdn.intra.42.fr/users/4c77e34e93f7f4a566042d1f85e16b84/heecjang.jpg","location":null,"inOutState":0,"msg":null,"locate":null,"friend":true},
     {"login":"heeckim","image_url":"https://cdn.intra.42.fr/users/4f5e94237cfbddc0d757c3792b3eca46/heeckim.jpg","location":null,"inOutState":0,"msg":null,"locate":null,"friend":false},
     {"login":"heeekim","image_url":"https://cdn.intra.42.fr/users/3eaaff51eb2585f501b2b8c48e9c36d0/heeekim.jpg","location":null,"inOutState":0,"msg":null,"locate":null,"friend":false},
     {"login":"heehkim","image_url":"https://cdn.intra.42.fr/users/523c48fbc2abf4b96b92f38a12568b55/heehkim.jpg","location":null,"inOutState":0,"msg":null,"locate":null,"friend":false},
