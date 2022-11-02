@@ -73,7 +73,7 @@ public class MemberRepositoryTest {
 
     @Test
     public void findByIdFalse() {
-        // Optional 씌워야할듯?
+        // Optional 씌워야할듯? 현진님 API 끝나면 이야기 해야할듯
         save();
         Member member = memberRepository.findById(Long.valueOf(2));
         System.out.println(member.getName());

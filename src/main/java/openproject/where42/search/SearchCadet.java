@@ -12,7 +12,8 @@ public class SearchCadet {
     private String image_url;
     private String location;
     private boolean isFriend; // true 친구, false 아님
-    private int inOutState; // -1 정보없음, 0 퇴근, 1 출근
+    private int inOutStates; // -1 정보없음, 0 퇴근, 1 출근
+    private String inOutState;
     private String msg;
     private Locate locate;
 
@@ -21,14 +22,14 @@ public class SearchCadet {
         this.login = login;
     }
 
-    public void updateApiLocate(String seat) { // 42api에서 정보 가져오기
+    public void updateApiLocate(String seat) {
         int i;
 
-        if (seat == null) { // unavailable 어떻게 오는 지 모르겠음
-            this.locate = new Locate(null, -1, -1, null);
+        if (seat == null) {
+            this.locate = new Locate(null, 0, 0, null);
         } else {
             i = seat.charAt(1) - '0';
-            if ((i >= 1 && seat.charAt(2) != '0') && i <= 6) { // api부른 김에 걍 42api 정보는 정리해놓기..? 이렇게 하면 우리가 정보 비워주는 거에도 뭐 딱히 문제는 없을 듯
+            if ((i >= 1 && seat.charAt(2) != '0') && i <= 6) {
                 if (i <= 2)
                     this.locate = new Locate(Planet.gaepo, 2, 0, seat);
                 else if (i <= 4)

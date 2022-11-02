@@ -1,33 +1,21 @@
 package openproject.where42.groupFriend.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
+import openproject.where42.member.MemberService;
+import openproject.where42.member.OAuthToken;
+import openproject.where42.member.Seoul42;
 import openproject.where42.member.domain.Member;
+import openproject.where42.member.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
 
 @Getter
-@NoArgsConstructor
 public class GroupFriendInfo {
 
-	private String	name;
-	private String	img;
-	private String	inOutState;
-	private String	msg;
-	private String	seat;
-	private String	cluster;
-	private String	floor;
-	private String	locate;
-	private boolean	isMember;
-	private int		flag;
-
-	public GroupFriendInfo(Member member) {
-		// 이거 그냥 api가 핵심인건가..!?
-//		img = 42api_call;
-//		inOutState = 42hane_api_call;
-//		msg = member에서 getter로 가져옴..?;
-//		seat = 42api_call;
-//		if (seat == null)
-//			seat = 뭐 따로 설정하나;
-//		isMember = 1;
-//		if (memberRepository.findByName(name) == null)
-//			isMember = 0;
-	}
 }
