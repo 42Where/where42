@@ -7,7 +7,7 @@
       "msg": "hello",
       "inOutState": "1",
       "locate": {
-        "planet": "0",
+        "planet": "1",
         "floor": "1",
         "cluster": "0",
         "spot": "오픈스튜디오"
@@ -39,7 +39,8 @@
         "groupFriends": [
           "sojoo",
           "sunghkim",
-          "heeskim"
+          "heeskim",
+          "jaebae"
         ]
       }
     ],
@@ -48,7 +49,7 @@
         "id" :"1",
         "name": "heeskim",
         "img": "url",
-        "inOutState": "0",
+        "inOutState": "1",
         "msg": "집에 가고 싶다. 오늘 몇시에 가지?",
         "locate": {
           "planet": "1",
@@ -64,23 +65,36 @@
         "inOutState": "0",
         "msg": "holly",
         "locate": {
-          "planet": "1",
-          "floor": "1",
+          "planet": "0",
+          "floor": "0",
           "cluster": "0",
-          "spot": "경복궁"
+          "spot": null
         }
       },
       {
         "id" : "3",
         "name": "sunghkim",
         "img": "url",
-        "inOutState": "0",
+        "inOutState": "1",
         "msg": "holly",
         "locate": {
           "planet": "0",
           "floor": "0",
           "cluster": "0",
-          "spot": "유투브 스튜디오"
+          "spot": null
+        }
+      },
+      {
+        "id" : "4",
+        "name": "jaebae",
+        "img": "url",
+        "inOutState": "2",
+        "msg": "holly",
+        "locate": {
+          "planet": "0",
+          "floor": "0",
+          "cluster": "0",
+          "spot": null
         }
       }
     ]
