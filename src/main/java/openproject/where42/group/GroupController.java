@@ -25,7 +25,7 @@ public class GroupController {
     String createGroup(@PathVariable("memberId") Long memberId, @ModelAttribute("name") GroupForm name, Model model) {
         groupService.saveGroup(name.getName(), memberId);
         Member member = memberRepository.findById(memberId);
-        model.addAttribute("member", member);
+        model.addAttribute("member", member); // dto 변경 필요
         System.out.println("그룹 기본 = " + member.getDefaultGroupId() + "즐겨찾기 = " + member.getStarredGroupId());
         return "member/iAm";
     }
@@ -56,7 +56,7 @@ public class GroupController {
 //        return "/member/iAm";
 //    } // post 방식으로 string 바로 받아올 수 있으면 이 컨트롤러 살리면 됨
 
-    @DeleteMapping("/member/{memberId}/{groupId}")
+    @DeleteMapping("/group/{memberId}/{groupId}")
     public String deleteGroup(@PathVariable("groupId") Long groupId) {
         groupService.deleteByGroupId(groupId);
         return "member/iAm";

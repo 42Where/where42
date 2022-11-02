@@ -92,21 +92,3 @@ public class LoginController {
         model.addAttribute("member", member); // member dto 만들어서 반환할 수 있도록!
         return "member/iAm";
     }
-
-
-
-//    @GetMapping("/items/{itemId}/edit")
-//    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
-//        Book item = (Book) itemService.findOne(itemId);
-//        BookForm form = new BookForm();
-//        form.setId(item.getId());
-//        form.setName(item.getName());
-//        form.setPrice(item.getPrice());
-//        form.setStockQuantity(item.getStockQuantity());
-//        form.setAuthor(item.getAuthor());
-//        form.setIsbn(item.getIsbn());
-//
-//        model.addAttribute("form", form);
-//        return "items/updateItemForm";
-//    }
-}
