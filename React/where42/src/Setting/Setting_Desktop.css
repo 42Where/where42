@@ -1,0 +1,52 @@
+#Setting #Desktop {
+    display: flex;
+    justify-content: center;
+}
+
+#Setting #Desktop #Wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    max-width: 1300px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 5% 0 5% 0;
+    background-color: white;
+}
+
+#Setting #Desktop #Wrapper #Comment {
+    width: 100%;
+    margin-bottom: 5%;
+    text-align: center;
+    font-family: 'GmarketSansBold';
+    font-size: clamp(40px, 4vw, 70px);
+}
+
+#Setting #Desktop #Wrapper #BoxWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 10% 0 10%;
+}
+
+#Setting #Desktop #Wrapper #BoxWrapper .Box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(228px, 22vw, 400px);
+    height: clamp(228px, 22vw, 400px);
+    margin: 5% 3% 0 3%;
+    border-radius: 50px;
+    background-color: #EF8E86;
+}
+
+#Setting #Desktop #Wrapper #BoxWrapper .Box .BoxCap {
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(35px, 3.5vw, 65px);
+    text-align: center;
+    color: white;
+}
