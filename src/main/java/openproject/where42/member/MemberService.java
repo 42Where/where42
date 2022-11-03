@@ -1,30 +1,18 @@
 package openproject.where42.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
+import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.dto.LocateForm;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.repository.MemberRepository;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.OutputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 

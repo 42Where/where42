@@ -2,8 +2,8 @@ package openproject.where42.groupFriend.domain;
 
 import lombok.*;
 import openproject.where42.check.CheckApi;
-import openproject.where42.member.OAuthToken;
 import openproject.where42.member.Seoul42;
+import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Planet;
 import openproject.where42.member.repository.MemberRepository;
@@ -19,7 +19,7 @@ public class GroupFriendInfo {
 	private String	name;
 	private int		inOutState;
 	private String	msg;
-	private Locate	locate;
+	private Locate locate;
 	private boolean	isMember;
 	private CheckApi checkApi;
 	@Autowired
@@ -57,7 +57,7 @@ public class GroupFriendInfo {
 //		}
 	}
 	private void locateParse(Seoul42 seoul42) {
-		Locate tmp = new Locate();
+//		Locate tmp = new Locate();
 		String seat = seoul42.getLocation();
 		int i = seat.indexOf(1) - '0';
 

@@ -45,7 +45,7 @@ public class LoginController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        if (seoul42.getLocation() == null){
+        if (seoul42.getLocation() == null) {
             if (!memberRepository.checkMemberByName(seoul42.getLogin())) {
             }
         }
@@ -59,3 +59,4 @@ public class LoginController {
         model.addAttribute("member", member); // member dto 만들어서 반환할 수 있도록!
         return "member/iAm";
     }
+}

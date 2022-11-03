@@ -83,6 +83,8 @@ public class CheckApi {
 		HttpEntity<MultiValueMap<String, String>> request =
 				new HttpEntity<>(params2, tokenHeaders);
 
+		System.out.println(this.access_token);
+
 		// HTTP 요청할 떄 생성한 Header 설정
 		//        ResponseEntity<String> responseEntity = restTemplate.exchange("요청 URL"
 		//                , HttpMethod.GET, new HttpEntity<>(headers), String.class);
