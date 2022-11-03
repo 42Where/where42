@@ -51,15 +51,15 @@ public class MemberApiController {
         }
     }
 
-    @GetMapping("/member/{memberId}/profile")
+    @GetMapping("/v1/member/{memberId}/profile")
     public MemberProfile memberProfile(@PathVariable("memberId") Long memberId) {
         Member member = memberRepository.findById(memberId);
         return new MemberProfile(member.getMsg(), member.getLocate());
     }
 
-    @GetMapping("/member/{memberId}/all")
+    @GetMapping("/v1/member/{memberId}/all")
     public MemberAll memberAll(@PathVariable("memberId") Long memberId) {
-        Member member = memberRepository.findById(Long.valueOf(1));
-        return new MemberAll(member.getName(), groupService.findGroups(Long.valueOf(1)), groupFriendRepository.findGroupFriendsByGroupId(Long.valueOf(1)));
+        Member member = memberRepository.findById(memberId);
+        return new MemberAll(member.getName(), groupService.findGroups(memberId), groupFriendRepository.findGroupFriendsByGroupId(memberId));
     }
 }

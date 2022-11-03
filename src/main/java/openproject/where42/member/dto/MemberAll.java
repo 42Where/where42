@@ -3,7 +3,6 @@ package openproject.where42.member.dto;
 import lombok.Getter;
 import lombok.Setter;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.groupFriend.domain.GroupFriend;
 
 import java.util.List;
 
