@@ -51,10 +51,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateLocate(Long memberId, LocateForm form) {
+    public void updateLocate(Long memberId, Locate locate) {
         Member member = memberRepository.findById(memberId);
 
-        member.getLocate().updateLocate(form.getPlanet(), form.getFloor(), form.getCluster(), form.getSpot());
+        member.getLocate().updateLocate(locate.getPlanet(), locate.getFloor(), locate.getCluster(), locate.getSpot());
     }
 
     public List<MemberGroupInfo> findAllGroupFriendsInfo(Long memberId) {

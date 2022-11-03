@@ -54,7 +54,7 @@ public class MemberApiController {
     @GetMapping("/member/{memberId}/profile")
     public MemberProfile memberProfile(@PathVariable("memberId") Long memberId) {
         Member member = memberRepository.findById(memberId);
-        return new MemberProfile(member.getId(), member.getMsg(), member.getLocate());
+        return new MemberProfile(member.getMsg(), member.getLocate());
     }
 
     @GetMapping("/member/{memberId}/all")
