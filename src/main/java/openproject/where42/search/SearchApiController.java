@@ -27,7 +27,7 @@ public class SearchApiController {
     private final ApiService api;
     private final ObjectMapper objectMapper;
 
-    @GetMapping("/search/{memberId}")
+    @GetMapping("/v1/search/{memberId}")
     public Search42UserResponse search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @RequestParam("token") String token) {
         HttpEntity<MultiValueMap<String, String>> req = api.req42ApiHeader(token); // 동일 헤더 사용
         ResponseEntity<String> res = api.resApi(req, api.req42ApiSearchUsersUri(begin, getEnd(begin)));
@@ -75,7 +75,7 @@ public class SearchApiController {
         }
     }
 
-    @GetMapping("/search/{memberId}/select")
+    @GetMapping("/v1/search/{memberId}/select")
     public SearchCadet getCadetInfo(@PathVariable("memberId") Long memberId, @RequestParam String token, @RequestBody SearchCadet cadet) {
         int test = 3;
         ResponseEntity<String> res = api.resApi(api.req42ApiHeader(token), api.reqHaneApiUri(cadet.getLogin())); // 헤더추가가 어떻게 되는거지.. reset 되나?
@@ -112,7 +112,7 @@ public class SearchApiController {
         return cadet;
     }
 
-    @PostMapping("/search/{memberId}/{friendName}")
+    @PostMapping("/v1/search/{memberId}/{friendName}") // friend로 빠질 거
     public Boolean saveFriend(@PathVariable("memberId") Long memberId, @PathVariable("friendName") String friendName) {
         Long groupId = memberRepository.findById(memberId).getDefaultGroupId();
         Long gId = Long.valueOf(1); // defaultgroupid 제대로 나오면 없애면 됨

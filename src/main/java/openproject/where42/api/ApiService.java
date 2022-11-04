@@ -15,13 +15,12 @@ import java.net.URI;
 @Service // 이컨트롤러 쓴느게 맞나..ㅎ 다시 생각..
 public class ApiService {
     RestTemplate rt = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-
     public HttpEntity<MultiValueMap<String, String>> req42ApiHeader(String token) { // cache 처리 혹은 객체 처리
-        this.headers.add("Authorization", "Bearer " + token); // token을 여기서 유저에 대한 캐시로 받거나.. 뭐 그럴 수 있으면 좋을듯
-        this.headers.add("Content-type", "application/json;charset=utf-8");
+        HttpHeaders headers = new HttpHeaders(); // 새 헤더를 만들지 않으면 429에러가 바로 난다.
+        headers.add("Authorization", "Bearer " + token); // token을 여기서 유저에 대한 캐시로 받거나.. 뭐 그럴 수 있으면 좋을듯
+        headers.add("Content-type", "application/json;charset=utf-8");
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 얘네는 new 처리 하는게 맞겠지..?
-        return new HttpEntity<>(params, this.headers); // 헤더 공통으로 쓸 수 있는 방법
+        return new HttpEntity<>(params, headers); // 헤더 공통으로 쓸 수 있는 방법
     }
 
     public URI req42ApiSearchUsersUri(String begin, String end) {

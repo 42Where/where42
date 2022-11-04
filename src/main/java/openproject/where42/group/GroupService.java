@@ -1,6 +1,7 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.exception.DuplicateGroupNameException;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.member.domain.Member;
@@ -32,21 +33,15 @@ public class GroupService {
     }
 
     @Transactional
-    public boolean updateGroupName(Long groupId, String groupName) {
+    public void updateGroupName(Long groupId, String groupName) {
         Groups group = groupRepository.findById(groupId);
-
-        try {
-            validateDuplicateGroupName(group.getOwner().getId(), groupName);
-        } catch (IllegalStateException e) {
-            return false;
-        }
+        validateDuplicateGroupName(group.getOwner().getId(), groupName);
         group.updateGroupName(groupName);
-        return true; // 예외처리 더 알아보자
     }
 
     private void validateDuplicateGroupName(Long ownerId, String groupName) { // 여러곳에서 호출 시에 대한 에러 처리 필요 싱글톤 패턴 참고
         if (groupRepository.isGroupNameInOwner(ownerId, groupName))
-            throw new IllegalStateException("이미 사용하고 있는 그룹 이름입니다.");
+            throw new DuplicateGroupNameException();
     }
 
     public List<Groups> findGroups(Long ownerId) {
