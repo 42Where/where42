@@ -24,12 +24,14 @@ import java.net.URI;
 @NoArgsConstructor
 public class CheckApi {
 
-	private String access_token;
-	private String token_type;
-	private String refresh_token;
-	private int expires_in;
-	private String scope;
-	private int created_at;
+	static private String access_token;
+	static private String token_type;
+	static private String refresh_token;
+	static private int expires_in;
+	static private String scope;
+	static private int created_at;
+
+	static private HttpHeaders tokenHeaders = new HttpHeaders();
 
 	public void setting(String code) {
 		RestTemplate rt = new RestTemplate(); //http 요청을 간단하게 해줄 수 있는 클래스
@@ -40,8 +42,8 @@ public class CheckApi {
 		//HttpBody 오브젝트 생성
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type","authorization_code");
-		params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-		params.add("client_secret", "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");
+		params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+		params.add("client_secret", "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");
 		params.add("code", code);
 		params.add("redirect_uri","http://localhost:8080/auth/login/callback");
 
@@ -73,12 +75,11 @@ public class CheckApi {
 		this.expires_in = oauthToken.getExpires_in();
 		this.created_at = oauthToken.getCreated_at();
 		this.scope = oauthToken.getScope();
+		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
+		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
 	}
 	public ResponseEntity<String> callMeInfo() {
 		RestTemplate rt = new RestTemplate();
-		HttpHeaders tokenHeaders = new HttpHeaders();
-		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
-		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
 		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
 		HttpEntity<MultiValueMap<String, String>> request =
 				new HttpEntity<>(params2, tokenHeaders);
@@ -101,20 +102,21 @@ public class CheckApi {
 
 	public ResponseEntity<String> callNameInfo(String name) {
 		RestTemplate rt = new RestTemplate();
-		HttpHeaders tokenHeaders = new HttpHeaders();
-		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
-		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
+//		HttpHeaders tokenHeaders = new HttpHeaders();
+//		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
+//		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
 		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
 		HttpEntity<MultiValueMap<String, String>> request =
 				new HttpEntity<>(params2, tokenHeaders);
 
+		System.out.println(this.access_token);
 		// HTTP 요청할 떄 생성한 Header 설정
 //                ResponseEntity<String> responseEntity = restTemplate.exchange("요청 URL"
 //                        , HttpMethod.GET, new HttpEntity<>(headers), String.class);
+
 		URI url = UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/users/" + name)
 				.build()
 				.toUri();
-
 		return rt.exchange(
 				url.toString(),
 				HttpMethod.GET,

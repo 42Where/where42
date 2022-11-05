@@ -6,6 +6,7 @@ import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
+import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.dto.MemberGroupInfo;
@@ -59,9 +60,8 @@ public class MemberService {
         return groupList;
     }
 
-    public List<GroupFriendInfo> findAllFriendsInfo(Long memberId) {
+    public List<FriendForm> findAllFriendsInfo(Long memberId) {
         Member member = memberRepository.findById(memberId);
-//        return groupFriendService.findAllFriendsInfo(member.getDefaultGroup()); // 기본 그룹 id 보내주면 기본 그룹에 있는 친구들 정보 싹다 정리해서 반환
-        return null;
+        return groupFriendService.findAllFriendsInfo(member.getDefaultGroupId()); // 기본 그룹 id 보내주면 기본 그룹에 있는 친구들 정보 싹다 정리해서 반환
     }
 }
