@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupService;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
+import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.groupFriend.dto.GroupFriendForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class GroupFriendController {
 	public final GroupFriendService groupFriendService;
@@ -32,15 +34,15 @@ public class GroupFriendController {
 		if (result.hasErrors()) // 에러나면 메세지 출력하게끔 하는 부분인데 프론트가 어떻게 만드냐에 따라 다른듯
 			return "???";
 		groupFriendService.saveGroupFriend(form.getFriend_name(), form.getGroupId());
-		return "redirect:/"; //영한씨가 홈에 보내라고 했다..
+		return "success"; //영한씨가 홈에 보내라고 했다..
 	}
 
-	@GetMapping("/groupFriends/new")
-	public String multicreateForm(Model model) {
-		List<GroupFriend> list = null; // 이거 리스트 보내면 프론트에서 채워 넣을 수 있는건가...?
-		model.addAttribute("groupFriendForms", list);
-		return "???";
-	}
+//	@GetMapping("/groupFriends/new")
+//	public String multicreateForm(Model model) {
+//		List<GroupFriend> list = null; // 이거 리스트 보내면 프론트에서 채워 넣을 수 있는건가...?
+//		model.addAttribute("groupFriendForms", list);
+//		return "???";
+//	} ==> 쓰레기 함수
 
 	@PostMapping("/groupFriends/new")
 	public String muticreate(@Valid List<GroupFriend> list) {
@@ -48,11 +50,10 @@ public class GroupFriendController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/groupFriend/{groupId}/delete")
-	public String deleteGroupFriend(@PathVariable("groupId") Long groupId, Model model) {
-		List<GroupFriendInfo> groupFriends = groupFriendService.findGroupFriendInfo(groupId);
-		model.addAttribute("groupFriends", groupFriends);
-		return "???";
+	@GetMapping("/v1/groupFriend/{groupId}")
+	public List<FriendForm> GroupFriendInfo(@PathVariable("groupId") Long groupId) {
+		List<FriendForm> groupFriends = groupFriendService.findAllFriendsInfo(groupId);
+		return groupFriends;
 	}
 
 	@PostMapping("/groupFriend/{groupId}/delete")
@@ -63,7 +64,7 @@ public class GroupFriendController {
 
 	@GetMapping("/groupFriends/{groupId}/delete")
 	public String deleteGroupFriends(@PathVariable("groupId") Long groupId, Model model) {
-		List<GroupFriendInfo> groupFriends = groupFriendService.findGroupFriendInfo(groupId);
+		List<FriendForm> groupFriends = groupFriendService.findAllFriendsInfo(groupId);
 		model.addAttribute("groupFriends", groupFriends);
 		return "???";
 	}

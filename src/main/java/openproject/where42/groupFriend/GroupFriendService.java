@@ -5,12 +5,15 @@ import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
+import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.groupFriend.repository.GroupFriendRepository;
 import openproject.where42.member.OAuthToken;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,11 +69,13 @@ public class GroupFriendService {
 		groupFriendRepository.deleteFriendsGroupByName(member, friendName);
 	}
 
-	public List<GroupFriendInfo> findGroupFriendInfo(Long groupId) {
+	public List<FriendForm> findAllFriendsInfo(Long groupId) {
 		List<String> nameList = groupFriendRepository.findGroupFriendsByGroupId(groupId);
-		List<GroupFriendInfo> result = null;
+		List<FriendForm> result = new ArrayList<>();
+		System.out.println(nameList);
 		for (String i: nameList)
-			result.add(new GroupFriendInfo().setting(i));
+			result.add(new FriendForm(new GroupFriendInfo().setting(i, memberRepository)));
+		System.out.println(result);
 		return result;
 	}
 

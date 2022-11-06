@@ -15,17 +15,15 @@ import javax.persistence.EntityManager;
 @NoArgsConstructor
 public class GroupFriendInfo {
 
-	private Long	id; // ID 넣는 로직 추가필요
+	private Long	id = null; // ID 넣는 로직 추가필요
 	private String	name;
 	private int		inOutState;
 	private String	msg;
-	private Locate locate;
+	private Locate locate = null;
 	private boolean	isMember;
-	private CheckApi checkApi;
-	@Autowired
-	private MemberRepository memberRepository;
+	final private CheckApi checkApi = new CheckApi();
 
-	public GroupFriendInfo setting(String name) {
+	public GroupFriendInfo setting(String name, MemberRepository memberRepository) {
 
 
 		Member member = memberRepository.findByName(name);
@@ -51,7 +49,7 @@ public class GroupFriendInfo {
 			Seoul42 seoul42 = checkApi.check42Api(name);
 		if (seoul42.getLocation() != null) {
 			locateParse(seoul42);
-		} else if (seoul42.getLocation() == null && isMember == true){
+//		} else if (seoul42.getLocation() == null && isMember == true){
 				//수동자리불러오기
 			}
 //		}
