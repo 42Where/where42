@@ -56,7 +56,7 @@ public class GroupFriendRepository {
     public List<String> notIncludeFriendByGroup(Member member, Long groupId) {
         List<GroupFriend> friends = em.createQuery("select gs from GroupFriend gs where gs.group.owner = :member and gs.group.groupName = :groupName", GroupFriend.class)
                 .setParameter("member", member)
-                .setParameter("groupName", "friends")
+                .setParameter("groupName", "기본")
                 .getResultList();
         List<GroupFriend> groupFriends = em.createQuery("select gs from GroupFriend gs where gs.group.owner = :member and gs.group.id = :groupId", GroupFriend.class)
                 .setParameter("member", member)
@@ -112,7 +112,7 @@ public class GroupFriendRepository {
 
     public List<String> findAllGroupFriendByOwnerId(Long ownerId) {
         Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
-                .setParameter("groupName", "friends")
+                .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
         return em.createQuery("select gm.friendName from GroupFriend gm where gm.group = :group", String.class)

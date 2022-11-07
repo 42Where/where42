@@ -46,7 +46,7 @@ public class MemberRepository {
         try {
             friend = em.createQuery("select gm from GroupFriend gm where gm.group.owner.id = :memberId and gm.group.groupName = :groupname and gm.friendName = :name", GroupFriend.class)
                     .setParameter("memberId", memberId)
-                    .setParameter("groupname", "friends")
+                    .setParameter("groupname", "기본")
                     .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
