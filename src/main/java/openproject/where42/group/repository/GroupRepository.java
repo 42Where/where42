@@ -53,8 +53,8 @@ public class GroupRepository {
     public List<Groups> findGroupsByOwnerId(Long ownerId) {
         List<Groups> groups =  em.createQuery("select gs from Groups gs where gs.owner.id = :ownerId and gs.groupName not in (:friends, :starred)", Groups.class)
                 .setParameter("ownerId", ownerId)
-                .setParameter("friends", "friends")
-                .setParameter("starred", "starred")
+                .setParameter("friends", "기본")
+                .setParameter("starred", "즐겨찾기")
                 .getResultList();
         Collections.sort(groups, new Comparator<Groups>() {
             @Override
