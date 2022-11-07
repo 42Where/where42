@@ -6,6 +6,11 @@ import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.groupFriend.dto.GroupFriendForm;
+import openproject.where42.response.ResponseDto;
+import openproject.where42.response.ResponseMsg;
+import openproject.where42.response.StatusCode;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,56 +28,36 @@ public class GroupFriendController {
 	public final GroupFriendService groupFriendService;
 	public final GroupService groupService;
 
-	@GetMapping("/groupFriend/new")
-	public String createForm(Model model) {
-		model.addAttribute("groupFriendForm", new GroupFriendForm());
-		return "???"; // 그룹 추가할 때 새 페이지를 열어서 추가하나..?
-	}
-
 	@PostMapping("/groupFriend/new")
-	public String create(@Valid GroupFriendForm form, BindingResult result) {
-		if (result.hasErrors()) // 에러나면 메세지 출력하게끔 하는 부분인데 프론트가 어떻게 만드냐에 따라 다른듯
-			return "???";
+	public ResponseEntity create(@Valid GroupFriendForm form, BindingResult result) {
+		if (result.hasErrors())
+			return new ResponseEntity(ResponseDto.res(StatusCode.BAD_REQUEST,ResponseMsg.NOT_FOUND_USER), HttpStatus.BAD_REQUEST);
 		groupFriendService.saveGroupFriend(form.getFriend_name(), form.getGroupId());
-		return "success"; //영한씨가 홈에 보내라고 했다..
+		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_GROUP_FRIEND), HttpStatus.OK);
 	}
-
-//	@GetMapping("/groupFriends/new")
-//	public String multicreateForm(Model model) {
-//		List<GroupFriend> list = null; // 이거 리스트 보내면 프론트에서 채워 넣을 수 있는건가...?
-//		model.addAttribute("groupFriendForms", list);
-//		return "???";
-//	} ==> 쓰레기 함수
 
 	@PostMapping("/groupFriends/new")
-	public String muticreate(@Valid List<GroupFriend> list) {
+	public ResponseEntity muticreate(@Valid List<GroupFriend> list) {
 		groupFriendService.multiSaveGroupFriend(list);
-		return "redirect:/";
-	}
-
-	@GetMapping("/v1/groupFriend/{groupId}")
-	public List<FriendForm> GroupFriendInfo(@PathVariable("groupId") Long groupId) {
-		List<FriendForm> groupFriends = groupFriendService.findAllFriendsInfo(groupId);
-		return groupFriends;
+		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_GROUP_FRIEND), HttpStatus.OK);
 	}
 
 	@PostMapping("/groupFriend/{groupId}/delete")
-	public String deleteGroupFriend(GroupFriend groupFriend) {
+	public ResponseEntity deleteGroupFriend(GroupFriend groupFriend) {
 		groupFriendService.deleteGroupFriend(groupFriend);
-		return "redirect:/";
+		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.DELETE_GROUP_FRIEND), HttpStatus.OK);
 	}
 
-	@GetMapping("/groupFriends/{groupId}/delete")
-	public String deleteGroupFriends(@PathVariable("groupId") Long groupId, Model model) {
-		List<FriendForm> groupFriends = groupFriendService.findAllFriendsInfo(groupId);
-		model.addAttribute("groupFriends", groupFriends);
-		return "???";
-	}
+//	@GetMapping("/groupFriends/{groupId}/delete")
+//	public String deleteGroupFriends(@PathVariable("groupId") Long groupId, Model model) {
+//		List<FriendForm> groupFriends = groupFriendService.findAllFriendsInfo(groupId);
+//		model.addAttribute("groupFriends", groupFriends);
+//		return "???";
+//	}
 
 	@PostMapping("/groupFriends/{groupId}/delete")
-	public String deleteGroupFriends(List<GroupFriend> groupFriends) {
-		groupFriendService.deleteGroupFriends(groupFriends);
-		return "redirect:/";
+	public ResponseEntity deleteGroupFriends(@PathVariable("groupId") Long groupId, List<GroupFriend> groupFriends) {
+		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.DELETE_GROUP_FRIEND), HttpStatus.OK);
 	}
 
 }

@@ -57,7 +57,8 @@ public class GroupFriendInfo {
 	private void locateParse(Seoul42 seoul42) {
 //		Locate tmp = new Locate();
 		String seat = seoul42.getLocation();
-		int i = seat.indexOf(1) - '0';
+		System.out.println(seat);
+		int i = seat.charAt(1) - '0';
 
 		if (i >= 1 && i <= 6) {
 			if (i <= 2)
@@ -68,6 +69,7 @@ public class GroupFriendInfo {
 				this.locate = new Locate(Planet.gaepo, 5, -1, seat);
 		} else if (i >= 7 && i <= 10)
 			this.locate = new Locate(Planet.seocho, -1, i, seat);
+		System.out.println(seat.indexOf(1));
 	}
 
 }
