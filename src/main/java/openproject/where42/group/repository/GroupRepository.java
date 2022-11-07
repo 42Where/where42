@@ -23,6 +23,7 @@ public class GroupRepository {
         return groups.getId();
     }
 
+    // em.remove는 id로 동작안함
     public void deleteByGroupId(Long groupId) {
         List<GroupFriend> members = em.createQuery("select ms from GroupFriend ms where ms.group.id = :groupId", GroupFriend.class)
                 .setParameter("groupId", groupId)
@@ -30,7 +31,12 @@ public class GroupRepository {
         for (GroupFriend member : members) {
             em.remove(member);
         }
-        em.remove(groupId);
+        int isSuccessful = em.createQuery("delete from Groups g where g.id = :groupId")
+                .setParameter("groupId", groupId)
+                .executeUpdate();
+//        if (isSuccessful == 0) {
+//            throw new Exception("deleteByGroupId failed may be invaild id");
+//        }
     }
 
     public Groups findById(Long id) {
@@ -47,8 +53,8 @@ public class GroupRepository {
     public List<Groups> findGroupsByOwnerId(Long ownerId) {
         List<Groups> groups =  em.createQuery("select gs from Groups gs where gs.owner.id = :ownerId and gs.groupName not in (:friends, :starred)", Groups.class)
                 .setParameter("ownerId", ownerId)
-                .setParameter("friends", "friends")
-                .setParameter("starred", "starred")
+                .setParameter("friends", "기본")
+                .setParameter("starred", "즐겨찾기")
                 .getResultList();
         Collections.sort(groups, new Comparator<Groups>() {
             @Override

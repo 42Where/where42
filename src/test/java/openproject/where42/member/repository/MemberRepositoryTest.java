@@ -105,4 +105,11 @@ public class MemberRepositoryTest {
         Boolean result = memberRepository.checkMemberByName("jujo");
         System.out.println("jujo = " + result);
     }
+
+    @Test
+    public void checkFriendByMemberIdAndName() {
+        save();
+        Boolean result = memberRepository.checkFriendByMemberIdAndName(members.get("jaebae").getId(), "sunghkim");
+        System.out.println(result);
+    }
 }
