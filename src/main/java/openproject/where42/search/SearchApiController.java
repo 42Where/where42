@@ -114,9 +114,8 @@ public class SearchApiController {
 
     @PostMapping("/v1/search/{memberId}/{friendName}") // friend로 빠질 거
     public Boolean saveFriend(@PathVariable("memberId") Long memberId, @PathVariable("friendName") String friendName) {
-        Long groupId = memberRepository.findById(memberId).getDefaultGroupId();
-        Long gId = Long.valueOf(1); // defaultgroupid 제대로 나오면 없애면 됨
-        groupFriendService.saveGroupFriend(friendName, gId);
+        Member member = memberRepository.findById(memberId);
+        groupFriendService.saveGroupFriend(friendName, member.getDefaultGroupId());
         return true;
     }
 }

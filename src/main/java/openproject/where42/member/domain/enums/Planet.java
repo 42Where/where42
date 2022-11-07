@@ -1,8 +1,7 @@
 package openproject.where42.member.domain.enums;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@Getter
 public enum Planet {
     gaepo(1), seocho(2);
 
@@ -11,5 +10,10 @@ public enum Planet {
     }
 
     private final Integer value;
+
+    @JsonValue
+    public int getValue() {
+        return this.value;
+    }
 
 }

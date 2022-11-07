@@ -28,12 +28,9 @@ public class MemberController {
 
     @PostMapping("/v1/member/{name}") // 동의 완료 시 넘어오는 주소 로그인 완료하고 dto 반환 -> 다시 이름 받기
     public ResponseEntity createMember(@PathVariable("name") String name) {
-        Member member = new Member(name, MemberLevel.member);
-        memberService.createMember(member);
-        Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
-        Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
-        member.setDefaultGroup(defaultGroupId, starredGroupId);
-        return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_MEMBER, member.getId()), HttpStatus.OK); // memberid 반환해줘야하나? 프론트에 확인 할 것 뭐 가지고 있어야 하는지.
+        Long memberId = memberService.saveMember(name);
+        return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_MEMBER, memberId), HttpStatus.OK);
+        // memberid 반환해줘야하나? 프론트에 확인 할 것 뭐 가지고 있어야 하는지. + 로케이트도 줬다가 다시 받아서 다시 주자 me다시 안부르게
     }
 
     @PostMapping("/v1/member/{memberId}/profile/msg")
