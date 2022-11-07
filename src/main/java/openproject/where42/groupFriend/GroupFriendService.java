@@ -40,16 +40,6 @@ public class GroupFriendService {
 		groupFriendRepository.multiSave(groupFriendList);
 	}
 
-	// 해당 친구가 포함되지 않은 그룹 목록 front 반환 ---> API
-//	public List<String> notIncludeGroupByFriend(Member member, String friendName) {
-//		return groupMemberRepository.notIncludeGroupByFriend(member, friendName);
-//	}
-
-	// 해당 그룹에 포함되지 않는 친구 목록 front 반환 ---> API
-	public List<String> notIncludeFriendByGroup(Member member, Long groupId) {
-		return groupFriendRepository.notIncludeFriendByGroup(member, groupId);
-	}
-
 	@Transactional
 //	public void deleteGroupFriend(Long groupId, String friendName) {
 	public void deleteGroupFriend(GroupFriend groupFriend) {
@@ -72,10 +62,8 @@ public class GroupFriendService {
 	public List<FriendForm> findAllFriendsInfo(Long groupId) {
 		List<String> nameList = groupFriendRepository.findGroupFriendsByGroupId(groupId);
 		List<FriendForm> result = new ArrayList<>();
-		System.out.println(nameList);
 		for (String i: nameList)
 			result.add(new FriendForm(new GroupFriendInfo().setting(i, memberRepository)));
-		System.out.println(result);
 		return result;
 	}
 
