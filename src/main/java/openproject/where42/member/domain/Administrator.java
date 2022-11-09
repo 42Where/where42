@@ -2,7 +2,6 @@ package openproject.where42.member.domain;
 
 import openproject.where42.group.domain.Groups;
 import openproject.where42.member.domain.enums.Planet;
-import openproject.where42.member.domain.enums.Place;
 import openproject.where42.member.domain.enums.MemberLevel;
 
 import javax.persistence.*;
@@ -32,7 +31,4 @@ public class Administrator extends User {
     private int floor;
 
     private int cluster;
-
-    @Enumerated
-    private Place place;
 }

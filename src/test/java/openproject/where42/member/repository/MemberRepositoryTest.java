@@ -1,9 +1,10 @@
 package openproject.where42.member.repository;
 
 import openproject.where42.group.domain.Groups;
-import openproject.where42.group.repository.GroupRepository;
+import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.groupFriend.repository.GroupFriendRepository;
+import openproject.where42.groupFriend.GroupFriendRepository;
+import openproject.where42.member.MemberRepository;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
 import org.junit.Test;
@@ -22,7 +23,8 @@ import java.util.List;
 @SpringBootTest
 @Transactional
 public class MemberRepositoryTest {
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Autowired GroupRepository groupRepository;
     @Autowired GroupFriendRepository groupFriendRepository;
 
