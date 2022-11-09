@@ -26,6 +26,10 @@
     align-items: center;
 }
 
+#Setting #Mobile #SettingChoice #BoxWrapper a {
+    text-decoration: none;
+}
+
 #Setting #Mobile #SettingChoice #BoxWrapper .Box {
     display: flex;
     align-items: center;

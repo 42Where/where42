@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
 import './Setting_Desktop.css';
 import './Setting_Mobile.css';
 
@@ -34,7 +35,9 @@ function Setting() {
                         </div>
                     </div>
                     <Box cap="그룹 설정" choice={3}/>
-                    <Box cap="로그아웃" choice={4}/>
+                    <Link to="/Login">
+                        <Box cap="로그아웃" choice={0}/>
+                    </Link>
                 </div>
             </div>
         )
@@ -48,7 +51,7 @@ function Setting() {
             event.preventDefault(); /*새로고침 방지*/
             alert(JSON.stringify(msg, null, 1).replace(/"/gi, ""));
             /*변경된 msg를 백으로 넘겨주는 api 호출*/
-            /*settingchoice 컴포넌트 부르기*/
+            setChoice(0);
         }
 
         return (
@@ -71,8 +74,8 @@ function Setting() {
             <div id="SettingPlanet">
                 <div id="Comment">클러스터 선택</div>
                 <div id="BoxWrapper">
-                    <Box cap="개포" planet={1}/>
-                    <Box cap="서초" planet={2}/>
+                    <Box cap="개포" planet={1} choice={4}/>
+                    <Box cap="서초" planet={2} choice={5}/>
                 </div>
             </div>
         )
@@ -84,13 +87,13 @@ function Setting() {
             <div id="SettingFloor">
                 <div id="Comment">층 수 선택</div>
                 <div id="BoxWrapper">
-                    <Box cap="지하 1층"/>
-                    <Box cap="1층"/>
-                    <Box cap="2층"/>
-                    <Box cap="3층"/>
-                    <Box cap="4층"/>
-                    <Box cap="5층"/>
-                    <Box cap="옥상"/>
+                    <Box cap="지하 1층" floor={-1} choice={61}/>
+                    <Box cap="1층" floor={1} choice={62}/>
+                    <Box cap="2층" floor={2} choice={63}/>
+                    <Box cap="3층" floor={3} choice={64}/>
+                    <Box cap="4층" floor={4} choice={65}/>
+                    <Box cap="5층" floor={5} choice={66}/>
+                    <Box cap="옥상" floor={6} choice={67}/>
                 </div>
             </div>
         )
@@ -101,10 +104,10 @@ function Setting() {
             <div id="SettingCluster">
                 <div id="Comment">클러스터 선택</div>
                 <div id="BoxWrapper">
-                    <Box cap="7 클러스터"/>
-                    <Box cap="8 클러스터"/>
-                    <Box cap="9 클러스터"/>
-                    <Box cap="10 클러스터"/>
+                    <Box cap="7 클러스터" cluster={7} choice={71}/>
+                    <Box cap="8 클러스터" cluster={8} choice={72}/>
+                    <Box cap="9 클러스터" cluster={9} choice={73}/>
+                    <Box cap="10 클러스터" cluster={10} choice={74}/>
                 </div>
             </div>
         )
@@ -128,27 +131,52 @@ function Setting() {
 
     /*매개변수를 문자열 하나만 전달 할건데 그것도 꼭 props로 전달해줘야 하나요?*/
     function Box(props) {
-        if (props.choice >= 0) {
+        if (props.planet) {
+            return (
+                <div className='Box' onClick={() => {
+                    setLocate((prev) => {
+                        return {...prev, planet: props.planet}
+                    });
+                    setChoice(props.choice);
+                }}>
+                    <div className='BoxCap'>{props.cap}</div>
+                </div>
+            )
+        }
+        else if (props.floor >= -1) {
+            return (
+                <div className='Box' onClick={() => {
+                    setLocate((prev) => {
+                        return {...prev, floor: props.floor}
+                    });
+                    setChoice(props.choice);
+                }}>
+                    <div className='BoxCap'>{props.cap}</div>
+                </div>
+            )
+        }
+        else if (props.cluster) {
+            return (
+                <div className='Box' onClick={() => {
+                    setLocate((prev) => {
+                        return {...prev, cluster: props.cluster}
+                    });
+                    setChoice(props.choice);
+                }}>
+                    <div className='BoxCap'>{props.cap}</div>
+                </div>
+            )
+        }
+        else if (props.choice >= 0) {
             return (
                 <div className='Box' onClick={()=>{setChoice(props.choice)}}>
                     <div className='BoxCap'>{props.cap}</div>
                 </div>
             )
         }
-        else if (props.planet) {
-            return (
-                <div className='Box' onClick={() => {
-                    setLocate((prev) => {
-                        return {...prev, planet: props.planet}
-                    });
-                    /*choice 말고 다른 변수로 위치 설정하는 컴포넌트 결정해야할듯?*/
-                }}>
-                    <div className='BoxCap'>{props.cap}</div>
-                </div>
-            )
-        }
     }
 
+    /*return 구역 (실제로 화면에 띄울 컴포넌트 선택)*/
     if (choice === 0) {
         return (
             <div id="Setting">
@@ -178,6 +206,22 @@ function Setting() {
             <div id="Setting">
                 {isMobile && <div id="Mobile"><SettingGroup/></div>}
                 {isDesktop && <div id="Desktop"><SettingGroup/></div>}
+            </div>
+        )
+    }
+    else if (choice === 4) {
+        return (
+            <div id="Setting">
+                {isMobile && <div id="Mobile"><SettingFloor/></div>}
+                {isDesktop && <div id="Desktop"><SettingFloor/></div>}
+            </div>
+        )
+    }
+    else if (choice === 5) {
+        return (
+            <div id="Setting">
+                {isMobile && <div id="Mobile"><SettingCluster/></div>}
+                {isDesktop && <div id="Desktop"><SettingCluster/></div>}
             </div>
         )
     }

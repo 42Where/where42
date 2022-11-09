@@ -55,6 +55,17 @@
     color: white;
 }
 
+/*SettingChoice*/
+
+#Setting #Desktop #SettingChoice #BoxWrapper a {
+    margin: 5% 3% 0 3%;
+    text-decoration: none;
+}
+
+#Setting #Desktop #SettingChoice #BoxWrapper a .Box {
+    margin: 0;
+}
+
 /*SettingMsg*/
 
 #Setting #Desktop #SettingMsg #Comment {
