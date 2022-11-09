@@ -26,13 +26,6 @@ public class GroupFriendRepository {
         return groupFriend.getId();
     }
 
-    // 다중 친구 그룹 추가
-    public void multiSave(List<GroupFriend> groupFriends) {
-        for (GroupFriend groupFriend : groupFriends) {
-            em.persist(groupFriend);
-        }
-    }
-
     // 해당 친구가 포함되지 않은 그룹 목록 front 반환
     public List<String> notIncludeGroupByMemberAndFriendName(Member member, String friendName) {
         List<Groups> groups = em.createQuery("select g from Groups g where g.owner = :member", Groups.class)
