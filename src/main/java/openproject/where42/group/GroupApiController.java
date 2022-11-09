@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 public class GroupApiController {
     private final GroupService groupService;
 
-    @PostMapping("/v1/member/group/{memberId}")
+    @PostMapping("/v1/member/{memberId}/group")
     public ResponseEntity createGroup(@PathVariable("memberId") Long memberId, @RequestParam("groupName") String groupName) {
-        groupService.saveGroup(groupName, memberId); // false 예외처리??
-        return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_GROUP), HttpStatus.OK);
+        Long groupId = groupService.saveGroup(groupName, memberId); // false 예외처리??
+        return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_GROUP, groupId), HttpStatus.OK);
     }
 
     @PostMapping("/v1/group/{groupId}")

@@ -1,6 +1,7 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.exception.DefaultGroupNameException;
 import openproject.where42.exception.DuplicateGroupNameException;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
@@ -21,15 +22,15 @@ public class GroupService {
     @Transactional
     public Long createDefaultGroup(Member member, String groupName) {
         if (!(groupName.equalsIgnoreCase("기본") || groupName.equalsIgnoreCase("즐겨찾기"))) // 기본이나 즐겨찾기 아닌 다른 그룹 혹시 잘못 호출 시 예외 터트릴 건데 어디서 잡을 지 모르겠어서 일단 걍 리턴 나중에 에러처리 필요
-            return Long.valueOf(0);
+            throw new DefaultGroupNameException();
         return groupRepository.save(new Groups(groupName, member));
     }
 
-    @Transactional // 기본적으로 false여서 안쓰면 false임
-    public void saveGroup(String groupName, Long ownerId) {
+    @Transactional
+    public Long saveGroup(String groupName, Long ownerId) {
         validateDuplicateGroupName(ownerId, groupName);
         Member owner = memberRepository.findById(ownerId);
-        groupRepository.save(new Groups(groupName, owner));
+        return groupRepository.save(new Groups(groupName, owner));
     }
 
     @Transactional
@@ -44,7 +45,7 @@ public class GroupService {
             throw new DuplicateGroupNameException();
     }
 
-    public List<Groups> findGroups(Long ownerId) {
+    public List<Groups> findAllGroupsExceptDefault(Long ownerId) {
         return groupRepository.findGroupsByOwnerId(ownerId);
     }
 
