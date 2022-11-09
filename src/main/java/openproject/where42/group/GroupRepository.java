@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -76,5 +77,17 @@ public class GroupRepository {
             return false;
         }
         return true;
+    }
+
+    List<Groups> findGroupsByOwnerIdAndGroupNames(Long ownerId, List<String> groupNames) {
+        List<Groups> groups = new ArrayList<>();
+        for (String groupName : groupNames) {
+            Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                    .setParameter("ownerId", ownerId)
+                    .setParameter("groupName", groupName)
+                    .getSingleResult();
+            groups.add(group);
+        }
+        return groups;
     }
 }
