@@ -8,7 +8,7 @@ import openproject.where42.api.ApiService;
 import openproject.where42.api.Utils;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.member.repository.MemberRepository;
+import openproject.where42.member.MemberRepository;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;

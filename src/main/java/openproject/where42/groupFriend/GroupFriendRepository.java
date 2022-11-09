@@ -1,4 +1,4 @@
-package openproject.where42.groupFriend.repository;
+package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
@@ -24,13 +24,6 @@ public class GroupFriendRepository {
     public Long save(GroupFriend groupFriend) {
         em.persist(groupFriend);
         return groupFriend.getId();
-    }
-
-    // 다중 친구 그룹 추가
-    public void multiSave(List<GroupFriend> groupFriends) {
-        for (GroupFriend groupFriend : groupFriends) {
-            em.persist(groupFriend);
-        }
     }
 
     // 해당 친구가 포함되지 않은 그룹 목록 front 반환
@@ -75,19 +68,23 @@ public class GroupFriendRepository {
     }
 
     // 한명 삭제 그룹 멤버 DB 삭제
-    public void deleteGroupFriend(GroupFriend groupFriend) {
-        em.remove(groupFriend);
+    public void deleteGroupFriendByGroupFriendId(Long groupFriendId) {
+        int result = em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+                .setParameter("groupFriendId", groupFriendId)
+                .executeUpdate();
     }
 
     // 다중 친구 그룹 삭제
-    public void deleteGroupFriends(List<GroupFriend> groupFriends) {
-        for (GroupFriend groupFriend : groupFriends) {
-            em.remove(groupFriend.getId());
+    public void deleteGroupFriendsByGroupFriendId(List<Long> groupFriendIds) {
+        for (Long groupFriendId : groupFriendIds) {
+            em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+                    .setParameter("groupFriendId", groupFriendId)
+                    .executeUpdate();
         }
     }
 
-    // 친구가 해당된 모든 그룹에서 삭제하기
-    public void deleteFriendsGroupByName(Member member, String friendName) {
+    // 친구가 해당된 모든 그룹에서 삭제하기 deleteFriendsGroupByName -> deleteFriendByFriendName
+    public void deleteFriendByFriendName(Member member, String friendName) {
         List<Groups> groups = em.createQuery("select g from Groups g where g.owner = :member", Groups.class)
                 .setParameter("member", member)
                 .getResultList();
@@ -110,15 +107,13 @@ public class GroupFriendRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<String> findAllGroupFriendByOwnerId(Long ownerId) {
+    public List<Groups> findAllGroupFriendByOwnerId(Long ownerId) {
         Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
                 .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm.friendName from GroupFriend gm where gm.group = :group", String.class)
+        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", Groups.class)
                 .setParameter("group", group)
-                .getResultList()
-                .stream().sorted()
-                .collect(Collectors.toList());
+                .getResultList();
     }
 }

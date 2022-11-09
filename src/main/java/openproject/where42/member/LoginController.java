@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.check.CheckApi;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.repository.MemberRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

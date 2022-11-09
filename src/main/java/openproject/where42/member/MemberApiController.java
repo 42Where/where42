@@ -8,16 +8,14 @@ import openproject.where42.api.dto.Seoul42;
 import openproject.where42.exception.TakenSeatException;
 import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.dto.GroupFriendInfo;
-import openproject.where42.groupFriend.repository.GroupFriendRepository;
 import openproject.where42.member.domain.Locate;
+import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.dto.MemberAll;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.dto.MemberProfile;
 import openproject.where42.member.dto.MemberInfo;
-import openproject.where42.member.repository.MemberRepository;
 import openproject.where42.response.ResponseDto;
 import openproject.where42.response.ResponseMsg;
 import openproject.where42.response.StatusCode;
@@ -27,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

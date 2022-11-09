@@ -5,7 +5,7 @@ import openproject.where42.api.Define;
 import openproject.where42.api.Utils;
 import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.group.repository.GroupRepository;
+import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.groupFriend.dto.GroupFriendInfo;
@@ -14,7 +14,6 @@ import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.dto.MemberInfo;
-import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
