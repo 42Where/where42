@@ -79,6 +79,14 @@ public class GroupRepository {
         return true;
     }
 
+    Groups findGroupsByOwnerIdAndGroupNames(Long ownerId, String groupName) {
+        Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                .setParameter("ownerId", ownerId)
+                .setParameter("groupName", groupName)
+                .getSingleResult();
+        return group;
+    }
+
     List<Groups> findGroupsByOwnerIdAndGroupNames(Long ownerId, List<String> groupNames) {
         List<Groups> groups = new ArrayList<>();
         for (String groupName : groupNames) {
