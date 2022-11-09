@@ -84,7 +84,7 @@ public class SearchApiController {
             e.printStackTrace();
         }
 
-        Utils parseInfo = new Utils(cadet.getLogin(), cadet.getLocation());
+        Utils parseInfo = new Utils(memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
         cadet.setInOutStates(parseInfo.getInOutState());

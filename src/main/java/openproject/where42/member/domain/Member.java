@@ -25,8 +25,9 @@ public class Member extends User {
     @Embedded
     private Locate locate = new Locate(null, -1, -1, null);
 
-    public Member(String name, MemberLevel level) {
+    public Member(String name, String img, MemberLevel level) {
         this.name = name;
+        this.img = img;
         this.level = level;
     }
     public void updatePersonalMsg(String msg) {

@@ -89,10 +89,15 @@ public class GroupFriendRepository {
                 .setParameter("member", member)
                 .getResultList();
         for (Groups group : groups) {
-            GroupFriend groupFriend = em.createQuery("select gm from GroupFriend gm where gm.group = :group and gm.friendName = :friendName", GroupFriend.class)
-                    .setParameter("group", group)
-                    .setParameter("friendName", friendName)
-                    .getSingleResult();
+            GroupFriend groupFriend;
+            try {
+                groupFriend = em.createQuery("select gm from GroupFriend gm where gm.group = :group and gm.friendName = :friendName", GroupFriend.class)
+                        .setParameter("group", group)
+                        .setParameter("friendName", friendName)
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                groupFriend = null;
+            }
             if (groupFriend != null)
                 em.remove(groupFriend);
         }
@@ -107,12 +112,12 @@ public class GroupFriendRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<Groups> findAllGroupFriendByOwnerId(Long ownerId) {
+    public List<GroupFriend> findAllGroupFriendByOwnerId(Long ownerId) {
         Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
                 .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", Groups.class)
+        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
                 .setParameter("group", group)
                 .getResultList();
     }

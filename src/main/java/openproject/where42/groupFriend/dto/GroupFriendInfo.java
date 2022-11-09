@@ -4,6 +4,7 @@ import lombok.Data;
 import openproject.where42.api.Utils;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.member.domain.Locate;
+import openproject.where42.member.domain.Member;
 
 @Data
 public class GroupFriendInfo {
@@ -16,8 +17,8 @@ public class GroupFriendInfo {
 	private int inOutState;
 	private boolean isMember;
 
-	public GroupFriendInfo(GroupFriend friend) {
-		Utils parseInfo = new Utils(friend.getFriendName());
+	public GroupFriendInfo(GroupFriend friend, Member member) {
+		Utils parseInfo = new Utils(friend.getFriendName(), member);
 		this.id = friend.getId();
 		this.name = friend.getFriendName();
 		this.img = parseInfo.getImg();

@@ -6,21 +6,16 @@ import openproject.where42.check.CheckApi;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Planet;
-import openproject.where42.member.repository.MemberRepository;
-
 @Data
 public class Utils { // api에 넣어도 괜찮을듯..?
-
-    private static MemberRepository memberRepository; // static.. 가능한가.
-    private static CheckApi checkApi; // 어차피 계속 부를거 static으로 해놓는 게 좋을지두
+    private static CheckApi checkApi = new CheckApi(); // 어차피 계속 부를거 static으로 해놓는 게 좋을지두
     private String img;
     private String msg;
     private Locate locate;
     private int inOutState;
     private boolean isMember;
 
-    public Utils(String name) {
-        Member member = memberRepository.findByName(name);
+    public Utils(String name, Member member) {
         Seoul42 seoul42 = checkApi.check42Api(name);
 
         this.img = seoul42.getImage_url();
@@ -48,9 +43,7 @@ public class Utils { // api에 넣어도 괜찮을듯..?
         }
     }
 
-    public Utils(String name, String locate) {
-        Member member = memberRepository.findByName(name);
-
+    public Utils(Member member, String locate) {
         if (member != null) {
             this.msg = member.getMsg();
             if (3 == 3) {// hane 출근 확인 로직

@@ -20,9 +20,15 @@ public class MemberRepository {
     }
 
     public Member findByName(String name) {
-        return em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
-                .setParameter("name", name)
-                .getSingleResult();
+        Member member;
+        try {
+            member = em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        return member;
     }
 
     public Member findById(Long id) {

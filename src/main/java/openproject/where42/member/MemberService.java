@@ -31,8 +31,7 @@ public class MemberService {
 
     @Transactional
     public MemberInfo saveMember(String name, String img, String location) { // me 다시 부르지 않기 위해 img, location 정리하기
-        Member member = new Member(name, MemberLevel.member);
-        // Member member = new Member(name, img); // member img 수정되면 이거 살리기
+        Member member = new Member(name, img, MemberLevel.member); // member img 수정되면 이거 살리기
         Long memberId = memberRepository.save(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
@@ -46,6 +45,10 @@ public class MemberService {
             initializeLocate(member);
             return new MemberInfo(member, Define.OUT);
         }
+    }
+
+    public Member findByName(String name) {
+        return memberRepository.findByName(name);
     }
 
     @Transactional
@@ -67,10 +70,9 @@ public class MemberService {
         member.getLocate().updateLocate(null, 0, 0, null);
     }
 
-    public List<MemberGroupInfo> findAllGroupFriendsInfo(Long memberId) {
+    public List<MemberGroupInfo> findAllGroupFriendsInfo(Member member) {
         List<MemberGroupInfo> groupsInfo = new ArrayList<MemberGroupInfo>();
-        List<Groups> customGroupList = groupService.findAllGroupsExceptDefault(memberId);
-        Member member = memberRepository.findById(memberId);
+        List<Groups> customGroupList = groupService.findAllGroupsExceptDefault(member.getId());
 
         groupsInfo.add(new MemberGroupInfo(groupRepository.findById(member.getStarredGroupId()),
                 groupFriendService.findAllGroupFriendNameByGroupId(member.getStarredGroupId())));
@@ -81,13 +83,12 @@ public class MemberService {
         return groupsInfo;
     }
 
-    public List<GroupFriendInfo> findAllFriendsInfo(Long memberId) {
+    public List<GroupFriendInfo> findAllFriendsInfo(Member member) {
         List<GroupFriendInfo> friendsInfo = new ArrayList<GroupFriendInfo>();
-        Member member = memberRepository.findById(memberId);
         List<GroupFriend> friends = groupFriendService.findAllFriends(member.getDefaultGroupId());
 
         for (GroupFriend f : friends)
-            friendsInfo.add(new GroupFriendInfo(f));
+            friendsInfo.add(new GroupFriendInfo(f, member));
         return friendsInfo;
     }
 }
