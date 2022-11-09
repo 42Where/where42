@@ -5,10 +5,10 @@ import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
-import openproject.where42.groupFriend.domain.GroupFriendInfo;
 import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
+import openproject.where42.member.domain.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,13 @@ public class MemberService {
     private final GroupFriendService groupFriendService;
 
     @Transactional
-    public void createMember(Member member) {
-        memberRepository.save(member);
+    public Long saveMember(String name) {
+        Member member = new Member(name, MemberLevel.member);
+        Long memberId = memberRepository.save(member);
+        Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
+        Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
+        member.setDefaultGroup(defaultGroupId, starredGroupId);
+        return memberId;
     }
 
     private final GroupRepository groupRepository;

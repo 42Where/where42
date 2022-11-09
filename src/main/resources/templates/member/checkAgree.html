@@ -24,7 +24,7 @@
                 <td th:text="${user.login}"></td>
                 <td th:text="${user.location}"></td>
                 <td>
-                    <a href="javascript:agree('sunghkim')"
+                    <a href="#" th:name="${user.login}" th:onclick="agree(name)"
                        class="btn btn-primary">동의</a>
                 </td>
             </tr>
@@ -34,11 +34,12 @@
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 </body>
-<script>
+<script th:inline="javascript">
     function agree(name) {
         const form = document.createElement("form");
+        console.log(name);
         form.setAttribute("method", "post");
-        form.setAttribute("action", "/member/" + name);
+        form.setAttribute("action", "/v1/member/" + name);
         document.body.appendChild(form);
         form.submit();
         console.log(typeof(name))

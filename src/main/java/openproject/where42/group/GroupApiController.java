@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class GroupController {
+public class GroupApiController {
     private final GroupService groupService;
 
     @PostMapping("/v1/member/group/{memberId}")
