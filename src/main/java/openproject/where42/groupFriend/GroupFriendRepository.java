@@ -103,15 +103,13 @@ public class GroupFriendRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<String> findAllGroupFriendByOwnerId(Long ownerId) {
+    public List<Groups> findAllGroupFriendByOwnerId(Long ownerId) {
         Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
                 .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm.friendName from GroupFriend gm where gm.group = :group", String.class)
+        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", Groups.class)
                 .setParameter("group", group)
-                .getResultList()
-                .stream().sorted()
-                .collect(Collectors.toList());
+                .getResultList();
     }
 }
