@@ -79,8 +79,8 @@ public class GroupFriendRepository {
         }
     }
 
-    // 친구가 해당된 모든 그룹에서 삭제하기
-    public void deleteFriendsGroupByName(Member member, String friendName) {
+    // 친구가 해당된 모든 그룹에서 삭제하기 deleteFriendsGroupByName -> deleteFriendByFriendName
+    public void deleteFriendByFriendName(Member member, String friendName) {
         List<Groups> groups = em.createQuery("select g from Groups g where g.owner = :member", Groups.class)
                 .setParameter("member", member)
                 .getResultList();
