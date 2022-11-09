@@ -68,14 +68,18 @@ public class GroupFriendRepository {
     }
 
     // 한명 삭제 그룹 멤버 DB 삭제
-    public void deleteGroupFriend(GroupFriend groupFriend) {
-        em.remove(groupFriend);
+    public void deleteGroupFriend(Long groupFriendId) {
+        int result = em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+                .setParameter("groupFriendId", groupFriendId)
+                .executeUpdate();
     }
 
     // 다중 친구 그룹 삭제
-    public void deleteGroupFriends(List<GroupFriend> groupFriends) {
-        for (GroupFriend groupFriend : groupFriends) {
-            em.remove(groupFriend.getId());
+    public void deleteGroupFriends(List<Long> groupFriendIds) {
+        for (Long groupFriendId : groupFriendIds) {
+            em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+                    .setParameter("groupFriendId", groupFriendId)
+                    .executeUpdate();
         }
     }
 
