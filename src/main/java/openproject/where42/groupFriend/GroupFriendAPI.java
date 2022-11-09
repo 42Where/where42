@@ -1,7 +1,6 @@
 package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.member.MemberRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,8 +1,8 @@
 package openproject.where42.groupFriend.domain;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import openproject.where42.check.CheckApi;
-import openproject.where42.member.Seoul42;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Planet;

@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import openproject.where42.member.OAuthToken;
+<<<<<<< HEAD
+import openproject.where42.api.dto.Seoul42;
+=======
 import openproject.where42.member.Seoul42;
+>>>>>>> 3b40d5c0ee60797e1476b1ca27a3c0672798a872
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.groupFriend.GroupFriendService;
-import openproject.where42.member.Seoul42;
-import openproject.where42.member.domain.Member;
+import openproject.where42.api.Utils;
+import openproject.where42.api.dto.SearchCadet;
+import openproject.where42.api.dto.Seoul42;
 import openproject.where42.member.MemberRepository;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +23,13 @@ import java.util.List;
 public class SearchApiController {
 
     private final MemberRepository memberRepository;
-    private final GroupFriendService groupFriendService;
     private final ApiService api;
     private final ObjectMapper objectMapper;
 
     @GetMapping("/v1/search/{memberId}")
     public Search42UserResponse search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @RequestParam("token") String token) {
         HttpEntity<MultiValueMap<String, String>> req = api.req42ApiHeader(token); // 동일 헤더 사용
-        ResponseEntity<String> res = api.resApi(req, api.req42ApiSearchUsersUri(begin, getEnd(begin)));
+        ResponseEntity<String> res = api.resApi(req, api.req42ApiUsersUri(begin, getEnd(begin)));
 
         List<Seoul42> searchList = null;
         try {
@@ -41,7 +40,7 @@ public class SearchApiController {
 
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
         for (Seoul42 cadet : searchList) {
-            ResponseEntity<String> res2 = api.resApi(req, api.req42ApiSearchOneUserUri(cadet.getLogin()));
+            ResponseEntity<String> res2 = api.resApi(req, api.req42ApiOneUserUri(cadet.getLogin()));
 
             SearchCadet searchCadet;
             try {
@@ -56,7 +55,7 @@ public class SearchApiController {
        return new Search42UserResponse(searchCadetList);
     }
 
-    private String getEnd(String begin) {
+    private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?
         char first = begin.charAt(0); // abc - abd
         char last = begin.charAt(begin.length() - 1);
         if (first != 'z' && last == 'z') // az 면 az ~ b 까지 b 한글자인 인 intra 는 없으니까?
@@ -76,8 +75,7 @@ public class SearchApiController {
     }
 
     @GetMapping("/v1/search/{memberId}/select")
-    public SearchCadet getCadetInfo(@PathVariable("memberId") Long memberId, @RequestParam String token, @RequestBody SearchCadet cadet) {
-        int test = 3;
+    public SearchCadet getCadetInfo(@PathVariable("memberId") Long memberId, @RequestParam String token, @RequestBody SearchCadet cadet) { // 만약 실제 서비스에서도 token 받아야 할 시 requestBody로 받을 것 보안을 위해
         ResponseEntity<String> res = api.resApi(api.req42ApiHeader(token), api.reqHaneApiUri(cadet.getLogin())); // 헤더추가가 어떻게 되는거지.. reset 되나?
 
         try {
@@ -86,36 +84,10 @@ public class SearchApiController {
             e.printStackTrace();
         }
 
-        if (memberRepository.checkMemberByName(cadet.getLogin())) {
-            Member member = memberRepository.findByName(cadet.getLogin());
-            if (3 == test) { // hane 조회 후 in 일 경우 inoutstate도 바꿈
-                if (cadet.getLocation() != null)
-                    cadet.updateApiLocate(cadet.getLocation());
-                else
-                    cadet.updateSelfLocate(member.getLocate());
-                cadet.setInOutStates(1);
-            }
-            else { // hane 아웃일 경우
-                cadet.updateApiLocate(null);
-                cadet.setInOutStates(0); // 이거 하네 변수명에 따라서 inoutstates로 바꿀지 이거 다시 말해줘야함 프론트한테
-            }
-            cadet.setMsg(member.getMsg());
-        } else { // 선택 대상이 멤버가 아닌 경우
-            if (cadet.getLocation() != null) {
-                cadet.updateApiLocate(cadet.getLocation());
-                cadet.setInOutStates(1);
-            } else {
-                cadet.setInOutStates(2);
-                cadet.updateApiLocate(null);
-            }
-        }
+        Utils parseInfo = new Utils(cadet.getLogin(), cadet.getLocation());
+        cadet.setMsg(parseInfo.getMsg());
+        cadet.setLocate(parseInfo.getLocate());
+        cadet.setInOutStates(parseInfo.getInOutState());
         return cadet;
-    }
-
-    @PostMapping("/v1/search/{memberId}/{friendName}") // friend로 빠질 거
-    public Boolean saveFriend(@PathVariable("memberId") Long memberId, @PathVariable("friendName") String friendName) {
-        Member member = memberRepository.findById(memberId);
-        groupFriendService.saveGroupFriend(friendName, member.getDefaultGroupId());
-        return true;
     }
 }

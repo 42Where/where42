@@ -1,69 +1,56 @@
 package openproject.where42.member.dto;
 
+import lombok.Data;
+import openproject.where42.api.Utils;
 import openproject.where42.check.CheckApi;
-import openproject.where42.member.Seoul42;
+import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.Define;
+import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.Planet;
 
+@Data
 public class MemberInfo {
 
-    private String name;
+    private MemberService memberService;
+    private CheckApi checkApi;
     private Long id;
-    private String msg;
+    private String name;
     private String img;
+    private String msg;
+    private Locate locate;
     private int inOutState;
 
-    private CheckApi checkApi = new CheckApi();
-
-    private Locate locate; //embeded된거 내가 써도 되나?
+    public MemberInfo (Member member, int inOutState) { // 맨처음 만들어지면서 로그인 할 때
+        this.id = member.getId();
+        this.name = member.getName();
+//        this.img = member.img(); // 멤버 엔티티 수정되면 살리기
+        this.msg = member.getMsg();
+        this.locate = member.getLocate();
+        this.inOutState = inOutState;
+    }
 
     //내 상태 조회 메소드
-    public MemberInfo (Member member) {
-        String seat;
-
-        this.name = member.getName();
+    public MemberInfo (Member member) { // 두번쨰부터 로그인 시
         this.id = member.getId();
+        this.name = member.getName();
+//        this.img = member.getImg(); // 멤버 엔티티 수정되면 살리기
         this.msg = member.getMsg();
-        Seoul42 seoul42 = checkApi.check42Api(name);
-        if (seoul42.getLocation() != null)
-            getAutoInfo(seoul42);
-//        42api 호출
-//        this.img = "api 정보";
-//        if (hane is 출근) {
-//            this.inOutState = 1;
-//            if (seat != null)
-//                getMyAutoInfo(member, seat);
-//            else
-//                getMySelfInfo(member);
-//        } else
-//            getMyOutInfo(member);
+        if (3 == 3) { // hane 출근 검사 부분임 출근 했을 경우.
+            Seoul42 seoul42 = checkApi.check42Api(name);
+            if (seoul42.getLocation() != null) {
+                this.locate = Utils.parseLocate(seoul42.getLocation());
+                memberService.initializeLocate(member); // 좌석 정보 있으면 수동 정보 날리기
+            } else {
+                this.locate = member.getLocate();
+            }
+            this.inOutState = Define.IN;
+        } else {
+            memberService.initializeLocate(member); // 만약 정보가 있으면 날려줘야 하니까
+            this.locate = member.getLocate();
+            this.inOutState = Define.OUT; // 원래 초기화 돼있으면 할 필요 없음.
+        }
     }
 
-    private void getAutoInfo(Seoul42 seoul42) {
-//		Locate tmp = new Locate();
-        String seat = seoul42.getLocation();
-        int i = seat.indexOf(1) - '0';
 
-        if (i >= 1 && i <= 6) {
-            if (i <= 2)
-                this.locate = new Locate(Planet.gaepo, 2, -1, seat);
-            else if (i <= 4)
-                this.locate = new Locate(Planet.gaepo, 4, -1, seat);
-            else
-                this.locate = new Locate(Planet.gaepo, 5, -1, seat);
-        } else if (i >= 7 && i <= 10)
-            this.locate = new Locate(Planet.seocho, -1, i, seat);
-    }
-
-    private void getMySelfInfo(Member member) {
-        this.locate = member.getLocate();
-    }
-
-    private void getMyOutInfo(Member member) {
-        this.inOutState = 0;
-        // 외출 관련 로직 추가 여부에 따라 시간 계산 로직 필요
-        member.getLocate().updateLocate(null, -1, -1, null);
-        this.locate = member.getLocate();
-    }
 }

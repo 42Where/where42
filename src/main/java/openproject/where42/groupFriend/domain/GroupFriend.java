@@ -21,10 +21,6 @@ public class GroupFriend {
     @Column(name = "group_friend_id")
     private Long id;
 
-    // 재배님한테 말씀 드릴거!
-    @Column(name = "intra_id")
-    private Long intraId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Groups group;

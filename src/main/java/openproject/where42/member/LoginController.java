@@ -3,6 +3,7 @@ package openproject.where42.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.dto.Seoul42;
 import openproject.where42.check.CheckApi;
 import openproject.where42.member.domain.Member;
 import org.springframework.http.ResponseEntity;

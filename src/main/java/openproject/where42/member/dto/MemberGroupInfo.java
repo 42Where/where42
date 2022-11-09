@@ -7,7 +7,7 @@ import java.util.List;
 public class MemberGroupInfo {
     Long groupId;
     String groupName;
-    List<String> groupFriends; // 프론트랑 협의 필요
+    List<String> groupFriends;
 
     public MemberGroupInfo(Groups g, List<String> groupMembers) {
         this.groupId = g.getId();

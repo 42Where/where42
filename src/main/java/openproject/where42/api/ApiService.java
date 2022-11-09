@@ -15,6 +15,7 @@ import java.net.URI;
 @Service // 이컨트롤러 쓴느게 맞나..ㅎ 다시 생각..
 public class ApiService {
     RestTemplate rt = new RestTemplate();
+
     public HttpEntity<MultiValueMap<String, String>> req42ApiHeader(String token) { // cache 처리 혹은 객체 처리
         HttpHeaders headers = new HttpHeaders(); // 새 헤더를 만들지 않으면 429에러가 바로 난다.
         headers.add("Authorization", "Bearer " + token); // token을 여기서 유저에 대한 캐시로 받거나.. 뭐 그럴 수 있으면 좋을듯
@@ -23,7 +24,7 @@ public class ApiService {
         return new HttpEntity<>(params, headers); // 헤더 공통으로 쓸 수 있는 방법
     }
 
-    public URI req42ApiSearchUsersUri(String begin, String end) {
+    public URI req42ApiUsersUri(String begin, String end) {
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path("/v2/campus/29/users/")
                 .queryParam("sort", "login")
@@ -33,8 +34,8 @@ public class ApiService {
                 .toUri();
     }
 
-    public URI req42ApiSearchOneUserUri(String login) {
-       return UriComponentsBuilder.newInstance()
+    public URI req42ApiOneUserUri(String login) {
+        return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path("/v2/users/" + login)
                 .build()
                 .toUri();
