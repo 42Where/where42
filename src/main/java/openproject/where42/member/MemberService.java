@@ -3,14 +3,13 @@ package openproject.where42.member;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.group.repository.GroupRepository;
+import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.dto.FriendForm;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
-import openproject.where42.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

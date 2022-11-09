@@ -2,13 +2,9 @@ package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.groupFriend.dto.FriendForm;
-import openproject.where42.groupFriend.repository.GroupFriendRepository;
-import openproject.where42.member.domain.Member;
-import openproject.where42.member.repository.MemberRepository;
-import org.springframework.security.core.parameters.P;
+import openproject.where42.member.MemberRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

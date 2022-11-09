@@ -1,11 +1,12 @@
 package openproject.where42.group.repository;
 
+import openproject.where42.group.GroupRepository;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.groupFriend.repository.GroupFriendRepository;
+import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
-import openproject.where42.member.repository.MemberRepository;
+import openproject.where42.member.MemberRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

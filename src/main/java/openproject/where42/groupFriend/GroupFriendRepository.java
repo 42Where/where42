@@ -1,4 +1,4 @@
-package openproject.where42.groupFriend.repository;
+package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;

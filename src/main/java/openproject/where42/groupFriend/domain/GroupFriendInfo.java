@@ -6,10 +6,7 @@ import openproject.where42.member.Seoul42;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Planet;
-import openproject.where42.member.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.persistence.EntityManager;
+import openproject.where42.member.MemberRepository;
 
 @Getter
 @NoArgsConstructor

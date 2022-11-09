@@ -3,8 +3,6 @@ package openproject.where42.member.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.member.domain.enums.Planet;
-import openproject.where42.member.domain.enums.Place;
 import openproject.where42.member.domain.enums.MemberLevel;
 
 import javax.persistence.*;
@@ -21,6 +19,8 @@ public class Member extends User {
     private Long defaultGroupId;
 
     private Long starredGroupId;
+
+    private String img;
 
     @Embedded
     private Locate locate = new Locate(null, -1, -1, null);
