@@ -25,7 +25,7 @@ public class ControllerExceptionHandler {
         return new ResponseEntity(ErrResponseDto.errorRes(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 
-    @ExceptionHandler(DefaultGroupNameException.class)
+    @ExceptionHandler(NotCustomGroupFriend.class)
     protected ResponseEntity NotCustomGroupFriendException(NotCustomGroupFriend e) {
         return new ResponseEntity(ErrResponseDto.errorRes(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }

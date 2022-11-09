@@ -38,7 +38,7 @@ public class GroupFriendRepositoryTest {
     @Test
     @Rollback(value = false)
     public void save() {
-        Member jaebae = new Member("jaebae", MemberLevel.member);
+        Member jaebae = new Member("jaebae",  null,  MemberLevel.member);
         members.put("jaebae", jaebae);
         memberRepository.save(jaebae);
 
@@ -130,6 +130,15 @@ public class GroupFriendRepositoryTest {
     public void findGroupFriendsByGroupId() {
         save();
         List<String> friends = groupFriendRepository.findGroupFriendsByGroupId(groups.get("where42").getId());
+        for (String friend : friends) {
+            System.out.println(friend);
+        }
+    }
+
+    @Test
+    public void findGroupFriendsByGroupIdEmpty() {
+        save();
+        List<String> friends = groupFriendRepository.findGroupFriendsByGroupId(groups.get("hello").getId());
         for (String friend : friends) {
             System.out.println(friend);
         }

@@ -38,7 +38,7 @@ public class GroupRepositoryTest {
     @Test
     @Rollback(value = false)
     public void save() {
-        Member jaebae = new Member("jaebae", MemberLevel.member);
+        Member jaebae = new Member("jaebae", null, MemberLevel.member);
         members.put("jaebae", jaebae);
         memberRepository.save(jaebae);
 

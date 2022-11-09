@@ -2,12 +2,11 @@ package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.exception.NotCustomGroupFriend;
+import openproject.where42.group.GroupRepository;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.group.repository.GroupRepository;
 import openproject.where42.groupFriend.dto.GroupFriendShortInfo;
-import openproject.where42.groupFriend.repository.GroupFriendRepository;
+import openproject.where42.member.MemberRepository;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.repository.MemberRepository;
 import openproject.where42.response.ResponseDto;
 import openproject.where42.response.ResponseMsg;
 import openproject.where42.response.StatusCode;
@@ -57,7 +56,7 @@ public class GroupFriendApiController {
 	}
 
 	// 해당 그룹에 대해 여러 친구 추가
-	@PostMapping("/v1/groupFriend/Friends/{groupId}")
+	@PostMapping("/v1/groupFriend/friends/{groupId}")
 	public ResponseEntity addFriendsToGroup(@PathVariable("groupId") Long groupId, @RequestBody List<String> friends) {
 		Groups group = groupRepository.findById(groupId);
 		groupFriendService.addFriendsToGroup(friends, group); // 로직 만들어야 함
@@ -65,7 +64,7 @@ public class GroupFriendApiController {
 	}
 
 	// 커스텀 그룹에서 친구를 삭제할 경우 프론트 선택 된 친구들에 대해 그룹이름, Id 같이 넘겨줘야 함
-	@DeleteMapping("/groupFriend/customGroup")
+	@DeleteMapping("/v1/groupFriend/customGroup")
 	public ResponseEntity deleteGroupFriend(@RequestBody List<GroupFriendShortInfo> friendList) {
 		for (GroupFriendShortInfo friend : friendList) {
 			if (friend.getGroupName().equalsIgnoreCase("기본"))
@@ -77,8 +76,8 @@ public class GroupFriendApiController {
 	}
 
 	// 아예 기본 그룹 자체에서 삭제할 경우 (그룹별로 선택해서 친구  다중 삭제 가능하게 할 것인지? -> 이거 디폴트랑 구분돼야 해서 기본그룹에서만 다중 삭제 가능하게 해야할지도. 만약 시킬거라면?)
-	@DeleteMapping("/groupFriend/default/{memberId}") // 프론트 기본에서 삭제하는 경우와 사용자정의 그룹에서만 삭제하는 경우 필히 구분지어서 매핑 필
-	public ResponseEntity deleteFriend(@PathVariable("memberId") Long memberId, @RequestParam List<String> friendNames) {
+	@DeleteMapping("/v1/groupFriend/default/{memberId}") // 프론트 기본에서 삭제하는 경우와 사용자정의 그룹에서만 삭제하는 경우 필히 구분지어서 매핑 필
+	public ResponseEntity deleteFriend(@PathVariable("memberId") Long memberId, @RequestBody List<String> friendNames) {
 		for (String friendName : friendNames)
 			groupFriendService.deleteFriend(memberId, friendName);
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.DELETE_GROUP_FRIEND), HttpStatus.OK);

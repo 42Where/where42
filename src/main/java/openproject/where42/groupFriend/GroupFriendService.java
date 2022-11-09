@@ -34,16 +34,10 @@ public class GroupFriendService {
 	}
 
 	@Transactional
-	public void addFriendsToGroup(List<String> friendNames, Groups group,) {
+	public void addFriendsToGroup(List<String> friendNames, Groups group) {
 		for (String friendName : friendNames) {
 			saveGroupFriend(friendName, group);
 		}
-	}
-
-	// 다중 친구 그룹 추가
-	@Transactional
-	public void multiSaveGroupFriend(List<GroupFriend> groupFriendList) {
-		groupFriendRepository.multiSave(groupFriendList);
 	}
 
 	@Transactional
@@ -54,7 +48,7 @@ public class GroupFriendService {
 	@Transactional
 	public void deleteFriend(Long memberId, String friendName) { // 이게 현재 딜리트프렌즈그룹바이네임
 		Member member = memberRepository.findById(memberId);
-		groupFriendRepository.deleteFriendByOwnerIdAndFriendName(member, friendName);
+		groupFriendRepository.deleteFriendByFriendName(member, friendName);
 	}
 
 	public List<GroupFriend> findAllFriends(Long memberId) {
