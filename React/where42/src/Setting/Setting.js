@@ -21,8 +21,8 @@ function Setting() {
 
     useEffect(() => {
         window.localStorage.setItem("locate", JSON.stringify(locate));
+        console.log(locate);
     }, [locate]);
-    console.log(locate);
 
     function SettingChoice() {
         const SetLocateAlert = () => {
@@ -184,7 +184,7 @@ function Setting() {
 
     function SettingFriend() {
         /*친꾸 목록 불러오는 api 호출*/
-        const arr = ["sojoo", "hyunjcho", "heeskim"]; /*샘플*/
+        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
             if (checked) {
@@ -199,17 +199,24 @@ function Setting() {
         const handleSubmit = (event) => {
             event.preventDefault();
             console.log(delList);
+            if (delList.size > 0 && window.confirm("정말 삭제하시겠습니까?")) {
+                /*삭제 부탁하는 api 호출*/
+                alert("삭제 완료!");
+                nav("/Setting");
+            }
         }
         return (
             <div id="SettingFriend">
                 <div id="Comment">현재 친구 목록</div>
                 <div id="Comment2">삭제할 친구를 선택한 후 '삭제' 버튼을 눌러주세요.</div>
                 <form onSubmit={handleSubmit}>
-                    {
-                        arr.map((value, index) => (
-                            <MemberList user={value} addList={addList} key={index}/>
-                        ))
-                    }
+                    <div id="MemberWrapper">
+                        {
+                            arr.map((value, index) => (
+                                <MemberList user={value} addList={addList} key={index}/>
+                            ))
+                        }
+                    </div>
                     <button type="submit">삭제</button>
                 </form>
             </div>
@@ -218,7 +225,7 @@ function Setting() {
 
     function MemberList(props) {
         const [checked, setChecked] = useState(false);
-        useEffect(() => {props.addList(props.user, checked)}, [checked]);
+        useEffect(() => {props.addList(props.user, checked)}, [props, checked]);
 
         return (
             <div className='User'>

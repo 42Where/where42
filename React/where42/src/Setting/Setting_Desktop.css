@@ -28,6 +28,13 @@
     font-size: clamp(60px, 5vw, 100px);
 }
 
+#Setting #Desktop #Comment2 {
+    width: 100%;
+    text-align: center;
+    font-family: 'GmarketSansLight';
+    font-size: clamp(20px, 2vw, 40px);
+}
+
 #Setting #Desktop #BoxWrapper {
     display: flex;
     flex-wrap: wrap;
@@ -50,8 +57,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: clamp(228px, 22vw, 400px);
-    height: clamp(228px, 22vw, 400px);
+    width: clamp(220px, 22vw, 230px);
+    height: clamp(220px, 22vw, 230px);
     margin: 5% 3% 0 3%;
     border-radius: 50px;
     background-color: #EF8E86;
@@ -78,10 +85,6 @@
 }
 
 #Setting #Desktop #SettingMsg #Comment2 {
-    width: 100%;
-    text-align: center;
-    font-family: 'GmarketSansLight';
-    font-size: clamp(20px, 2vw, 40px);
     margin-bottom: 8%;
 }
 
@@ -155,4 +158,43 @@
 
 #Setting #Desktop #SettingSpot #BoxWrapper .Box .BoxCap {
     font-size: clamp(20px, 3vw, 50px);
+}
+
+/*SettingFriend*/
+
+#Setting #Desktop #SettingFriend #Comment {
+    margin-bottom: 2%;
+}
+
+#Setting #Desktop #SettingFriend form {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Setting #Desktop #SettingFriend form #MemberWrapper {
+    width: 100%;
+    margin: 20% 0 15% 0;
+}
+
+#Setting #Desktop #SettingFriend form button {
+    width: 50%;
+    height: 4vw;
+    border: 0;
+    border-radius: 50px;
+    background-color: #EF8E86;
+    color: white;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 1.7vw, 50px);
+}
+
+#Setting #Desktop #SettingFriend .User {
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(20px, 2.5vw, 50px);
+    margin-bottom: 5%;
+}
+
+#Setting #Desktop #SettingFriend .User input {
+    margin-right: 10%;
 }
