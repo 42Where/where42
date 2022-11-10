@@ -1,0 +1,137 @@
+#Search #Mobile {
+    width: 100%;
+}
+
+#Search #Mobile #Wrapper #Logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 7vh 0 4vh 0;
+}
+
+#Search #Mobile #Wrapper #Logo img {
+    width: 60%;
+    max-width: 300px;
+}
+
+#Search #Mobile #Wrapper #Logo p {
+    margin-top: 2%;
+    font-family: GmarketsansLight;
+    font-size: 2.5vw;
+    color: white;
+}
+
+#Search #Mobile #Wrapper .Profile {
+    width: 85%;
+    display: flex;
+    align-items: center;
+    height: 20vw;
+    max-height: 80px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    background-color: white;
+    z-index: 1;
+}
+
+#Search #Mobile #Wrapper .Profile .Photo {
+    display: flex;
+    width: 15%;
+    max-width: 60px;
+    height: 12.5vw;
+    max-height: 60px;
+    border-radius: 70%;
+    margin: 1.5% 1.5% 1.5% 3%;
+    overflow: hidden;
+}
+
+#Search #Mobile #Wrapper .Profile .Photo img {
+    width: 100%;
+    object-fit: cover;
+}
+
+#Search #Mobile #Wrapper .Profile .Info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 58%;
+    margin-top: min(6px, 1.5%);
+}
+
+#Search #Mobile #Wrapper .Profile .Info > div {
+    margin: 0 2% 0 2%;
+    margin-bottom: min(6px, 1.5%);
+}
+
+#Search #Mobile #Wrapper .Profile .Info .Name {
+    font-family: GmarketSansBold;
+    font-size: clamp(8px, 3.5vw, 15px);
+}
+
+#Search #Mobile #Wrapper .Profile .Info .Locate {
+    font-family: GmarketSansMedium;
+    font-size: clamp(8px, 3.5vw, 15px);
+}
+
+#Search #Mobile #Wrapper .Profile .Info .Msg {
+    font-family: GmarketSansLight;
+    font-size: clamp(6px, 3vw, 13px);
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper .Profile {
+    margin-bottom: 10px;
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper > button {
+    padding: 0;
+    border-radius: 20px;
+    border-width: 0.5px;
+    display : inline-block;
+    /* float : right; */
+    width : clamp(4px, 31vw, 40px);
+    height : clamp(3px, 6vw, 30px);
+    font-family: GmarketSansLight;
+    font-size: clamp(6px, 1.2vw, 15px);
+    margin-bottom : 3px;
+    padding:1;
+}
+
+#Mobile .Locate::before {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    width: 0;
+    height: clamp(3px, 1.5vw, 9px);
+    bottom: 3px;
+    z-index: -1;
+    background-color: #f6e298;
+    transition: 0.2s all;
+}
+
+#Mobile .Locate {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    width: max-content;
+}
+
+#Mobile .Locate:hover:before {
+    width: 100%;
+}

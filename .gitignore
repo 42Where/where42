@@ -36,3 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 .DS_Store
+
+### node js ###
+/React/where42/node_modules/
+/src/main/react/node_modules/
