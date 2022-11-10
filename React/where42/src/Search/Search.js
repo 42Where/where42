@@ -24,18 +24,21 @@ function Search() {
                     {isMobile && <p>42서울 자리 찾기 서비스</p>}
                 </div>
                 <div id="SearchBar">
-                    <div id="SearchIcon"></div>
+                    <div id="SearchMascot">
+                        <img src="img/character.svg" alt="character"></img>
+                    </div>
                     <div id="SearchContent"></div>
+                    <div id="SearchIcon"></div>
                 </div>
                 {/* enter 치면 state변경 가능? */}
-                <div className="ProfileWrapper">
-                    <Profile info={sample.matchUser[0]}/>
-                    <Profile info={sample.matchUser[1]}/>
-                    <Profile info={sample.matchUser[2]}/>
-
+                <div id="SearchResults">
+                    {/* 검색 결과 */}
+                    <div className="ProfileWrapper">
+                        <Profile info={sample.matchUser[0]}/>
+                        <Profile info={sample.matchUser[1]}/>
+                        <Profile info={sample.matchUser[2]}/>
+                    </div>
                 </div>
-                {/* 여기 검색 창 생성*/}
-                {/* 검색 결과 */}
             </div>
         )
     }

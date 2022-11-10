@@ -24,6 +24,8 @@
     width: 40%;
 }
 
+/* #Search #Desktop #SearchBar #SearchMascot  */
+
 #Search #Desktop #Wrapper .ProfileWrapper {
     display: flex;
     flex-wrap: wrap;
@@ -90,9 +92,11 @@
     box-sizing: border-box;
     padding-top: 8px;
     padding-bottom: 8px;
-}
+}   
 
 #Search #Desktop #Wrapper .ProfileWrapper .Profile .ButtonWrapper > button {
+    /* float : right;  */
+    display : inline-block;
     border-radius: 20px;
     border-width: 1.2px;
     height : 35%;
