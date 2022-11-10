@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './Setting_Desktop.css';
 import './Setting_Mobile.css';
 
@@ -87,13 +88,12 @@ function Setting() {
             <div id="SettingFloor">
                 <div id="Comment">층 수 선택</div>
                 <div id="BoxWrapper">
-                    <Box cap="지하 1층" floor={-1} choice={61}/>
-                    <Box cap="1층" floor={1} choice={62}/>
-                    <Box cap="2층" floor={2} choice={63}/>
-                    <Box cap="3층" floor={3} choice={64}/>
-                    <Box cap="4층" floor={4} choice={65}/>
-                    <Box cap="5층" floor={5} choice={66}/>
-                    <Box cap="옥상" floor={6} choice={67}/>
+                    <Box cap="1층" floor={1} choice={61}/>
+                    <Box cap="2층" floor={2} choice={62}/>
+                    <Box cap="3층" floor={3} choice={63}/>
+                    <Box cap="4층" floor={4} choice={64}/>
+                    <Box cap="5층" floor={5} choice={65}/>
+                    <Box cap="B1/옥상" floor={6} choice={66}/>
                 </div>
             </div>
         )
@@ -180,8 +180,11 @@ function Setting() {
     if (choice === 0) {
         return (
             <div id="Setting">
-                {isMobile && <div id="Mobile"><SettingChoice/></div>}
-                {isDesktop && <div id="Desktop"><SettingChoice/></div>}
+                <Routes>
+                    {isDesktop && <Route path={"SetMsg"} element={<div id="Desktop"><SettingMsg/></div>}/>}
+                    {isMobile && <Route path={""} element={<div id="Mobile"><SettingChoice/></div>}/>}
+                    {isDesktop && <Route path={""} element={<div id="Desktop"><SettingChoice/></div>}/>}
+                </Routes>
             </div>
         )
     }
