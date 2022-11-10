@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.member.OAuthToken;
 import openproject.where42.api.dto.Seoul42;
+import openproject.where42.member.OAuthToken;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,14 +21,14 @@ import java.net.URI;
 @NoArgsConstructor
 public class CheckApi {
 
-	static private String access_token;
-	static private String token_type;
-	static private String refresh_token;
-	static private int expires_in;
-	static private String scope;
-	static private int created_at;
+	private String access_token;
+	private String token_type;
+	private String refresh_token;
+	private int expires_in;
+	private String scope;
+	private int created_at;
 
-	static private HttpHeaders tokenHeaders = new HttpHeaders();
+	private HttpHeaders tokenHeaders = new HttpHeaders();
 
 	public void setting(String code) {
 		RestTemplate rt = new RestTemplate(); //http 요청을 간단하게 해줄 수 있는 클래스
