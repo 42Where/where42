@@ -39,4 +39,6 @@ out/
 
 ### node js ###
 /React/where42/node_modules/
-/src/main/react/node_modules/
+/src/main/where42/node_modules/
+/src/main/where42/build/
+/src/main/resources/
