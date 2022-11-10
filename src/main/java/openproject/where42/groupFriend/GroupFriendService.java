@@ -46,6 +46,11 @@ public class GroupFriendService {
 	}
 
 	@Transactional
+	public void deleteGroupFriend(Long groupId, List<String> friendNames) {
+//		groupFriendRepository.deleteGroupFriendsByGroupFriendId(friendNames); // groupId + friendNames 조합으로 삭제할 수 있게
+	}
+
+	@Transactional
 	public void deleteFriend(Long memberId, String friendName) { // 이게 현재 딜리트프렌즈그룹바이네임
 		Member member = memberRepository.findById(memberId);
 		groupFriendRepository.deleteFriendByFriendName(member, friendName);

@@ -4,9 +4,11 @@ public class ResponseMsg {
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGIN_FAIL = "로그인 실패";
     public static final String CREATE_MEMBER = "회원 생성 성공";
-    public static final String SET_MSG = "상태 메시지 저장 성공";
+    public static final String GET_MSG = "상태메시지 조회 성공";
+    public static final String SET_MSG = "상태메시지 저장 성공";
     public static final String SET_LOCATE = "위치 저장 성공";
     public static final String CREATE_GROUP = "그룹 생성 성공";
+    public static final String NOT_TAKEN_SEAT = "자리 설정 가능";
     public static final String TAKEN_SEAT = "자리 정보 있음";
     public static final String CHANGE_GROUP_NAME = "그룹 이름 변경 성공";
     public static final String DELETE_GROUP = "그룹 삭제 성공";
@@ -18,9 +20,7 @@ public class ResponseMsg {
     public static final String DELETE_GROUP_FROM_FRIEND = "친구 그룹 삭제 성공";
     public static final String DELETE_GROUP_FRIEND = "친구 삭제 성공";
     public static final String DELETE_MULTI_GROUP_FRIENDS = "다중 친구 삭제 성공";
-
-    public static final String NOT_CUSTOM_GROUP_FRIEND = "기본 그룹 친구 삭제 불가";
-//    public static final String READ_USER = "회원 정보 조회 성공";
+    //    public static final String READ_USER = "회원 정보 조회 성공";
     public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
 //    public static final String CREATED_USER = "회원 가입 성공";
 //    public static final String UPDATE_USER = "회원 정보 수정 성공";

@@ -1,18 +1,13 @@
-package openproject.where42.groupFriend.domain;
+package openproject.where42.groupFriend.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 import openproject.where42.api.Utils;
-import openproject.where42.api.dto.Seoul42;
-import openproject.where42.check.CheckApi;
+import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.Planet;
-import openproject.where42.member.MemberRepository;
 
-@Getter
-@NoArgsConstructor
-public class GroupFriendInfo {
+@Data
+public class GroupFriendInfoDto {
 
 	private Long id;
 	private String name;
@@ -22,7 +17,7 @@ public class GroupFriendInfo {
 	private int inOutState;
 	private boolean isMember;
 
-	public GroupFriendInfo(GroupFriend friend, Member member) {
+	public GroupFriendInfoDto(GroupFriend friend, Member member) {
 		Utils parseInfo = new Utils(friend.getFriendName(), member);
 		this.id = friend.getId();
 		this.name = friend.getFriendName();
