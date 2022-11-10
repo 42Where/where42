@@ -24,6 +24,8 @@
     width: 40%;
 }
 
+/* #Search #Desktop #SearchBar #SearchMascot  */
+
 #Search #Desktop #Wrapper .ProfileWrapper {
     display: flex;
     flex-wrap: wrap;
@@ -59,7 +61,7 @@
 }
 
 #Search #Desktop #Wrapper .ProfileWrapper .Profile .Photo img {
-    width: 105%;
+    width: 100%;
     object-fit: cover;
 }
 
@@ -69,8 +71,6 @@
     justify-content: center;
     width: 50%;
     padding: 3%;
-    padding-left : 1%;
-    padding-right : 0;
 }
 
 #Search #Desktop #Wrapper .ProfileWrapper .Profile .Info > div {
@@ -83,12 +83,12 @@
 }
 
 #Search #Desktop #Wrapper .ProfileWrapper .Profile .ButtonWrapper {
-    width: 37%;
+    width: 30.7%;
     height: 100%;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     box-sizing: border-box;
     padding-top: 8px;
     padding-bottom: 8px;

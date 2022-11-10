@@ -1,12 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
 import select from './select.json';
 
 const Profile = (props) => {
-    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
-    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-    
     const info = props.info;
     const [detail, setDetail] = useState(0);
     let friendOrNot;
@@ -16,28 +12,6 @@ const Profile = (props) => {
     else
         friendOrNot = (<button className="AddFriend">친구 추가</button>);
 
-    function DetailClick()
-    {
-        const button = document.getElementsByClassName('CheckSpot');
-        if (isMobile)
-        {
-            if (detail === 0)
-            {
-                button[0].style.backgroundImage = "url('img/detail_on.svg')";
-                setDetail(1);
-            }
-            else
-            {
-                button[0].style.backgroundImage = "url('img/detail_off.svg')";
-                setDetail(0);
-            }
-        }
-        else if (isDesktop)
-        {
-            if (detail === 0)
-                setDetail(1);
-        }
-    }
     return (
         <div className="Profile">
             <div className="Photo">
@@ -45,11 +19,11 @@ const Profile = (props) => {
             </div>
             <div className="Info">
                 <div className="Name">{info.login}</div>
-                {detail === 1 ? <Detail info={info}/> : null}
+                {detail ===1 ? <Detail info={info}/> : null}
             </div>
             <div className="ButtonWrapper">
                 {friendOrNot}
-                {detail === 0 || isMobile? <button className="CheckSpot" onClick={DetailClick}>자리 확인</button> : null}
+                {detail === 0? <button className="CheckSpot" onClick={()=>{setDetail(1)}}>자리 확인</button> : null}
             </div>
         </div>
     );

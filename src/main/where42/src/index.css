@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'GmarketSansBold';
+  src: url('../public/fonts/GmarketSansBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('../public/fonts/GmarketSansMedium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'GmarketSansLight';
+  src: url('../public/fonts/GmarketSansLight.otf') format('opentype');
+}
+
+html {
+  width: 100%;
+}
+
+body {
+  width: 100%;
+  margin: 0; /*자동 8px을 위한 강제 설정*/
+  background-color: #F6C4B7;
+}
+
+#root {
+  width: 100%;
+}

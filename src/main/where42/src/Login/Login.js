@@ -43,12 +43,12 @@ function Login() {
                     <img src="img/character.svg" alt="character"></img>
                 </div>
                 <Link to={"/Main"}>
-                    <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
+                        <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
                 </Link>
             </div>
         )
     }
-    
+
     function Modal() {
         return (
             <div id="Modal">
