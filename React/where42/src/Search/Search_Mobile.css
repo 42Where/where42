@@ -103,7 +103,9 @@
     padding: 0;
     border-radius: 20px;
     border-width: 0.5px;
-    width : clamp(4px, 25vw, 40px);
+    display : inline-block;
+    /* float : right; */
+    width : clamp(4px, 31vw, 40px);
     height : clamp(3px, 6vw, 30px);
     font-family: GmarketSansLight;
     font-size: clamp(6px, 1.2vw, 15px);

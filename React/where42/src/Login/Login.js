@@ -29,7 +29,7 @@ function Login() {
         function clickUp() {
             const button = document.getElementById('Login-button');
             button.style = "background-image: url('img/login_button.svg')";
-            window.location.href = 'https://profile.intra.42.fr/users/sojoo';
+            // window.location.href = 'https://profile.intra.42.fr/users/sojoo';
         }
 
         return (
@@ -41,7 +41,7 @@ function Login() {
                 <div id="Character">
                     <img src="img/character.svg" alt="character"></img>
                 </div>
-                <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
+                    <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
             </div>
         )
     }
