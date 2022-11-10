@@ -5,7 +5,6 @@ import openproject.where42.api.Utils;
 import openproject.where42.check.CheckApi;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.api.Define;
-import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 
@@ -18,15 +17,6 @@ public class MemberInfo {
     private String msg;
     private Locate locate;
     private int inOutState;
-
-    public MemberInfo (Member member, int inOutState) { // 맨처음 만들어지면서 로그인 할 때
-        this.id = member.getId();
-        this.name = member.getName();
-        this.img = member.getImg();
-        this.msg = member.getMsg();
-        this.locate = member.getLocate();
-        this.inOutState = inOutState;
-    }
 
     //내 상태 조회 메소드
     public MemberInfo (Member member) { // 두번쨰부터 로그인 시

@@ -8,12 +8,11 @@ import openproject.where42.group.domain.Groups;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendService;
 import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.groupFriend.dto.GroupFriendInfo;
+import openproject.where42.groupFriend.dto.GroupFriendInfoDto;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
-import openproject.where42.member.dto.MemberInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,21 +29,18 @@ public class MemberService {
     private final GroupRepository groupRepository;
 
     @Transactional
-    public MemberInfo saveMember(String name, String img, String location) { // me 다시 부르지 않기 위해 img, location 정리하기
+    public Long saveMember(String name, String img, String location) { // me 다시 부르지 않기 위해 img, location 정리하기
         Member member = new Member(name, img, MemberLevel.member); // member img 수정되면 이거 살리기
         Long memberId = memberRepository.save(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
 
         member.setDefaultGroup(defaultGroupId, starredGroupId);
-        if (3 == 3 && location != null) {// hane 확인 로직
-            updateLocate(memberId, Utils.parseLocate(location));
-            return new MemberInfo(member, Define.IN);
-        }
-        else {
+        if (3 == 3 && location != null) // hane 확인 로직
+            updateLocate(member, Utils.parseLocate(location));
+        else
             initializeLocate(member);
-            return new MemberInfo(member, Define.OUT);
-        }
+        return memberId;
     }
 
     public Member findByName(String name) {
@@ -59,9 +55,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateLocate(Long memberId, Locate locate) {
-        Member member = memberRepository.findById(memberId);
-
+    public void updateLocate(Member member, Locate locate) {
         member.getLocate().updateLocate(locate.getPlanet(), locate.getFloor(), locate.getCluster(), locate.getSpot());
     }
 
@@ -83,12 +77,12 @@ public class MemberService {
         return groupsInfo;
     }
 
-    public List<GroupFriendInfo> findAllFriendsInfo(Member member) {
-        List<GroupFriendInfo> friendsInfo = new ArrayList<GroupFriendInfo>();
+    public List<GroupFriendInfoDto> findAllFriendsInfo(Member member) {
+        List<GroupFriendInfoDto> friendsInfo = new ArrayList<GroupFriendInfoDto>();
         List<GroupFriend> friends = groupFriendService.findAllFriends(member.getDefaultGroupId());
 
         for (GroupFriend f : friends)
-            friendsInfo.add(new GroupFriendInfo(f, member));
+            friendsInfo.add(new GroupFriendInfoDto(f, member));
         return friendsInfo;
     }
 }

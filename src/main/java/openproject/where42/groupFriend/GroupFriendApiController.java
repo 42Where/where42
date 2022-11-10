@@ -1,10 +1,10 @@
 package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.exception.NotCustomGroupFriend;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.groupFriend.dto.GroupFriendShortInfo;
+import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.groupFriend.dto.GroupFriendShortInfoDto;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.domain.Member;
 import openproject.where42.response.ResponseDto;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,18 @@ public class GroupFriendApiController {
 		Member member = memberRepository.findById(memberId);
 		groupFriendService.saveGroupFriend(friendName, member.getDefaultGroupId());
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_GROUP_FRIEND), HttpStatus.OK); // 실패하는 경우 예외가 있을까?
+	}
+
+	@GetMapping("/v1/groupFriend/includeFriends/{groupId}")
+	public List<String> getGroupFriends(@PathVariable("groupId") Long groupId) {
+		Long id = groupId;
+		List<String> result = new ArrayList<>();
+		result.add("heeskim");
+		result.add("sojoo");
+		result.add("sunghkim");
+		result.add("jaebae");
+		return result;
+//		return groupFriendRepository.includeGroupFriends(groupId);
 	}
 
 	// 해당 친구가 포함되지 않은 그룹 목록 front 반환, SO, 어떤 친구 클릭해서 어떤 그룹에 추가할지 고를 수 있도록
@@ -63,15 +76,9 @@ public class GroupFriendApiController {
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.ADD_FRIENDS_TO_GROUP), HttpStatus.OK);
 	}
 
-	// 커스텀 그룹에서 친구를 삭제할 경우 프론트 선택 된 친구들에 대해 그룹이름, Id 같이 넘겨줘야 함
-	@DeleteMapping("/v1/groupFriend/customGroup")
-	public ResponseEntity deleteGroupFriend(@RequestBody List<GroupFriendShortInfo> friendList) {
-		for (GroupFriendShortInfo friend : friendList) {
-			if (friend.getGroupName().equalsIgnoreCase("기본"))
-				throw new NotCustomGroupFriend();
-			else
-				groupFriendService.deleteGroupFriend(friend.getId());
-		}
+	@DeleteMapping("/v1/groupFriend/{groupId}")
+	public ResponseEntity deleteGroupFriends(@PathVariable("groupId") Long groupId, @RequestBody List<String> friendNames) {
+		groupFriendService.deleteGroupFriend(groupId, friendNames);
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.DELETE_GROUP_FROM_FRIEND), HttpStatus.OK);
 	}
 
