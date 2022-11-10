@@ -1,4 +1,4 @@
-package openproject.where42.member;
+package openproject.where42.Oauth;
 
 import lombok.Data;
 
