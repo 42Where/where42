@@ -37,8 +37,8 @@ public class LoginController {
         checkApi.setting(code); //access_code setting
         checkCookie.register(response, checkApi); // cookie 등록
         ResponseEntity<String> response2 = checkApi.callMeInfo(); // v2/me 부르는 로직
+
         // 이거 줄여야함
-        System.out.println(response2.getBody());
         Seoul42 seoul42 = null;
         try {
             seoul42 = objectMapper.readValue(response2.getBody(), Seoul42.class);
