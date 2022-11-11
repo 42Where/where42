@@ -1,7 +1,9 @@
-package openproject.where42.api;
+package openproject.where42.api.dto;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.ApiService;
+import openproject.where42.api.Define;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
@@ -71,6 +73,9 @@ public class Utils { // api에 넣어도 괜찮을듯..?
     }
 
     public static Locate parseLocate(String location) {
+        if (location == null) {
+            return new Locate(null, 0, 0, null);
+        }
         int i = location.charAt(1) - '0';
         if ((i >= 1 && location.charAt(2) != '0') && i <= 6) {
             if (i <= 2)

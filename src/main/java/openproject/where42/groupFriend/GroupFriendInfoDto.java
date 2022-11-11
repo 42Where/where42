@@ -1,7 +1,7 @@
-package openproject.where42.groupFriend.dto;
+package openproject.where42.groupFriend;
 
 import lombok.Data;
-import openproject.where42.api.Utils;
+import openproject.where42.api.dto.Utils;
 import openproject.where42.groupFriend.domain.GroupFriend;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
@@ -15,7 +15,6 @@ public class GroupFriendInfoDto {
 	private String msg;
 	private Locate locate;
 	private int inOrOut;
-	private boolean isMember;
 
 	public GroupFriendInfoDto(String token42, String tokenHane, GroupFriend friend, Member member) {
 		Utils parseInfo = new Utils(token42, tokenHane, friend.getFriendName(), member);
@@ -25,6 +24,5 @@ public class GroupFriendInfoDto {
 		this.msg = parseInfo.getMsg();
 		this.locate = parseInfo.getLocate();
 		this.inOrOut = parseInfo.getInOrOut();
-		this.isMember = parseInfo.isMember(); // 굳이 필요한지??
 	}
 }
