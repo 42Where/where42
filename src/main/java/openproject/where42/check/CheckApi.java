@@ -78,19 +78,26 @@ public class CheckApi {
 		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
 		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
 	}
+	/*** post 방식 resAPI ==> 나중에 다른곳으로 옮길..?***/
+	public ResponseEntity<String> resPostApi(HttpEntity<MultiValueMap<String, String>> request, URI url) {
+		return rt.exchange(
+				url.toString(),
+				HttpMethod.POST,
+				request,
+				String.class);
+	}
+	public URI createUrl(String url) {
+		return UriComponentsBuilder.fromHttpUrl(url)
+				.build()
+				.toUri();
+	}
 
 	public void setting(String code) {
-
-		ResponseEntity<String> response = rt.exchange(
-				"https://api.intra.42.fr/oauth/token",
-				HttpMethod.POST,
-				callAccessHttp(code),
-				String.class);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		OAuthToken oauthToken = null;
 		try {
-			oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
+			oauthToken = objectMapper.readValue(resPostApi(callAccessHttp(code), createUrl("https://api.intra.42.fr/oauth/token")).getBody(), OAuthToken.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -99,14 +106,10 @@ public class CheckApi {
 
 	public ResponseEntity<String> callMeInfo() {
 		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
-
 		HttpEntity<MultiValueMap<String, String>> request =
 				new HttpEntity<>(params2, tokenHeaders);
 
-		URI url = UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/me")
-				.build()
-				.toUri();
-		return apiService.resApi(request, url);
+		return apiService.resApi(request, createUrl("https://api.intra.42.fr/v2/me"));
 	}
 
 	public ResponseEntity<String> callNameInfo(String name) {
