@@ -121,4 +121,13 @@ public class GroupFriendRepository {
                 .setParameter("group", group)
                 .getResultList();
     }
+
+    public void deleteGroupFriends(Long groupId, List<String> friendNames) {
+        for (String friendName : friendNames) {
+            em.createQuery("delete from GroupFriend gf where gf.group = :groupId and gf.friendName = :friendName")
+                    .setParameter("groupId", groupId)
+                    .setParameter("friendName", friendName)
+                    .executeUpdate();
+        }
+    }
 }
