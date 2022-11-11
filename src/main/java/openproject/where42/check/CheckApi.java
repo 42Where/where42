@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.Oauth.OAuthToken;
 import org.springframework.http.HttpEntity;
@@ -27,16 +29,34 @@ public class CheckApi {
 	private int expires_in;
 	private String scope;
 	private int created_at;
-
 	private HttpHeaders tokenHeaders = new HttpHeaders();
+	static private RestTemplate rt = new RestTemplate();
+	static private ApiService apiService = new ApiService();
 
-	public void setting(String code) {
-		RestTemplate rt = new RestTemplate(); //http 요청을 간단하게 해줄 수 있는 클래스
-		//HttpHeader 오브젝트 생성
+	// Refresh Token용 header body 생성기
+	public HttpEntity<MultiValueMap<String, String>> callRefreshHttp(String refreshToken) {
+		/*** Header 생성 ***/
 		HttpHeaders codeHeaders = new HttpHeaders();
 		codeHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-		//HttpBody 오브젝트 생성
+		/*** body 생성 ***/
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("grant_type","refresh_token");
+		params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+		params.add("client_secret", "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");
+		params.add("refresh_token", refreshToken);
+
+		return new HttpEntity<>(params, codeHeaders);
+	}
+
+	// Access Token용 header body 생성기
+	public HttpEntity<MultiValueMap<String, String>> callAccessHttp(String code) {
+
+		/*** Header 생성 ***/
+		HttpHeaders codeHeaders = new HttpHeaders();
+		codeHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+		/*** body 생성 ***/
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("grant_type","authorization_code");
 		params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
@@ -44,93 +64,64 @@ public class CheckApi {
 		params.add("code", code);
 		params.add("redirect_uri","http://localhost:8080/auth/login/callback");
 
-		//HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-		HttpEntity<MultiValueMap<String, String>> authTokenRequest =
-				new HttpEntity<>(params, codeHeaders);
+		return new HttpEntity<>(params, codeHeaders); // 반환
+	}
 
-		//실제로 요청하기
-		//Http 요청하기 - POST 방식으로 - 그리고 response 변수의 응답을 받음.
-		ResponseEntity<String> response = rt.exchange(
-				"https://api.intra.42.fr/oauth/token",
-				HttpMethod.POST,
-				authTokenRequest,
-				String.class
-		);
-
-		//Gson Library, JSON SIMPLE LIBRARY, OBJECT MAPPER(Check)
-		ObjectMapper objectMapper = new ObjectMapper();
-		OAuthToken oauthToken = null;
-		//Model과 다르게 되있으면 그리고 getter setter가 없으면 오류가 날 것이다.
-		try {
-			oauthToken = objectMapper.readValue(response.getBody(), OAuthToken.class);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		this.access_token = oauthToken.getAccess_token();
-		this.token_type = oauthToken.getToken_type();
-		this.refresh_token = oauthToken.getRefresh_token();
-		this.expires_in = oauthToken.getExpires_in();
-		this.created_at = oauthToken.getCreated_at();
-		this.scope = oauthToken.getScope();
+	//정보 주입
+	private void injectInfo(OAuthToken oAuthToken) {
+		this.access_token = oAuthToken.getAccess_token();
+		this.token_type = oAuthToken.getToken_type();
+		this.refresh_token = oAuthToken.getRefresh_token();
+		this.expires_in = oAuthToken.getExpires_in();
+		this.created_at = oAuthToken.getCreated_at();
+		this.scope = oAuthToken.getScope();
 		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
 		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
 	}
-	public ResponseEntity<String> callMeInfo() {
-		RestTemplate rt = new RestTemplate();
-		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
-		HttpEntity<MultiValueMap<String, String>> request =
-				new HttpEntity<>(params2, tokenHeaders);
-
-		System.out.println(this.access_token);
-
-		// HTTP 요청할 떄 생성한 Header 설정
-		//        ResponseEntity<String> responseEntity = restTemplate.exchange("요청 URL"
-		//                , HttpMethod.GET, new HttpEntity<>(headers), String.class);
-		URI url = UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/me")
-				.build()
-				.toUri();
-
+	/*** post 방식 resAPI ==> 나중에 다른곳으로 옮길..?***/
+	public ResponseEntity<String> resPostApi(HttpEntity<MultiValueMap<String, String>> request, URI url) {
 		return rt.exchange(
 				url.toString(),
-				HttpMethod.GET,
+				HttpMethod.POST,
 				request,
 				String.class);
 	}
-
-	public ResponseEntity<String> callNameInfo(String name) {
-		RestTemplate rt = new RestTemplate();
-//		HttpHeaders tokenHeaders = new HttpHeaders();
-//		tokenHeaders.add("Authorization", "Bearer " + this.access_token);
-//		tokenHeaders.add("Content-type", "application/json;charset=utf-8");
-		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
-		HttpEntity<MultiValueMap<String, String>> request =
-				new HttpEntity<>(params2, tokenHeaders);
-
-		System.out.println(this.access_token);
-		// HTTP 요청할 떄 생성한 Header 설정
-//                ResponseEntity<String> responseEntity = restTemplate.exchange("요청 URL"
-//                        , HttpMethod.GET, new HttpEntity<>(headers), String.class);
-
-		URI url = UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/users/" + name)
+	public URI createUrl(String url) {
+		return UriComponentsBuilder.fromHttpUrl(url)
 				.build()
 				.toUri();
-		return rt.exchange(
-				url.toString(),
-				HttpMethod.GET,
-				request,
-				String.class);
 	}
 
-	public Seoul42 check42Api(String name) {
+	public void setting(String code) {
+
 		ObjectMapper objectMapper = new ObjectMapper();
-		Seoul42 seoul42 = null;
-
-		ResponseEntity<String> response = callNameInfo(name);
+		OAuthToken oauthToken = null;
 		try {
-			seoul42 = objectMapper.readValue(response.getBody(), Seoul42.class);
+			oauthToken = objectMapper.readValue(resPostApi(callAccessHttp(code), createUrl("https://api.intra.42.fr/oauth/token")).getBody(), OAuthToken.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return seoul42;
+		injectInfo(oauthToken);
+	}
+
+	public ResponseEntity<String> callMeInfo() {
+		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
+		HttpEntity<MultiValueMap<String, String>> request =
+				new HttpEntity<>(params2, tokenHeaders);
+
+		return apiService.resApi(request, createUrl("https://api.intra.42.fr/v2/me"));
+	}
+
+	public ResponseEntity<String> callNameInfo(String name) {
+		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
+		HttpEntity<MultiValueMap<String, String>> request =
+				new HttpEntity<>(params2, tokenHeaders);
+
+		return apiService.resApi(request, apiService.req42ApiOneUserUri(name));
+	}
+
+	public Seoul42 check42Api(String name) {
+		ResponseEntity<String> response = callNameInfo(name);
+		return apiService.seoul42Mapping(response.getBody());
 	}
 }

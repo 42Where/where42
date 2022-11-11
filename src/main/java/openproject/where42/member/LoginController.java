@@ -3,10 +3,12 @@ package openproject.where42.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.check.AES;
 import openproject.where42.check.CheckApi;
 import openproject.where42.check.CheckCookie;
+import openproject.where42.check.MakeCookie;
 import openproject.where42.member.domain.Member;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginController {
     private final MemberRepository memberRepository;
     private final CheckApi checkApi = new CheckApi();
+    static private MakeCookie oven = new MakeCookie();
+    private final AES aes = new AES();
 
     @GetMapping("/auth/logins")
     public String login() {
@@ -33,11 +37,14 @@ public class LoginController {
         ObjectMapper objectMapper = new ObjectMapper();
         CheckCookie checkCookie = new CheckCookie();
 
-
         checkApi.setting(code); //access_code setting
-        checkCookie.register(response, checkApi); // cookie 등록
-        ResponseEntity<String> response2 = checkApi.callMeInfo(); // v2/me 부르는 로직
 
+        /*** 쿠키 등록 ***/
+        response.addCookie(oven.bakingCookie("access_token", aes.encoding(checkApi.getAccess_token()), 7200));
+        response.addCookie(oven.bakingCookie("access_token", aes.encoding(checkApi.getRefresh_token()), 1209600));
+        response.addCookie(oven.bakingMaxAge("1209600", 1209600));
+
+        ResponseEntity<String> response2 = checkApi.callMeInfo(); // v2/me 부르는 로직
         // 이거 줄여야함
         Seoul42 seoul42 = null;
         try {

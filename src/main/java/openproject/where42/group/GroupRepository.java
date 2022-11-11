@@ -29,6 +29,7 @@ public class GroupRepository {
                 .setParameter("groupId", groupId)
                 .getResultList();
         for (GroupFriend member : members) {
+            System.out.println(member.getFriendName());
             em.remove(member);
         }
         Groups group = em.createQuery("select g from Groups g where g.id = :groupId", Groups.class)
