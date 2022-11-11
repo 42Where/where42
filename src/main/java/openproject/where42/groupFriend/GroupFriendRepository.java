@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -116,9 +113,12 @@ public class GroupFriendRepository {
                 .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
+        List<GroupFriend> friends = em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
                 .setParameter("group", group)
                 .getResultList();
+        StringComparator stringComparator = new StringComparator();
+        Collections.sort(friends, stringComparator);
+        return friends;
     }
 
     public void deleteGroupFriends(Long groupId, List<String> friendNames) {
@@ -130,5 +130,4 @@ public class GroupFriendRepository {
             em.remove(friend);
         }
     }
-
 }
