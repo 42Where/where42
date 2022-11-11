@@ -61,12 +61,12 @@ public class GroupFriendService {
 	// 해당 그룹에 포함된 친구들 중 선택된 친구들 일괄 삭제
 	@Transactional
 	public void deleteIncludeGroupFriends(Long groupId, List<String> friendNames) {
-//		groupFriendRepository.deleteGroupFriendsByGroupFriendId(friendNames); // groupId + friendNames 조합으로 삭제할 수 있게
+		groupFriendRepository.deleteGroupFriends(groupId, friendNames);
 	}
 
 	// 기본 그룹을 포함한 같은 친구에 대해 정보 일괄 삭제
 	@Transactional
-	public void deleteFriend(Long memberId, String friendName) { // 이게 현재 딜리트프렌즈그룹바이네임
+	public void deleteFriend(Long memberId, String friendName) {
 		Member member = memberRepository.findById(memberId);
 		groupFriendRepository.deleteFriendByFriendName(member, friendName);
 	}

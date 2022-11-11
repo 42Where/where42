@@ -16,11 +16,10 @@ public class ResponseMsg {
     public static final String DUPLICATE_GROUP_NAME = "그룹 이름 중복";
     public static final String DEFAULT_GROUP_NAME = "사용자 설정 불가 이름";
     public static final String CREATE_GROUP_FRIEND = "친구 생성 성공";
-    public static final String ADD_GROUPS_TO_FRIEND = "친구 그룹 추가 성공"; // 두개 의미가 모호. 더 알아보기 쉬운 메시지가 없을까.
     public static final String ADD_FRIENDS_TO_GROUP = "그룹에 친구 추가 성공";
-    public static final String DELETE_GROUP_FROM_FRIEND = "친구 그룹 삭제 성공";
-    public static final String DELETE_GROUP_FRIEND = "친구 삭제 성공";
-    public static final String DELETE_MULTI_GROUP_FRIENDS = "다중 친구 삭제 성공";
+    public static final String DELETE_FRIENDS_FROM_GROUP = "그룹에서 친구 삭제 성공";
+    public static final String DELETE_GROUP_FRIENDS = "친구 삭제 성공";
+    public static final String ADD_GROUPS_TO_FRIEND = "친구 그룹 추가 성공";
     //    public static final String READ_USER = "회원 정보 조회 성공";
     public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
 //    public static final String CREATED_USER = "회원 가입 성공";
