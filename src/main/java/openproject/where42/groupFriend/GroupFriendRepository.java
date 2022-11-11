@@ -124,10 +124,11 @@ public class GroupFriendRepository {
 
     public void deleteGroupFriends(Long groupId, List<String> friendNames) {
         for (String friendName : friendNames) {
-            em.createQuery("delete from GroupFriend gf where gf.group = :groupId and gf.friendName = :friendName")
+            GroupFriend friend = em.createQuery("select gf from GroupFriend gf where gf.group.id = :groupId and gf.friendName = :friendName", GroupFriend.class)
                     .setParameter("groupId", groupId)
                     .setParameter("friendName", friendName)
-                    .executeUpdate();
+                    .getSingleResult();
+            em.remove(friend);
         }
     }
 }

@@ -30,14 +30,13 @@ public class GroupRepository {
                 .setParameter("groupId", groupId)
                 .getResultList();
         for (GroupFriend member : members) {
+            System.out.println(member.getFriendName());
             em.remove(member);
         }
-        int isSuccessful = em.createQuery("delete from Groups g where g.id = :groupId")
+        Groups group = em.createQuery("select g from Groups g where g.id = :groupId", Groups.class)
                 .setParameter("groupId", groupId)
-                .executeUpdate();
-//        if (isSuccessful == 0) {
-//            throw new Exception("deleteByGroupId failed may be invaild id");
-//        }
+                .getSingleResult();
+        em.remove(group);
     }
 
     public Groups findById(Long id) {

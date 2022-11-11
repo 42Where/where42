@@ -68,8 +68,15 @@ public class GroupRepositoryTest {
         groupMembers.put("yyoo", yyoo);
         groupMembers.put("dongchoi", dongchoi);
         groupMembers.put("jaewchoi", jaewchoi);
-        List<GroupFriend> temp = List.of(sunghkim, hyunjcho, sojoo, heeskim, jonkim, yyoo, dongchoi, jaewchoi);
-        groupFriendRepository.multiSave(temp);
+        groupFriendRepository.save(sunghkim);
+        groupFriendRepository.save(hyunjcho);
+        groupFriendRepository.save(sojoo);
+        groupFriendRepository.save(heeskim);
+        groupFriendRepository.save(jonkim);
+        groupFriendRepository.save(yyoo);
+        groupFriendRepository.save(dongchoi);
+        groupFriendRepository.save(jaewchoi);
+
 
         GroupFriend sunghkim2 = new GroupFriend("sunghkim", where42);
         GroupFriend hyunjcho2 = new GroupFriend("hyunjcho", where42);
@@ -79,8 +86,10 @@ public class GroupRepositoryTest {
         groupMembers.put("hyunjcho2", hyunjcho2);
         groupMembers.put("sojoo2", sojoo2);
         groupMembers.put("heeskim2", heeskim2);
-        List<GroupFriend> temp2 = List.of(sunghkim2, hyunjcho2, sojoo2, heeskim2);
-        groupFriendRepository.multiSave(temp2);
+        groupFriendRepository.save(sunghkim2);
+        groupFriendRepository.save(hyunjcho2);
+        groupFriendRepository.save(sojoo2);
+        groupFriendRepository.save(heeskim2);
 
         GroupFriend hyunjcho3 = new GroupFriend("hyunjcho", study);
         GroupFriend dongchoi2 = new GroupFriend("dongchoi", study);
@@ -88,8 +97,9 @@ public class GroupRepositoryTest {
         groupMembers.put("hyunjcho3", hyunjcho3);
         groupMembers.put("dongchoi2", dongchoi2);
         groupMembers.put("jaewchoi2", jaewchoi2);
-        List<GroupFriend> temp3 = List.of(hyunjcho3, dongchoi2, jaewchoi2);
-        groupFriendRepository.multiSave(temp3);
+        groupFriendRepository.save(hyunjcho3);
+        groupFriendRepository.save(dongchoi2);
+        groupFriendRepository.save(jaewchoi2);
     }
 
     @Test
