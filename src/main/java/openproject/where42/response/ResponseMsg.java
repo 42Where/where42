@@ -10,6 +10,7 @@ public class ResponseMsg {
     public static final String CREATE_GROUP = "그룹 생성 성공";
     public static final String NOT_TAKEN_SEAT = "자리 설정 가능";
     public static final String TAKEN_SEAT = "자리 정보 있음";
+    public static final String OUT_STATE = "출근 상태 아님";
     public static final String CHANGE_GROUP_NAME = "그룹 이름 변경 성공";
     public static final String DELETE_GROUP = "그룹 삭제 성공";
     public static final String DUPLICATE_GROUP_NAME = "그룹 이름 중복";

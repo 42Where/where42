@@ -25,4 +25,8 @@ public class ControllerExceptionHandler {
         return new ResponseEntity(ErrResponseDto.errorRes(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 
+    @ExceptionHandler(OutStateException.class)
+    protected ResponseEntity handleDuplicateGroupNameException(OutStateException e) {
+        return new ResponseEntity(ErrResponseDto.errorRes(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
 }

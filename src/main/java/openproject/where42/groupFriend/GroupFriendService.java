@@ -19,7 +19,16 @@ public class GroupFriendService {
 	private final GroupFriendRepository groupFriendRepository;
 	private final GroupRepository groupRepository;
 
-	// 친구 1명에 대한 그룹 추가
+	// 기본 그룹 친구 추가
+	@Transactional
+	public void saveFriend(String friendName, Long ownerId) {
+		Member member = memberRepository.findById(ownerId);
+		Groups group = groupRepository.findById(member.getDefaultGroupId());
+		GroupFriend groupFriend = new GroupFriend(friendName, group);
+		groupFriendRepository.save(groupFriend);
+	}
+
+	// 커스텀 그룹 친구 추가, 그룹 아이디로
 	@Transactional
 	public void saveGroupFriend(String friendName, Long groupId) {
 		Groups group = groupRepository.findById(groupId);
@@ -27,40 +36,38 @@ public class GroupFriendService {
 		groupFriendRepository.save(groupFriend);
 	}
 
+	// 커스텀 그룹 친구 추가, 그룹 객체로
 	@Transactional
 	public void saveGroupFriend(String friendName, Groups group) {
 		GroupFriend groupFriend = new GroupFriend(friendName, group);
 		groupFriendRepository.save(groupFriend);
 	}
 
+	// 커스텀 그룹 일괄 추가
 	@Transactional
-	public void addFriendsToGroup(List<String> friendNames, Groups group) {
+	public void addFriendsToGroup(List<String> friendNames, Long groupId) {
+		Groups group = groupRepository.findById(groupId);
 		for (String friendName : friendNames) {
 			saveGroupFriend(friendName, group);
 		}
 	}
 
+	// 친구 한명에 대해 삭제인데, 사용을 안할지도?
 	@Transactional
 	public void deleteGroupFriend(Long friendId) {
 		groupFriendRepository.deleteGroupFriendByGroupFriendId(friendId);
 	}
 
+	// 해당 그룹에 포함된 친구들 중 선택된 친구들 일괄 삭제
 	@Transactional
-	public void deleteGroupFriend(Long groupId, List<String> friendNames) {
+	public void deleteIncludeGroupFriends(Long groupId, List<String> friendNames) {
 //		groupFriendRepository.deleteGroupFriendsByGroupFriendId(friendNames); // groupId + friendNames 조합으로 삭제할 수 있게
 	}
 
+	// 기본 그룹을 포함한 같은 친구에 대해 정보 일괄 삭제
 	@Transactional
 	public void deleteFriend(Long memberId, String friendName) { // 이게 현재 딜리트프렌즈그룹바이네임
 		Member member = memberRepository.findById(memberId);
 		groupFriendRepository.deleteFriendByFriendName(member, friendName);
-	}
-
-	public List<GroupFriend> findAllFriends(Long memberId) {
-		return groupFriendRepository.findAllGroupFriendByOwnerId(memberId);
-	}
-
-	public List<String> findAllGroupFriendNameByGroupId(Long groupId) {
-		return groupFriendRepository.findGroupFriendsByGroupId(groupId);
 	}
 }

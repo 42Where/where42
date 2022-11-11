@@ -1,21 +1,14 @@
 package openproject.where42.search;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.Utils;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.member.MemberRepository;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,35 +17,21 @@ public class SearchApiController {
 
     private final MemberRepository memberRepository;
     private final ApiService api;
-    private final ObjectMapper objectMapper;
 
     @GetMapping("/v1/search/{memberId}")
-    public Search42UserResponse search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @RequestParam("token") String token) {
-        HttpEntity<MultiValueMap<String, String>> req = api.req42ApiHeader(token); // 동일 헤더 사용
-        ResponseEntity<String> res = api.resApi(req, api.req42ApiUsersUri(begin, getEnd(begin)));
-
-        List<Seoul42> searchList = null;
-        try {
-            searchList = Arrays.asList(objectMapper.readValue(res.getBody(), Seoul42[].class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
+    public List<SearchCadet> search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @CookieValue("access_token") String token) {
+        List<Seoul42> searchList = api.get42UsersInfoInRange(token, begin, getEnd(begin));
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
-        for (Seoul42 cadet : searchList) {
-            ResponseEntity<String> res2 = api.resApi(req, api.req42ApiOneUserUri(cadet.getLogin()));
 
-            SearchCadet searchCadet;
-            try {
-                searchCadet = objectMapper.readValue(res2.getBody(), SearchCadet.class);
+        for (Seoul42 cadet : searchList) {
+            SearchCadet searchCadet = api.get42DetailInfo(token, cadet);
+            if (searchCadet != null) { // json e 처리?!
                 if (memberRepository.checkFriendByMemberIdAndName(memberId, searchCadet.getLogin()))
-                    searchCadet.setFriend(true); // 제대로 반영이 안되는 듯함..?
+                    searchCadet.setFriend(true);
                 searchCadetList.add(searchCadet);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
             }
         }
-       return new Search42UserResponse(searchCadetList);
+       return searchCadetList;
     }
 
     private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?
@@ -66,28 +45,12 @@ public class SearchApiController {
             return begin.substring(0, begin.length() - 1) + String.valueOf((char)((int)last + 1));
     }
 
-    @Data
-    static class Search42UserResponse {
-        private List<SearchCadet> matchUser;
-        public Search42UserResponse(List<SearchCadet> matchUser) {
-            this.matchUser = matchUser;
-        }
-    }
-
-    @GetMapping("/v1/search/{memberId}/select")
-    public SearchCadet getCadetInfo(@PathVariable("memberId") Long memberId, @RequestParam String token, @RequestBody SearchCadet cadet) { // 만약 실제 서비스에서도 token 받아야 할 시 requestBody로 받을 것 보안을 위해
-        ResponseEntity<String> res = api.resApi(api.req42ApiHeader(token), api.reqHaneApiUri(cadet.getLogin())); // 헤더추가가 어떻게 되는거지.. reset 되나?
-
-        try {
-            cadet = objectMapper.readValue(res.getBody(), SearchCadet.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        Utils parseInfo = new Utils(memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
+    @GetMapping("/v1/search/select")
+    public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet, @CookieValue("access_token") String token) { // 이부분은 사실 하네 토큰 필요
+        Utils parseInfo = new Utils(token, memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
-        cadet.setInOutStates(parseInfo.getInOutState());
+        cadet.setInOrOut(parseInfo.getInOrOut());
         return cadet;
     }
 }

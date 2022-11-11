@@ -10,6 +10,6 @@ public class DuplicateGroupNameException extends RuntimeException {
 
     public DuplicateGroupNameException() {
         super(ResponseMsg.DUPLICATE_GROUP_NAME);
-        this.errorCode = StatusCode.DUPLICATE_GROUP_NAME;
+        this.errorCode = StatusCode.CONFLICT;
     }
 }

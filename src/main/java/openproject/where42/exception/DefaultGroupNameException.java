@@ -10,6 +10,6 @@ public class DefaultGroupNameException extends RuntimeException {
 
     public DefaultGroupNameException() {
         super(ResponseMsg.DEFAULT_GROUP_NAME);
-        this.errorCode = StatusCode.DEFAULT_GROUP_NAME;
+        this.errorCode = StatusCode.CONFLICT;
     }
 }

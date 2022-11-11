@@ -14,17 +14,17 @@ public class GroupFriendInfoDto {
 	private String img;
 	private String msg;
 	private Locate locate;
-	private int inOutState;
+	private int inOrOut;
 	private boolean isMember;
 
-	public GroupFriendInfoDto(GroupFriend friend, Member member) {
-		Utils parseInfo = new Utils(friend.getFriendName(), member);
+	public GroupFriendInfoDto(String token42, String tokenHane, GroupFriend friend, Member member) {
+		Utils parseInfo = new Utils(token42, tokenHane, friend.getFriendName(), member);
 		this.id = friend.getId();
 		this.name = friend.getFriendName();
 		this.img = parseInfo.getImg();
 		this.msg = parseInfo.getMsg();
 		this.locate = parseInfo.getLocate();
-		this.inOutState = parseInfo.getInOutState();
+		this.inOrOut = parseInfo.getInOrOut();
 		this.isMember = parseInfo.isMember(); // 굳이 필요한지??
 	}
 }

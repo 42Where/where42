@@ -1,8 +1,8 @@
 package openproject.where42.member.dto;
 
 import lombok.Data;
+import openproject.where42.api.ApiService;
 import openproject.where42.api.Utils;
-import openproject.where42.check.CheckApi;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.api.Define;
 import openproject.where42.member.domain.Locate;
@@ -10,33 +10,31 @@ import openproject.where42.member.domain.Member;
 
 @Data
 public class MemberInfo {
-    private CheckApi checkApi;
+
+    private static final ApiService api = new ApiService();
     private Long id;
     private String name;
     private String img;
     private String msg;
     private Locate locate;
-    private int inOutState;
+    private int inOrOut;
 
-    //내 상태 조회 메소드
-    public MemberInfo (Member member) { // 두번쨰부터 로그인 시
+    public MemberInfo (Member member, String token) {
         this.id = member.getId();
         this.name = member.getName();
-        this.img = member.getImg(); // 멤버 엔티티 수정되면 살리기
+        this.img = member.getImg();
         this.msg = member.getMsg();
+        System.out.println("memberInfo inout = " + this.inOrOut);
         if (3 == 3) { // hane 출근 검사 부분임 출근 했을 경우.
-            checkApi = new CheckApi();
-            Seoul42 seoul42 = checkApi.check42Api(name);
+            Seoul42 seoul42 = api.get42ShortInfo(token, member.getName());
             if (seoul42.getLocation() != null)
                 this.locate = Utils.parseLocate(seoul42.getLocation());
             else
                 this.locate = member.getLocate();
-            this.inOutState = Define.IN;
+            this.inOrOut = Define.IN;
         } else {
             this.locate = member.getLocate();
-            this.inOutState = Define.OUT; // 원래 초기화 돼있으면 할 필요 없음.
+            this.inOrOut = Define.OUT; // 원래 초기화 돼있으면 할 필요 없음.
         }
     }
-
-
 }

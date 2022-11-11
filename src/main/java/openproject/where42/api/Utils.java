@@ -1,69 +1,71 @@
 package openproject.where42.api;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.check.CheckApi;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Planet;
 @Data
+@RequiredArgsConstructor
 public class Utils { // api에 넣어도 괜찮을듯..?
-    private static CheckApi checkApi = new CheckApi(); // 어차피 계속 부를거 static으로 해놓는 게 좋을지두
+
+    private static ApiService api = new ApiService(); // 어차피 계속 부를거 static으로 해놓는 게 좋을지두
     private String img;
     private String msg;
     private Locate locate;
-    private int inOutState;
-    private boolean isMember;
+    private int inOrOut;
+    private boolean isMember; // 필요한지?
 
-    public Utils(String name, Member member) {
-        Seoul42 seoul42 = checkApi.check42Api(name);
+    // 친구 추가된 애들에 대해서 정보 parse하고 반환, 42 및 멤버일 경우 hane까지 조회
+    public Utils(String token42, String tokenHane, String friendName, Member member) {
+        Seoul42 seoul42 = api.get42ShortInfo(token42, friendName);
 
         this.img = seoul42.getImage_url();
         if (member != null) {
             this.msg = member.getMsg();
-            if (3 == 3) {// hane 출근 확인 로직
+            if (api.getHaneInfo(tokenHane, friendName) == Define.IN) {// hane 출근 확인 로직
                 if (seoul42.getLocation() != null)
                     this.locate = parseLocate(seoul42.getLocation());
                 else
                     this.locate = member.getLocate();
-                this.inOutState = Define.IN;
+                this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
-                this.inOutState = Define.OUT;
             }
             this.isMember = true;
         } else {
             if (seoul42.getLocation() != null) {
                 this.locate = parseLocate(seoul42.getLocation());
-                this.inOutState = Define.IN;
+                this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
-                this.inOutState = Define.NONE;
+                this.inOrOut = Define.NONE;
             }
         }
     }
 
-    public Utils(Member member, String locate) {
+    // 검색 후 한명 선택 시 member 여부에 따라 하네, 출근, 자리 정보등 다시 parse 후 반환 (42api 이미 정리된 상태)
+    public Utils(String tokenHane, Member member, String location) { // hane token 받아야 함
         if (member != null) {
             this.msg = member.getMsg();
-            if (3 == 3) {// hane 출근 확인 로직
-                if (locate != null)
-                    this.locate = parseLocate(locate);
+            if (api.getHaneInfo(tokenHane, member.getName()) == Define.IN) {// hane 출근 확인 로직
+                if (location != null)
+                    this.locate = parseLocate(location);
                 else
                     this.locate = member.getLocate();
-                this.inOutState = Define.IN;
+                this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
-                this.inOutState = Define.OUT;
             }
             this.isMember = true;
         } else {
-            if (locate != null) {
-                this.locate = parseLocate(locate);
-                this.inOutState = Define.IN;
+            if (location != null) {
+                this.locate = parseLocate(location);
+                this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
-                this.inOutState = Define.NONE;
+                this.inOrOut = Define.NONE;
             }
         }
     }
