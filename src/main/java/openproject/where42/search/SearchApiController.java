@@ -2,7 +2,7 @@ package openproject.where42.search;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.Utils;
+import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.member.MemberRepository;
@@ -19,12 +19,12 @@ public class SearchApiController {
     private final ApiService api;
 
     @GetMapping("/v1/search/{memberId}")
-    public List<SearchCadet> search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @CookieValue("access_token") String token) {
-        List<Seoul42> searchList = api.get42UsersInfoInRange(token, begin, getEnd(begin));
+    public List<SearchCadet> search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @CookieValue("access_token") String token42) {
+        List<Seoul42> searchList = api.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
 
         for (Seoul42 cadet : searchList) {
-            SearchCadet searchCadet = api.get42DetailInfo(token, cadet);
+            SearchCadet searchCadet = api.get42DetailInfo(token42, cadet);
             if (searchCadet != null) { // json e 처리?!
                 if (memberRepository.checkFriendByMemberIdAndName(memberId, searchCadet.getLogin()))
                     searchCadet.setFriend(true);
@@ -46,8 +46,9 @@ public class SearchApiController {
     }
 
     @GetMapping("/v1/search/select")
-    public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet, @CookieValue("access_token") String token) { // 이부분은 사실 하네 토큰 필요
-        Utils parseInfo = new Utils(token, memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
+    public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
+        String tokenHane = "토큰하네 필요";
+        Utils parseInfo = new Utils(tokenHane, memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
         cadet.setInOrOut(parseInfo.getInOrOut());

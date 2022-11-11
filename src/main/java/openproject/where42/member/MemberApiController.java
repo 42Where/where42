@@ -2,12 +2,11 @@ package openproject.where42.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.group.GroupService;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.groupFriend.dto.GroupFriendInfoDto;
+import openproject.where42.groupFriend.GroupFriendInfoDto;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.member.domain.Member;
@@ -36,7 +35,7 @@ public class MemberApiController {
     private final GroupRepository groupRepository;
     private final GroupFriendRepository groupFriendRepository;
 
-    @PostMapping("/v1/member") // 동의 완료 시 넘어오는 주소 로그인 완료하고 dto 반환 -> 다시 이름 받기
+    @PostMapping("/v1/member")
     public ResponseEntity createMember(@RequestBody Seoul42 seoul42) {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage_url(), seoul42.getLocation());
 
@@ -47,9 +46,9 @@ public class MemberApiController {
     public ResponseMemberInfo memberInformation(@PathVariable ("memberId") Long memberId, @CookieValue("access_token") String token42) {
         Member member = memberRepository.findById(memberId);
         String tokenHane = "hanecookie";
-        MemberInfo memberInfo = new MemberInfo(member, token42);
-        if ((memberInfo.getInOrOut() == Define.IN && memberInfo.getLocate() != null) || memberInfo.getInOrOut() == Define.OUT)
-            memberService.initializeLocate(member);
+        MemberInfo memberInfo = new MemberInfo(member, tokenHane, token42);
+        if (memberInfo.isInitFlag())
+            memberService.initLocate(member);
         List<MemberGroupInfo> groupList = memberService.findAllGroupFriendsInfo(member); // 그룹별 친구 오름차순 된거
         List<GroupFriendInfoDto> groupFriendsList = memberService.findAllFriendsInfo(member, token42, tokenHane); // 해당 오너의 기본 그룹에 속한 친구들 정보 DTO로
         return new ResponseMemberInfo(memberInfo, groupList, groupFriendsList);

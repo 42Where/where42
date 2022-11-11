@@ -3,7 +3,7 @@ package openproject.where42.member;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.Define;
-import openproject.where42.api.Utils;
+import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.exception.OutStateException;
 import openproject.where42.exception.TakenSeatException;
@@ -12,7 +12,7 @@ import openproject.where42.group.domain.Groups;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.groupFriend.dto.GroupFriendInfoDto;
+import openproject.where42.groupFriend.GroupFriendInfoDto;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.MemberLevel;
@@ -39,12 +39,12 @@ public class MemberService {
         Long memberId = memberRepository.save(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
-
+        String tokenHane = "하네 토큰";
         member.setDefaultGroup(defaultGroupId, starredGroupId);
-        if (3 == 3 && location != null) // hane 확인 로직
+        if (api.getHaneInfo(tokenHane, name) == Define.IN && location != null)
             updateLocate(member, Utils.parseLocate(location));
         else
-            initializeLocate(member);
+            initLocate(member);
         return memberId;
     }
 
@@ -65,7 +65,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void initializeLocate(Member member) {
+    public void initLocate(Member member) {
         member.getLocate().updateLocate(null, 0, 0, null);
     }
 
@@ -80,7 +80,7 @@ public class MemberService {
             }
         }
         else {
-            initializeLocate(member);
+            initLocate(member);
             throw new OutStateException();
         }
     }

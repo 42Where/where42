@@ -3,7 +3,7 @@ package openproject.where42.response;
 public class ResponseMsg {
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGIN_FAIL = "로그인 실패";
-    public static final String CREATE_MEMBER = "회원 생성 성공";
+    public static final String CREATE_MEMBER = "멤버 생성 성공";
     public static final String GET_MSG = "상태메시지 조회 성공";
     public static final String SET_MSG = "상태메시지 저장 성공";
     public static final String SET_LOCATE = "위치 저장 성공";

@@ -24,40 +24,40 @@ public class GroupFriendApiController {
 
 
 	// 검색을 통한 친구 등록, 기본 그룹에 등록
-	@PostMapping("/v1/groupFriend/{memberId}") // 세션 사용시 v1/groupFriend로 주소 변경
+	@PostMapping("/v1/groupFriend/{memberId}") // 세션 사용시 v1/groupFriend로 주소 변경 및 하기 주소에서 group 빼기
 	public ResponseEntity createFriend(@PathVariable("memberId") Long memberId, @RequestParam String friendName) {
 		groupFriendService.saveFriend(friendName, memberId);
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.CREATE_GROUP_FRIEND), HttpStatus.OK);
 	}
 
 	// 해당 그룹에 포함되지 않는 친구 이름 목록 전체 반환
-	@GetMapping("/v1/groupFriend/{groupId}/notIncludes/{memberId}")
+	@GetMapping("/v1/groupFriend/notIncludes/group/{groupId}/{memberId}")
 	public List<String> getNotIncludeGroupFriendNames(@PathVariable("memberId") Long memberId, @PathVariable("groupId") Long groupId) {
 		return groupFriendRepository.notIncludeFriendByGroup(memberRepository.findById(memberId), groupId); // repo 함수 이름도 통일 할까?
 	}
 
 	// 해당 그룹에 포함되지 않은 친구들 중 선택된 친구들 일괄 추가
-	@PostMapping("/v1/groupFriend/{groupId}")
+	@PostMapping("/v1/groupFriend/notIncludes/group/{groupId}")
 	public ResponseEntity addFriendsToGroup(@PathVariable("groupId") Long groupId, @RequestBody List<String> friendNames) {
 		groupFriendService.addFriendsToGroup(friendNames, groupId);
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.ADD_FRIENDS_TO_GROUP), HttpStatus.OK);
 	}
 
 	// 해당 그룹에 포함된 친구 이름 목록 전체 반환
-	@GetMapping("/v1/groupFriend/{groupId}/includes")
+	@GetMapping("/v1/groupFriend/includes/group/{groupId}")
 	public List<String> getIncludeGroupFriendNames(@PathVariable("groupId") Long groupId) {
 		return groupFriendRepository.findGroupFriendsByGroupId(groupId);
 	}
 
 	// 해당 그룹에 포함된 친구들 중 선택된 친구들 일괄 삭제
-	@DeleteMapping("/v1/groupFriend/{groupId}/includes")
+	@DeleteMapping("/v1/groupFriend/includes/group/{groupId}")
 	public ResponseEntity removeIncludeGroupFriends(@PathVariable("groupId") Long groupId, @RequestBody List<String> friendNames) {
 		groupFriendService.deleteIncludeGroupFriends(groupId, friendNames);
 		return new ResponseEntity(ResponseDto.res(StatusCode.OK, ResponseMsg.DELETE_FRIENDS_FROM_GROUP), HttpStatus.OK);
 	}
 
 	// 해당 친구가 포함되지 않은 그룹 목록 front 반환, 친구 선택해서 그룹 추가 하게 하는 거, 프론트 아직 구현 안함
-	@GetMapping("/v1/groupFriend/notIncludeGroup/{memberId}") // uri 구조가 좀 이상하긴 하다.. member/{memberId}/groupFriend/~식이 젤 안정적이긴 한데..
+	@GetMapping("/v1/groupFriend/notIncludeGroup/{memberId}")
 	public List<String> notIncludeGroupByFriend(@PathVariable("memberId") Long memberId, @RequestParam String friendName) {
 		return groupFriendRepository.notIncludeGroupByMemberAndFriendName(memberRepository.findById(memberId), friendName);
 	}
