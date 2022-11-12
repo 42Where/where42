@@ -97,7 +97,10 @@ public class CheckApi {
 		ObjectMapper objectMapper = new ObjectMapper();
 		OAuthToken oauthToken = null;
 		try {
-			oauthToken = objectMapper.readValue(resPostApi(callAccessHttp(code), createUrl("https://api.intra.42.fr/oauth/token")).getBody(), OAuthToken.class);
+			oauthToken = objectMapper.readValue(
+					resPostApi(callAccessHttp(code),
+					createUrl("https://api.intra.42.fr/oauth/token")).getBody(),
+					OAuthToken.class);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
