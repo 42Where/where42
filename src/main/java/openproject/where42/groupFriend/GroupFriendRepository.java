@@ -8,10 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -41,7 +38,9 @@ public class GroupFriendRepository {
                 result.add(group.getGroupName());
             }
         }
-        return result;
+        return result.stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     // 해당 그룹에 포함되지 않는 친구 목록 front 반환
@@ -68,7 +67,7 @@ public class GroupFriendRepository {
 
     // 한명 삭제 그룹 멤버 DB 삭제
     public void deleteGroupFriendByGroupFriendId(Long groupFriendId) {
-        int result = em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+        em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
                 .setParameter("groupFriendId", groupFriendId)
                 .executeUpdate();
     }
@@ -116,9 +115,16 @@ public class GroupFriendRepository {
                 .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
+        List<GroupFriend> friends = em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
                 .setParameter("group", group)
                 .getResultList();
+        Collections.sort(friends, new Comparator<GroupFriend>() {
+            @Override
+            public int compare(GroupFriend o1, GroupFriend o2) {
+                return o1.getFriendName().compareTo(o2.getFriendName());
+            }
+        });
+        return friends;
     }
 
     public void deleteGroupFriends(Long groupId, List<String> friendNames) {
@@ -130,5 +136,4 @@ public class GroupFriendRepository {
             em.remove(friend);
         }
     }
-
 }

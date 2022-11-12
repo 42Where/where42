@@ -42,7 +42,7 @@ public class GroupFriendRepositoryTest {
         members.put("jaebae", jaebae);
         memberRepository.save(jaebae);
 
-        Groups friends = new Groups("friends", jaebae);
+        Groups friends = new Groups("기본", jaebae);
         Groups where42 = new Groups("where42", jaebae);
         Groups study = new Groups("study", jaebae);
         groups.put("friends", friends);
@@ -132,8 +132,11 @@ public class GroupFriendRepositoryTest {
     }
 
     @Test
-    public void deleteFriendsGroupByName() {
-
+    @Rollback(value = false)
+    public void deleteGroupFriendByGroupFriendId() {
+        save();
+//        groupFriendRepository.deleteGroupFriendByGroupFriendId(groupMembers.get("hyunjcho3").getId());
+        groupFriendRepository.deleteGroupFriendsByGroupFriendId(List.of(groupMembers.get("hyunjcho3").getId(), groupMembers.get("dongchoi2").getId()));
     }
 
     @Test
@@ -157,7 +160,9 @@ public class GroupFriendRepositoryTest {
     @Test
     public void findAllGroupFriendByOwnerId() {
         save();
-        //List<String> friends = groupFriendRepository.findAllGroupFriendByOwnerId(members.get("jaebae").getId());
-        //System.out.println(friends);
+        List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(members.get("jaebae").getId());
+        for (GroupFriend name : friends) {
+            System.out.println(name.getFriendName());
+        }
     }
 }
