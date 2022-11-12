@@ -94,6 +94,12 @@ public class GroupRepository {
                     .getSingleResult();
             groups.add(group);
         }
+        Collections.sort(groups, new Comparator<Groups>() {
+            @Override
+            public int compare(Groups o1, Groups o2) {
+                return o1.getGroupName().compareTo(o2.getGroupName());
+            }
+        });
         return groups;
     }
 }

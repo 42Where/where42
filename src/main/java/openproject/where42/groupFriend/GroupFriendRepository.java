@@ -38,7 +38,9 @@ public class GroupFriendRepository {
                 result.add(group.getGroupName());
             }
         }
-        return result;
+        return result.stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     // 해당 그룹에 포함되지 않는 친구 목록 front 반환
@@ -116,8 +118,12 @@ public class GroupFriendRepository {
         List<GroupFriend> friends = em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
                 .setParameter("group", group)
                 .getResultList();
-        StringComparator stringComparator = new StringComparator();
-        Collections.sort(friends, stringComparator);
+        Collections.sort(friends, new Comparator<GroupFriend>() {
+            @Override
+            public int compare(GroupFriend o1, GroupFriend o2) {
+                return o1.getFriendName().compareTo(o2.getFriendName());
+            }
+        });
         return friends;
     }
 
