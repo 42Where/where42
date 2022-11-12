@@ -20,7 +20,7 @@ public class CheckCookie {
 			/*** 쿠키 삭제하는 부분도 어디 넣을지 생각하기***/
 //			if (refreshToken == null)
 //				return ""
-			return "success main home";
+			return "redirect:/auth/logins";
 		}
 		if (refreshToken == null)
 			return "redirect:https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code";
