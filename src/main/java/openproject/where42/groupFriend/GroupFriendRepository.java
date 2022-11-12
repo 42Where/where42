@@ -67,7 +67,7 @@ public class GroupFriendRepository {
 
     // 한명 삭제 그룹 멤버 DB 삭제
     public void deleteGroupFriendByGroupFriendId(Long groupFriendId) {
-        int result = em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+        em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
                 .setParameter("groupFriendId", groupFriendId)
                 .executeUpdate();
     }

@@ -132,8 +132,11 @@ public class GroupFriendRepositoryTest {
     }
 
     @Test
-    public void deleteFriendsGroupByName() {
-
+    @Rollback(value = false)
+    public void deleteGroupFriendByGroupFriendId() {
+        save();
+//        groupFriendRepository.deleteGroupFriendByGroupFriendId(groupMembers.get("hyunjcho3").getId());
+        groupFriendRepository.deleteGroupFriendsByGroupFriendId(List.of(groupMembers.get("hyunjcho3").getId(), groupMembers.get("dongchoi2").getId()));
     }
 
     @Test
