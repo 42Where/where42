@@ -62,12 +62,18 @@ public class GroupFriendRepository {
             if (groupMap.get(friend.getFriendName()) == null)
                 result.add(friend.getFriendName());
         }
+        Collections.sort(result, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
         return result;
     }
 
     // 한명 삭제 그룹 멤버 DB 삭제
     public void deleteGroupFriendByGroupFriendId(Long groupFriendId) {
-        em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
+        int result = em.createQuery("delete from GroupFriend gs where gs.id = :groupFriendId")
                 .setParameter("groupFriendId", groupFriendId)
                 .executeUpdate();
     }
