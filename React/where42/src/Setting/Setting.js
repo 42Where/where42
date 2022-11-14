@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ import spot from './spot.json';
 function Setting() {
     const location = useLocation();
     const name = location.state?.name;
+    /*유저 이름 브라우저 내 저장 필요*/
     const nav = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
@@ -223,6 +224,182 @@ function Setting() {
         )
     }
 
+    function SettingGroup() {
+        const arr = [ /*테스트용*/
+            {
+                "groupId": 2,
+                "groupName": "어디 있니어디 있니" 
+            },
+            {
+                "groupId": 314,
+                "groupName": "5기 2차" 
+            },
+            {
+                "groupId": 57,
+                "groupName": "헬창 모임" 
+            }
+        ]
+        const [name, setName] = useState("");
+        const handleChange = ({target : {value}}) => setName(value);
+        const handleSubmit = (event) => {
+            event.preventDefault(); /*새로고침 방지*/
+            alert(JSON.stringify(name, null, 1).replace(/"/gi, ""));
+            /*새로 추가할 그룹을 백으로 넘겨주는 api 호출*/
+            nav("/setting/SetGroup");
+        }
+
+        return (
+            <div id="SettingGroup">
+                <div id="Comment">그룹 관리</div>
+                <form onSubmit={handleSubmit}>
+                    <input type="text" maxLength="10" value={name} onChange={handleChange}/>
+                    <button type="submit">추가</button>
+                </form>
+                <div id="Comment2">그룹명은 10자까지 입력 가능합니다.</div>
+                <div id="GroupList">
+                    {
+                        arr.map((group) => (
+                            <GroupList name={group.groupName} id={group.groupId} key={group.groupId}/>
+                        ))
+                    }
+                </div>
+            </div>
+        )
+    }
+
+    function SettingGroupAdd() {
+        const loc = useLocation();
+        const groupInfo = loc.state;
+        /*그룹 ID로 친구 string arr 얻는 api 호출*/
+        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+        /*아래는 친구 삭제와 동일한 함수들 (재사용할 방법은?)*/
+        const [delList, setDelList] = useState(new Set());
+        const addList = (user, checked) => {
+            if (checked) {
+                delList.add(user);
+                setDelList(delList);
+            }
+            else if (!checked && delList.has(user)) {
+                delList.delete(user);
+                setDelList(delList);
+            }
+        }
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            console.log(delList);
+            if (delList.size > 0 && window.confirm("추가 하시겠습니까?")) {
+                /*추가 부탁하는 api 호출*/
+                alert("추가 완료!");
+                nav("/Setting/SetGroup");
+            }
+        }
+
+        return (
+            <div id="SettingGroupAdd">
+                <div id="Comment">{groupInfo.name}</div>
+                <div id="Comment2">그룹에 추가할 친구를 선택해 주세요.</div>
+                <form onSubmit={handleSubmit}>
+                    <div id="MemberWrapper">
+                        {
+                            arr.map((value, index) => (
+                                <MemberList user={value} addList={addList} key={index}/>
+                            ))
+                        }
+                    </div>
+                    <button type="submit">추가</button>
+                </form>
+            </div>
+        )
+    }
+
+    function SettingGroupDel() {
+        const loc = useLocation();
+        const groupInfo = loc.state;
+        /*그룹 ID로 친구 string arr 얻는 api 호출*/
+        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+        /*아래는 친구 삭제와 동일한 함수들 (재사용할 방법은?)*/
+        const [delList, setDelList] = useState(new Set());
+        const addList = (user, checked) => {
+            if (checked) {
+                delList.add(user);
+                setDelList(delList);
+            }
+            else if (!checked && delList.has(user)) {
+                delList.delete(user);
+                setDelList(delList);
+            }
+        }
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            console.log(delList);
+            if (delList.size > 0 && window.confirm("정말 삭제 하시겠습니까?")) {
+                /*삭제 부탁하는 api 호출*/
+                alert("삭제 완료!");
+                nav("/Setting/SetGroup");
+            }
+        }
+
+        return (
+            /*id Del로 수정(일단은 css 때문에)*/
+            <div id="SettingGroupAdd">
+                <div id="Comment">{groupInfo.name}</div>
+                <div id="Comment2">그룹에서 삭제할 친구를 선택해 주세요.</div>
+                <form onSubmit={handleSubmit}>
+                    <div id="MemberWrapper">
+                        {
+                            arr.map((value, index) => (
+                                <MemberList user={value} addList={addList} key={index}/>
+                            ))
+                        }
+                    </div>
+                    <button type="submit">삭제</button>
+                </form>
+            </div>
+        )
+    }
+
+    function GroupList(props) {
+        const inputRef = useRef(null);
+        const [name, setName] = useState(props.name)
+        const delGroup = () => {
+            if (window.confirm("정말 삭제하시겠습니까?")) {
+                /*삭제 api*/
+                alert(props.id + " 삭제 완료!");
+                /*nav("/setting/SetGroup"); 으로 다시 불러야하겠지?*/
+            }
+        }
+        const modGroup = () => {
+            if (inputRef.current.disabled === true) {
+                inputRef.current.disabled = false;
+                inputRef.current.focus();
+            }
+            else {
+                inputRef.current.disabled = true;
+                /*그룹이름 수정 요청 api*/
+            }
+        }
+        const handleChange = ({target : {value}}) => setName(value);
+
+        return (
+            <div className='Group'>
+                <input type="text" maxLength="10" value={name} onChange={handleChange} ref={inputRef} disabled/>
+                {/* <div className='GroupName'>{props.name}</div> */}
+                <div className='GroupButtons'>
+                    <button onClick={delGroup}>X</button>
+                    <button onClick={modGroup}>O</button>
+                </div>
+                <div className='FriendButtons'>
+                    <Link to="/Setting/SetGroupAdd" state={{id: props.id, name: props.name}}>
+                        <button>+</button>
+                    </Link>
+                    <Link to="/Setting/SetGroupDel" state={{id: props.id, name: props.name}}>
+                        <button>-</button>
+                    </Link>
+                </div>
+            </div>
+        )
+    }
+
     function MemberList(props) {
         const [checked, setChecked] = useState(false);
         useEffect(() => {props.addList(props.user, checked)}, [props, checked]);
@@ -303,14 +480,14 @@ function Setting() {
                 {isDesktop && <Route path={"SetMsg"} element={<div id="Desktop"><SettingMsg/></div>}/>}
                 {isMobile && <Route path={"SetGnF"} element={<div id="Mobile"><SettingGnF/></div>}/>}
                 {isDesktop && <Route path={"SetGnF"} element={<div id="Desktop"><SettingGnF/></div>}/>}
-                {/*isMobile && <Route path={"SetGroup"} element={<div id="Mobile"><SettingGroup/></div>}/>}
-                {isDesktop && <Route path={"SetGroup"} element={<div id="Desktop"><SettingGroup/></div>}/>*/}
+                {isMobile && <Route path={"SetGroup"} element={<div id="Mobile"><SettingGroup/></div>}/>}
+                {isDesktop && <Route path={"SetGroup"} element={<div id="Desktop"><SettingGroup/></div>}/>}
                 {isMobile && <Route path={"SetFriend"} element={<div id="Mobile"><SettingFriend/></div>}/>}
                 {isDesktop && <Route path={"SetFriend"} element={<div id="Desktop"><SettingFriend/></div>}/>}
-                {/*isMobile && <Route path={"SetGroupAdd"} element={<div id="Mobile"><SettingGroupAdd/></div>}/>}
+                {isMobile && <Route path={"SetGroupAdd"} element={<div id="Mobile"><SettingGroupAdd/></div>}/>}
                 {isDesktop && <Route path={"SetGroupAdd"} element={<div id="Desktop"><SettingGroupAdd/></div>}/>}
                 {isMobile && <Route path={"SetGroupDel"} element={<div id="Mobile"><SettingGroupDel/></div>}/>}
-                {isDesktop && <Route path={"SetGroupDel"} element={<div id="Desktop"><SettingGroupDel/></div>}/>} */}
+                {isDesktop && <Route path={"SetGroupDel"} element={<div id="Desktop"><SettingGroupDel/></div>}/>}
             </Routes>
         </div>
     )
