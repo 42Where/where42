@@ -20,6 +20,12 @@
     cursor: pointer;
 }
 
+#Login a{
+    width : 100%;
+    display : flex;
+    justify-content: center;
+}
+
 #Login #LoginButton {
     cursor: pointer;
     background-image: url("../../public/img/login_button.svg");

@@ -1,16 +1,53 @@
 import React from 'react';
 import { useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import select from './select.json';
 
 const Profile = (props) => {
     const info = props.info;
-    const [detail, setDetail] = useState(0);
-    let friendOrNot;
+    const [detail, setDetail] = useState(false);
+    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
 
-    if (info.friend)
-        friendOrNot = (<button className="AddDone">친구 추가 완료</button>);
-    else
-        friendOrNot = (<button className="AddFriend">친구 추가</button>);
+    function FriendClick(e){
+        //api 요청
+        if (isDesktop)
+        {
+            e.target.innerText = '친구 추가 완료';
+        }
+        else if (isMobile)
+        {
+            e.target.style = "background-image: url('img/friend_check.svg')";
+        }
+        e.target.className = "AddDone";
+    }
+
+    let friendOrNot;
+    if (isDesktop)
+        friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick} >{info.friend? '친구 추가 완료' : '친구 추가'}</button>)
+    else if (isMobile)
+        friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
+
+    const DetailClick = (e) => {
+        //api 요청
+        if (isMobile)
+        {
+            if (detail === true)
+                e.target.style = "background-image: url('img/detail_off.svg')";
+            else
+                e.target.style = "background-image: url('img/detail_on.svg')";
+        }
+        setDetail(!detail);
+    }
+
+    let detailCheck;
+
+    if (isDesktop && detail === false)
+        detailCheck = (<button className="CheckSpot" onClick={DetailClick}>정보 확인</button>);
+    else if (isDesktop && detail === true)
+        detailCheck = null;
+    else if (isMobile)
+        detailCheck = (<button className="CheckSpot" onClick={DetailClick}></button>);
 
     return (
         <div className="Profile">
@@ -19,11 +56,11 @@ const Profile = (props) => {
             </div>
             <div className="Info">
                 <div className="Name">{info.login}</div>
-                {detail ===1 ? <Detail info={info}/> : null}
+                {detail === true? <Detail info={info}/> : null}
             </div>
             <div className="ButtonWrapper">
                 {friendOrNot}
-                {detail === 0? <button className="CheckSpot" onClick={()=>{setDetail(1)}}>자리 확인</button> : null}
+                {detailCheck}
             </div>
         </div>
     );
