@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Member;
-import openproject.where42.member.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,28 +15,20 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupFriendService {
-	private final MemberRepository memberRepository;
+
+	private final MemberService memberService;
 	private final GroupFriendRepository groupFriendRepository;
 	private final GroupRepository groupRepository;
 
 	// 기본 그룹 친구 추가
 	@Transactional
-	public void saveFriend(String friendName, Long ownerId) {
-		Member member = memberRepository.findById(ownerId);
-		Groups group = groupRepository.findById(member.getDefaultGroupId());
+	public void saveFriend(String friendName, Long defaultGroupId) {
+		Groups group = groupRepository.findById(defaultGroupId);
 		GroupFriend groupFriend = new GroupFriend(friendName, group);
 		groupFriendRepository.save(groupFriend);
 	}
 
-	// 커스텀 그룹 친구 추가, 그룹 아이디로
-	@Transactional
-	public void saveGroupFriend(String friendName, Long groupId) {
-		Groups group = groupRepository.findById(groupId);
-		GroupFriend groupFriend = new GroupFriend(friendName, group);
-		groupFriendRepository.save(groupFriend);
-	}
-
-	// 커스텀 그룹 친구 추가, 그룹 객체로
+	// 커스텀 그룹 친구 추가
 	@Transactional
 	public void saveGroupFriend(String friendName, Groups group) {
 		GroupFriend groupFriend = new GroupFriend(friendName, group);
@@ -66,8 +58,8 @@ public class GroupFriendService {
 
 	// 기본 그룹을 포함한 같은 친구에 대해 정보 일괄 삭제
 	@Transactional
-	public void deleteFriend(Long memberId, String friendName) {
-		Member member = memberRepository.findById(memberId);
-		groupFriendRepository.deleteFriendByFriendName(member, friendName);
+	public void deleteFriends(Member member, List<String> friendNames) {
+		for (String friendName : friendNames)
+			groupFriendRepository.deleteFriendByFriendName(member, friendName);
 	}
 }

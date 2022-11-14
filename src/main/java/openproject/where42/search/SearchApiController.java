@@ -5,9 +5,12 @@ import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
+import openproject.where42.exception.SessionExpiredException;
 import openproject.where42.member.MemberRepository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +21,18 @@ public class SearchApiController {
     private final MemberRepository memberRepository;
     private final ApiService api;
 
-    @GetMapping("/v1/search/{memberId}")
-    public List<SearchCadet> search42UserResponse(@PathVariable("memberId") Long memberId, @RequestParam("begin") String begin, @CookieValue("access_token") String token42) {
+    @GetMapping("/v1/search")
+    public List<SearchCadet> search42UserResponse(HttpServletRequest req, @RequestParam("begin") String begin, @CookieValue("access_token") String token42) {
+        HttpSession session = req.getSession(false); // 이거 어디 유틸로 뺄 수 있음 뺴자
+        if (session == null)
+            throw new SessionExpiredException();
         List<Seoul42> searchList = api.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
 
         for (Seoul42 cadet : searchList) {
             SearchCadet searchCadet = api.get42DetailInfo(token42, cadet);
             if (searchCadet != null) { // json e 처리?!
-                if (memberRepository.checkFriendByMemberIdAndName(memberId, searchCadet.getLogin()))
+                if (memberRepository.checkFriendByMemberIdAndName((Long)session.getAttribute("id"), searchCadet.getLogin()))
                     searchCadet.setFriend(true);
                 searchCadetList.add(searchCadet);
             }

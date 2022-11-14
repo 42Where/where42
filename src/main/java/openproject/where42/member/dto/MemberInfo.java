@@ -20,7 +20,7 @@ public class MemberInfo {
     private int inOrOut;
     private boolean initFlag;
 
-    public MemberInfo (Member member, String tokenHane, String token42) {
+    public MemberInfo(Member member, String tokenHane, String token42) {
         this.id = member.getId();
         this.name = member.getName();
         this.img = member.getImg();

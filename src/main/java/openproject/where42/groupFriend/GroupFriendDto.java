@@ -7,7 +7,7 @@ import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 
 @Data
-public class GroupFriendInfoDto {
+public class GroupFriendDto {
 
 	private Long id;
 	private String name;
@@ -16,7 +16,7 @@ public class GroupFriendInfoDto {
 	private Locate locate;
 	private int inOrOut;
 
-	public GroupFriendInfoDto(String token42, String tokenHane, GroupFriend friend, Member member) {
+	public GroupFriendDto(String token42, String tokenHane, GroupFriend friend, Member member) {
 		Utils parseInfo = new Utils(token42, tokenHane, friend.getFriendName(), member);
 		this.id = friend.getId();
 		this.name = friend.getFriendName();

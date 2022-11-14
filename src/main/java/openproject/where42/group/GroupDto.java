@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GroupInfoDto {
+public class GroupDto {
     Long groupId;
     String groupName;
 }
