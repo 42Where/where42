@@ -16,13 +16,13 @@
     max-width: 1300px;
     min-height: 100vh;
     box-sizing: border-box;
-    padding: 5% 0 5% 0;
+    padding: 3% 0 3% 0;
     background-color: white;
 }
 
 #Setting #Desktop #Comment {
     width: 100%;
-    margin-bottom: 5%;
+    margin-bottom: 3%;
     text-align: center;
     font-family: 'GmarketSansBold';
     font-size: clamp(60px, 5vw, 100px);
@@ -66,15 +66,19 @@
 
 #Setting #Desktop #BoxWrapper .Box .BoxCap {
     font-family: 'GmarketSansMedium';
-    font-size: clamp(35px, 3.5vw, 65px);
+    font-size: clamp(35px, 2.5vw, 65px);
     text-align: center;
     color: white;
+}
+
+#Setting #Desktop input:focus {
+    outline: none;
 }
 
 /*SettingChoice*/
 
 #Setting #Desktop #SettingChoice #Comment {
-    font-size: clamp(40px, 4vw, 70px);
+    font-size: clamp(40px, 3vw, 70px);
 }
 
 /*SettingMsg*/
@@ -106,10 +110,6 @@
     font-size: clamp(30px, 3vw, 60px);
 }
 
-#Setting #Desktop #SettingMsg input:focus {
-    outline: none;
-}
-
 #Setting #Desktop #SettingMsg button {
     width: 20%;
     height: 4vw;
@@ -122,6 +122,10 @@
 }
 
 /*SettingPlanet*/
+
+#Setting #Desktop #SettingPlanet #Comment {
+    margin-bottom: 5%;
+}
 
 #Setting #Desktop #SettingPlanet #BoxWrapper > :first-child > .Box {
     background-color: #F5A200;
@@ -139,10 +143,6 @@
 
 #Setting #Desktop #SettingFloor {
     padding: 3% 0 3% 0;
-}
-
-#Setting #Desktop #SettingFloor #Comment {
-    margin-bottom: 3%;
 }
 
 #Setting #Desktop #SettingFloor #BoxWrapper {
@@ -196,5 +196,121 @@
 }
 
 #Setting #Desktop #SettingFriend .User input {
+    margin-right: 10%;
+}
+
+/*SettingGroup*/
+
+#Setting #Desktop #SettingGroup #Comment {
+    font-size: clamp(40px, 4vw, 70px);
+}
+
+#Setting #Desktop #SettingGroup #Comment2 {
+    font-size: clamp(15px, 1vw, 40px);
+    margin: 1% 0 5% 0;
+}
+
+#Setting #Desktop #SettingGroup form {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#Setting #Desktop #SettingGroup form input {
+    width: 70%;
+    margin-right: 3%;
+    padding: 1%;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(20px, 2vw, 60px);
+}
+
+#Setting #Desktop #SettingGroup form button {
+    width: 15%;
+    height: 3vw;
+    border: 0;
+    border-radius: 50px;
+    background-color: #EF8E86;
+    color: white;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 1.3vw, 50px);
+}
+
+#Setting #Desktop #SettingGroup #GroupList {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5%;
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group input {
+    width: 60%;
+    padding: 1%;
+    border: none;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 2.5vw, 50px);
+    color: black;
+    background-color: transparent;
+}
+
+#Setting #Desktop #SettingGroup #GroupList .GroupButtons {
+    margin-right: 1%;
+}
+
+#Setting #Desktop #SettingGroup #GroupList div {
+    width: 15%;
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group button {
+    width: 40%;
+    height: 2.5vw;
+    margin-right: 5%;
+}
+
+/*SettingGroupAdd*/
+
+#Setting #Desktop #SettingGroupAdd #Comment {
+    margin: 5% 0 2% 0;
+    font-size: clamp(40px, 4vw, 70px);
+}
+
+#Setting #Desktop #SettingGroupAdd form {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Setting #Desktop #SettingGroupAdd form #MemberWrapper {
+    width: 100%;
+    margin: 20% 0 15% 0;
+}
+
+#Setting #Desktop #SettingGroupAdd form button {
+    width: 50%;
+    height: 4vw;
+    border: 0;
+    border-radius: 50px;
+    background-color: #EF8E86;
+    color: white;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 1.7vw, 50px);
+}
+
+#Setting #Desktop #SettingGroupAdd .User {
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(20px, 2.5vw, 50px);
+    margin-bottom: 5%;
+}
+
+#Setting #Desktop #SettingGroupAdd .User input {
     margin-right: 10%;
 }
