@@ -6,6 +6,13 @@
 </head>
 <body>
 Hello
-<a href="/hello">Where 42</a>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader" />
+  <div class="jumbotron"> <h1>HELLO SHOP</h1>
+    <p class="lead">회원 기능</p> <p>
+      <a class="btn btn-lg btn-secondary" href="/checkCookie">로그인</a>
+  </div>
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
 </body>
 </html>

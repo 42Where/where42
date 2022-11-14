@@ -3,18 +3,19 @@ package openproject.where42.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
 @Data
+@AllArgsConstructor
 @Builder
-public class ErrResponseDto {
+public class ResponseWithData<T> {
     private int statusCode;
     private String responseMsg;
+    private T data;
 
-    public static ErrResponseDto errorRes(final int statusCode, final String responseMsg) {
-        return ErrResponseDto.builder()
+    public static<T> ResponseWithData<T> res(final int statusCode, final String responseMsg, final T t) {
+        return ResponseWithData.<T>builder()
+                .data(t)
                 .statusCode(statusCode)
                 .responseMsg(responseMsg)
                 .build();
-    } // 객체가 아니라 builder를 사용하는 이유 찾아보기
+    }
 }
-
