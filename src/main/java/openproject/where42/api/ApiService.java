@@ -145,7 +145,7 @@ public class ApiService {
     // api 요청에 대한 응답 반환 메소드
 
     public ResponseEntity<String> resApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
-        return rt.exchange(
+        return rt.ㅈexchange(
                 url.toString(),
                 HttpMethod.GET,
                 req,
