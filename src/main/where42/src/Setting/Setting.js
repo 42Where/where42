@@ -156,7 +156,7 @@ function Setting() {
                 <div id="Comment">상태 메시지를 입력해 주세요.</div>
                 <div id="Comment2">상태 메시지는 최대 15자까지 입력 가능합니다.</div>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" maxLength="15" value={msg} onChange={handleChange}></input>
+                    <input type="text" maxLength="15" value={msg} spellcheck="false" onChange={handleChange}/>
                     <button type="submit">확인</button>
                 </form>
             </div>
@@ -165,8 +165,8 @@ function Setting() {
 
     function SettingGnF() {
         return (
-            <div id="SettingGroup">
-                <div id="Comment">그룹 설정</div>
+            <div id="SettingGnF">
+                <div id="Comment">그룹/친구 관리</div>
                 <div id="BoxWrapper">
                     <Link to="/Setting/SetGroup">
                         <div className='Box'>
@@ -252,7 +252,7 @@ function Setting() {
             <div id="SettingGroup">
                 <div id="Comment">그룹 관리</div>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" maxLength="10" placeholder="그룹명은 10자까지 입력 가능합니다." value={name} onChange={handleChange}/>
+                    <input type="text" maxLength="10" placeholder="그룹명은 10자까지 입력 가능합니다." spellcheck="false" value={name} onChange={handleChange}/>
                     <button type="submit">추가</button>
                 </form>
                 {/* <div id="Comment2">그룹명은 10자까지 입력 가능합니다.</div> */}
@@ -382,11 +382,11 @@ function Setting() {
 
         return (
             <div className='Group'>
-                <input type="text" maxLength="10" value={name} onChange={handleChange} ref={inputRef} disabled/>
+                <input type="text" maxLength="10" value={name} spellcheck="false" onChange={handleChange} ref={inputRef} disabled/>
                 {/* <div className='GroupName'>{props.name}</div> */}
                 <div className='GroupButtons'>
-                    <button onClick={delGroup}>X</button>
                     <button onClick={modGroup}>O</button>
+                    <button onClick={delGroup}>X</button>
                 </div>
                 <div className='FriendButtons'>
                     <Link to="/Setting/SetGroupAdd" state={{id: props.id, name: props.name}}>
@@ -425,11 +425,17 @@ function Setting() {
         }
         else if (props.floor) {
             return (
-                <div className='Box' onClick={() => {
-                    setLocate((prev) => {
-                        return {...prev, cluster: 0, floor: props.floor}
-                    })
-                    nav("SetSpot");
+                <div className='Box' onClick={(e) => {
+                    if (props.floor === 3) {
+                        e.preventDefault();
+                        alert("현재 3층은 공사중이므로 선택할 수 없습니다.");
+                    }
+                    else {
+                        setLocate((prev) => {
+                            return {...prev, cluster: 0, floor: props.floor}
+                        })
+                        nav("SetSpot");
+                    }
                 }}>
                     <div className='BoxCap'>{props.cap}</div>
                 </div>
