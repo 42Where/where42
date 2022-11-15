@@ -385,15 +385,15 @@ function Setting() {
                 <input type="text" maxLength="10" value={name} spellcheck="false" onChange={handleChange} ref={inputRef} disabled/>
                 {/* <div className='GroupName'>{props.name}</div> */}
                 <div className='GroupButtons'>
-                    <button onClick={modGroup}>O</button>
-                    <button onClick={delGroup}>X</button>
+                    <button onClick={modGroup}></button>
+                    <button onClick={delGroup}></button>
                 </div>
                 <div className='FriendButtons'>
                     <Link to="/Setting/SetGroupAdd" state={{id: props.id, name: props.name}}>
-                        <button>+</button>
+                        <button></button>
                     </Link>
                     <Link to="/Setting/SetGroupDel" state={{id: props.id, name: props.name}}>
-                        <button>-</button>
+                        <button></button>
                     </Link>
                 </div>
             </div>

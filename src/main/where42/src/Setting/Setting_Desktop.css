@@ -291,8 +291,24 @@
     background-color: transparent;
 }
 
-#Setting #Desktop #SettingGroup #GroupList .GroupButtons {
-    margin-right: 1%;
+#Setting #Desktop #SettingGroup #GroupList .Group .GroupButtons {
+    margin-right: 3%;
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group .GroupButtons :first-child {
+    background-image: url("../../public/img/group_edit.svg");
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group .GroupButtons :last-child {
+    background-image: url("../../public/img/group_del.svg");
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group .FriendButtons :first-child button {
+    background-image: url("../../public/img/friend_add.svg");
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group .FriendButtons :last-child button {
+    background-image: url("../../public/img/friend_del.svg");
 }
 
 #Setting #Desktop #SettingGroup #GroupList div {
@@ -305,9 +321,11 @@
     margin-right: 5%;
     border: 0;
     background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
-/*SettingGroupAdd*/
+/*SettingGroupAdd, Del*/
 
 #Setting #Desktop #SettingGroupAdd #Comment {
     margin: 5% 0 2% 0;
@@ -323,18 +341,18 @@
 
 #Setting #Desktop #SettingGroupAdd form #MemberWrapper {
     width: 100%;
-    margin: 20% 0 15% 0;
+    margin: 15% 0 15% 0;
 }
 
 #Setting #Desktop #SettingGroupAdd form button {
-    width: 50%;
-    height: 4vw;
+    width: 60%;
+    height: 3.5vw;
     border: 0;
     border-radius: 50px;
     background-color: #EF8E86;
     color: white;
     font-family: 'GmarketSansMedium';
-    font-size: clamp(10px, 1.7vw, 50px);
+    font-size: clamp(10px, 1.5vw, 45px);
 }
 
 #Setting #Desktop #SettingGroupAdd .User {
