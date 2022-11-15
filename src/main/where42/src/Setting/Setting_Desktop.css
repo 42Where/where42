@@ -275,15 +275,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 3%;
+}
+
+#Setting #Desktop #SettingGroup #GroupList :first-child .GroupButtons :last-child {
+    display: none;
 }
 
 #Setting #Desktop #SettingGroup #GroupList .Group input {
     width: 60%;
-    padding: 1%;
     border: none;
     font-family: 'GmarketSansMedium';
     font-size: clamp(10px, 2.5vw, 50px);
+    line-height: 2;
     color: black;
     background-color: transparent;
 }
@@ -300,6 +303,8 @@
     width: 40%;
     height: 2.5vw;
     margin-right: 5%;
+    border: 0;
+    background-color: transparent;
 }
 
 /*SettingGroupAdd*/
