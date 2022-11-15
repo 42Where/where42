@@ -3,12 +3,13 @@ package openproject.where42.exception;
 import lombok.Getter;
 import openproject.where42.response.ResponseMsg;
 import openproject.where42.response.StatusCode;
+
 @Getter
-public class TakenSeatException extends RuntimeException{
+public class CookieExpiredException extends RuntimeException{
     private int errorCode;
 
-    public TakenSeatException() {
-        super(ResponseMsg.TAKEN_SEAT);
-        this.errorCode = StatusCode.CONFLICT;
+    public CookieExpiredException() {
+        super(ResponseMsg.NO_COOKIE);
+        this.errorCode = StatusCode.UNAUTHORIZED;
     }
 }

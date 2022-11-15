@@ -56,7 +56,6 @@ public class MemberRepositoryTest {
         GroupFriend dongchoi = new GroupFriend("dongchoi", friends);
         GroupFriend jaewchoi = new GroupFriend("jaewchoi", friends);
         List<GroupFriend> temp = List.of(sunghkim, hyunjcho, sojoo, heeskim, jonkim, yyoo, dongchoi, jaewchoi);
-        groupFriendRepository.multiSave(temp);
     }
 
     @Test

@@ -8,16 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class GroupFriendRepository {
-
     private final EntityManager em;
 
     // 객체 생성
@@ -42,7 +38,9 @@ public class GroupFriendRepository {
                 result.add(group.getGroupName());
             }
         }
-        return result;
+        return result.stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     // 해당 그룹에 포함되지 않는 친구 목록 front 반환
@@ -64,6 +62,12 @@ public class GroupFriendRepository {
             if (groupMap.get(friend.getFriendName()) == null)
                 result.add(friend.getFriendName());
         }
+        Collections.sort(result, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
         return result;
     }
 
@@ -117,8 +121,25 @@ public class GroupFriendRepository {
                 .setParameter("groupName", "기본")
                 .setParameter("ownerId", ownerId)
                 .getSingleResult();
-        return em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
+        List<GroupFriend> friends = em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
                 .setParameter("group", group)
                 .getResultList();
+        Collections.sort(friends, new Comparator<GroupFriend>() {
+            @Override
+            public int compare(GroupFriend o1, GroupFriend o2) {
+                return o1.getFriendName().compareTo(o2.getFriendName());
+            }
+        });
+        return friends;
+    }
+
+    public void deleteGroupFriends(Long groupId, List<String> friendNames) {
+        for (String friendName : friendNames) {
+            GroupFriend friend = em.createQuery("select gf from GroupFriend gf where gf.group.id = :groupId and gf.friendName = :friendName", GroupFriend.class)
+                    .setParameter("groupId", groupId)
+                    .setParameter("friendName", friendName)
+                    .getSingleResult();
+            em.remove(friend);
+        }
     }
 }

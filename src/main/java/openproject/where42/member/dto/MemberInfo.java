@@ -1,52 +1,42 @@
 package openproject.where42.member.dto;
 
 import lombok.Data;
-import openproject.where42.api.Utils;
-import openproject.where42.check.CheckApi;
+import openproject.where42.api.ApiService;
+import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.api.Define;
-import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 
 @Data
 public class MemberInfo {
-    private CheckApi checkApi;
+
+    private static final ApiService api = new ApiService();
     private Long id;
     private String name;
     private String img;
     private String msg;
     private Locate locate;
-    private int inOutState;
+    private int inOrOut;
+    private boolean initFlag;
 
-    public MemberInfo (Member member, int inOutState) { // 맨처음 만들어지면서 로그인 할 때
+    public MemberInfo(Member member, String tokenHane, String token42) {
         this.id = member.getId();
         this.name = member.getName();
         this.img = member.getImg();
         this.msg = member.getMsg();
-        this.locate = member.getLocate();
-        this.inOutState = inOutState;
-    }
-
-    //내 상태 조회 메소드
-    public MemberInfo (Member member) { // 두번쨰부터 로그인 시
-        this.id = member.getId();
-        this.name = member.getName();
-        this.img = member.getImg(); // 멤버 엔티티 수정되면 살리기
-        this.msg = member.getMsg();
-        if (3 == 3) { // hane 출근 검사 부분임 출근 했을 경우.
-            checkApi = new CheckApi();
-            Seoul42 seoul42 = checkApi.check42Api(name);
-            if (seoul42.getLocation() != null)
+        if (api.getHaneInfo(tokenHane, this.name) == Define.IN) {
+            Seoul42 seoul42 = api.get42ShortInfo(token42, member.getName());
+            if (seoul42.getLocation() != null) {
                 this.locate = Utils.parseLocate(seoul42.getLocation());
+                this.initFlag = true;
+            }
             else
                 this.locate = member.getLocate();
-            this.inOutState = Define.IN;
+            this.inOrOut = Define.IN;
         } else {
-            this.locate = member.getLocate();
-            this.inOutState = Define.OUT; // 원래 초기화 돼있으면 할 필요 없음.
+            this.locate = Utils.parseLocate(null);
+            this.initFlag = true;
         }
     }
-
-
 }

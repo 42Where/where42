@@ -1,9 +1,11 @@
 package openproject.where42.member.dto;
 
+import lombok.Data;
 import openproject.where42.group.domain.Groups;
 
 import java.util.List;
 
+@Data
 public class MemberGroupInfo {
     Long groupId;
     String groupName;

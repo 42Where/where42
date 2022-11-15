@@ -3,12 +3,15 @@ package openproject.where42.group;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.exception.DefaultGroupNameException;
 import openproject.where42.exception.DuplicateGroupNameException;
+import openproject.where42.exception.SessionExpiredException;
 import openproject.where42.group.domain.Groups;
-import openproject.where42.member.domain.Member;
 import openproject.where42.member.MemberRepository;
+import openproject.where42.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -26,10 +29,20 @@ public class GroupService {
     }
 
     @Transactional
-    public Long saveGroup(String groupName, Long ownerId) {
-        validateDuplicateGroupName(ownerId, groupName);
-        Member owner = memberRepository.findById(ownerId);
+    public Long createCustomGroup(String groupName, Member owner) {
+        validateDuplicateGroupName(owner.getId(), groupName);
         return groupRepository.save(new Groups(groupName, owner));
+    }
+
+    public List<Groups> findAllGroupsExceptDefault(Long ownerId) {
+        return groupRepository.findGroupsByOwnerId(ownerId);
+    }
+
+    public Member findOwnerBySession(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if (session == null)
+            throw new SessionExpiredException();
+        return memberRepository.findById((Long)session.getAttribute("id"));
     }
 
     @Transactional
@@ -42,10 +55,6 @@ public class GroupService {
     private void validateDuplicateGroupName(Long ownerId, String groupName) { // 여러곳에서 호출 시에 대한 에러 처리 필요 싱글톤 패턴 참고
         if (groupRepository.isGroupNameInOwner(ownerId, groupName))
             throw new DuplicateGroupNameException();
-    }
-
-    public List<Groups> findAllGroupsExceptDefault(Long ownerId) {
-        return groupRepository.findGroupsByOwnerId(ownerId);
     }
 
     @Transactional
