@@ -8,13 +8,47 @@ const Profile = (props) => {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
     
     const info = props.info;
-    const [detail, setDetail] = useState(0);
-    let friendOrNot;
+    const [detail, setDetail] = useState(false);
+   
+    function FriendClick(e){
+        //api 요청 post (memberId, friendName)
+        if (isDesktop)
+        {
+            e.target.innerText = '친구 추가 완료';
+        }
+        else if (isMobile)
+        {
+            e.target.style = "background-image: url('img/friend_check.svg')";
+        }
+        e.target.className = "AddDone";
+    }
 
-    if (info.friend)
-        friendOrNot = (<button className="AddDone">친구 추가 완료</button>);
-    else
-        friendOrNot = (<button className="AddFriend">친구 추가</button>);
+    let friendOrNot;
+    if (isDesktop)
+        friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick} >{info.friend? '친구 추가 완료' : '친구 추가'}</button>)
+    else if (isMobile)
+        friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
+
+    const DetailClick = (e) => {
+        //api 요청 get info 정보 그대로 넘기기
+        if (isMobile)
+        {
+            if (detail === true)
+                e.target.style = "background-image: url('img/detail_off.svg')";
+            else
+                e.target.style = "background-image: url('img/detail_on.svg')";
+        }
+        setDetail(!detail);
+    }
+
+    let detailCheck;
+
+    if (isDesktop && detail === false)
+        detailCheck = (<button className="CheckSpot" onClick={DetailClick}>정보 확인</button>);
+    else if (isDesktop && detail === true)
+        detailCheck = null;
+    else if (isMobile)
+        detailCheck = (<button className="CheckSpot" onClick={DetailClick}></button>);
 
     function DetailClick()
     {
@@ -45,11 +79,11 @@ const Profile = (props) => {
             </div>
             <div className="Info">
                 <div className="Name">{info.login}</div>
-                {detail === 1 ? <Detail info={info}/> : null}
+                {detail === true? <Detail info={info}/> : null}
             </div>
             <div className="ButtonWrapper">
                 {friendOrNot}
-                {detail === 0 || isMobile? <button className="CheckSpot" onClick={DetailClick}>자리 확인</button> : null}
+                {detailCheck}
             </div>
         </div>
     );

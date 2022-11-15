@@ -14,11 +14,91 @@
     max-width: 300px;
 }
 
+#Search #Mobile #Wrapper a{
+    text-decoration : none;
+}
+
 #Search #Mobile #Wrapper #Logo p {
     margin-top: 2%;
     font-family: GmarketsansLight;
     font-size: 2.5vw;
     color: white;
+}
+
+
+#Search #Mobile #Wrapper #SearchWrapper
+{
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom : 20px;
+}
+
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox {
+    width : 70%;
+    height : 9vw;
+    display : flex;
+    align-items: center;
+    /* border : 3px solid white; */
+    background-color: white;
+    border-radius: 20px;
+    max-height: 125px;
+}
+
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox #SearchMascot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    width : 20%;
+}
+
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox #SearchMascot img{
+    width: 100%;
+    height : 100%;
+    max-width: 540px;
+    margin-left: 1.5%;
+    object-fit: cover; 
+}
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox form {
+    display : flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    width : 100%;
+    height : 100%;
+}
+
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox form input {
+    background-color: transparent;
+    width : 85%;
+    padding: 0;
+    height : 100%;
+    display: inline-block;
+    font-family: GmarketSansMedium;
+    font-size: clamp(8px, 3.5vw, 15px);
+    line-height : normal;
+    text-align: left;
+    border :0;
+}
+
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox form input:focus {
+    outline:none;
+}
+
+#Search #Mobile #Wrapper #SearchWrapper #SearchBox #SearchButton {
+    width : 6vw;
+    height : 6vw;
+    margin : 5px;
+    padding: 0;
+    float : right;
+    background-color: #F6C4B7;
+    background-image : url("../../public/img/zoom_white.svg");
+    background-repeat: no-repeat;
+    background-size: 65%;
+    background-position: 0.8vw 0.6vw;
+    border : none;
+    border-radius : 50px;
+    cursor: pointer;
 }
 
 #Search #Mobile #Wrapper .Profile {
@@ -101,16 +181,38 @@
 
 #Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper > button {
     padding: 0;
-    border-radius: 20px;
+    border : 0;
+    border-radius: 50px;
     border-width: 0.5px;
-    display : inline-block;
-    /* float : right; */
-    width : clamp(4px, 31vw, 40px);
-    height : clamp(3px, 6vw, 30px);
-    font-family: GmarketSansLight;
-    font-size: clamp(6px, 1.2vw, 15px);
-    margin-bottom : 3px;
+    float : right;
+    width : 7vw;
+    height : 7vw;
+    /* width : clamp(4px, 31vw, 40px); */
+    /* height : clamp(3px, 6vw, 30px); */
+    border : 1px solid #ffccc1;
+    background-color: white;
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
     padding:1;
+    cursor : pointer;
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper .AddDone{
+    background-image: url('../../public/img/friend_check.svg');
+    cursor : auto;
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper .AddFriend{
+    background-image: url('../../public/img/friend_plus.svg');
+    /* background-color : transparent; */
+}
+
+#Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper .CheckSpot{
+    margin-top : 5px;
+    border : 0;
+    background-color : white;
+    background-image: url('../../public/img/detail_off.svg');
 }
 
 #Mobile .Locate::before {

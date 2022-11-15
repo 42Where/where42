@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import { Link } from 'react-router-dom';
 import './Login.css'
 import './Login_Mobile.css'
 import './Login_Tablet.css'
@@ -25,12 +26,12 @@ function Login() {
     function Common() {
         function clickDown() {
             const button = document.getElementById('LoginButton');
-            button.style.backgroundSize = "contain";
-            button.style.backgroundImage = "url('img/login_button_click.svg')";
+            button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
         }
         function clickUp() {
             const button = document.getElementById('LoginButton');
-            button.style.backgroundImage = "url('img/login_button.svg')";
+            button.style = "background-image: url('img/login_button.svg')";
+            // window.location.href = 'https://profile.intra.42.fr/users/sojoo';
         }
 
         return (
@@ -42,7 +43,7 @@ function Login() {
                 <div id="Character">
                     <img src="img/character.svg" alt="character"></img>
                 </div>
-                <Link to={"/Main"}>
+                <Link to="/Main">
                     <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
                 </Link>
             </div>
