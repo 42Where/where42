@@ -1,12 +1,8 @@
-package openproject.where42.check;
+package openproject.where42.cookie;
 
 import lombok.NoArgsConstructor;
 import org.springframework.util.Base64Utils;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.spec.AlgorithmParameterSpec;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
