@@ -10,7 +10,7 @@ const Profile = (props) => {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
 
     function FriendClick(e){
-        //api 요청
+        //api 요청 post (memberId, friendName)
         if (isDesktop)
         {
             e.target.innerText = '친구 추가 완료';
@@ -29,7 +29,7 @@ const Profile = (props) => {
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
 
     const DetailClick = (e) => {
-        //api 요청
+        //api 요청 get info 정보 그대로 넘기기
         if (isMobile)
         {
             if (detail === true)
