@@ -252,10 +252,10 @@ function Setting() {
             <div id="SettingGroup">
                 <div id="Comment">그룹 관리</div>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" maxLength="10" value={name} onChange={handleChange}/>
+                    <input type="text" maxLength="10" placeholder="그룹명은 10자까지 입력 가능합니다." value={name} onChange={handleChange}/>
                     <button type="submit">추가</button>
                 </form>
-                <div id="Comment2">그룹명은 10자까지 입력 가능합니다.</div>
+                {/* <div id="Comment2">그룹명은 10자까지 입력 가능합니다.</div> */}
                 <div id="GroupList">
                     {
                         arr.map((group) => (

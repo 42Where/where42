@@ -102,6 +102,7 @@
 #Setting #Desktop #SettingMsg input {
     width: 70%;
     height: 5vw;
+    line-height: 2;
     margin-bottom: 3%;
     padding-left: 1%;
     border: 0;
@@ -223,6 +224,7 @@
     padding: 1%;
     font-family: 'GmarketSansMedium';
     font-size: clamp(20px, 2vw, 60px);
+    line-height: 2;
 }
 
 #Setting #Desktop #SettingGroup form button {
