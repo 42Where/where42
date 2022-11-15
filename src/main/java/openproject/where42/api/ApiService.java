@@ -2,6 +2,7 @@ package openproject.where42.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import openproject.where42.Oauth.OAuthToken;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.cookie.AES;
@@ -24,29 +25,45 @@ public class ApiService {
     private static final AES aes = new AES();
     private static final ObjectMapper om = new ObjectMapper();
     private static final RestTemplate rt = new RestTemplate();
+
+    HttpHeaders headers;
     HttpEntity<MultiValueMap<String, String>> req;
+    MultiValueMap<String, String> params;
     ResponseEntity<String> res;
+
+    // oAuth 토큰 반환
+    public OAuthToken getOauthToken(String code) {
+        req = req42TokenHeader(code);
+        res = resPostApi(req);
+        return oAuthTokenMapping(res.getBody());
+    }
+
+    // me 정보 반환
+    public Seoul42 getMeInfo(String token) {
+        req = req42ApiHeader(aes.decoding(token));
+        res = resReqApi(req, req42MeUri());
+        return seoul42Mapping(res.getBody());
+    }
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
     // 검색 시 Location 및 img가 나오지 않아 seoul42 -> searchCadet으로 변환해야함
     public List<Seoul42> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
-        res = resApi(req, req42ApiUsersInRangeUri(begin, end));
+        res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
         return seoul42ListMapping(res.getBody());
     }
 
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
     public Seoul42 get42ShortInfo(String token, String name) {
-        System.out.println(aes.decoding(token));
         req = req42ApiHeader(aes.decoding(token));
-        res = resApi(req, req42ApiOneUserUri(name));
+        res = resReqApi(req, req42ApiOneUserUri(name));
         return seoul42Mapping(res.getBody());
     }
 
     // 유저 한명에 대해 모든 정보를 반환해주는 메소드
     public SearchCadet get42DetailInfo(String token, Seoul42 cadet) {
         req = req42ApiHeader(aes.decoding(token));
-        res = resApi(req, req42ApiOneUserUri(cadet.getLogin()));
+        res = resReqApi(req, req42ApiOneUserUri(cadet.getLogin()));
         return searchCadetMapping(res.getBody());
     }
 
@@ -60,12 +77,23 @@ public class ApiService {
         return Define.IN;
     }
 
+    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
+        headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        params = new LinkedMultiValueMap<>();
+        params.add("grant_type","authorization_code");
+        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+        params.add("client_secret", "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");
+        params.add("code", code);
+        params.add("redirect_uri","http://localhost:8080/auth/login/callback");
+        return new HttpEntity<>(params, headers);
+    }
     // 42api 요청 헤더 생성 메소드
     public HttpEntity<MultiValueMap<String, String>> req42ApiHeader(String token) {
-        HttpHeaders headers = new HttpHeaders(); // 새 헤더를 만들지 않으면 429에러가 바로 난다.
+        headers = new HttpHeaders(); // 새 헤더를 만들지 않으면 429에러가 바로 난다.
         headers.add("Authorization", "Bearer " + token);
         headers.add("Content-type", "application/json;charset=utf-8");
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 얘네는 new 처리 하는게 맞겠지..?
+        params = new LinkedMultiValueMap<>(); // 얘네는 new 처리 하는게 맞겠지..?
         return new HttpEntity<>(params, headers); // 헤더 공통으로 쓸 수 있는 방법
     }
 
@@ -77,6 +105,19 @@ public class ApiService {
 //        MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 얘네는 new 처리 하는게 맞겠지..?
 //        return new HttpEntity<>(params, headers); // 헤더 공통으로 쓸 수 있는 방법
         return null;
+    }
+
+    public URI req42TokenUri() {
+        return UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/me")
+                .build()
+                .toUri();
+    }
+
+    public URI req42MeUri() {
+        return UriComponentsBuilder.newInstance()
+                .scheme("https").host("api.intra.42.fr").path("/v2/me")
+                .build()
+                .toUri();
     }
 
     // 유저 범위 설정 검색 요청 uri 생성 메소드
@@ -99,12 +140,22 @@ public class ApiService {
     }
 
     // 한 유저에 대한 하네 정보 요청 uri 생성 메소드
-
     public URI reqHaneApiUri(String login) {
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("24hoursarenotenough.42seoul.kr").path("/v1/tag-log/maininfo" + login)
                 .build()
                 .toUri();
+    }
+
+    // oAuth 객체 json 매핑 메소드
+    public OAuthToken oAuthTokenMapping(String body) {
+        OAuthToken oAuthToken = null;
+        try {
+            oAuthToken = om.readValue(body, OAuthToken.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return oAuthToken;
     }
 
     // seoul42 객체 json 매핑 메소드
@@ -141,12 +192,20 @@ public class ApiService {
         return cadet;
     }
 
-    // api 요청에 대한 응답 반환 메소드
-
-    public ResponseEntity<String> resApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
+    // api req요청에 대한 응답 반환 메소드
+    public ResponseEntity<String> resReqApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
         return rt.exchange(
                 url.toString(),
                 HttpMethod.GET,
+                req,
+                String.class);
+    }
+
+    // api post요청에 대한 응답 반환 메소드
+    public ResponseEntity<String> resPostApi(HttpEntity<MultiValueMap<String, String>> req) {
+        return rt.exchange(
+                "https://api.intra.42.fr/oauth/token",
+                HttpMethod.POST,
                 req,
                 String.class);
     }
