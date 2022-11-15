@@ -34,17 +34,24 @@ public class LoginController2 {
     static private ApiService apiService = new ApiService();
 
     @GetMapping("/v1/home") // home 접속 시 세션 유무를 판단하여 세션이 && 토큰이 있으면 바로 메인화면 없을 경우 전부 42auth로 연결
-    public ResponseEntity home(@CookieValue(value = "access_token", required = false) String token, HttpServletRequest req) {
+    public ResponseEntity home(@CookieValue(value = "access_token", required = false) String token, @CookieValue(value = "refresh_token", required = false) String refresh_token, HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         if (session != null && token != null) // refresh 관련은 성훈이가
             return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK); // case A, 메인 화면으로 넘어가도록
+        if (session != null) {
+            if (refresh == 있음)// refresh 확인 -> 있으면 어세스 발급
+                return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK); // case A, 메인 화면으로 넘어가도록
+            return new ResponseEntity(Response.res(StatusCode.UNAUTHORIZED, ResponseMsg.LOGIN_FAIL), HttpStatus.UNAUTHORIZED); // case B ~ F. 에러 객체..?
+        }
         return new ResponseEntity(Response.res(StatusCode.UNAUTHORIZED, ResponseMsg.LOGIN_FAIL), HttpStatus.UNAUTHORIZED); // case B ~ F. 에러 객체..?
     }
 
     @GetMapping("/v1/login")
     public ResponseEntity login(@CookieValue(value = "access_token", required = false) String token, HttpServletRequest req) {
-        if (token == null)
+        if (token == null && refresh == 없움)
             throw new CookieExpiredException(); // case A ~ C, 쿠키 생성하게 보냄
+        if (token == null && resfresh == 있음)
+            // refresh로 토큰 새로 발급
         ResponseEntity<String> response2 = checkApi.callMeInfo(); // v2/me 부르는 로직 // token 유효성 검증 apiservice에서 하기
         Seoul42 seoul42 = apiService.seoul42Mapping(response2.getBody()); // 이름만 가져올 방법 없나..
         Member member = memberRepository.findByName(seoul42.getLogin()); // 멤버 검사
