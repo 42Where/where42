@@ -15,15 +15,15 @@ import org.springframework.util.MultiValueMap;
 @Getter
 @NoArgsConstructor
 public class TokenDao {
+	static private ObjectMapper om = new ObjectMapper();
 	static private TokenHttp tokenHttp = new TokenHttp();
 	static private ApiService apiService = new ApiService();
 
 	public OAuthToken getAllToken(String code) {
 
-		ObjectMapper objectMapper = new ObjectMapper();
 		OAuthToken oauthToken = null;
 		try {
-			oauthToken = objectMapper.readValue(
+			oauthToken = om.readValue(
 					tokenHttp.resPostApi(tokenHttp.callAccessHttp(code),
 					tokenHttp.createUrl("https://api.intra.42.fr/oauth/token")).getBody(),
 					OAuthToken.class);
