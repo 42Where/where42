@@ -2,6 +2,7 @@ package openproject.where42.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import openproject.where42.Oauth.OAuthToken;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.group.GroupService;
@@ -48,12 +49,11 @@ public class MemberApiController {
     @GetMapping("/v1/member")
     public ResponseMemberInfo memberInformation(HttpServletRequest req, @CookieValue("access_token") String token42) {
         Member member = memberService.findBySession(req);
-        String tokenHane = "hanecookie";
-        MemberInfo memberInfo = new MemberInfo(member, tokenHane, token42);
+        MemberInfo memberInfo = new MemberInfo(member, OAuthToken.tokenHane, token42);
         if (memberInfo.isInitFlag())
             memberService.initLocate(member);
         List<MemberGroupInfo> groupList = memberService.findAllGroupFriendsInfo(member); // 그룹별 친구 오름차순 된거
-        List<GroupFriendDto> groupFriendsList = memberService.findAllFriendsInfo(member, token42, tokenHane); // 해당 오너의 기본 그룹에 속한 친구들 정보 DTO로
+        List<GroupFriendDto> groupFriendsList = memberService.findAllFriendsInfo(member, token42, OAuthToken.tokenHane); // 해당 오너의 기본 그룹에 속한 친구들 정보 DTO로
         return new ResponseMemberInfo(memberInfo, groupList, groupFriendsList);
     }
 
@@ -83,8 +83,7 @@ public class MemberApiController {
 
     @GetMapping("/v1/member/setting/locate") // 위치 설정 가능 여부 조회
     public ResponseEntity checkLocate(HttpServletRequest req, @CookieValue("access_token") String token42) {
-        String tokenHane = "하네 토큰도 필요해용";
-        memberService.checkLocate(req, tokenHane, token42);
+        memberService.checkLocate(req, OAuthToken.tokenHane, token42);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT), HttpStatus.OK);
     }
 

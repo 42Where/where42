@@ -3,9 +3,11 @@ package openproject.where42.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import openproject.where42.Oauth.OAuthToken;
+import openproject.where42.api.dto.Hane;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.cookie.AES;
+import openproject.where42.member.domain.enums.Planet;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,7 +36,7 @@ public class ApiService {
     // oAuth 토큰 반환
     public OAuthToken getOauthToken(String code) {
         req = req42TokenHeader(code);
-        res = resPostApi(req);
+        res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
 
@@ -68,13 +70,16 @@ public class ApiService {
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
-    public int getHaneInfo(String token, String name) {
-//        req = reqHaneApiHeader(aes.decoding(token));
-//        res = resApi(req, reqHaneApiUri(cadet.getLogin()));
-//        if (res.getBody().equalsIgnoreCase("in"))
-//            return 1; // 외출 로직 확인
-//        return 0;
-        return Define.IN;
+    public Planet getHaneInfo(String token, String name) {
+        req = reqHaneApiHeader(token);
+        res = resReqApi(req, reqHaneApiUri(name));
+        Hane hane = haneMapping(res.getBody());
+        if (hane.getInoutState().equalsIgnoreCase("IN")) {
+            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
+                return Planet.gaepo;
+            return Planet.seocho;
+        }
+        return null;
     }
 
     public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
@@ -98,17 +103,16 @@ public class ApiService {
     }
 
     // hane 요청 헤더 생성 메소드
-    public HttpEntity<MultiValueMap<String, String>> req42HaneHeader(String token) {
-//        HttpHeaders headers = new HttpHeaders(); // 새 헤더를 만들지 않으면 429에러가 바로 난다.
-//        headers.add("Authorization", "Bearer " + token);
-//        headers.add("Content-type", "application/json;charset=utf-8");
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>(); // 얘네는 new 처리 하는게 맞겠지..?
-//        return new HttpEntity<>(params, headers); // 헤더 공통으로 쓸 수 있는 방법
-        return null;
+    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader(String token) {
+        headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+        headers.add("Content-type", "application/json;charset=utf-8");
+        params = new LinkedMultiValueMap<>();
+        return new HttpEntity<>(params, headers);
     }
 
     public URI req42TokenUri() {
-        return UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/v2/me")
+        return UriComponentsBuilder.fromHttpUrl("https://api.intra.42.fr/oauth/token")
                 .build()
                 .toUri();
     }
@@ -140,9 +144,8 @@ public class ApiService {
     }
 
     // 한 유저에 대한 하네 정보 요청 uri 생성 메소드
-    public URI reqHaneApiUri(String login) {
-        return UriComponentsBuilder.newInstance()
-                .scheme("https").host("24hoursarenotenough.42seoul.kr").path("/v1/tag-log/maininfo" + login)
+    public URI reqHaneApiUri(String name) {
+        return UriComponentsBuilder.fromHttpUrl("https://api.24hoursarenotenough.42seoul.kr/ext/where42/where42/" + name)
                 .build()
                 .toUri();
     }
@@ -185,11 +188,21 @@ public class ApiService {
     public SearchCadet searchCadetMapping(String body) {
         SearchCadet cadet = null;
         try {
-            cadet = om.readValue(body, SearchCadet.class); // hane꺼는 써치카뎃으로 하지말고 string으로 inourStatus만 가져와서 true/false로 반환하는 방법 고민
+            cadet = om.readValue(body, SearchCadet.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return cadet;
+    }
+
+    public Hane haneMapping(String body) {
+        Hane hane = null;
+        try {
+            hane = om.readValue(body, Hane.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return hane;
     }
 
     // api req요청에 대한 응답 반환 메소드
@@ -202,9 +215,9 @@ public class ApiService {
     }
 
     // api post요청에 대한 응답 반환 메소드
-    public ResponseEntity<String> resPostApi(HttpEntity<MultiValueMap<String, String>> req) {
+    public ResponseEntity<String> resPostApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
         return rt.exchange(
-                "https://api.intra.42.fr/oauth/token",
+                url.toString(),
                 HttpMethod.POST,
                 req,
                 String.class);

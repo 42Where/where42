@@ -1,6 +1,7 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.Oauth.OAuthToken;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.Define;
 import openproject.where42.api.dto.Utils;
@@ -39,12 +40,11 @@ public class MemberService {
     @Transactional
     public Long saveMember(String name, String img, String location) { // me 다시 부르지 않기 위해 img, location 정리하기
         Member member = new Member(name, img, MemberLevel.member); // member img 수정되면 이거 살리기
-        String tokenHane = "하네 토큰";
         Long memberId = memberRepository.save(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
         member.setDefaultGroup(defaultGroupId, starredGroupId);
-        if (api.getHaneInfo(tokenHane, name) == Define.IN && location != null)
+        if (api.getHaneInfo(OAuthToken.tokenHane, name) != null && location != null)
             updateLocate(member, Utils.parseLocate(location));
         else
             initLocate(member);
@@ -71,7 +71,7 @@ public class MemberService {
     public void checkLocate(HttpServletRequest req, String tokenHane, String token42) {
         Member member = findBySession(req);
 
-        if (api.getHaneInfo(tokenHane, member.getName()) == Define.IN) {// hane 출근 확인 로직
+        if (api.getHaneInfo(tokenHane, member.getName()) != null) {// hane 출근 확인 로직
             Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
             if (member42.getLocation() != null) {
                 updateLocate(member, Utils.parseLocate(member42.getLocation()));
