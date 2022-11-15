@@ -1,4 +1,3 @@
-import sample from './sample.json';
 import Profile from './Profile';
 
 function Groups(props){

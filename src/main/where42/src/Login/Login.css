@@ -20,7 +20,7 @@
     cursor: pointer;
 }
 
-#Login a {
+#Login a{
     width : 100%;
     display : flex;
     justify-content: center;
