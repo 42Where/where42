@@ -52,12 +52,12 @@ function Search() {
     function Common() {
         return (
             <div id="Wrapper">
-                <Link to="/Main">
-                    <div id="Logo">
+                <div id="Logo">
+                    <Link to="/Main">
                         <img src="img/logo_simple.svg" alt="logo"></img>
-                        {isMobile && <p>42서울 자리 찾기 서비스</p>}
-                    </div>
-                </Link>
+                    </Link>
+                    {isMobile && <p>42서울 자리 찾기 서비스</p>}
+                </div>
                 <SearchBox/>
                 <div id="SearchResults">
                     {/* 검색 결과 */}

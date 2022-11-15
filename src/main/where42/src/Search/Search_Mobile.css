@@ -2,6 +2,12 @@
     width: 100%;
 }
 
+#Search #Mobile #Wrapper #Logo a{
+    width : 60%;
+    max-width: 300px;
+    text-decoration : none;
+}
+
 #Search #Mobile #Wrapper #Logo {
     display: flex;
     flex-direction: column;
@@ -10,12 +16,7 @@
 }
 
 #Search #Mobile #Wrapper #Logo img {
-    width: 60%;
-    max-width: 300px;
-}
-
-#Search #Mobile #Wrapper a{
-    text-decoration : none;
+    width: 100%;
 }
 
 #Search #Mobile #Wrapper #Logo p {
@@ -54,7 +55,7 @@
 }
 
 #Search #Mobile #Wrapper #SearchWrapper #SearchBox #SearchMascot img{
-    width: 100%;
+    width: 85%;
     height : 100%;
     max-width: 540px;
     margin-left: 1.5%;
@@ -72,11 +73,11 @@
     background-color: transparent;
     width : 85%;
     padding: 0;
-    height : 100%;
+    /*height : 100%;*/
     display: inline-block;
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 3.5vw, 15px);
-    line-height : normal;
+    line-height : 2;
     text-align: left;
     border :0;
 }
@@ -95,7 +96,7 @@
     background-image : url("../../public/img/zoom_white.svg");
     background-repeat: no-repeat;
     background-size: 65%;
-    background-position: 0.8vw 0.6vw;
+    background-position: 0.9vw 0.8vw;
     border : none;
     border-radius : 50px;
     cursor: pointer;
@@ -133,7 +134,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 58%;
+    width: 67%;
     margin-top: min(6px, 1.5%);
 }
 
@@ -172,7 +173,6 @@
     width: 20%;
     height: 100%;
     display: flex;
-    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -181,36 +181,39 @@
 
 #Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper > button {
     padding: 0;
-    border : 0;
-    border-radius: 50px;
-    border-width: 0.5px;
     float : right;
-    width : 7vw;
-    height : 7vw;
-    /* width : clamp(4px, 31vw, 40px); */
-    /* height : clamp(3px, 6vw, 30px); */
-    border : 1px solid #ffccc1;
+    width : 5vw;
+    height : 5vw;
     background-color: white;
     background-size: 70%;
     background-position: center;
     background-repeat: no-repeat;
-    padding:1;
+    /*padding: 1px;*/
+    margin-left:2px;
     cursor : pointer;
 }
 
 #Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper .AddDone{
     background-image: url('../../public/img/friend_check.svg');
+    margin: 1px 0;
     cursor : auto;
+    border-radius: 50px;
+    border : 0.3vw solid black;
 }
 
 #Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper .AddFriend{
     background-image: url('../../public/img/friend_plus.svg');
-    /* background-color : transparent; */
+    margin: 1px 0;
+    border-radius: 50px;
+    border : 0.3vw solid black;
 }
 
 #Search #Mobile #Wrapper .ProfileWrapper .Profile .ButtonWrapper .CheckSpot{
-    margin-top : 5px;
+    /*margin-top : 5px;*/
+    padding: 0;
     border : 0;
+    width : 7vw;
+    height : 40%;
     background-color : white;
     background-image: url('../../public/img/detail_off.svg');
 }
