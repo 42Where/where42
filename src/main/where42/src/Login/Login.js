@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 import './Login.css'
 import './Login_Mobile.css'
 import './Login_Tablet.css'
@@ -29,8 +30,9 @@ function Login() {
         }
         function clickUp() {
             const button = document.getElementById('LoginButton');
-            button.style = "background-image: url('img/login_button.svg')";
-            // window.location.href = 'https://profile.intra.42.fr/users/sojoo';
+            button.style = "background-image: url('img/login_button.svg')"
+            axios.get(  '/v1/login' ).then((response)=>{console.log(response.data)})
+                .catch((Error)=>{console.log(Error)})
         }
 
         return (
