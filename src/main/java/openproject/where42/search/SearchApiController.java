@@ -1,6 +1,7 @@
 package openproject.where42.search;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.Oauth.OAuthToken;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.SearchCadet;
@@ -53,8 +54,7 @@ public class SearchApiController {
 
     @GetMapping("/v1/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
-        String tokenHane = "토큰하네 필요";
-        Utils parseInfo = new Utils(tokenHane, memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
+        Utils parseInfo = new Utils(OAuthToken.tokenHane, memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
         cadet.setInOrOut(parseInfo.getInOrOut());

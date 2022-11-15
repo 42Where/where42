@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.group.domain.Groups;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +14,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GroupFriendService {
-
-	private final MemberService memberService;
 	private final GroupFriendRepository groupFriendRepository;
 	private final GroupRepository groupRepository;
 

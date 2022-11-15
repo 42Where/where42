@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.Define;
-import openproject.where42.api.dto.Seoul42;
 import openproject.where42.member.domain.Locate;
 import openproject.where42.member.domain.Member;
 import openproject.where42.member.domain.enums.Planet;
@@ -17,7 +16,6 @@ public class Utils { // api에 넣어도 괜찮을듯..?
     private String msg;
     private Locate locate;
     private int inOrOut;
-    private boolean isMember; // 필요한지?
 
     // 친구 추가된 애들에 대해서 정보 parse하고 반환, 42 및 멤버일 경우 hane까지 조회
     public Utils(String token42, String tokenHane, String friendName, Member member) {
@@ -26,16 +24,19 @@ public class Utils { // api에 넣어도 괜찮을듯..?
         this.img = seoul42.getImage_url();
         if (member != null) {
             this.msg = member.getMsg();
-            if (api.getHaneInfo(tokenHane, friendName) == Define.IN) {// hane 출근 확인 로직
+            Planet planet = api.getHaneInfo(tokenHane, friendName);
+            if (planet != null) {
                 if (seoul42.getLocation() != null)
                     this.locate = parseLocate(seoul42.getLocation());
-                else
+                else {
                     this.locate = member.getLocate();
+                    if (this.locate.getPlanet() == null)
+                        this.locate.updateLocate(planet, 0, 0, null);
+                }
                 this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
             }
-            this.isMember = true;
         } else {
             if (seoul42.getLocation() != null) {
                 this.locate = parseLocate(seoul42.getLocation());
@@ -51,16 +52,19 @@ public class Utils { // api에 넣어도 괜찮을듯..?
     public Utils(String tokenHane, Member member, String location) { // hane token 받아야 함
         if (member != null) {
             this.msg = member.getMsg();
-            if (api.getHaneInfo(tokenHane, member.getName()) == Define.IN) {// hane 출근 확인 로직
+            Planet planet = api.getHaneInfo(tokenHane, member.getName());
+            if (planet != null) {// hane 출근 확인 로직
                 if (location != null)
                     this.locate = parseLocate(location);
-                else
+                else {
                     this.locate = member.getLocate();
+                    if (this.locate.getPlanet() == null)
+                        this.locate.updateLocate(planet, 0, 0, null);
+                }
                 this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
             }
-            this.isMember = true;
         } else {
             if (location != null) {
                 this.locate = parseLocate(location);
