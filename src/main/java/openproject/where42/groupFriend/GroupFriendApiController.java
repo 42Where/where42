@@ -61,8 +61,8 @@ public class GroupFriendApiController {
 
 	// 해당 친구가 포함되지 않은 그룹 목록 front 반환, 친구 선택해서 그룹 추가 하게 하는 거, 프론트 아직 구현 안함
 	@GetMapping("/v1/groupFriend/notIncludeGroup")
-	public List<String> notIncludeGroupByFriend(HttpSession session, @RequestParam String friendName) {
-		return groupFriendRepository.notIncludeGroupByMemberAndFriendName(memberService.findBySession(session), friendName);
+	public List<String> notIncludeGroupByFriend(HttpServletRequest req, @RequestParam String friendName) {
+		return groupFriendRepository.notIncludeGroupByMemberAndFriendName(memberService.findBySession(req), friendName);
 	}
 
 	// 해당 친구에 대해 여러 그룹에 추가, 프론트 아직 구현 안함
