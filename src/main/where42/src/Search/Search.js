@@ -41,7 +41,7 @@ function Search() {
                     </div>
                     <form onSubmit={SubmitId}>
                         {/* input 필드의 height를 늘려도, font의 descender부분이 잘리는 증상있음 */}
-                        <input type="text" placeholder="아이디를 입력해 주세요" value={searchId} onKeyPress={(e)=>{if (e.key=='Enter') SubmitId(e);}} onChange={searchChange}/>
+                        <input type="text" placeholder="아이디를 입력해 주세요" value={searchId} onKeyPress={(e)=>{if (e.key==='Enter') SubmitId(e);}} onChange={searchChange}/>
                         <button id="SearchButton" type="submit"/>
                     </form>
                 </div>

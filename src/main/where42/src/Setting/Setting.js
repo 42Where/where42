@@ -165,8 +165,8 @@ function Setting() {
 
     function SettingGnF() {
         return (
-            <div id="SettingGroup">
-                <div id="Comment">그룹 설정</div>
+            <div id="SettingGnF">
+                <div id="Comment">그룹/친구 관리</div>
                 <div id="BoxWrapper">
                     <Link to="/Setting/SetGroup">
                         <div className='Box'>
@@ -425,11 +425,17 @@ function Setting() {
         }
         else if (props.floor) {
             return (
-                <div className='Box' onClick={() => {
-                    setLocate((prev) => {
-                        return {...prev, cluster: 0, floor: props.floor}
-                    })
-                    nav("SetSpot");
+                <div className='Box' onClick={(e) => {
+                    if (props.floor === 3) {
+                        e.preventDefault();
+                        alert("현재 3층은 공사중이므로 선택할 수 없습니다.");
+                    }
+                    else {
+                        setLocate((prev) => {
+                            return {...prev, cluster: 0, floor: props.floor}
+                        })
+                        nav("SetSpot");
+                    }
                 }}>
                     <div className='BoxCap'>{props.cap}</div>
                 </div>

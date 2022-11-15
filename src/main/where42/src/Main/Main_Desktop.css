@@ -105,18 +105,18 @@
 
 #Main #Desktop #Wrapper #MyProfile .Profile .Info .Name {
     font-family: GmarketSansBold;
-    font-size: clamp(8px, 1.5vw, 30px);
+    font-size: clamp(8px, 1.5vw, 25px);
 }
 
 #Main #Desktop #Wrapper #MyProfile .Profile .Info .Locate {
     font-family: GmarketSansMedium;
-    font-size: clamp(8px, 1.3vw, 30px);
+    font-size: clamp(8px, 1.3vw, 25px);
     width: max-content;
 }
 
 #Main #Desktop #Wrapper #MyProfile .Profile .Info .Msg {
     font-family: GmarketSansLight;
-    font-size: clamp(6px, 1.1vw, 28px);
+    font-size: clamp(6px, 1.1vw, 23px);
 }
 
 #Main #Desktop #Wrapper .GroupName {
