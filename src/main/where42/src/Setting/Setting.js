@@ -9,6 +9,7 @@ import spot from './spot.json';
 
 function Setting() {
     const location = useLocation();
+    // console.log(location);
     const name = location.state?.name;
     /*유저 이름 브라우저 내 저장 필요*/
     const nav = useNavigate();

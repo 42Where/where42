@@ -6,7 +6,7 @@ import './Main_Desktop.css';
 import './Main_Mobile.css';
 import Profile from './Profile';
 import Groups from './Groups';
-// import test from './sample.json';
+import test from './sample.json';
 import axios from 'axios';
 
 function Main() {
