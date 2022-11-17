@@ -235,3 +235,167 @@
 }
 
 /*SettingGroup*/
+
+#Setting #Mobile #SettingGroup #Comment {
+    font-size: clamp(25px, 9vw, 50px);
+    margin-bottom: 5%;
+}
+
+#Setting #Mobile #SettingGroup form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3%;
+}
+
+#Setting #Mobile #SettingGroup form input {
+    width: 60%;
+    margin-right: 3%;
+    padding-left: 1%;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 2vw, 15px);
+    line-height: 2;
+}
+
+#Setting #Mobile #SettingGroup form button {
+    width: clamp(40px, 15%, 66px);
+    border: 0;
+    border-radius: 50px;
+    background-color: #EF8E86;
+    color: white;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 2vw, 20px);
+}
+
+#Setting #Mobile #SettingGroup #GroupList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group input {
+    width: 45%;
+    margin-right: 3%;
+    border: none;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 4vw, 20px);
+    line-height: 2;
+    color: black;
+    background-color: transparent;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group div {
+    display: flex;
+    align-items: center;
+    width: 15%;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group div a {
+    width: 40%;
+    height: 4vw;
+    margin-right: 10%;
+    display: flex;
+    align-items: center;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .FriendButtons button {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .GroupButtons button {
+    width: 40%;
+    height: 4vw;
+    margin-right: 10%;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#Setting #Mobile #SettingGroup #GroupList :first-child .GroupButtons :last-child {
+    display: none;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .GroupButtons {
+    margin-right: 5%;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .GroupButtons :first-child {
+    background-image: url("../../public/img/group_edit.svg");
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .GroupButtons :last-child {
+    background-image: url("../../public/img/group_del.svg");
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .FriendButtons :first-child button {
+    background-image: url("../../public/img/friend_add.svg");
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group .FriendButtons :last-child button {
+    background-image: url("../../public/img/friend_del.svg");
+}
+
+/*SettingGroupAdd, Del*/
+
+#Setting #Mobile #SettingGroupAdd #Comment {
+    font-size: clamp(20px, 9vw, 50px);
+    margin-bottom: 3%;
+}
+
+#Setting #Mobile #SettingGroupAdd #Comment2 {
+    font-size: clamp(80px, 35vw, 180px);
+    zoom: 0.1;
+}
+
+#Setting #Mobile #SettingGroupAdd form {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Setting #Mobile #SettingGroupAdd form #MemberWrapper {
+    width: 100%;
+    margin: 15% 0 15% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Setting #Mobile #SettingGroupAdd form button {
+    width: clamp(50px, 20vw, 100px);
+    height: clamp(25px, 9vw, 40px);
+    border: 0;
+    border-radius: 50px;
+    background-color: #EF8E86;
+    color: white;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 4vw, 20px);
+}
+
+#Setting #Mobile #SettingGroupAdd .User {
+    width: 75%;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(10px, 5vw, 30px);
+    margin-bottom: 5%;
+}
+
+#Setting #Mobile #SettingGroupAdd .User input {
+    margin-right: 10%;
+}

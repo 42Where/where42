@@ -230,11 +230,6 @@
     font-size: clamp(40px, 4vw, 70px);
 }
 
-#Setting #Desktop #SettingGroup #Comment2 {
-    font-size: clamp(15px, 1vw, 40px);
-    margin: 1% 0 5% 0;
-}
-
 #Setting #Desktop #SettingGroup form {
     width: 70%;
     display: flex;
