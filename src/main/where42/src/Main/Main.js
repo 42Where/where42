@@ -6,11 +6,19 @@ import './Main_Desktop.css';
 import './Main_Mobile.css';
 import Profile from './Profile';
 import Groups from './Groups';
-import sample from './sample.json';
+// import test from './sample.json';
+import axios from 'axios';
 
 function Main() {
+    let sample = test;
+    // let sample ="";
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    axios.get('v1/member').then((response)=>{
+        console.log(response.data);
+        alert("axios success");
+        // sample = response.data;
+    }).catch((Error)=>{console.log("main error" + Error)})
 
     function Common() {
         return (
