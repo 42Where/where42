@@ -1,4 +1,4 @@
-package openproject.where42.check;
+package openproject.where42.cookie;
 
 
 import lombok.NoArgsConstructor;
