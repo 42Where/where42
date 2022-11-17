@@ -65,7 +65,6 @@ public class LoginApiController {
 
     @GetMapping("/auth/login/callback") // 쿠키가 없을 경우 42api로 리다이렉트 시켜 권한 획득 후 이 주소로 콜백됨
     public ResponseEntity loginCallback(@RequestParam("code") String code, HttpServletResponse res, HttpServletRequest req) {
-        System.out.println(code);
         OAuthToken oAuthToken = apiService.getOauthToken(code);
         /*** 쿠키 등록 ***/
         res.addCookie(oven.bakingCookie("access_token", aes.encoding(oAuthToken.getAccess_token()), 7200));

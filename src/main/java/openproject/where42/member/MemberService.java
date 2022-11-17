@@ -83,6 +83,7 @@ public class MemberService {
             throw new OutStateException();
         }
     }
+
     @Transactional
     public void updateLocate(Member member, Locate locate) {
         member.getLocate().updateLocate(locate.getPlanet(), locate.getFloor(), locate.getCluster(), locate.getSpot());

@@ -24,6 +24,7 @@ public class SearchApiController {
 
     @GetMapping("/v1/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, @RequestParam("begin") String begin, @CookieValue("access_token") String token42) {
+        // 토큰 예외 검사
         HttpSession session = req.getSession(false); // 이거 어디 유틸로 뺄 수 있음 뺴자
         if (session == null)
             throw new SessionExpiredException();
@@ -52,7 +53,7 @@ public class SearchApiController {
             return begin.substring(0, begin.length() - 1) + String.valueOf((char)((int)last + 1));
     }
 
-    @GetMapping("/v1/search/select")
+    @PostMapping("/v1/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
         Utils parseInfo = new Utils(OAuthToken.tokenHane, memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
