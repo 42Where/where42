@@ -49,6 +49,7 @@ public class MemberApiController {
     @GetMapping("/v1/member")
     public ResponseMemberInfo memberInformation(HttpServletRequest req, @CookieValue("access_token") String token42) {
         Member member = memberService.findBySession(req);
+        // 토큰 없을 때 refresh 받거나, 401 에러 반환
         MemberInfo memberInfo = new MemberInfo(member, OAuthToken.tokenHane, token42);
         if (memberInfo.isInitFlag())
             memberService.initLocate(member);
@@ -75,6 +76,7 @@ public class MemberApiController {
         Member member = memberService.findBySession(req);
         return member.getMsg();
     }
+
     @PostMapping("/v1/member/setting/msg") // 상태메시지 설정
     public ResponseEntity updatePersonalMsg(HttpServletRequest req, @RequestBody String msg) {
         memberService.updatePersonalMsg(req, msg);
@@ -83,6 +85,7 @@ public class MemberApiController {
 
     @GetMapping("/v1/member/setting/locate") // 위치 설정 가능 여부 조회
     public ResponseEntity checkLocate(HttpServletRequest req, @CookieValue("access_token") String token42) {
+        // 쿠키 예외
         memberService.checkLocate(req, OAuthToken.tokenHane, token42);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT), HttpStatus.OK);
     }

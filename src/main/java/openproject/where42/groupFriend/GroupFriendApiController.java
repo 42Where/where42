@@ -6,6 +6,7 @@ import openproject.where42.member.MemberService;
 import openproject.where42.member.domain.Member;
 import openproject.where42.response.Response;
 import openproject.where42.response.ResponseMsg;
+import openproject.where42.response.ResponseWithData;
 import openproject.where42.response.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +29,15 @@ public class GroupFriendApiController {
 	@PostMapping("/v1/groupFriend")
 	public ResponseEntity createFriend(HttpServletRequest req, @RequestParam String friendName) {
 		Member member = memberService.findBySession(req);
-		groupFriendService.saveFriend(friendName, member.getDefaultGroupId());
-		return new ResponseEntity(Response.res(StatusCode.CREATED, ResponseMsg.CREATE_GROUP_FRIEND), HttpStatus.CREATED);
+		Long friendId = groupFriendService.saveFriend(friendName, member.getDefaultGroupId());
+		return new ResponseEntity(ResponseWithData.res(StatusCode.CREATED, ResponseMsg.CREATE_GROUP_FRIEND, friendId), HttpStatus.CREATED);
 	}
 
 	// 해당 그룹에 포함되지 않는 친구 이름 목록 전체 반환
 	@GetMapping("/v1/groupFriend/notIncludes/group/{groupId}")
 	public List<String> getNotIncludeGroupFriendNames(HttpServletRequest req, @PathVariable("groupId") Long groupId) {
-		return groupFriendRepository.notIncludeFriendByGroup(memberService.findBySession(req), groupId); // repo 함수 이름도 통일 할까?
+		Member member = memberService.findBySession(req);
+		return groupFriendRepository.notIncludeFriendByGroup(member, groupId); // repo 함수 이름도 통일 할까?
 	}
 
 	// 해당 그룹에 포함되지 않은 친구들 중 선택된 친구들 일괄 추가, 세션 검사 안함. 저장은 됨
@@ -79,7 +81,8 @@ public class GroupFriendApiController {
 	// 기본 그룹 친구 이름 목록 반환
 	@GetMapping("v1/groupFriend")
 	public List<String> getAllDefaultFriends(HttpServletRequest req) {
-		return groupFriendRepository.findGroupFriendsByGroupId(memberService.findBySession(req).getDefaultGroupId());
+		Member member = memberService.findBySession(req);
+		return groupFriendRepository.findGroupFriendsByGroupId(member.getDefaultGroupId());
 	}
 
 	// 기본 그룹을 포함한 모든 그룹에서 삭제
