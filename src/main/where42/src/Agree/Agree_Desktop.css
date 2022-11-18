@@ -34,6 +34,7 @@
 
 #Agree #Desktop #Wrapper #AgreeContent
 {
+    white-space: pre-line;
     background-color : #F6C4B7;
     opacity: 0.5;
     border-radius : 20px;
@@ -42,7 +43,7 @@
     padding: 30px;
     box-sizing: border-box;
     font-family: GmarketSansLight;
-    font-size: 40px;
+    font-size: 30px;
     overflow: auto;
 
 }
