@@ -19,10 +19,10 @@ public class GroupFriendService {
 
 	// 기본 그룹 친구 추가
 	@Transactional
-	public void saveFriend(String friendName, Long defaultGroupId) {
+	public Long saveFriend(String friendName, Long defaultGroupId) {
 		Groups group = groupRepository.findById(defaultGroupId);
 		GroupFriend groupFriend = new GroupFriend(friendName, group);
-		groupFriendRepository.save(groupFriend);
+		return groupFriendRepository.save(groupFriend);
 	}
 
 	// 커스텀 그룹 친구 추가
