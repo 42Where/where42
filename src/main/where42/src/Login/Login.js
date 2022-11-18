@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import {useNavigate} from "react-router";
 import axios from 'axios'
 import './Login.css'
 import './Login_Mobile.css'
@@ -22,7 +23,7 @@ function Login() {
     if (xmlhttp.status === 200) {
         content = xmlhttp.responseText;
     }
-
+    const nav = useNavigate();
     function Common() {
         function clickDown() {
             const button = document.getElementById('LoginButton');
@@ -33,15 +34,17 @@ function Login() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button.svg')";
             axios.get(  '/v1/login' ).then((response)=>{
-                console.log(response.data)
-                window.location.href = serverurl;
+                nav('/Main');
             }).catch((Error)=> {
-                    console.log(Error);
-                    //에러가 올수있는건가?
-                })
+                const errData = Error.response.data;
+                if ('data' in errData) {
+                    nav('/Agree');
+                }
+                else {
+                    window.location.href=serverurl;
+                }
+            })
         }
-
-
         return (
             <div id="Common">
                 <button id="Wiki" onClick={()=>{setModal(1)}} ></button>
@@ -51,9 +54,7 @@ function Login() {
                 <div id="Character">
                     <img src="img/character.svg" alt="character"></img>
                 </div>
-                <Link to="/Main">
-                    <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
-                </Link>
+                <button id="LoginButton" onMouseDown={clickDown} onMouseUp={clickUp}></button>
             </div>
         )
     }
