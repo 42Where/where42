@@ -2,6 +2,8 @@
 import { useMediaQuery } from 'react-responsive';
 import './Agree_Desktop.css';
 import './Agree_Mobile.css';
+import {useLocation, useNavigate} from "react-router";
+import axios from "axios";
 
 function Agree()
 {
@@ -11,8 +13,16 @@ function Agree()
 
     function Common(){
         const AgreeClick=()=>{
-            window.location.href = "/Main";
-            //axios api호출
+            const location = useLocation();
+            const nav = useNavigate();
+            const data = location.state;
+            console.log(data);
+            axios.post('/v1/member', {data:data}).then((response)=>{
+                console.log(response.data);
+                nav("/Main");
+            }).catch((Error)=>{
+                console.log(Error);
+            })
         }
         return (
             <div id="Wrapper">
