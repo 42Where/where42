@@ -12,12 +12,13 @@ function Agree()
     //api post : login, location, image_url (메인 호출하면 이정보가 오는데, 그걸 다시 보내줘야함)
 
     function Common(){
+        const location = useLocation();
+        const nav = useNavigate();
+        const data = location.state;
+
         const AgreeClick=()=>{
-            const location = useLocation();
-            const nav = useNavigate();
-            const data = location.state;
             console.log(data);
-            axios.post('/v1/member', {data:data}).then((response)=>{
+            axios.post('/v1/member', {data}, {"Content-Type": 'application/json'}).then((response)=>{
                 console.log(response.data);
                 nav("/Main");
             }).catch((Error)=>{
