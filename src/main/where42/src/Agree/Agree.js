@@ -14,15 +14,14 @@ function Agree()
     function Common(){
         const location = useLocation();
         const nav = useNavigate();
-        const data = location.state;
-
+        const info = location.state;
         const AgreeClick=()=>{
-            console.log(data);
-            axios.post('/v1/member', {data}, {"Content-Type": 'application/json'}).then((response)=>{
-                console.log(response.data);
-                nav("/Main");
-            }).catch((Error)=>{
-                console.log(Error);
+            const body = { login: info.login , image_url : info.image_url, location:info.location};
+            axios.post('/v1/member', body)
+                .then((response)=>{
+                nav("/Main");})
+                .catch((Error)=>{
+                    console.log(Error);
             })
         }
         return (

@@ -1,24 +1,29 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import './Main.css';
 import './Main_Desktop.css';
 import './Main_Mobile.css';
 import Profile from './Profile';
 import Groups from './Groups';
-import test from './sample.json';
+// import test from './sample.json';
 import axios from 'axios';
 
-function Main() {
-    let sample = test;
-    // let sample ="";
+async function Main() {
+    // let sample = test;
+    let sample ="";
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-    axios.get('v1/member').then((response)=>{
-        console.log(response.data);
-        alert("axios success");
-        // sample = response.data;
-    }).catch((Error)=>{console.log("main error" + Error)})
+    try{
+        let response = await axios.get('v1/member')
+        if (response.status == 201)
+        {
+            console.log(response.data);
+            sample = response.data;
+        }
+    }
+    catch(Error){console.log("main error" + Error);}
+
 
     function Common() {
         return (
@@ -35,7 +40,7 @@ function Main() {
                 <div id="MyProfile">
                     <Profile key={sample.memeberInfo.id} info={sample.memeberInfo} me={1}/>
                 </div>
-                <Groups groupInfo={sample.groupInfo} friendInfo={sample.groupFriendInfo}/>
+                {/*<Groups groupInfo={sample.groupInfo} friendInfo={sample.groupFriendInfo}/>*/}
             </div>
 
         )
