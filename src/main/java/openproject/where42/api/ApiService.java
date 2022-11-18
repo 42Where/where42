@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service // 이컨트롤러 쓴느게 맞나..ㅎ 다시 생각.. 왜 스프링 빈에 등록이 안된다는걸까??
 public class ApiService {
@@ -68,10 +70,11 @@ public class ApiService {
     }
 
     // 유저 한명에 대해 모든 정보를 반환해주는 메소드
-    public SearchCadet get42DetailInfo(String token, Seoul42 cadet) {
+    @Async("apiThreadPoolTaskExecutor")
+    public CompletableFuture<SearchCadet> get42DetailInfo(String token, Seoul42 cadet) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(cadet.getLogin()));
-        return searchCadetMapping(res.getBody());
+        return CompletableFuture.completedFuture(searchCadetMapping(res.getBody()));
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
