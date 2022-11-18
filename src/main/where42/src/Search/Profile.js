@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import select from './select.json';
+import axios from 'axios';
 
 const Profile = (props) => {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
@@ -12,6 +13,10 @@ const Profile = (props) => {
    
     function FriendClick(e){
         //api 요청 post (memberId, friendName)
+        axios.post('v1/groupFriend?'+'friendName=hyunjcho',{
+        } ).then((response)=>{
+            console.log(response)
+        })
         if (isDesktop)
         {
             e.target.innerText = '친구 추가 완료';
@@ -30,7 +35,13 @@ const Profile = (props) => {
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
 
     const DetailClick = (e) => {
-        //api 요청 get info 정보 그대로 넘기기
+        //api 요청 post info 정보 그대로 넘기기
+        axios.post('v1/search/select?',{params:info}).then((response)=>{
+            console.log("detail check" + response)
+        }).catch((Error)=>{
+            console.log(Error)
+        })
+
         if (isMobile)
         {
             if (detail === true)
