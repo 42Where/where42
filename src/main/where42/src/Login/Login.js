@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
-// import { Link } from 'react-router-dom';
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 import axios from 'axios'
 import './Login.css'
 import './Login_Mobile.css'
@@ -16,6 +15,7 @@ function Login() {
     const [modal, setModal] = useState(0);
     const xmlhttp = new XMLHttpRequest();
     let   content = null;
+    const nav = useNavigate();
 
     xmlhttp.open("GET", "./wiki.txt", false);
     xmlhttp.overrideMimeType("text/html;charset=utf-8");
@@ -23,7 +23,7 @@ function Login() {
     if (xmlhttp.status === 200) {
         content = xmlhttp.responseText;
     }
-    const nav = useNavigate();
+
     function Common() {
         function clickDown() {
             const button = document.getElementById('LoginButton');
@@ -36,15 +36,16 @@ function Login() {
             axios.get(  '/v1/login' ).then((response)=>{
                 nav('/Main');
             }).catch((Error)=> {
-                const errData = Error.response.data;
-                if ('data' in errData) {
-                    nav('/Agree');
-                }
-                else {
-                    window.location.href=serverurl;
-                }
-            })
+                    const errData = Error.response.data;
+                    if ('data' in errData) {
+                        nav('/Agree');
+                    }
+                    else {
+                        window.location.href=serverurl;
+                    }
+                })
         }
+
         return (
             <div id="Common">
                 <button id="Wiki" onClick={()=>{setModal(1)}} ></button>

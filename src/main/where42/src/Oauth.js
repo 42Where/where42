@@ -1,19 +1,22 @@
-// import react from 'react';
-// import {useLocation} from "react-router";
-// import {parsePath} from "react-router-dom";
-// import * as queryString from "querystring";
+import axios from "axios";
+import {useNavigate} from "react-router";
 
-function Oauth(){
-    // const locate = useLocation();
-    // const path = locate.pathname;
-    // const code = queryString.parse(path);
-    // console.log("code " + code);
-    //
-    // axios.get('/v1/auth/callback', {param : {"code":code} }).then(response){
-    //     console.log(response.data);
-    //     //response에 따라 띄울 컴포넌트 결정하기
-    // }
-    return (<div>oauth hello</div>)
+function Oauth() {
+    const nav = useNavigate();
+    let code = new URL(window.location.href).searchParams.get("code");
+    axios.get('/v1/auth/code', {params : {code: code}})
+        .then((response) => {
+            nav('/main');
+        }).catch((Error)=> {
+            let data = Error.response.data.data;
+            nav('/agree', {state : data});
+        });
+
+    return (
+        <div>
+            기다려 주세용!
+        </div>
+    )
 }
 
 export default Oauth;
