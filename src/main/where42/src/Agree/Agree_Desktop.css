@@ -26,26 +26,49 @@
 #Agree #Desktop #Wrapper #HeaderWrapper #AgreeHeader
 {
     display: inline-block;
-    width : 80%;
+    width : 90%;
     font-family: GmarketSansBold;
-    font-size: 90px;
+    font-size: clamp(20px, 7vw, 44px);
 }
-
 
 #Agree #Desktop #Wrapper #AgreeContent
 {
-    white-space: pre-line;
-    background-color : #F6C4B7;
-    opacity: 0.5;
+    background-color : rgba(246,196,183,0.5);
     border-radius : 20px;
     width : 80%;
     max-height : 700px;
-    padding: 30px;
+    padding: 0 30px;
     box-sizing: border-box;
     font-family: GmarketSansLight;
-    font-size: 30px;
+    font-size: clamp(12px, 2vw, 15px);
     overflow: auto;
+    line-height: 1.2;
+}
 
+#Agree #Desktop #Wrapper #AgreeContent .bold
+{
+    font-family: GmarketSansMedium;
+    font-size: clamp(15px, 3vw, 18px);
+}
+
+#Agree #Desktop #Wrapper #AgreeContent .underline
+{
+    text-decoration: underline;
+}
+
+#Agree #Desktop #Wrapper #AgreeContent .blue
+{
+    color : #8195FF;
+}
+#Agree #Desktop #Wrapper #AgreeContent .header
+{
+    font-size: clamp(15px, 3vw, 18px);
+}
+
+table, td, th {
+    padding: 10px;
+    border : 1px solid black;
+    border-collapse : collapse;
 }
 
 #Agree #Desktop #Wrapper #AskWrapper
@@ -61,20 +84,21 @@
 
 #Agree #Desktop #Wrapper #AskWrapper #AgreeAsk
 {
-    width : 65%;
+    width : 60%;
+    margin-right : 5px;
     font-family: GmarketSansMedium;
-    font-size: 50px;
+    font-size: 20px;
 }
 
 #Agree #Desktop #Wrapper #AskWrapper #AgreeCheck
 {
-    width : 20%;
+    width : 15%;
+    /*height : 10%;*/
     background-color: #F6C4B7;
     border-radius : 40px;
     border : 0;
-    padding: 0;
+    padding: 10px;
     font-family: GmarketSansMedium;
-    font-size: 50px;
+    font-size: 24px;
     background-color: EF8E86;
-
 }
