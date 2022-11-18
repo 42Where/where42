@@ -1,0 +1,101 @@
+#Agree #Mobile #Wrapper{
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#Agree #Mobile #Wrapper #HeaderWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 20vw;
+    max-height: 115px;
+    margin-top: 5%;
+    border-radius: 50px;
+    background-color: #EF8E86;
+}
+
+#Agree #Mobile #Wrapper #AgreeHeader {
+    padding : 10px;
+    box-sizing: border-box;
+    font-family: 'GmarketSansMedium';
+    font-size: clamp(20px, 7vw, 40px);
+    color: white;
+    text-align: center;
+}
+
+#Agree #Mobile #Wrapper #AgreeContent{
+    line-height: 1.5;
+    overflow: auto;
+    box-sizing: border-box;
+    width: 80%;
+    margin-top: 5%;
+    border-radius: 20px;
+    padding: 0 20px;
+    font-family: GmarketSansLight;
+    font-size: clamp(14px,3vw,18px);
+    background-color: white;
+
+}
+
+#Agree #Mobile #Wrapper #AgreeContent .bold
+{
+    font-family: GmarketSansMedium;
+    font-size: clamp(15px,3vw,18px);
+}
+
+#Agree #Mobile #Wrapper #AgreeContent .underline
+{
+    text-decoration: underline;
+}
+
+#Agree #Mobile #Wrapper #AgreeContent .blue
+{
+    color : #8195FF;
+}
+
+#Agree #Mobile #Wrapper #AgreeContent .header
+{
+    font-size: clamp(15px,2vw,18px);
+}
+
+table, td, th {
+    padding: 10px;
+    border : 0.5px solid black;
+    border-collapse : collapse;
+}
+
+#Agree #Mobile #Wrapper #AskWrapper
+{
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width : 100%;
+    height : 3vw;
+    margin : 40px 0;
+    text-align-last: center;
+}
+
+#Agree #Mobile #Wrapper #AskWrapper #AgreeAsk
+{
+    width : 75%;
+    margin-top : 30px;
+    font-family: GmarketSansMedium;
+    font-size: clamp(14px,3vw,18px);
+}
+
+#Agree #Mobile #Wrapper #AskWrapper #AgreeCheck
+{
+    width : 20%;
+    background-color: #F6C4B7;
+    border-radius : 40px;
+    border : 0;
+    padding: 10px;
+    margin : 20px 0;
+    font-family: GmarketSansMedium;
+    font-size: clamp(14px,3vw,18px);
+    background-color: white;
+}
