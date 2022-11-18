@@ -68,7 +68,7 @@ public class LoginApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
     }
 
-    @GetMapping("/auth/login/callback") // 쿠키가 없을 경우 42api로 리다이렉트 시켜 권한 획득 후 이 주소로 콜백됨
+    @GetMapping("v1/auth/code") // 쿠키가 없을 경우 42api로 리다이렉트 시켜 권한 획득 후 이 주소로 콜백됨
     public ResponseEntity loginCallback(@RequestParam("code") String code,
                                         HttpServletResponse res, HttpServletRequest req) {
         List<String> token = tokenService.BeginnigIssue(code);
