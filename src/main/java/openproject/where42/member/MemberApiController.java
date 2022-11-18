@@ -3,6 +3,7 @@ package openproject.where42.member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.Oauth.OAuthToken;
+import openproject.where42.Oauth.TokenService;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.group.GroupService;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class MemberApiController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final GroupFriendRepository groupFriendRepository;
+    private final TokenService tokenService;
 
     @PostMapping("/v1/member")
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
@@ -47,9 +50,10 @@ public class MemberApiController {
 
     // 메인 정보 조회
     @GetMapping("/v1/member")
-    public ResponseMemberInfo memberInformation(HttpServletRequest req, @CookieValue("access_token") String token42) {
+    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key,@CookieValue("access_token") String token42) {
         Member member = memberService.findBySession(req);
-        // 토큰 없을 때 refresh 받거나, 401 에러 반환
+        if (token42 == null)
+            tokenService.inspectToken(rep, key);
         MemberInfo memberInfo = new MemberInfo(member, OAuthToken.tokenHane, token42);
         if (memberInfo.isInitFlag())
             memberService.initLocate(member);
@@ -84,8 +88,11 @@ public class MemberApiController {
     }
 
     @GetMapping("/v1/member/setting/locate") // 위치 설정 가능 여부 조회
-    public ResponseEntity checkLocate(HttpServletRequest req, @CookieValue("access_token") String token42) {
-        // 쿠키 예외
+    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep,
+                                      @CookieValue("access_token") String token42,
+                                      @CookieValue("ID") String key) {
+        if (token42 == null)
+            tokenService.inspectToken(rep, key);
         memberService.checkLocate(req, OAuthToken.tokenHane, token42);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT), HttpStatus.OK);
     }

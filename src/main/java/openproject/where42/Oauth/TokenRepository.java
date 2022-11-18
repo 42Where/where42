@@ -14,7 +14,7 @@ import javax.persistence.NoResultException;
 @Transactional(readOnly = true)
 public class TokenRepository {
 
-	private final AES aes;
+	static private AES aes = new AES();
 	private final EntityManager em;
 	@Transactional
 	public String saveRefreshToken(String value) {
