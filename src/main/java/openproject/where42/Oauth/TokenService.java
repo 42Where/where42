@@ -39,17 +39,9 @@ public class TokenService {
 		System.out.println("======= invalidRefreshToken call =======");
 
 		Token token = tokenRepository.findTokenByKey(key);
-		/*** refresh call ***/
-		ResponseEntity<String> response = apiService.resPostApi(
-				apiService.callRefreshHttp(aes.decoding(token.getToken())),
-				apiService.req42TokenUri()
-		);
-
-		/*** parsing ***/
-		OAuthToken oauthToken = apiService.oAuthTokenMapping(response.getBody());
-		tokenRepository.updateTokenByKey(token,oauthToken.getRefresh_token());
-
-		return aes.encoding(oauthToken.getAccess_token());
+		OAuthToken oAuthToken = apiService.getNewOauthToken(aes.decoding(token.getToken()));
+		tokenRepository.updateTokenByKey(token,oAuthToken.getRefresh_token());
+		return aes.encoding(oAuthToken.getAccess_token());
 	}
 
 	public void inspectToken(HttpServletResponse rep, String key) {
