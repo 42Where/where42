@@ -7,6 +7,7 @@ import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
+import openproject.where42.exception.CookieExpiredException;
 import openproject.where42.exception.SessionExpiredException;
 import openproject.where42.member.MemberRepository;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +42,13 @@ public class SearchApiController {
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
 
         for (Seoul42 cadet : searchList) {
-            SearchCadet searchCadet = api.get42DetailInfo(token42, cadet);
+            CompletableFuture<SearchCadet> cf = api.get42DetailInfo(token42, cadet);
+            SearchCadet searchCadet = null;
+            try {
+                searchCadet = cf.get();
+            } catch (CancellationException | InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
             if (searchCadet != null) { // json e 처리?!
                 if (memberRepository.checkFriendByMemberIdAndName((Long)session.getAttribute("id"), searchCadet.getLogin()))
                     searchCadet.setFriend(true);
