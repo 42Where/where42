@@ -1,6 +1,6 @@
 package openproject.where42.groupFriend;
 
-import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.groupFriend.entity.GroupFriend;
 
 import java.util.Comparator;
 

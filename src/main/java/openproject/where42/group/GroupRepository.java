@@ -1,8 +1,8 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.group.domain.Groups;
-import openproject.where42.groupFriend.domain.GroupFriend;
+import openproject.where42.group.entity.Groups;
+import openproject.where42.groupFriend.entity.GroupFriend;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor

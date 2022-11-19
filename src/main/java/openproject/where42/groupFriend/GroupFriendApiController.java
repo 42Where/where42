@@ -3,11 +3,11 @@ package openproject.where42.groupFriend;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.member.MemberService;
-import openproject.where42.member.domain.Member;
-import openproject.where42.response.Response;
-import openproject.where42.response.ResponseMsg;
-import openproject.where42.response.ResponseWithData;
-import openproject.where42.response.StatusCode;
+import openproject.where42.member.entity.Member;
+import openproject.where42.util.response.Response;
+import openproject.where42.util.response.ResponseMsg;
+import openproject.where42.util.response.ResponseWithData;
+import openproject.where42.util.response.StatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,6 @@ public class GroupFriendApiController {
 	private final GroupFriendRepository groupFriendRepository;
 	private final MemberService memberService;
 	private final GroupRepository groupRepository;
-
 
 	// 검색을 통한 친구 등록, 기본 그룹에 등록
 	@PostMapping("/v1/groupFriend")
