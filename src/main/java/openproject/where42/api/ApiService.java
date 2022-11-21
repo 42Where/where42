@@ -2,12 +2,13 @@ package openproject.where42.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import openproject.where42.Oauth.OAuthToken;
+import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.api.dto.Hane;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.cookie.AES;
-import openproject.where42.member.domain.enums.Planet;
+import openproject.where42.token.AES;
+import openproject.where42.member.entity.enums.Planet;
+import openproject.where42.api.dto.Define;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,19 +30,21 @@ public class ApiService {
     private static final AES aes = new AES();
     private static final ObjectMapper om = new ObjectMapper();
     private static final RestTemplate rt = new RestTemplate();
+    static final public String tokenHane = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRmdW5jIjoiV2hlcmU0MiIsImlhdCI6MTY2ODM5MTIwMCwiZXhwIjoxNjcwOTgzMjAwfQ.N7N3IqsQFwuz1MU0OHN27f_QIZ1XEwnEAYgp4Iadz18";
+    // open 서비스로 돌릴 때 삭제해야 하는 것
     HttpHeaders headers;
     HttpEntity<MultiValueMap<String, String>> req;
     MultiValueMap<String, String> params;
     ResponseEntity<String> res;
 
     // oAuth 토큰 반환
-    public OAuthToken getOauthToken(String code) {
+    public OAuthToken getOAuthToken(String code) {
         req = req42TokenHeader(code);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
     // oAuth 토큰 반환
-    public OAuthToken getNewOauthToken(String token) {
+    public OAuthToken getNewOAuthToken(String token) {
         req = req42RefreshHeader(token);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
@@ -78,8 +81,8 @@ public class ApiService {
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
-    public Planet getHaneInfo(String token, String name) {
-        req = reqHaneApiHeader(token);
+    public Planet getHaneInfo(String name) {
+        req = reqHaneApiHeader();
         res = resReqApi(req, reqHaneApiUri(name));
         Hane hane = haneMapping(res.getBody());
         if (hane.getInoutState().equalsIgnoreCase("IN")) {
@@ -123,9 +126,9 @@ public class ApiService {
     }
 
     // hane 요청 헤더 생성 메소드
-    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader(String token) {
+    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader() {
         headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
+        headers.add("Authorization", "Bearer " + tokenHane);
         headers.add("Content-type", "application/json;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         return new HttpEntity<>(params, headers);
