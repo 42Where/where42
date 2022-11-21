@@ -1,7 +1,6 @@
 package openproject.where42.exception;
 
 import openproject.where42.exception.customException.*;
-import openproject.where42.util.exception.customException.*;
 import openproject.where42.util.response.Response;
 import openproject.where42.util.response.ResponseWithData;
 import org.springframework.http.HttpStatus;

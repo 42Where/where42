@@ -1,6 +1,7 @@
 package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.dto.Define;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Utils;
@@ -27,7 +28,7 @@ public class SearchApiController {
     private final ApiService api;
     private final TokenService tokenService;
 
-    @GetMapping("/v1/search")
+    @GetMapping(Define.versionPath + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep,
                                                   @RequestParam("begin") String begin,
                                                   @CookieValue("access_token") String token42, @CookieValue("ID") String key) {
@@ -67,7 +68,7 @@ public class SearchApiController {
             return begin.substring(0, begin.length() - 1) + String.valueOf((char)((int)last + 1));
     }
 
-    @PostMapping("/v1/search/select")
+    @PostMapping(Define.versionPath + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
         Utils parseInfo = new Utils(memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());

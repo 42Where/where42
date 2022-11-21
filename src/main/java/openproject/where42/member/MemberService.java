@@ -54,6 +54,8 @@ public class MemberService {
         if (session == null)
             throw new SessionExpiredException();
         session.setMaxInactiveInterval(30 * 60); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
+        System.out.println("member!!!!!!!!" + session.getAttribute("id"));
+        System.out.println("member == " + memberRepository.findById((Long)session.getAttribute("id")) + " member id == " + session.getAttribute("id"));
         return memberRepository.findById((Long)session.getAttribute("id"));
     }
 
