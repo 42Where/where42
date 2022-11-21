@@ -2,6 +2,8 @@ import Profile from './Profile';
 
 function Groups(props){
     const groupInfo = props.groupInfo;
+    // console.log(groupInfo);
+    //그룹 카운트가 안넘어옴 ㅜ 안보내주는건가 아니면 가먹은건가
     return (
         <>
         {groupInfo.map(group=>(

@@ -56,7 +56,7 @@ function Search() {
                     <Link to="/Main">
                         <img src="img/logo_simple.svg" alt="logo"></img>
                     </Link>
-                    {isMobile && <p>42서울 자리 찾기 서비스</p>}
+                    {isMobile && <p>42서울 친구 자리 찾기 서비스</p>}
                 </div>
                 <SearchBox/>
                 <div id="SearchResults">

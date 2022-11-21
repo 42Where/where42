@@ -19,9 +19,9 @@ function Agree()
             const body = { login: info.login , image_url : info.image_url, location:info.location};
             axios.post('/v1/member', body)
                 .then((response)=>{
-                nav("/Main");})
+                nav("/Main")})
                 .catch((Error)=>{
-                    console.log(Error);
+                    // console.log(Error);
             })
         }
         return (
