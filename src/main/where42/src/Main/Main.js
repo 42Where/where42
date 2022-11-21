@@ -6,24 +6,14 @@ import './Main_Desktop.css';
 import './Main_Mobile.css';
 import Profile from './Profile';
 import Groups from './Groups';
-// import test from './sample.json';
+import test from './sample.json';
 import axios from 'axios';
 
-async function Main() {
-    // let sample = test;
-    let sample ="";
+function Main() {
+    let sample = test;
+    // let sample ="";
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-    try{
-        let response = await axios.get('v1/member')
-        if (response.status == 201)
-        {
-            console.log(response.data);
-            sample = response.data;
-        }
-    }
-    catch(Error){console.log("main error" + Error);}
-
 
     function Common() {
         return (
@@ -31,16 +21,16 @@ async function Main() {
                 <Link to="/Search" state={{name : sample.memeberInfo.name}}>
                     <button id="Search"></button>
                 </Link>
-                {/* <Link to="/Main"> */}
-                <div id="Logo">
-                    <img src="img/logo_simple.svg" alt="logo"></img>
-                    {isMobile && <p>42서울 자리 찾기 서비스</p>}
-                </div>
-                {/* </Link> */}
+                <Link to="/Main">
+                    <div id="Logo">
+                        <img src="img/logo_simple.svg" alt="logo"></img>
+                        {isMobile && <p>42서울 자리 찾기 서비스</p>}
+                    </div>
+                </Link>
                 <div id="MyProfile">
                     <Profile key={sample.memeberInfo.id} info={sample.memeberInfo} me={1}/>
                 </div>
-                {/*<Groups groupInfo={sample.groupInfo} friendInfo={sample.groupFriendInfo}/>*/}
+                <Groups groupInfo={sample.groupInfo} friendInfo={sample.groupFriendInfo}/>
             </div>
 
         )
