@@ -1,8 +1,8 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.member.domain.Member;
+import openproject.where42.groupFriend.entity.GroupFriend;
+import openproject.where42.member.entity.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -32,7 +32,15 @@ public class MemberRepository {
     }
 
     public Member findById(Long id) {
-        return em.find(Member.class, id);
+        Member member;
+        try {
+            member = em.createQuery("SELECT m FROM Member m WHERE m.id = :id", Member.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        return member;
     }
 
     public Boolean checkMemberByName(String name) {

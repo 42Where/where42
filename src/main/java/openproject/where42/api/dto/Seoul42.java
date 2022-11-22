@@ -1,11 +1,12 @@
 package openproject.where42.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Seoul42 { // 더 좋은 이름 없으려나.. 써치카뎃은 딱 와닿는데...
+public class Seoul42 {
     String login;
     String location;
     String image_url;

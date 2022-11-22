@@ -1,15 +1,16 @@
 package openproject.where42.member.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.api.Define;
-import openproject.where42.member.domain.Locate;
-import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.Planet;
+import openproject.where42.api.dto.Define;
+import openproject.where42.member.entity.Locate;
+import openproject.where42.member.entity.Member;
+import openproject.where42.member.entity.enums.Planet;
 
-@Data
+@Getter @Setter
 public class MemberInfo {
 
     private static final ApiService api = new ApiService();
@@ -21,12 +22,12 @@ public class MemberInfo {
     private int inOrOut;
     private boolean initFlag;
 
-    public MemberInfo(Member member, String tokenHane, String token42) {
+    public MemberInfo(Member member, String token42) {
         this.id = member.getId();
         this.name = member.getName();
         this.img = member.getImg();
         this.msg = member.getMsg();
-        Planet planet = api.getHaneInfo(tokenHane, this.name);
+        Planet planet = api.getHaneInfo(this.name);
         if (planet != null) {
             Seoul42 seoul42 = api.get42ShortInfo(token42, member.getName());
             if (seoul42.getLocation() != null) {

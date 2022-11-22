@@ -25,15 +25,11 @@ function Login() {
     }
 
     function Common() {
-        const serverurl = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code';
-        // let serverurl = "";
-        // axios.get('/v1/auth/login')
-        //     .then((res) => {
-        //         serverurl = res.data;
-        //     }).catch((err) => {
-        //         console.log(err);
-        //         // err 시 뭐하까?
-        // })
+        let serverurl = "";
+        axios.get('/v1/auth/login')
+            .then((res) => {
+                serverurl = res.data;
+            });
         function clickDown() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
