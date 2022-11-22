@@ -101,7 +101,7 @@ public class ApiService {
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
     public Planet getHaneInfo(String name) {
         req = reqHaneApiHeader();
-        res = resReqApi(req, reqHaneApiUri("hyunjcho"));
+        res = resReqApi(req, reqHaneApiUri(name));
         Hane hane = haneMapping(res.getBody());
         if (hane.getInoutState().equalsIgnoreCase("IN")) {
             if (hane.getCluster().equalsIgnoreCase("GAEPO"))

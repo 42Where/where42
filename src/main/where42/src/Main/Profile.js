@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 const Profile = (props) => {
     const info = props.info;
-    const locate = CombineLocate(info.locate, info.inOutState);
+    const locate = CombineLocate(info.locate, info.inOrOut);
     let meOrNot = null;
 
     if (props.me) {
@@ -41,15 +41,16 @@ function CombineLocate(locate, inOutState){
         position = "퇴근";
     else
     {
-        if (locate.planet === 0)
-            position = "클러스터 내";
+        //inoutstate가 1이고 planet이 0인 경우 없음? : 확인 필요
         if (locate.planet === 1)
-            position += '개포 ';
+            position = '개포 ';
         else if (locate.planet === 2)
-            position += '서초 ';
-        if (locate.floor > 0)
+            position = '서초 ';
+        if (locate.floor === 0)
+            position += "클러스터 내";
+        else if (locate.floor > 0)
             position += locate.floor.toString() + '층 ';
-        if (locate.floor === -1)
+        else if (locate.floor === -1)
             position += '지하 1층 ';
         if (locate.cluster !== 0)
             position += locate.cluster.toString() + '클 ';
