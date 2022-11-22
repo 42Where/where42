@@ -34,12 +34,15 @@ resilience4j:
         limit-refresh-period:
           1s
         timeout-duration:
-          50ms
+          1s
 
   retry:
     instances:
       42apiRetry:
         max-attempts: 10
+        retry-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
+          - io.github.resilience4j.ratelimiter.RequestNotPermitted
         wait-duration:
           2s
 
