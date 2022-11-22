@@ -70,7 +70,7 @@ public class SearchApiController {
 
     @PostMapping(Define.versionPath + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
-        Utils parseInfo = new Utils(memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
+        Utils parseInfo = new Utils(memberRepository.findMember(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
         cadet.setInOrOut(parseInfo.getInOrOut());
