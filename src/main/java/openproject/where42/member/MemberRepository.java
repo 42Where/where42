@@ -32,7 +32,15 @@ public class MemberRepository {
     }
 
     public Member findById(Long id) {
-        return em.find(Member.class, id);
+        Member member;
+        try {
+            member = em.createQuery("SELECT m FROM Member m WHERE m.id = :id", Member.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        return member;
     }
 
     public Boolean checkMemberByName(String name) {
