@@ -2,13 +2,11 @@ package openproject.where42.member;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.dto.Define;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.group.GroupRepository;
-import openproject.where42.group.GroupService;
 import openproject.where42.groupFriend.entity.GroupFriendDto;
 import openproject.where42.member.entity.Locate;
-import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.member.entity.Member;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.dto.MemberInfo;
@@ -32,12 +30,9 @@ import java.util.List;
 public class MemberApiController {
 
     private final MemberService memberService;
-    private final GroupService groupService;
-    private final GroupRepository groupRepository;
-    private final GroupFriendRepository groupFriendRepository;
     private final TokenService tokenService;
 
-    @PostMapping("/v1/member")
+    @PostMapping(Define.versionPath + "/member")
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage_url(), seoul42.getLocation());
         session.setAttribute("id", memberId);
@@ -46,8 +41,8 @@ public class MemberApiController {
     }
 
     // 메인 정보 조회
-    @GetMapping("/v1/member")
-    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key,@CookieValue("access_token") String token42) {
+    @GetMapping(Define.versionPath + "/member")
+    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key, @CookieValue("access_token") String token42) {
         Member member = memberService.findBySession(req);
         if (token42 == null)
             tokenService.inspectToken(rep, key);
@@ -72,19 +67,19 @@ public class MemberApiController {
         }
     }
 
-    @GetMapping("/v1/member/setting/msg") // 상태메시지 조회
+    @GetMapping(Define.versionPath + "/member/setting/msg") // 상태메시지 조회
     public String getPersonalMsg(HttpServletRequest req) {
         Member member = memberService.findBySession(req);
         return member.getMsg();
     }
 
-    @PostMapping("/v1/member/setting/msg") // 상태메시지 설정
+    @PostMapping(Define.versionPath + "/member/setting/msg") // 상태메시지 설정
     public ResponseEntity updatePersonalMsg(HttpServletRequest req, @RequestBody String msg) {
         memberService.updatePersonalMsg(req, msg);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_MSG), HttpStatus.OK);
     }
 
-    @GetMapping("/v1/member/setting/locate") // 위치 설정 가능 여부 조회
+    @GetMapping(Define.versionPath + "/member/setting/locate") // 위치 설정 가능 여부 조회
     public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep,
                                       @CookieValue("access_token") String token42,
                                       @CookieValue("ID") String key) {
@@ -94,7 +89,7 @@ public class MemberApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT), HttpStatus.OK);
     }
 
-    @PostMapping("/v1/member/setting/locate") // 위치 설정
+    @PostMapping(Define.versionPath + "/member/setting/locate") // 위치 설정
     public ResponseEntity updateLocate(HttpServletRequest req, @RequestBody Locate locate) {
         Member member = memberService.findBySession(req);
         memberService.updateLocate(member, locate);
