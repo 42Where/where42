@@ -34,6 +34,7 @@ function Login() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
         }
+
         function clickUp() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button.svg')";
