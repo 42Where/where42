@@ -4,7 +4,6 @@
     align-items: center;
     justify-content: center;
 }
-
 #Agree #Mobile #Wrapper #HeaderWrapper {
     display: flex;
     align-items: center;
@@ -16,7 +15,6 @@
     border-radius: 50px;
     background-color: #EF8E86;
 }
-
 #Agree #Mobile #Wrapper #AgreeHeader {
     padding : 10px;
     box-sizing: border-box;
@@ -25,7 +23,6 @@
     color: white;
     text-align: center;
 }
-
 #Agree #Mobile #Wrapper #AgreeContent{
     line-height: 1.5;
     overflow: auto;
@@ -37,30 +34,24 @@
     font-family: GmarketSansLight;
     font-size: clamp(14px,3vw,18px);
     background-color: white;
-
 }
-
 #Agree #Mobile #Wrapper #AgreeContent .bold
 {
     font-family: GmarketSansMedium;
     font-size: clamp(15px,3vw,18px);
 }
-
 #Agree #Mobile #Wrapper #AgreeContent .underline
 {
     text-decoration: underline;
 }
-
 #Agree #Mobile #Wrapper #AgreeContent .blue
 {
     color : #8195FF;
 }
-
 #Agree #Mobile #Wrapper #AgreeContent .header
 {
     font-size: clamp(15px,2vw,18px);
 }
-
 table, td, th {
     padding: 10px;
     border : 0.5px solid black;
@@ -89,6 +80,7 @@ table, td, th {
 
 #Agree #Mobile #Wrapper #AskWrapper #AgreeCheck
 {
+    cursor : pointer;
     width : 20%;
     background-color: #F6C4B7;
     border-radius : 40px;

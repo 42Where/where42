@@ -37,9 +37,9 @@ public class LoginApiController {
     private HttpSession session;
 
     @GetMapping(Define.versionPath + "/home")
-    public ResponseEntity home(@CookieValue(value = "access_token", required = false) String token,
-                               @CookieValue(value = "ID", required = false) String key,
+    public ResponseEntity home(@CookieValue(value = "ID", required = false) String key,
                                HttpServletRequest req, HttpServletResponse res) {
+        String token = tokenService.findAccessToken(key);
         session = req.getSession(false);
         if (session != null && token != null)
             return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK); // case A, 메인 화면으로 넘어가도록
@@ -51,16 +51,16 @@ public class LoginApiController {
     }
 
     @GetMapping(Define.versionPath + "/login")
-    public ResponseEntity login(@CookieValue(value = "access_token", required = false) String token,
-                                @CookieValue(value = "ID", required = false) String key,
+    public ResponseEntity login(@CookieValue(value = "ID", required = false) String key,
                                 HttpServletRequest req, HttpServletResponse res) {
+        String token = tokenService.findAccessToken(key);
         if (token == null){
             tokenService.checkRefreshToken(key); // 리프레시 토큰도 없을경우 case B ~ D, 42auth로 넘어가도록
             token = tokenService.issueAccessToken(key);
-            tokenService.addCookie(res, token, key);
+            tokenService.addCookie(res, key);
         }
         Seoul42 seoul42 = apiService.getMeInfo(token);
-        Member member = memberRepository.findByName(seoul42.getLogin());
+        Member member = memberRepository.findMember(seoul42.getLogin());
         if (member == null)
             throw new UnregisteredMemberException(seoul42); // case E, 동의 화면으로 넘어가도록
         session = req.getSession();
@@ -68,22 +68,21 @@ public class LoginApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
     }
 
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiLimiter") // fallback 메소드 생각해보기
-    @GetMapping(Define.versionPath + "/auth/login") // 실 어플리케이션 발급 시 오픈소스에는 가리고 올려야 함
+    @GetMapping("/v1/auth/login") // 실 어플리케이션 발급 시 오픈소스에는 가리고 올려야 함
     public String authLogin() {
         return "https://api.intra.42.fr/oauth/authorize?client_id=150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code";
     }
 
     @GetMapping(Define.versionPath + "/auth/code")
     public ResponseEntity makeToken(@RequestParam("code") String code, HttpServletRequest req, HttpServletResponse res) {
-        List<String> token = tokenService.beginningIssue(code);
-        tokenService.addCookie(res, aes.encoding(token.get(1)), token.get(0));
+        Seoul42 seoul42 = tokenService.beginningIssue(res, code);
+
         session = req.getSession(false);
         if (session != null) // case B
             return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
-        Seoul42 seoul42 = apiService.getMeInfo(aes.encoding(token.get(1)));
-        Member member = memberRepository.findByName(seoul42.getLogin());
+
+//        Seoul42 seoul42 = apiService.getMeInfo(aes.encoding(token.get(1)));
+        Member member = memberRepository.findMember(seoul42.getLogin());
         if (member == null)
             throw new UnregisteredMemberException(seoul42); // case C, 동의 화면으로 넘어가도록
         session = req.getSession();

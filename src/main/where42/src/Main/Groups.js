@@ -27,16 +27,16 @@ function MakeGroupName(props)
     )
 }
 
-function GetFrinedInfo(data, value){
-    return data.filter(function(friend){
-        return friend.name === value;
+function GetFriendInfo(friendInfo, name){
+    return friendInfo.filter((person)=>{
+        return person.name === name;
     });
 }
 
 function GroupProfile(props) {
     const groupInfo = props.groupInfo;
     const friendList = groupInfo.groupFriends.map(friend => {
-        const oneFriendInfo = GetFrinedInfo(props.friendInfo, friend);
+        const oneFriendInfo = GetFriendInfo(props.friendInfo, friend);
         return <Profile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
     });
 

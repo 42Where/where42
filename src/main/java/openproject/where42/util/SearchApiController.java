@@ -31,8 +31,9 @@ public class SearchApiController {
     @GetMapping(Define.versionPath + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep,
                                                   @RequestParam("begin") String begin,
-                                                  @CookieValue("access_token") String token42, @CookieValue("ID") String key) {
+                                                  @CookieValue("ID") String key) {
         HttpSession session = req.getSession(false); // 이거 어디 유틸로 뺄 수 있음 뺴자
+        String token42 = tokenService.findAccessToken(key);
         if (session == null)
             throw new SessionExpiredException();
         if (token42 == null)
@@ -70,7 +71,7 @@ public class SearchApiController {
 
     @PostMapping(Define.versionPath + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
-        Utils parseInfo = new Utils(memberRepository.findByName(cadet.getLogin()), cadet.getLocation());
+        Utils parseInfo = new Utils(memberRepository.findMember(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
         cadet.setInOrOut(parseInfo.getInOrOut());

@@ -27,7 +27,10 @@
     align-items: center;
     margin: 7vh 0 4vh 0;
 }
+#Main #Mobile #Wrapper a{
+    text-decoration: none;
 
+}
 #Main #Mobile #Wrapper #Logo img {
     width: 60%;
     max-width: 300px;

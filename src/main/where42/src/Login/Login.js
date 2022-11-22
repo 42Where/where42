@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from "react-router";
 import axios from 'axios'
@@ -25,11 +25,16 @@ function Login() {
     }
 
     function Common() {
+        let serverurl = "";
+        axios.get('/v1/auth/login')
+            .then((res) => {
+                serverurl = res.data;
+            });
         function clickDown() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
         }
-        const serverurl = 'https://api.intra.42.fr/oauth/authorize?client_id=150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code';
+
         function clickUp() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button.svg')";

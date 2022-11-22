@@ -1,10 +1,10 @@
 {
-    "memeberInfo": {
+    "memberInfo": {
       "name": "hyunjcho",
       "id": "1",
       "image_url": "null",
       "msg": "hello",
-      "inOutState": 1,
+      "inOrOut": 1,
       "locate": {
         "planet": 1,
         "floor": 1,
@@ -48,7 +48,7 @@
         "id" :"1",
         "name": "heeskim",
         "img": "url",
-        "inOutState": 1,
+        "inOrOut": 1,
         "msg": "집에 가고 싶다. 오늘 몇시에 가지?",
         "locate": {
           "planet": 1,
@@ -61,7 +61,7 @@
         "id" : "2",
         "name": "sojoo",
         "img": "url",
-        "inOutState": 0,
+        "inOrOut": 0,
         "msg": "holly",
         "locate": {
           "planet": 0,
@@ -74,7 +74,7 @@
         "id" : "3",
         "name": "sunghkim",
         "img": "url",
-        "inOutState": 1,
+        "inOrOut": 1,
         "msg": "holly",
         "locate": {
           "planet": 0,
@@ -87,7 +87,7 @@
         "id" : "4",
         "name": "jaebae",
         "img": "url",
-        "inOutState": 2,
+        "inOrOut": 2,
         "msg": "holly",
         "locate": {
           "planet": 0,

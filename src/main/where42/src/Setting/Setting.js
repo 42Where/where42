@@ -1,25 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useLocation, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './Setting_Desktop.css';
 import './Setting_Mobile.css';
 import spot from './spot.json';
 
 function Setting() {
     const location = useLocation();
-    // console.log(location);
     const name = location.state?.name;
-    /*유저 이름 브라우저 내 저장 필요*/
+    if (name) {
+        localStorage.setItem('userName', name);
+    }
     const nav = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-    
+
     /*새로고침 시에도 유지될 수 있도록 localstorage에 저장*/
     let [locate, setLocate] = useState(
         () => JSON.parse(window.localStorage.getItem("locate")) ||
-        { planet: 0, floor: 0, cluster: 0, spot: 0});
+            { planet: 0, floor: 0, cluster: 0, spot: 0});
 
     useEffect(() => {
         window.localStorage.setItem("locate", JSON.stringify(locate));
@@ -27,12 +29,23 @@ function Setting() {
     }, [locate]);
 
     function SettingChoice() {
+        const name = localStorage.getItem('userName');
         const SetLocateAlert = () => {
-            /*api 호출해서 200 받으면 (출근 && 자동 자리 정보 없음) nav("SetPlanet"),
-            아니면 alert 후 nav("/Setting")*/
-            alert("자동 자리 정보가 존재하여 수동 자리 정보를 등록할 수 없습니다.");
-            nav("SetPlanet");
-        }
+            axios.get('/v1/member/setting/locate')
+                .then(() => {
+                    nav("/Setting/SetPlanet");
+                }).catch((error) => {
+                console.log(error);
+                if (error.response.status === 401) {
+                    nav("/Login");
+                } else if (error.response.status === 403) {
+                    alert("클러스터 외부에 있으므로 수동 자리 정보를 등록할 수 없습니다.");
+                } else if (error.response.status === 409) {
+                    alert("자동 자리 정보가 존재하여 수동 자리 정보를 등록할 수 없습니다.");
+                }
+            });
+        };
+
         return (
             <div id="SettingChoice">
                 <div id="Comment">반가워요, {name}! 👋</div>
@@ -141,23 +154,35 @@ function Setting() {
     }
 
     function SettingMsg() {
-        /*처음에 user의 msg 가져와서 초기화에 넣기*/
-        /*null 이면 뒤에 흐린 글씨 넣기*/
-        const [msg, setMsg] = useState("안녕하세요");
+        const [msg, setMsg] = useState("");
+        useEffect(() => {
+            axios.get('/v1/member/setting/msg')
+                .then((res) => {
+                    setMsg(res.data.msg);
+                }).catch(() => {
+                    nav("/Login");
+                });
+        }, []);
+        /*렌더링 후 한번만 호출하기 위해 useeffect 사용, 근데 setState는 다시 렌더링을 하게 만드므로 두번째 매개변수의 의존성을 null로 두면 관찰할 요소가
+        없기 때문에 한번만 실행됨*/
         const handleChange = ({target : {value}}) => setMsg(value);
         const handleSubmit = (event) => {
             event.preventDefault(); /*새로고침 방지*/
-            alert(JSON.stringify(msg, null, 1).replace(/"/gi, ""));
-            /*변경된 msg를 백으로 넘겨주는 api 호출*/
-            nav("/setting");
-        }
+            axios.post('/v1/member/setting/msg', {msg: msg})
+                .then(() => {
+                    alert("수정 완료!");
+                    nav("/setting");
+                }).catch(() => {
+                    nav("/Login");
+            });
+        };
 
         return (
             <div id="SettingMsg">
                 <div id="Comment">상태 메시지를 입력해 주세요.</div>
                 <div id="Comment2">상태 메시지는 최대 15자까지 입력 가능합니다.</div>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" maxLength="15" value={msg} spellcheck="false" onChange={handleChange}/>
+                    <input type="text" maxLength="15" placeholder={"상태 메시지를 입력해주세요."} spellCheck={false} value={msg} onChange={handleChange}/>
                     <button type="submit">확인</button>
                 </form>
             </div>
@@ -185,8 +210,15 @@ function Setting() {
     }
 
     function SettingFriend() {
-        /*친꾸 목록 불러오는 api 호출*/
-        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+        let arr = [];
+        axios.get('/v1/groupFriend')
+            .then((res) => {
+                console.log(res);
+                arr = res.data;
+            }).catch(() => {
+                nav("/Login");
+        });
+        /*친구가 없어서... 확인이... 안도ㅐ...*/
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
             if (checked) {
@@ -226,27 +258,32 @@ function Setting() {
     }
 
     function SettingGroup() {
-        const arr = [ /*테스트용*/
-            {
-                "groupId": 2,
-                "groupName": "어디 있니어디 있니" 
-            },
-            {
-                "groupId": 314,
-                "groupName": "5기 2차" 
-            },
-            {
-                "groupId": 57,
-                "groupName": "헬창 모임" 
-            }
-        ]
+        let arr = [];
+        useEffect(() => {
+            axios.get('/v1/group')
+                .then((res) => {
+                    arr = res.data;
+                    console.log(arr);
+                }).catch((err) => {
+                nav("/Login");
+            });
+        }, []);
         const [name, setName] = useState("");
         const handleChange = ({target : {value}}) => setName(value);
-        const handleSubmit = (event) => {
-            event.preventDefault(); /*새로고침 방지*/
-            alert(JSON.stringify(name, null, 1).replace(/"/gi, ""));
-            /*새로 추가할 그룹을 백으로 넘겨주는 api 호출*/
-            nav("/setting/SetGroup");
+        const handleSubmit = () => {
+            axios.post('/v1/group?groupName=' + name, {})
+                .then((res) => {
+                    console.log(res);
+                    alert("그룹을 생성하였습니다.");
+                }).catch((err) => {
+                    console.log(err);
+                    if (err.response.status === 401) {
+                        nav("/Login");
+                    }
+                    else if (err.response.status === 409) {
+                        alert("이미 존재하는 그룹명입니다.");
+                    }
+                });
         }
 
         return (
@@ -256,7 +293,6 @@ function Setting() {
                     <input type="text" maxLength="10" placeholder="그룹명은 10자까지 입력 가능합니다." spellcheck="false" value={name} onChange={handleChange}/>
                     <button type="submit">추가</button>
                 </form>
-                {/* <div id="Comment2">그룹명은 10자까지 입력 가능합니다.</div> */}
                 <div id="GroupList">
                     {
                         arr.map((group) => (
@@ -297,7 +333,7 @@ function Setting() {
 
         return (
             <div id="SettingGroupAdd">
-                <div id="Comment">{groupInfo.name}</div>
+                <div id="Comment">{groupInfo.groupName}</div>
                 <div id="Comment2">그룹에 추가할 친구를 선택해 주세요.</div>
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
@@ -343,7 +379,7 @@ function Setting() {
         return (
             /*id Del로 수정(일단은 css 때문에)*/
             <div id="SettingGroupAdd">
-                <div id="Comment">{groupInfo.name}</div>
+                <div id="Comment">{groupInfo.groupName}</div>
                 <div id="Comment2">그룹에서 삭제할 친구를 선택해 주세요.</div>
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
@@ -360,6 +396,7 @@ function Setting() {
     }
 
     function GroupList(props) {
+        console.log(props);
         const inputRef = useRef(null);
         const [name, setName] = useState(props.name)
         const delGroup = () => {
@@ -384,16 +421,15 @@ function Setting() {
         return (
             <div className='Group'>
                 <input type="text" maxLength="10" value={name} spellcheck="false" onChange={handleChange} ref={inputRef} disabled/>
-                {/* <div className='GroupName'>{props.name}</div> */}
                 <div className='GroupButtons'>
                     <button onClick={modGroup}></button>
                     <button onClick={delGroup}></button>
                 </div>
                 <div className='FriendButtons'>
-                    <Link to="/Setting/SetGroupAdd" state={{id: props.id, name: props.name}}>
+                    <Link to="/Setting/SetGroupAdd" state={{id: props.id, groupName: props.name}}>
                         <button></button>
                     </Link>
-                    <Link to="/Setting/SetGroupDel" state={{id: props.id, name: props.name}}>
+                    <Link to="/Setting/SetGroupDel" state={{id: props.id, groupName: props.name}}>
                         <button></button>
                     </Link>
                 </div>
@@ -460,9 +496,13 @@ function Setting() {
                     setLocate((prev) => {
                         return {...prev, spot: props.cap}
                     })
-                    /*저장 api 호출*/
-                    alert("수정 완료!");
-                    nav("/Setting");
+                    axios.post('/v1/member/setting/locate', {locate})
+                        .then(() => {
+                            alert("수정 완료!");
+                            nav("/Setting");
+                        }).catch(() => {
+                            nav("/Login");
+                    });
                 }}>
                     <div className='BoxCap'>{props.cap}</div>
                 </div>

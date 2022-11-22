@@ -42,8 +42,9 @@ public class MemberApiController {
 
     // 메인 정보 조회
     @GetMapping(Define.versionPath + "/member")
-    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key, @CookieValue("access_token") String token42) {
+    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key) {
         Member member = memberService.findBySession(req);
+        String token42 = tokenService.findAccessToken(key);
         if (token42 == null)
             tokenService.inspectToken(rep, key);
         MemberInfo memberInfo = new MemberInfo(member, token42);

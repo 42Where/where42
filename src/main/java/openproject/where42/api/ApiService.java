@@ -114,8 +114,8 @@ public class ApiService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
-        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
+        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+        params.add("client_secret", "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");
         params.add("code", code);
         params.add("redirect_uri","http://localhost:8080/auth/login/callback");
         return new HttpEntity<>(params, headers);

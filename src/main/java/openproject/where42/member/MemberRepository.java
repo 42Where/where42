@@ -19,20 +19,38 @@ public class MemberRepository {
         return member.getId();
     }
 
-    public Member findByName(String name) {
+    public Member findMember(String name) {
+        try {
+            Member member = em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            return member;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public Long findId(String name) {
+        try {
+            Member member = em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+            return member.getId();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public Member findById(Long id) {
         Member member;
         try {
-            member = em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
-                    .setParameter("name", name)
+            member = em.createQuery("SELECT m FROM Member m WHERE m.id = :id", Member.class)
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
         return member;
-    }
-
-    public Member findById(Long id) {
-        return em.find(Member.class, id);
     }
 
     public Boolean checkMemberByName(String name) {

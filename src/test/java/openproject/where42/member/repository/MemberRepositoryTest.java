@@ -61,7 +61,7 @@ public class MemberRepositoryTest {
     @Test
     public void findName() {
         save();
-        Member member = memberRepository.findByName("jaebae");
+        Member member = memberRepository.findMember("jaebae");
         System.out.println(member.getName());
     }
 
