@@ -2,8 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import axios from 'axios';
+import {useNavigate} from "react-router";
 
 const Profile = (props) => {
+    const nav = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
     
@@ -11,10 +13,15 @@ const Profile = (props) => {
     const [detail, setDetail] = useState(null);
    
     function FriendClick(e){
-        //api 요청 post (memberId, friendName)
-        axios.post('v1/groupFriend',{params:{friendName : info.friendName}
-        } ).then((response)=>{
-            console.log(response.data)
+        axios.post('v1/groupFriend?',{params: {friendName : info.friendName}
+        }).then((response)=>{
+            if (response.status === 201) //친구추가 성공
+                console.log(response.data)
+        }).catch((Error)=>{
+            if (Error.response.status === 401)
+            //세션 없음 401에러 -> 로그인으로 보내서 재 로그인하게하기
+                nav('/Login');
+            console.log(Error);
         })
         if (isDesktop)
         {

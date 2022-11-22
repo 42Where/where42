@@ -2,36 +2,33 @@ import React from 'react';
 import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-//import { useLocation } from 'react-router-dom';
 import Profile from './Profile';
 import './Search_Desktop.css';
 import './Search_Mobile.css';
-
 import sample from './search.json';
+import axios from "axios";
+import {useNavigate} from "react-router";
 
 function Search() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const nav = useNavigate();
 
-    //const location = useLocation();
-    //const name = location.state?.name;
-    //여기서 name을 api 요청시에 백엔드로 같이 보내줘야함
-    //name 말고 id?
-    //Search의 prop으로 id를 받을까?
-
+    const [information, setInformation] = useState(null);
     function SearchBox()
     {
         const [searchId, setSearch] = useState("");
         const searchChange=(e)=>{
             setSearch(e.target.value)
-            // console.log(e.target.value);
         }
-        //ente
+
         const SubmitId = (event) => {
             event.preventDefault();
-            //api 호출 get memberId, searchId
-            //respond json으로 profile 생성
-            console.log(searchId);
+            //api 호출 get searchId
+            axios.get('v1/search', {params : {begin : searchId}}).then((response)=>{
+                console.log(response.data);
+                setInformation(response.data);
+            }).catch(()=>{nav('/Login')})
         }
         return (
             <div id="SearchWrapper">
@@ -40,10 +37,22 @@ function Search() {
                         <img src="img/character.svg" alt="character"></img>
                     </div>
                     <form onSubmit={SubmitId}>
-                        {/* input 필드의 height를 늘려도, font의 descender부분이 잘리는 증상있음 */}
                         <input type="text" placeholder="아이디를 입력해 주세요" value={searchId} onKeyPress={(e)=>{if (e.key==='Enter') SubmitId(e);}} onChange={searchChange}/>
                         <button id="SearchButton" type="submit"/>
                     </form>
+                </div>
+            </div>
+        )
+    }
+    function SearchResults()
+    {
+        return (
+            <div id="SearchResults">
+                <div className="ProfileWrapper">
+                    {/* map으로 하나씩 띄우기 */}
+                    <Profile info={sample.matchUser[0]}/>
+                    <Profile info={sample.matchUser[1]}/>
+                    <Profile info={sample.matchUser[2]}/>
                 </div>
             </div>
         )
@@ -59,15 +68,7 @@ function Search() {
                     {isMobile && <p>42서울 친구 자리 찾기 서비스</p>}
                 </div>
                 <SearchBox/>
-                <div id="SearchResults">
-                    {/* 검색 결과 */}
-                    <div className="ProfileWrapper">
-                        {/* {Profiles} */}
-                        <Profile info={sample.matchUser[0]}/>
-                        <Profile info={sample.matchUser[1]}/>
-                        <Profile info={sample.matchUser[2]}/>
-                    </div>
-                </div>
+                {information != null ? <SearchResults/> : null}
             </div>
         )
     }
