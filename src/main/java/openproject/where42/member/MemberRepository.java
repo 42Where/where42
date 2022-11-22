@@ -1,8 +1,8 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.member.domain.Member;
+import openproject.where42.groupFriend.entity.GroupFriend;
+import openproject.where42.member.entity.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

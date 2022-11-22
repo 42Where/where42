@@ -13,6 +13,52 @@ spring:
         show_sql: true
         format_sql: true
 
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state:
+          10s
+    instances:
+      apiCircuitBreaker:
+        base-config: default
+
+  ratelimiter:
+    instances:
+      42apiLimiter:
+        limit-for-period: 2
+        register-health-indicator: true
+        limit-refresh-period:
+          1s
+        timeout-duration:
+          50ms
+
+  retry:
+    instances:
+      42apiRetry:
+        max-attempts: 10
+        wait-duration:
+          2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
 logging:
   level:
     org.hibernate.SQL: debug

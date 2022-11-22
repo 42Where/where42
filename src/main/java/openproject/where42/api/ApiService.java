@@ -2,12 +2,18 @@ package openproject.where42.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import openproject.where42.Oauth.OAuthToken;
+//import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.api.dto.Hane;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.cookie.AES;
-import openproject.where42.member.domain.enums.Planet;
+import openproject.where42.token.AES;
+import openproject.where42.member.entity.enums.Planet;
+import openproject.where42.api.dto.Define;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,25 +35,33 @@ public class ApiService {
     private static final AES aes = new AES();
     private static final ObjectMapper om = new ObjectMapper();
     private static final RestTemplate rt = new RestTemplate();
+    static final public String tokenHane = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRmdW5jIjoiV2hlcmU0MiIsImlhdCI6MTY2ODM5MTIwMCwiZXhwIjoxNjcwOTgzMjAwfQ.N7N3IqsQFwuz1MU0OHN27f_QIZ1XEwnEAYgp4Iadz18";
+    // open 서비스로 돌릴 때 삭제해야 하는 것
     HttpHeaders headers;
     HttpEntity<MultiValueMap<String, String>> req;
     MultiValueMap<String, String> params;
     ResponseEntity<String> res;
 
     // oAuth 토큰 반환
-    public OAuthToken getOauthToken(String code) {
+    @Retry(name = "42apiRetry")
+    @RateLimiter(name = "42apiLimiter")
+    public OAuthToken getOAuthToken(String code) {
         req = req42TokenHeader(code);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
     // oAuth 토큰 반환
-    public OAuthToken getNewOauthToken(String token) {
+    @RateLimiter(name = "42apiLimiter")
+    @Retry(name = "42apiRetry")
+    public OAuthToken getNewOAuthToken(String token) {
         req = req42RefreshHeader(token);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
 
     // me 정보 반환
+    @Retry(name = "42apiRetry")
+    @RateLimiter(name = "42apiLimiter")
     public Seoul42 getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42MeUri());
@@ -56,13 +70,18 @@ public class ApiService {
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
     // 검색 시 Location 및 img가 나오지 않아 seoul42 -> searchCadet으로 변환해야함
+    @Retry(name = "42apiRetry")
+    @RateLimiter(name = "42apiLimiter")
     public List<Seoul42> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
         return seoul42ListMapping(res.getBody());
     }
 
+
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
+    @Retry(name = "42apiRetry")
+    @RateLimiter(name = "42apiLimiter")
     public Seoul42 get42ShortInfo(String token, String name) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(name));
@@ -70,7 +89,9 @@ public class ApiService {
     }
 
     // 유저 한명에 대해 모든 정보를 반환해주는 메소드
-    @Async("apiThreadPoolTaskExecutor")
+//    @Async("apiThreadPoolTaskExecutor")
+    @Retry(name = "42apiRetry")
+    @RateLimiter(name = "42apiLimiter")
     public CompletableFuture<SearchCadet> get42DetailInfo(String token, Seoul42 cadet) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(cadet.getLogin()));
@@ -78,9 +99,9 @@ public class ApiService {
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
-    public Planet getHaneInfo(String token, String name) {
-        req = reqHaneApiHeader(token);
-        res = resReqApi(req, reqHaneApiUri(name));
+    public Planet getHaneInfo(String name) {
+        req = reqHaneApiHeader();
+        res = resReqApi(req, reqHaneApiUri("hyunjcho"));
         Hane hane = haneMapping(res.getBody());
         if (hane.getInoutState().equalsIgnoreCase("IN")) {
             if (hane.getCluster().equalsIgnoreCase("GAEPO"))
@@ -95,8 +116,8 @@ public class ApiService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
-        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
+        params.add("client_secret", "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");
         params.add("code", code);
         params.add("redirect_uri","http://localhost:8080/auth/login/callback");
         return new HttpEntity<>(params, headers);
@@ -123,9 +144,9 @@ public class ApiService {
     }
 
     // hane 요청 헤더 생성 메소드
-    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader(String token) {
+    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader() {
         headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
+        headers.add("Authorization", "Bearer " + tokenHane);
         headers.add("Content-type", "application/json;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         return new HttpEntity<>(params, headers);

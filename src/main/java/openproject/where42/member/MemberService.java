@@ -1,23 +1,21 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.Oauth.OAuthToken;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.Define;
 import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.exception.OutStateException;
-import openproject.where42.exception.SessionExpiredException;
-import openproject.where42.exception.TakenSeatException;
+import openproject.where42.exception.customException.OutStateException;
+import openproject.where42.exception.customException.SessionExpiredException;
+import openproject.where42.exception.customException.TakenSeatException;
 import openproject.where42.group.GroupService;
-import openproject.where42.group.domain.Groups;
+import openproject.where42.group.entity.Groups;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendRepository;
-import openproject.where42.groupFriend.domain.GroupFriend;
-import openproject.where42.groupFriend.GroupFriendDto;
-import openproject.where42.member.domain.Locate;
-import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.MemberLevel;
+import openproject.where42.groupFriend.entity.GroupFriend;
+import openproject.where42.groupFriend.entity.GroupFriendDto;
+import openproject.where42.member.entity.Locate;
+import openproject.where42.member.entity.Member;
+import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +42,7 @@ public class MemberService {
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
         member.setDefaultGroup(defaultGroupId, starredGroupId);
-        if (api.getHaneInfo(OAuthToken.tokenHane, name) != null && location != null)
+        if (api.getHaneInfo(name) != null && location != null)
             updateLocate(member, Utils.parseLocate(location));
         else
             initLocate(member);
@@ -53,11 +51,11 @@ public class MemberService {
 
     public Member findBySession(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
-        if (session == null) {
-//            session.invalidate(); // 이미 expired 된건데 하는 게 의미가 있나? 로그아웃시에는 해줘야함 잊지말자!
+        if (session == null)
             throw new SessionExpiredException();
-        }
-        session.setMaxInactiveInterval(1 * 60); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
+        session.setMaxInactiveInterval(30 * 60); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
+        System.out.println("member!!!!!!!!" + session.getAttribute("id"));
+        System.out.println("member == " + memberRepository.findById((Long)session.getAttribute("id")) + " member id == " + session.getAttribute("id"));
         return memberRepository.findById((Long)session.getAttribute("id"));
     }
 
@@ -68,10 +66,10 @@ public class MemberService {
         member.updatePersonalMsg(msg);
     }
 
-    public void checkLocate(HttpServletRequest req, String tokenHane, String token42) {
+    public void checkLocate(HttpServletRequest req, String token42) {
         Member member = findBySession(req);
 
-        if (api.getHaneInfo(tokenHane, member.getName()) != null) {// hane 출근 확인 로직
+        if (api.getHaneInfo(member.getName()) != null) {// hane 출근 확인 로직
             Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
             if (member42.getLocation() != null) {
                 updateLocate(member, Utils.parseLocate(member42.getLocation()));
@@ -107,12 +105,12 @@ public class MemberService {
         return groupsInfo;
     }
 
-    public List<GroupFriendDto> findAllFriendsInfo(Member member, String token42, String tokenHane) {
+    public List<GroupFriendDto> findAllFriendsInfo(Member member, String token42) {
         List<GroupFriendDto> friendsInfo = new ArrayList<GroupFriendDto>();
         List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(member.getDefaultGroupId());
 
         for (GroupFriend f : friends)
-            friendsInfo.add(new GroupFriendDto(token42, tokenHane, f, memberRepository.findByName(f.getFriendName())));
+            friendsInfo.add(new GroupFriendDto(token42, f, memberRepository.findByName(f.getFriendName())));
         return friendsInfo;
     }
 }

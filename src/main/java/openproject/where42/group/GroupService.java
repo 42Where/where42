@@ -1,12 +1,12 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.exception.DefaultGroupNameException;
-import openproject.where42.exception.DuplicateGroupNameException;
-import openproject.where42.exception.SessionExpiredException;
-import openproject.where42.group.domain.Groups;
+import openproject.where42.exception.customException.DefaultGroupNameException;
+import openproject.where42.exception.customException.DuplicateGroupNameException;
+import openproject.where42.exception.customException.SessionExpiredException;
+import openproject.where42.group.entity.Groups;
 import openproject.where42.member.MemberRepository;
-import openproject.where42.member.domain.Member;
+import openproject.where42.member.entity.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +52,7 @@ public class GroupService {
         group.updateGroupName(groupName);
     }
 
-    private void validateDuplicateGroupName(Long ownerId, String groupName) { // 여러곳에서 호출 시에 대한 에러 처리 필요 싱글톤 패턴 참고
+    private void validateDuplicateGroupName(Long ownerId, String groupName) {
         if (groupRepository.isGroupNameInOwner(ownerId, groupName))
             throw new DuplicateGroupNameException();
     }

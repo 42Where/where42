@@ -1,7 +1,8 @@
 package openproject.where42.exception;
 
-import openproject.where42.response.Response;
-import openproject.where42.response.ResponseWithData;
+import openproject.where42.exception.customException.*;
+import openproject.where42.util.response.Response;
+import openproject.where42.util.response.ResponseWithData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,6 +31,11 @@ public class ControllerExceptionHandler {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 
+    @ExceptionHandler(OutStateException.class)
+    protected ResponseEntity handleOutStateException(OutStateException e) {
+        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
+
     @ExceptionHandler(DefaultGroupNameException.class)
     protected ResponseEntity handleDefaultGroupNameException(DefaultGroupNameException e) {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
@@ -38,11 +44,6 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(DuplicateGroupNameException.class)
     protected ResponseEntity handleDuplicateGroupNameException(DuplicateGroupNameException e) {
 //        logger.error("handleHttpRequestMethodNotSupportedException", e); // 나중에 로거 남기는 거 해야됨
-        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
-    }
-
-    @ExceptionHandler(OutStateException.class)
-    protected ResponseEntity handleOutStateException(OutStateException e) {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 }

@@ -1,30 +1,29 @@
 package openproject.where42.api.dto;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.Define;
-import openproject.where42.member.domain.Locate;
-import openproject.where42.member.domain.Member;
-import openproject.where42.member.domain.enums.Planet;
-@Data
-@RequiredArgsConstructor
-public class Utils { // api에 넣어도 괜찮을듯..?
+import openproject.where42.member.entity.Locate;
+import openproject.where42.member.entity.Member;
+import openproject.where42.member.entity.enums.Planet;
 
-    private static ApiService api = new ApiService(); // 어차피 계속 부를거 static으로 해놓는 게 좋을지두
+@Getter @Setter
+public class Utils {
+
+    private static ApiService api = new ApiService();
     private String img;
     private String msg;
     private Locate locate;
     private int inOrOut;
 
     // 친구 추가된 애들에 대해서 정보 parse하고 반환, 42 및 멤버일 경우 hane까지 조회
-    public Utils(String token42, String tokenHane, String friendName, Member member) {
+    public Utils(String token42, String friendName, Member member) {
         Seoul42 seoul42 = api.get42ShortInfo(token42, friendName);
 
         this.img = seoul42.getImage_url();
         if (member != null) {
             this.msg = member.getMsg();
-            Planet planet = api.getHaneInfo(tokenHane, friendName);
+            Planet planet = api.getHaneInfo(friendName);
             if (planet != null) {
                 if (seoul42.getLocation() != null)
                     this.locate = parseLocate(seoul42.getLocation());
@@ -49,10 +48,10 @@ public class Utils { // api에 넣어도 괜찮을듯..?
     }
 
     // 검색 후 한명 선택 시 member 여부에 따라 하네, 출근, 자리 정보등 다시 parse 후 반환 (42api 이미 정리된 상태)
-    public Utils(String tokenHane, Member member, String location) { // hane token 받아야 함
+    public Utils(Member member, String location) { // hane token 받아야 함
         if (member != null) {
             this.msg = member.getMsg();
-            Planet planet = api.getHaneInfo(tokenHane, member.getName());
+            Planet planet = api.getHaneInfo(member.getName());
             if (planet != null) {// hane 출근 확인 로직
                 if (location != null)
                     this.locate = parseLocate(location);
@@ -88,10 +87,8 @@ public class Utils { // api에 넣어도 괜찮을듯..?
                 return new Locate(Planet.gaepo, 4, 0, location);
             else
                 return new Locate(Planet.gaepo, 5, 0, location);
-        } else if (i >= 7 && i <= 9) {
+        } else if (i >= 7 && i <= 9)
             return new Locate(Planet.seocho, 0, i, location);
-        } else if (i == 1)
-            return new Locate(Planet.seocho, 0, 10, location);
-        return null; // 예외처리 throw 날려야 하나?
+        return new Locate(Planet.seocho, 0, 10, location);
     }
 }

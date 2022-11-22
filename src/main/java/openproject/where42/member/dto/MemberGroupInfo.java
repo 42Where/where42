@@ -1,11 +1,12 @@
 package openproject.where42.member.dto;
 
-import lombok.Data;
-import openproject.where42.group.domain.Groups;
+import lombok.Getter;
+import lombok.Setter;
+import openproject.where42.group.entity.Groups;
 
 import java.util.List;
 
-@Data
+@Getter @Setter
 public class MemberGroupInfo {
     Long groupId;
     String groupName;
