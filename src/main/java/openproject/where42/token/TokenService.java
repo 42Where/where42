@@ -3,7 +3,9 @@ package openproject.where42.token;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.OAuthToken;
+import openproject.where42.api.dto.Seoul42;
 import openproject.where42.exception.customException.CookieExpiredException;
+import openproject.where42.member.MemberService;
 import openproject.where42.token.entity.Token;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +16,23 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TokenService {
+	private final MemberService memberService;
 	private final TokenRepository tokenRepository;
 	private final ApiService apiService;
 	static private AES aes = new AES();
 	static private MakeCookie oven = new MakeCookie();
 
-	public List<String> beginningIssue(String code) {
-		List<String> result = new ArrayList<>();
+	public Seoul42 beginningIssue(HttpServletResponse response, String code) {
 		OAuthToken oAuthToken = apiService.getOAuthToken(code);
-		result.add(tokenRepository.saveRefreshToken(aes.encoding(oAuthToken.getRefresh_token())));
-		result.add(oAuthToken.getAccess_token());
-		return result;
+		Seoul42 seoul42 = apiService.getMeInfo(aes.encoding(oAuthToken.getAccess_token()));
+		Token token = tokenRepository.findTokenByName(seoul42.getLogin());
+		if (token != null){ // 만약 이미 DB에 Token들이 저장된 흔적이 있으면 업데이트만 해줌
+			tokenRepository.updateRefreshToken(token, oAuthToken.getRefresh_token());
+			addCookie(response, tokenRepository.updateAccessToken(token, oAuthToken.getAccess_token()));
+			return seoul42;
+		}
+		addCookie(response, tokenRepository.saveRefreshToken(seoul42.getLogin(), oAuthToken));
+		return seoul42;
 	}
 
 	public void checkRefreshToken(String key) {
@@ -32,24 +40,28 @@ public class TokenService {
 			throw new CookieExpiredException();
 	}
 
-	public void addCookie(HttpServletResponse rep, String token42,String key) {
-		rep.addCookie(oven.bakingCookie("access_token", token42, 7200));
+	public void addCookie(HttpServletResponse rep,String key) {
 		rep.addCookie(oven.bakingMaxAge("1209600", 1209600));
 		rep.addCookie(oven.bakingCookie("ID", key, 1209600));
 	}
 
 	/*** Access Token 새로 발급***/
 	public String issueAccessToken(String key) {
-		System.out.println("======= invalidRefreshToken call ======="); // 이건 무엇?
-
 		Token token = tokenRepository.findTokenByKey(key);
-		OAuthToken oAuthToken = apiService.getNewOAuthToken(aes.decoding(token.getToken()));
-		tokenRepository.updateTokenByKey(token,oAuthToken.getRefresh_token());
+		OAuthToken oAuthToken = apiService.getNewOAuthToken(aes.decoding(token.getRefreshToken()));
+		tokenRepository.updateRefreshToken(token,oAuthToken.getRefresh_token());
 		return aes.encoding(oAuthToken.getAccess_token());
 	}
 
 	public void inspectToken(HttpServletResponse res, String key) {
 		checkRefreshToken(key);
-		addCookie(res, issueAccessToken(key),key);
+		addCookie(res, key);
+	}
+
+	public String findAccessToken(String key) {
+		Token token = tokenRepository.findTokenByKey(key);
+		if (token == null || token.getAccessToken() == null)
+			return null;
+		return token.getAccessToken();
 	}
 }
