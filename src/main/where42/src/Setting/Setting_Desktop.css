@@ -272,7 +272,7 @@
     align-items: center;
 }
 
-#Setting #Desktop #SettingGroup #GroupList :first-child .GroupButtons :last-child {
+#Setting #Desktop #SettingGroup #GroupList :first-child .GroupButtons button {
     display: none;
 }
 

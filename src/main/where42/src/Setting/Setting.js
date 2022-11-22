@@ -21,7 +21,7 @@ function Setting() {
     /*새로고침 시에도 유지될 수 있도록 localstorage에 저장*/
     let [locate, setLocate] = useState(
         () => JSON.parse(window.localStorage.getItem("locate")) ||
-            { planet: 0, floor: 0, cluster: 0, spot: 0});
+            {planet: 0, floor: 0, cluster: 0, spot: 0});
 
     useEffect(() => {
         window.localStorage.setItem("locate", JSON.stringify(locate));
@@ -32,10 +32,16 @@ function Setting() {
         const name = localStorage.getItem('userName');
         const SetLocateAlert = () => {
             axios.get('/v1/member/setting/locate')
-                .then(() => {
-                    nav("/Setting/SetPlanet");
+                .then((res) => {
+                    setLocate((prev) => {
+                        return {...prev, planet: res.data.data}
+                    });
+                    if (res.data.data === 1) {
+                        nav("/Setting/SetFloor");
+                    } else if (res.data.data === 2) {
+                        nav("/Setting/SetCluster");
+                    }
                 }).catch((error) => {
-                console.log(error);
                 if (error.response.status === 401) {
                     nav("/Login");
                 } else if (error.response.status === 403) {
@@ -45,6 +51,12 @@ function Setting() {
                 }
             });
         };
+        const Logout = () => {
+            axios.get('/v1/logout')
+                .then(() => {
+                    nav('/Login');
+                });
+        }
 
         return (
             <div id="SettingChoice">
@@ -72,33 +84,15 @@ function Setting() {
                             </div>
                         </div>
                     </Link>
-                    <Link to="/Login">
-                        <div className='Box'>
-                            <div className='BoxCap'>로그아웃</div>
-                        </div>
-                    </Link>
+                    <div className='Box' onClick={() => {Logout()}}>
+                        <div className='BoxCap'>로그아웃</div>
+                    </div>
                 </div>
             </div>
         )
     }
 
     /*자리설정 컴포넌트들은 따로 js로 모아서 뺄까?*/
-    function SettingPlanet() {
-        return (
-            <div id="SettingPlanet">
-                <div id="Comment">클러스터 선택</div>
-                <div id="BoxWrapper">
-                    <Link to="/Setting/SetFloor">
-                        <Box cap="개포" planet={1}/>
-                    </Link>
-                    <Link to="/Setting/SetCluster">
-                        <Box cap="서초" planet={2}/>
-                    </Link>
-                </div>
-            </div>
-        )
-    }
-
     function SettingFloor() {
         return (
             <div id="SettingFloor">
@@ -210,15 +204,16 @@ function Setting() {
     }
 
     function SettingFriend() {
-        let arr = [];
-        axios.get('/v1/groupFriend')
-            .then((res) => {
-                console.log(res);
-                arr = res.data;
-            }).catch(() => {
+        const [arr, setArr] = useState(null);
+        useEffect(() => {
+            axios.get('/v1/groupFriend')
+                .then((res) => {
+                    setArr(res.data);
+                }).catch(() => {
                 nav("/Login");
-        });
-        /*친구가 없어서... 확인이... 안도ㅐ...*/
+            });
+        }, []);
+
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
             if (checked) {
@@ -230,13 +225,18 @@ function Setting() {
                 setDelList(delList);
             }
         }
+
         const handleSubmit = (event) => {
             event.preventDefault();
-            console.log(delList);
             if (delList.size > 0 && window.confirm("정말 삭제하시겠습니까?")) {
-                /*삭제 부탁하는 api 호출*/
-                alert("삭제 완료!");
-                nav("/Setting");
+                axios.delete('/v1/groupFriend', {
+                    data: Array.from(delList)
+                }).then(() => {
+                    alert("삭제 완료!");
+                    nav("/Setting");
+                }).catch(() => {
+                    nav("/Login");
+                });
             }
         }
         return (
@@ -246,9 +246,9 @@ function Setting() {
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
                         {
-                            arr.map((value, index) => (
-                                <MemberList user={value} addList={addList} key={index}/>
-                            ))
+                            arr && arr.map((value, index) => {
+                                return <MemberList user={value} addList={addList} key={index}/>
+                            })
                         }
                     </div>
                     <button type="submit">삭제</button>
@@ -258,32 +258,35 @@ function Setting() {
     }
 
     function SettingGroup() {
-        let arr = [];
+        const [arr, setArr] = useState(null);
         useEffect(() => {
             axios.get('/v1/group')
                 .then((res) => {
-                    arr = res.data;
-                    console.log(arr);
-                }).catch((err) => {
-                nav("/Login");
-            });
+                    setArr(res.data);
+                }).catch(() => {
+                    nav("/Login");
+                });
         }, []);
         const [name, setName] = useState("");
         const handleChange = ({target : {value}}) => setName(value);
-        const handleSubmit = () => {
-            axios.post('/v1/group?groupName=' + name, {})
-                .then((res) => {
-                    console.log(res);
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
+                alert("사용할 수 없는 그룹명입니다.");
+            } else {
+                try {
+                    await axios.post('/v1/group', null, {params: {groupName: name}});
                     alert("그룹을 생성하였습니다.");
-                }).catch((err) => {
-                    console.log(err);
+                    nav('/Setting/SetGroup');
+                } catch (err) {
                     if (err.response.status === 401) {
-                        nav("/Login");
-                    }
-                    else if (err.response.status === 409) {
+                        nav('/Login');
+                    } else if (err.response.status === 409) {
                         alert("이미 존재하는 그룹명입니다.");
+                        nav('/Setting/SetGroup');
                     }
-                });
+                }
+            }
         }
 
         return (
@@ -295,9 +298,9 @@ function Setting() {
                 </form>
                 <div id="GroupList">
                     {
-                        arr.map((group) => (
-                            <GroupList name={group.groupName} id={group.groupId} key={group.groupId}/>
-                        ))
+                        arr && arr.map((group, index) => {
+                            return <GroupList name={group.groupName} id={group.groupId} key={index}/>
+                        })
                     }
                 </div>
             </div>
@@ -307,8 +310,17 @@ function Setting() {
     function SettingGroupAdd() {
         const loc = useLocation();
         const groupInfo = loc.state;
-        /*그룹 ID로 친구 string arr 얻는 api 호출*/
-        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+
+        const [arr, setArr] = useState(null);
+        useEffect(() => {
+            axios.get('/v1/groupFriend/notIncludes/group/' + groupInfo.id)
+                .then((res) => {
+                    setArr(res.data);
+                }).catch((err) => {
+                    nav("/Login");
+            });
+        }, []);
+
         /*아래는 친구 삭제와 동일한 함수들 (재사용할 방법은?)*/
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
@@ -323,11 +335,14 @@ function Setting() {
         }
         const handleSubmit = (event) => {
             event.preventDefault();
-            console.log(delList);
             if (delList.size > 0 && window.confirm("추가 하시겠습니까?")) {
-                /*추가 부탁하는 api 호출*/
-                alert("추가 완료!");
-                nav("/Setting/SetGroup");
+                axios.post('/v1/groupFriend/notIncludes/group/' + groupInfo.id, Array.from(delList))
+                    .then(() => {
+                        alert("추가 완료!");
+                        nav("/Setting/SetGroup");
+                    }).catch(() => {
+                        nav("/Login");
+                    });
             }
         }
 
@@ -338,7 +353,7 @@ function Setting() {
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
                         {
-                            arr.map((value, index) => (
+                            arr && arr.map((value, index) => (
                                 <MemberList user={value} addList={addList} key={index}/>
                             ))
                         }
@@ -352,8 +367,17 @@ function Setting() {
     function SettingGroupDel() {
         const loc = useLocation();
         const groupInfo = loc.state;
-        /*그룹 ID로 친구 string arr 얻는 api 호출*/
-        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+
+        const [arr, setArr] = useState(null);
+        useEffect(() => {
+            axios.get('/v1/groupFriend/includes/group/' + groupInfo.id)
+                .then((res) => {
+                    setArr(res.data);
+                }).catch(() => {
+                    nav("/Login");
+            });
+        }, []);
+
         /*아래는 친구 삭제와 동일한 함수들 (재사용할 방법은?)*/
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
@@ -368,11 +392,15 @@ function Setting() {
         }
         const handleSubmit = (event) => {
             event.preventDefault();
-            console.log(delList);
             if (delList.size > 0 && window.confirm("정말 삭제 하시겠습니까?")) {
-                /*삭제 부탁하는 api 호출*/
-                alert("삭제 완료!");
-                nav("/Setting/SetGroup");
+                axios.delete('/v1/groupFriend/includes/group/' + groupInfo.id, {
+                    data: Array.from(delList)
+                }).then(() => {
+                    alert("삭제 완료!");
+                    nav("/Setting/SetGroup");
+                }).catch(() => {
+                    nav("/Login");
+                });
             }
         }
 
@@ -384,7 +412,7 @@ function Setting() {
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
                         {
-                            arr.map((value, index) => (
+                            arr && arr.map((value, index) => (
                                 <MemberList user={value} addList={addList} key={index}/>
                             ))
                         }
@@ -396,14 +424,15 @@ function Setting() {
     }
 
     function GroupList(props) {
-        console.log(props);
         const inputRef = useRef(null);
-        const [name, setName] = useState(props.name)
+        const [name, setName] = useState(props.name);
         const delGroup = () => {
             if (window.confirm("정말 삭제하시겠습니까?")) {
-                /*삭제 api*/
-                alert(props.id + " 삭제 완료!");
-                /*nav("/setting/SetGroup"); 으로 다시 불러야하겠지?*/
+                axios.delete('/v1/group/' + props.id)
+                    .then(() => {
+                        alert("'" + props.name + "' 그룹을 삭제하였습니다.");
+                        nav("/setting/SetGroup");
+                    });
             }
         }
         const modGroup = () => {
@@ -413,7 +442,18 @@ function Setting() {
             }
             else {
                 inputRef.current.disabled = true;
-                /*그룹이름 수정 요청 api*/
+                if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
+                    alert("사용할 수 없는 그룹명입니다.");
+                    nav('/Setting/SetGroup');
+                } else {
+                    axios.post('/v1/group/' + props.id, null, {params: {changeName: name}})
+                        .then(() => {
+                            nav('/Setting/SetGroup');
+                        }).catch(() => {
+                            alert("중복된 이름의 그룹이 존재합니다.");
+                            nav('/Setting/SetGroup');
+                        });
+                }
             }
         }
         const handleChange = ({target : {value}}) => setName(value);
@@ -449,18 +489,7 @@ function Setting() {
     }
 
     function Box(props) {
-        if (props.planet) {
-            return (
-                <div className='Box' onClick={() => {
-                    setLocate((prev) => {
-                        return {...prev, planet: props.planet}
-                    });
-                }}>
-                    <div className='BoxCap'>{props.cap}</div>
-                </div>
-            )
-        }
-        else if (props.floor) {
+        if (props.floor) {
             return (
                 <div className='Box' onClick={(e) => {
                     if (props.floor === 3) {
@@ -496,8 +525,12 @@ function Setting() {
                     setLocate((prev) => {
                         return {...prev, spot: props.cap}
                     })
-                    axios.post('/v1/member/setting/locate', {locate})
-                        .then(() => {
+                    axios.post('/v1/member/setting/locate', {
+                        planet: locate.planet,
+                        cluster: locate.cluster,
+                        floor: locate.floor,
+                        spot: locate.spot
+                    }).then((res) => {
                             alert("수정 완료!");
                             nav("/Setting");
                         }).catch(() => {
@@ -515,8 +548,6 @@ function Setting() {
             <Routes>
                 {isMobile && <Route path={""} element={<div id="Mobile"><SettingChoice/></div>}/>}
                 {isDesktop && <Route path={""} element={<div id="Desktop"><SettingChoice/></div>}/>}
-                {isMobile && <Route path={"SetPlanet"} element={<div id="Mobile"><SettingPlanet/></div>}/>}
-                {isDesktop && <Route path={"SetPlanet"} element={<div id="Desktop"><SettingPlanet/></div>}/>}
                 {isMobile && <Route path={"SetFloor"} element={<div id="Mobile"><SettingFloor/></div>}/>}
                 {isDesktop && <Route path={"SetFloor"} element={<div id="Desktop"><SettingFloor/></div>}/>}
                 {isMobile && <Route path={"SetCluster"} element={<div id="Mobile"><SettingCluster/></div>}/>}
