@@ -30,10 +30,7 @@ function Login() {
         // axios.get('/v1/auth/login')
         //     .then((res) => {
         //         serverurl = res.data;
-        //     }).catch((err) => {
-        //         console.log(err);
-        //         // err 시 뭐하까?
-        // })
+        //     });
         function clickDown() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
