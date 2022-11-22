@@ -82,8 +82,8 @@ public class MemberApiController {
 
     @GetMapping(Define.versionPath + "/member/setting/locate") // 위치 설정 가능 여부 조회
     public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep,
-                                      @CookieValue("access_token") String token42,
                                       @CookieValue("ID") String key) {
+        String token42 = tokenService.findAccessToken(key);
         if (token42 == null)
             tokenService.inspectToken(rep, key);
         int inOrOut = memberService.checkLocate(req, token42);

@@ -21,7 +21,7 @@ function Setting() {
     /*새로고침 시에도 유지될 수 있도록 localstorage에 저장*/
     let [locate, setLocate] = useState(
         () => JSON.parse(window.localStorage.getItem("locate")) ||
-            { planet: 0, floor: 0, cluster: 0, spot: 0});
+            {planet: 0, floor: 0, cluster: 0, spot: 0});
 
     useEffect(() => {
         window.localStorage.setItem("locate", JSON.stringify(locate));
@@ -33,11 +33,14 @@ function Setting() {
         const SetLocateAlert = () => {
             axios.get('/v1/member/setting/locate')
                 .then((res) => {
-                    console.log(res.data);
                     setLocate((prev) => {
                         return {...prev, planet: res.data.data}
                     });
-                    nav("/Setting/SetPlanet");
+                    if (res.data.data === 1) {
+                        nav("/Setting/SetFloor");
+                    } else if (res.data.data === 2) {
+                        nav("/Setting/SetCluster");
+                    }
                 }).catch((error) => {
                 if (error.response.status === 401) {
                     nav("/Login");
@@ -90,22 +93,6 @@ function Setting() {
     }
 
     /*자리설정 컴포넌트들은 따로 js로 모아서 뺄까?*/
-    function SettingPlanet() {
-        return (
-            <div id="SettingPlanet">
-                <div id="Comment">클러스터 선택</div>
-                <div id="BoxWrapper">
-                    <Link to="/Setting/SetFloor">
-                        <Box cap="개포" planet={1}/>
-                    </Link>
-                    <Link to="/Setting/SetCluster">
-                        <Box cap="서초" planet={2}/>
-                    </Link>
-                </div>
-            </div>
-        )
-    }
-
     function SettingFloor() {
         return (
             <div id="SettingFloor">
@@ -473,18 +460,7 @@ function Setting() {
     }
 
     function Box(props) {
-        if (props.planet) {
-            return (
-                <div className='Box' onClick={() => {
-                    setLocate((prev) => {
-                        return {...prev, planet: props.planet}
-                    });
-                }}>
-                    <div className='BoxCap'>{props.cap}</div>
-                </div>
-            )
-        }
-        else if (props.floor) {
+        if (props.floor) {
             return (
                 <div className='Box' onClick={(e) => {
                     if (props.floor === 3) {
@@ -521,7 +497,8 @@ function Setting() {
                         return {...prev, spot: props.cap}
                     })
                     axios.post('/v1/member/setting/locate', {locate})
-                        .then(() => {
+                        .then((res) => {
+                            console.log(res);
                             alert("수정 완료!");
                             nav("/Setting");
                         }).catch(() => {
@@ -539,8 +516,6 @@ function Setting() {
             <Routes>
                 {isMobile && <Route path={""} element={<div id="Mobile"><SettingChoice/></div>}/>}
                 {isDesktop && <Route path={""} element={<div id="Desktop"><SettingChoice/></div>}/>}
-                {isMobile && <Route path={"SetPlanet"} element={<div id="Mobile"><SettingPlanet/></div>}/>}
-                {isDesktop && <Route path={"SetPlanet"} element={<div id="Desktop"><SettingPlanet/></div>}/>}
                 {isMobile && <Route path={"SetFloor"} element={<div id="Mobile"><SettingFloor/></div>}/>}
                 {isDesktop && <Route path={"SetFloor"} element={<div id="Desktop"><SettingFloor/></div>}/>}
                 {isMobile && <Route path={"SetCluster"} element={<div id="Mobile"><SettingCluster/></div>}/>}
