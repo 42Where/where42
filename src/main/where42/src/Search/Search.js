@@ -1,11 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
+import React, {useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import Profile from './Profile';
 import './Search_Desktop.css';
 import './Search_Mobile.css';
-import sample from './search.json';
 import axios from "axios";
 import {useNavigate} from "react-router";
 
@@ -14,7 +12,7 @@ function Search() {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
     const nav = useNavigate();
 
-    const [information, setInformation] = useState(null);
+    const [information, setInformation] = useState([]);
     function SearchBox()
     {
         const [searchId, setSearch] = useState("");
@@ -24,10 +22,11 @@ function Search() {
 
         const SubmitId = (event) => {
             event.preventDefault();
-            //api 호출 get searchId
             axios.get('v1/search', {params : {begin : searchId}}).then((response)=>{
-                // console.log(response.data);
                 setInformation(response.data);
+                // if (response.data === [])
+                //     alert('검색 결과가 없습니다');
+                // console.log(response.data);
             }).catch(()=>{nav('/Login')})
         }
         return (
@@ -49,13 +48,9 @@ function Search() {
         return (
             <div id="SearchResults">
                 <div className="ProfileWrapper">
-                    {/*{information.map(info=>(*/}
-                    {/*    <Profile info={info.matchUser[0]}/>*/}
-                    {/*))}*/}
-                    {/* map으로 하나씩 띄우기 */}
-                    <Profile info={sample.matchUser[0]}/>
-                    <Profile info={sample.matchUser[1]}/>
-                    <Profile info={sample.matchUser[2]}/>
+                    {information.map(person=>(
+                        <Profile info={person}/>
+                    ))}
                 </div>
             </div>
         )
@@ -71,7 +66,7 @@ function Search() {
                     {isMobile && <p>42서울 친구 자리 찾기 서비스</p>}
                 </div>
                 <SearchBox/>
-                {information != null ? <SearchResults/> : null}
+                {information? <SearchResults/> : null}
             </div>
         )
     }
