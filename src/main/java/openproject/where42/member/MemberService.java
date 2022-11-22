@@ -110,7 +110,7 @@ public class MemberService {
         List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(member.getDefaultGroupId());
 
         for (GroupFriend f : friends)
-            friendsInfo.add(new GroupFriendDto(token42, f, memberRepository.findByName(f.getFriendName())));
+            friendsInfo.add(new GroupFriendDto(token42, f, memberRepository.findMember(f.getFriendName())));
         return friendsInfo;
     }
 }

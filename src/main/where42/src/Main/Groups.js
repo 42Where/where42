@@ -2,8 +2,6 @@ import Profile from './Profile';
 
 function Groups(props){
     const groupInfo = props.groupInfo;
-    // console.log(groupInfo);
-    //그룹 카운트가 안넘어옴 ㅜ 안보내주는건가 아니면 가먹은건가
     return (
         <>
         {groupInfo.map(group=>(
@@ -29,16 +27,16 @@ function MakeGroupName(props)
     )
 }
 
-function GetFrinedInfo(data, value){
-    return data.filter(function(friend){
-        return friend.name === value;
+function GetFriendInfo(friendInfo, name){
+    return friendInfo.filter((person)=>{
+        return person.name === name;
     });
 }
 
 function GroupProfile(props) {
     const groupInfo = props.groupInfo;
     const friendList = groupInfo.groupFriends.map(friend => {
-        const oneFriendInfo = GetFrinedInfo(props.friendInfo, friend);
+        const oneFriendInfo = GetFriendInfo(props.friendInfo, friend);
         return <Profile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
     });
 
