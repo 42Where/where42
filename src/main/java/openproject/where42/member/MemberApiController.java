@@ -42,8 +42,9 @@ public class MemberApiController {
 
     // 메인 정보 조회
     @GetMapping(Define.versionPath + "/member")
-    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key, @CookieValue("access_token") String token42) {
+    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue("ID") String key) {
         Member member = memberService.findBySession(req);
+        String token42 = tokenService.findAccessToken(key);
         if (token42 == null)
             tokenService.inspectToken(rep, key);
         MemberInfo memberInfo = new MemberInfo(member, token42);
@@ -85,8 +86,9 @@ public class MemberApiController {
                                       @CookieValue("ID") String key) {
         if (token42 == null)
             tokenService.inspectToken(rep, key);
-        memberService.checkLocate(req, token42);
-        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT), HttpStatus.OK);
+        int inOrOut = memberService.checkLocate(req, token42);
+        return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, inOrOut), HttpStatus.OK);
+
     }
 
     @PostMapping(Define.versionPath + "/member/setting/locate") // 위치 설정

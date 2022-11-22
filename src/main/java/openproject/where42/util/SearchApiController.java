@@ -31,8 +31,9 @@ public class SearchApiController {
     @GetMapping(Define.versionPath + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep,
                                                   @RequestParam("begin") String begin,
-                                                  @CookieValue("access_token") String token42, @CookieValue("ID") String key) {
+                                                  @CookieValue("ID") String key) {
         HttpSession session = req.getSession(false); // 이거 어디 유틸로 뺄 수 있음 뺴자
+        String token42 = tokenService.findAccessToken(key);
         if (session == null)
             throw new SessionExpiredException();
         if (token42 == null)
@@ -41,13 +42,7 @@ public class SearchApiController {
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
 
         for (Seoul42 cadet : searchList) {
-            CompletableFuture<SearchCadet> cf = api.get42DetailInfo(token42, cadet);
-            SearchCadet searchCadet = null;
-            try {
-                searchCadet = cf.get();
-            } catch (CancellationException | InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+            SearchCadet searchCadet = api.get42DetailInfo(token42, cadet);
             if (searchCadet != null) { // json e 처리?!
                 if (memberRepository.checkFriendByMemberIdAndName((Long)session.getAttribute("id"), searchCadet.getLogin()))
                     searchCadet.setFriend(true);

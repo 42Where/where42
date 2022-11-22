@@ -68,7 +68,9 @@ public class LoginApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
     }
 
-    @GetMapping("/v1/auth/login") // 실 어플리케이션 발급 시 오픈소스에는 가리고 올려야 함
+    @RateLimiter(name = "42apiRateLimiter")
+    @Retry(name = "42apiRetry")
+    @GetMapping(Define.versionPath + "/auth/login") // 실 어플리케이션 발급 시 오픈소스에는 가리고 올려야 함
     public String authLogin() {
         return "https://api.intra.42.fr/oauth/authorize?client_id=150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code";
     }
