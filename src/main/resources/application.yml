@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://ec2-43-200-6-157.ap-northeast-2.compute.amazonaws.com:5432/where42
+#    url: jdbc:postgresql://ec2-43-200-6-157.ap-northeast-2.compute.amazonaws.com:5432/where42
+    url: jdbc:postgresql://localhost:5432/where42
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
@@ -34,12 +35,15 @@ resilience4j:
         limit-refresh-period:
           1s
         timeout-duration:
-          50ms
+          1s
 
   retry:
     instances:
       42apiRetry:
         max-attempts: 10
+        retry-exceptions:
+          - org.springframework.web.client.HttpClientErrorException
+          - io.github.resilience4j.ratelimiter.RequestNotPermitted
         wait-duration:
           2s
 

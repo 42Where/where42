@@ -2,7 +2,6 @@ package openproject.where42.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -43,13 +41,14 @@ public class ApiService {
     ResponseEntity<String> res;
 
     // oAuth 토큰 반환
-    @Retry(name = "42apiRetry")
     @RateLimiter(name = "42apiLimiter")
+    @Retry(name = "42apiRetry")
     public OAuthToken getOAuthToken(String code) {
         req = req42TokenHeader(code);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
+
     // oAuth 토큰 반환
     @RateLimiter(name = "42apiLimiter")
     @Retry(name = "42apiRetry")
@@ -60,8 +59,8 @@ public class ApiService {
     }
 
     // me 정보 반환
-    @Retry(name = "42apiRetry")
     @RateLimiter(name = "42apiLimiter")
+    @Retry(name = "42apiRetry")
     public Seoul42 getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42MeUri());
@@ -70,18 +69,17 @@ public class ApiService {
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
     // 검색 시 Location 및 img가 나오지 않아 seoul42 -> searchCadet으로 변환해야함
-    @Retry(name = "42apiRetry")
     @RateLimiter(name = "42apiLimiter")
+    @Retry(name = "42apiRetry")
     public List<Seoul42> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
         return seoul42ListMapping(res.getBody());
     }
 
-
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
-    @Retry(name = "42apiRetry")
     @RateLimiter(name = "42apiLimiter")
+    @Retry(name = "42apiRetry")
     public Seoul42 get42ShortInfo(String token, String name) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(name));
@@ -90,18 +88,18 @@ public class ApiService {
 
     // 유저 한명에 대해 모든 정보를 반환해주는 메소드
 //    @Async("apiThreadPoolTaskExecutor")
-    @Retry(name = "42apiRetry")
     @RateLimiter(name = "42apiLimiter")
-    public CompletableFuture<SearchCadet> get42DetailInfo(String token, Seoul42 cadet) {
+    @Retry(name = "42apiRetry")
+    public SearchCadet get42DetailInfo(String token, Seoul42 cadet) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(cadet.getLogin()));
-        return CompletableFuture.completedFuture(searchCadetMapping(res.getBody()));
+        return searchCadetMapping(res.getBody());
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
     public Planet getHaneInfo(String name) {
         req = reqHaneApiHeader();
-        res = resReqApi(req, reqHaneApiUri("hyunjcho"));
+        res = resReqApi(req, reqHaneApiUri(name));
         Hane hane = haneMapping(res.getBody());
         if (hane.getInoutState().equalsIgnoreCase("IN")) {
             if (hane.getCluster().equalsIgnoreCase("GAEPO"))
