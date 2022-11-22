@@ -32,10 +32,13 @@ function Setting() {
         const name = localStorage.getItem('userName');
         const SetLocateAlert = () => {
             axios.get('/v1/member/setting/locate')
-                .then(() => {
+                .then((res) => {
+                    console.log(res.data);
+                    setLocate((prev) => {
+                        return {...prev, planet: res.data.data}
+                    });
                     nav("/Setting/SetPlanet");
                 }).catch((error) => {
-                console.log(error);
                 if (error.response.status === 401) {
                     nav("/Login");
                 } else if (error.response.status === 403) {
@@ -45,6 +48,12 @@ function Setting() {
                 }
             });
         };
+        const Logout = () => {
+            axios.get('/v1/logout')
+                .then(() => {
+                    nav('/Login');
+                });
+        }
 
         return (
             <div id="SettingChoice">
@@ -72,11 +81,9 @@ function Setting() {
                             </div>
                         </div>
                     </Link>
-                    <Link to="/Login">
-                        <div className='Box'>
-                            <div className='BoxCap'>로그아웃</div>
-                        </div>
-                    </Link>
+                    <div className='Box' onClick={() => {Logout()}}>
+                        <div className='BoxCap'>로그아웃</div>
+                    </div>
                 </div>
             </div>
         )
@@ -258,33 +265,38 @@ function Setting() {
     }
 
     function SettingGroup() {
-        let arr = [];
+        const [arr, setArr] = useState(null);
         useEffect(() => {
             axios.get('/v1/group')
                 .then((res) => {
-                    arr = res.data;
-                    console.log(arr);
-                }).catch((err) => {
-                nav("/Login");
-            });
+                    setArr(res.data);
+                    console.log(res.data);
+                }).catch(() => {
+                    nav("/Login");
+                });
         }, []);
         const [name, setName] = useState("");
         const handleChange = ({target : {value}}) => setName(value);
-        const handleSubmit = () => {
-            axios.post('/v1/group?groupName=' + name, {})
-                .then((res) => {
-                    console.log(res);
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
+                alert("사용할 수 없는 그룹명입니다.");
+            } else {
+                try {
+                    await axios.post('/v1/group', null, {params: {groupName: name}});
                     alert("그룹을 생성하였습니다.");
-                }).catch((err) => {
-                    console.log(err);
+                    nav('/Setting/SetGroup');
+                } catch (err) {
                     if (err.response.status === 401) {
-                        nav("/Login");
-                    }
-                    else if (err.response.status === 409) {
+                        nav('/Login');
+                    } else if (err.response.status === 409) {
                         alert("이미 존재하는 그룹명입니다.");
+                        nav('/Setting/SetGroup');
                     }
-                });
+                }
+            }
         }
+        console.log(arr);
 
         return (
             <div id="SettingGroup">
@@ -295,9 +307,9 @@ function Setting() {
                 </form>
                 <div id="GroupList">
                     {
-                        arr.map((group) => (
-                            <GroupList name={group.groupName} id={group.groupId} key={group.groupId}/>
-                        ))
+                        arr && arr.map((group, index) => {
+                            return <GroupList name={group.groupName} id={group.groupId} key={index}/>
+                        })
                     }
                 </div>
             </div>
@@ -396,14 +408,15 @@ function Setting() {
     }
 
     function GroupList(props) {
-        console.log(props);
         const inputRef = useRef(null);
-        const [name, setName] = useState(props.name)
+        const [name, setName] = useState(props.name);
         const delGroup = () => {
             if (window.confirm("정말 삭제하시겠습니까?")) {
-                /*삭제 api*/
-                alert(props.id + " 삭제 완료!");
-                /*nav("/setting/SetGroup"); 으로 다시 불러야하겠지?*/
+                axios.delete('/v1/group/' + props.id)
+                    .then(() => {
+                        alert("'" + props.name + "' 그룹을 삭제하였습니다.");
+                        nav("/setting/SetGroup");
+                    });
             }
         }
         const modGroup = () => {
@@ -413,7 +426,18 @@ function Setting() {
             }
             else {
                 inputRef.current.disabled = true;
-                /*그룹이름 수정 요청 api*/
+                if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
+                    alert("사용할 수 없는 그룹명입니다.");
+                    nav('/Setting/SetGroup');
+                } else {
+                    axios.post('/v1/group/' + props.id, null, {params: {changeName: name}})
+                        .then(() => {
+                            nav('/Setting/SetGroup');
+                        }).catch(() => {
+                            alert("중복된 이름의 그룹이 존재합니다.");
+                            nav('/Setting/SetGroup');
+                        });
+                }
             }
         }
         const handleChange = ({target : {value}}) => setName(value);

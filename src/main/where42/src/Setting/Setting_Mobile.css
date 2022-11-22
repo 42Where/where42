@@ -327,7 +327,7 @@
     background-repeat: no-repeat;
 }
 
-#Setting #Mobile #SettingGroup #GroupList :first-child .GroupButtons :last-child {
+#Setting #Mobile #SettingGroup #GroupList :first-child .GroupButtons button {
     display: none;
 }
 
