@@ -204,15 +204,16 @@ function Setting() {
     }
 
     function SettingFriend() {
-        let arr = [];
-        axios.get('/v1/groupFriend')
-            .then((res) => {
-                console.log(res);
-                arr = res.data;
-            }).catch(() => {
+        const [arr, setArr] = useState(null);
+        useEffect(() => {
+            axios.get('/v1/groupFriend')
+                .then((res) => {
+                    setArr(res.data);
+                }).catch(() => {
                 nav("/Login");
-        });
-        /*친구가 없어서... 확인이... 안도ㅐ...*/
+            });
+        }, []);
+
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
             if (checked) {
@@ -224,13 +225,18 @@ function Setting() {
                 setDelList(delList);
             }
         }
+
         const handleSubmit = (event) => {
             event.preventDefault();
-            console.log(delList);
             if (delList.size > 0 && window.confirm("정말 삭제하시겠습니까?")) {
-                /*삭제 부탁하는 api 호출*/
-                alert("삭제 완료!");
-                nav("/Setting");
+                axios.delete('/v1/groupFriend', {
+                    data: Array.from(delList)
+                }).then(() => {
+                    alert("삭제 완료!");
+                    nav("/Setting");
+                }).catch(() => {
+                    nav("/Login");
+                });
             }
         }
         return (
@@ -240,9 +246,9 @@ function Setting() {
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
                         {
-                            arr.map((value, index) => (
-                                <MemberList user={value} addList={addList} key={index}/>
-                            ))
+                            arr && arr.map((value, index) => {
+                                return <MemberList user={value} addList={addList} key={index}/>
+                            })
                         }
                     </div>
                     <button type="submit">삭제</button>
@@ -257,7 +263,6 @@ function Setting() {
             axios.get('/v1/group')
                 .then((res) => {
                     setArr(res.data);
-                    console.log(res.data);
                 }).catch(() => {
                     nav("/Login");
                 });
@@ -283,7 +288,6 @@ function Setting() {
                 }
             }
         }
-        console.log(arr);
 
         return (
             <div id="SettingGroup">
@@ -306,8 +310,17 @@ function Setting() {
     function SettingGroupAdd() {
         const loc = useLocation();
         const groupInfo = loc.state;
-        /*그룹 ID로 친구 string arr 얻는 api 호출*/
-        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+
+        const [arr, setArr] = useState(null);
+        useEffect(() => {
+            axios.get('/v1/groupFriend/notIncludes/group/' + groupInfo.id)
+                .then((res) => {
+                    setArr(res.data);
+                }).catch((err) => {
+                    nav("/Login");
+            });
+        }, []);
+
         /*아래는 친구 삭제와 동일한 함수들 (재사용할 방법은?)*/
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
@@ -322,11 +335,14 @@ function Setting() {
         }
         const handleSubmit = (event) => {
             event.preventDefault();
-            console.log(delList);
             if (delList.size > 0 && window.confirm("추가 하시겠습니까?")) {
-                /*추가 부탁하는 api 호출*/
-                alert("추가 완료!");
-                nav("/Setting/SetGroup");
+                axios.post('/v1/groupFriend/notIncludes/group/' + groupInfo.id, Array.from(delList))
+                    .then(() => {
+                        alert("추가 완료!");
+                        nav("/Setting/SetGroup");
+                    }).catch(() => {
+                        nav("/Login");
+                    });
             }
         }
 
@@ -337,7 +353,7 @@ function Setting() {
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
                         {
-                            arr.map((value, index) => (
+                            arr && arr.map((value, index) => (
                                 <MemberList user={value} addList={addList} key={index}/>
                             ))
                         }
@@ -351,8 +367,17 @@ function Setting() {
     function SettingGroupDel() {
         const loc = useLocation();
         const groupInfo = loc.state;
-        /*그룹 ID로 친구 string arr 얻는 api 호출*/
-        const arr = ["sojoo", "minkkang", "heeskim", "donghyuk", "seokchoi", "minseunk", "hyeondle"]; /*샘플*/
+
+        const [arr, setArr] = useState(null);
+        useEffect(() => {
+            axios.get('/v1/groupFriend/includes/group/' + groupInfo.id)
+                .then((res) => {
+                    setArr(res.data);
+                }).catch(() => {
+                    nav("/Login");
+            });
+        }, []);
+
         /*아래는 친구 삭제와 동일한 함수들 (재사용할 방법은?)*/
         const [delList, setDelList] = useState(new Set());
         const addList = (user, checked) => {
@@ -367,11 +392,15 @@ function Setting() {
         }
         const handleSubmit = (event) => {
             event.preventDefault();
-            console.log(delList);
             if (delList.size > 0 && window.confirm("정말 삭제 하시겠습니까?")) {
-                /*삭제 부탁하는 api 호출*/
-                alert("삭제 완료!");
-                nav("/Setting/SetGroup");
+                axios.delete('/v1/groupFriend/includes/group/' + groupInfo.id, {
+                    data: Array.from(delList)
+                }).then(() => {
+                    alert("삭제 완료!");
+                    nav("/Setting/SetGroup");
+                }).catch(() => {
+                    nav("/Login");
+                });
             }
         }
 
@@ -383,7 +412,7 @@ function Setting() {
                 <form onSubmit={handleSubmit}>
                     <div id="MemberWrapper">
                         {
-                            arr.map((value, index) => (
+                            arr && arr.map((value, index) => (
                                 <MemberList user={value} addList={addList} key={index}/>
                             ))
                         }
@@ -496,9 +525,12 @@ function Setting() {
                     setLocate((prev) => {
                         return {...prev, spot: props.cap}
                     })
-                    axios.post('/v1/member/setting/locate', {locate})
-                        .then((res) => {
-                            console.log(res);
+                    axios.post('/v1/member/setting/locate', {
+                        planet: locate.planet,
+                        cluster: locate.cluster,
+                        floor: locate.floor,
+                        spot: locate.spot
+                    }).then((res) => {
                             alert("수정 완료!");
                             nav("/Setting");
                         }).catch(() => {
