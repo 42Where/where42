@@ -13,7 +13,7 @@ const Profile = (props) => {
     const [detail, setDetail] = useState(null);
    
     function FriendClick(e){
-        axios.post('v1/groupFriend?',{params: {friendName : info.friendName}
+        axios.post('v1/groupFriend',null,{params: {friendName : info.login}
         }).then((response)=>{
             if (response.status === 201) //친구추가 성공
                 console.log(response.data)
@@ -51,11 +51,12 @@ const Profile = (props) => {
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
         }
-        axios.post('v1/search/select',{params:info}).then((response)=>{
-            console.log(response.data)
-            setDetail(response.data);
-        }).catch((Error)=>{
-            console.log(Error)
+        const body = {login: info.login , image_url : info.image_url, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend};
+        axios.post('v1/search/select',{body})
+            .then((response)=>{
+                setDetail(response.data);
+            }).catch((Error)=>{
+                // console.log(Error)
         })
     }
 
@@ -86,11 +87,8 @@ const Profile = (props) => {
 };
 
 const Detail = (props) => {
-    const info = props.detail;
-    console.log('info');
-    console.log(info);
+    const info = props.info;
     const locate = CombineLocate(info.locate, info.inOrOut);
-
     return (
         <>
             <div className="Locate">{locate}</div>

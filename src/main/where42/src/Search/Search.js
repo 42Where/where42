@@ -26,7 +26,7 @@ function Search() {
             event.preventDefault();
             //api 호출 get searchId
             axios.get('v1/search', {params : {begin : searchId}}).then((response)=>{
-                console.log(response.data);
+                // console.log(response.data);
                 setInformation(response.data);
             }).catch(()=>{nav('/Login')})
         }
@@ -49,6 +49,9 @@ function Search() {
         return (
             <div id="SearchResults">
                 <div className="ProfileWrapper">
+                    {/*{information.map(info=>(*/}
+                    {/*    <Profile info={info.matchUser[0]}/>*/}
+                    {/*))}*/}
                     {/* map으로 하나씩 띄우기 */}
                     <Profile info={sample.matchUser[0]}/>
                     <Profile info={sample.matchUser[1]}/>
