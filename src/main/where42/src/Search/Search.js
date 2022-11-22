@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import Profile from './Profile';
@@ -29,6 +29,7 @@ function Search() {
                 // console.log(response.data);
             }).catch(()=>{nav('/Login')})
         }
+
         return (
             <div id="SearchWrapper">
                 <div id="SearchBox">
@@ -36,7 +37,7 @@ function Search() {
                         <img src="img/character.svg" alt="character"></img>
                     </div>
                     <form onSubmit={SubmitId}>
-                        <input type="text" placeholder="아이디를 입력해 주세요" value={searchId} onKeyPress={(e)=>{if (e.key==='Enter') SubmitId(e);}} onChange={searchChange}/>
+                        <input type="text" placeholder="아이디를 입력해 주세요" value={searchId} onKeyDown={(e)=>{ if(e.key === 'Enter') SubmitId(e);}} onChange={searchChange}/>
                         <button id="SearchButton" type="submit"/>
                     </form>
                 </div>
