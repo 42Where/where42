@@ -16,9 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +28,7 @@ public class SearchApiController {
     @GetMapping(Define.versionPath + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep,
                                                   @RequestParam("begin") String begin,
-                                                  @CookieValue("ID") String key) {
+                                                  @CookieValue(value = "ID", required = false) String key) {
         HttpSession session = req.getSession(false); // 이거 어디 유틸로 뺄 수 있음 뺴자
         String token42 = tokenService.findAccessToken(key);
         if (session == null)
