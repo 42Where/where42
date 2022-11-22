@@ -86,8 +86,9 @@ public class MemberApiController {
                                       @CookieValue("ID") String key) {
         if (token42 == null)
             tokenService.inspectToken(rep, key);
-        memberService.checkLocate(req, token42);
-        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT), HttpStatus.OK);
+        int inOrOut = memberService.checkLocate(req, token42);
+        return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, inOrOut), HttpStatus.OK);
+
     }
 
     @PostMapping(Define.versionPath + "/member/setting/locate") // 위치 설정

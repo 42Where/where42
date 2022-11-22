@@ -17,6 +17,7 @@ import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
+import openproject.where42.member.entity.enums.Planet;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,20 +67,20 @@ public class MemberService {
         member.updatePersonalMsg(msg);
     }
 
-    public void checkLocate(HttpServletRequest req, String token42) {
+    public int checkLocate(HttpServletRequest req, String token42) {
         Member member = findBySession(req);
+        Planet planet = api.getHaneInfo(member.getName());
 
-        if (api.getHaneInfo(member.getName()) != null) {// hane 출근 확인 로직
+        if (planet != null) {// hane 출근 확인 로직
             Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
             if (member42.getLocation() != null) {
                 updateLocate(member, Utils.parseLocate(member42.getLocation()));
                 throw new TakenSeatException();
             }
+            return planet.getValue();
         }
-        else {
-            initLocate(member);
-            throw new OutStateException();
-        }
+        initLocate(member);
+        throw new OutStateException();
     }
 
     @Transactional
