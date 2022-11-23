@@ -90,9 +90,9 @@ public class ApiService {
 //    @Async("apiThreadPoolTaskExecutor")
     @RateLimiter(name = "42apiLimiter")
     @Retry(name = "42apiRetry")
-    public SearchCadet get42DetailInfo(String token, Seoul42 cadet) {
+    public SearchCadet get42DetailInfo(String token, String name) {
         req = req42ApiHeader(aes.decoding(token));
-        res = resReqApi(req, req42ApiOneUserUri(cadet.getLogin()));
+        res = resReqApi(req, req42ApiOneUserUri(name));
         return searchCadetMapping(res.getBody());
     }
 

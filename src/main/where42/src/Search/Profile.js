@@ -51,7 +51,7 @@ const Profile = (props) => {
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
         }
-        const body = {login: info.login , image_url : info.image_url, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend};
+        const body = {login: info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend};
         axios.post('v1/search/select',{body})
             .then((response)=>{
                 setDetail(response.data);
@@ -72,7 +72,7 @@ const Profile = (props) => {
     return (
         <div className="Profile">
             <div className="Photo">
-                <img src={info.image_url} alt="user-face"></img>
+                <img src={info.image.link} alt="user-face"></img>
             </div>
             <div className="Info">
                 <div className="Name">{info.login}</div>

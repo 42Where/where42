@@ -6,8 +6,6 @@ import lombok.Setter;
 
 @Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Seoul42 {
-    private String login;
-    private String location;
-    private Image image;
+public class Image {
+    private String link;
 }

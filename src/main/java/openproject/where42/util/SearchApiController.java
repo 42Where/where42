@@ -39,12 +39,16 @@ public class SearchApiController {
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
 
         for (Seoul42 cadet : searchList) {
-            SearchCadet searchCadet = api.get42DetailInfo(token42, cadet);
+            SearchCadet searchCadet = api.get42DetailInfo(token42, cadet.getLogin());
             if (searchCadet != null) { // json e 처리?!
                 if (memberRepository.checkFriendByMemberIdAndName((Long)session.getAttribute("id"), searchCadet.getLogin()))
                     searchCadet.setFriend(true);
                 searchCadetList.add(searchCadet);
             }
+        }
+
+        for (SearchCadet search : searchCadetList) {
+            System.out.println("my name is = " + search.getLogin() + search.getLocation() + search.getImage().getLink());
         }
        return searchCadetList;
     }
@@ -62,6 +66,8 @@ public class SearchApiController {
 
     @PostMapping(Define.versionPath + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
+        System.out.println("===== member???? ===== " + cadet.getLogin());
+        System.out.println(memberRepository.findMember(cadet.getLogin()));
         Utils parseInfo = new Utils(memberRepository.findMember(cadet.getLogin()), cadet.getLocation());
         cadet.setMsg(parseInfo.getMsg());
         cadet.setLocate(parseInfo.getLocate());
