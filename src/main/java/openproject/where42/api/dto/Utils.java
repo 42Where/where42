@@ -20,7 +20,7 @@ public class Utils {
     public Utils(String token42, String friendName, Member member) {
         Seoul42 seoul42 = api.get42ShortInfo(token42, friendName);
 
-        this.img = seoul42.getImage_url();
+        this.img = seoul42.getImage().getLink();
         if (member != null) {
             this.msg = member.getMsg();
             Planet planet = api.getHaneInfo(friendName);
