@@ -9,7 +9,7 @@ import openproject.where42.member.entity.Locate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchCadet {
     private String login;
-    private String image_url;
+    private Image image;
     private String msg;
     private Locate locate;
     private int inOrOut;

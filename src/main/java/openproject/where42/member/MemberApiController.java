@@ -34,7 +34,7 @@ public class MemberApiController {
 
     @PostMapping(Define.versionPath + "/member")
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
-        Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage_url(), seoul42.getLocation());
+        Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage().getLink(), seoul42.getLocation());
         session.setAttribute("id", memberId);
         session.setMaxInactiveInterval(30 * 60); // 테스트 위해서 처음에 2분만 유지. 이후 디폴트 30분으로 하기 위해 삭제
         return new ResponseEntity(ResponseWithData.res(StatusCode.CREATED, ResponseMsg.CREATE_MEMBER, memberId), HttpStatus.CREATED);
