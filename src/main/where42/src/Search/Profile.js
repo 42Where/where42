@@ -16,7 +16,7 @@ const Profile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        axios.post('v1/groupFriend',null,{params: {friendName : info.login}
+        axios.post('v1/groupFriend',null,{params: {friendName : info.login, image: info.image},
         }).then((response)=>{
             if (response.status === 201)
                 //친구추가 성공
@@ -59,7 +59,7 @@ const Profile = (props) => {
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
         }
-        const body = {login : info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend};
+        const body = {login : info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend, member : info.member};
         axios.post('v1/search/select', body)
             .then((response)=>{
                 setDetail(response.data);
