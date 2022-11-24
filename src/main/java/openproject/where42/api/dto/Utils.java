@@ -16,7 +16,7 @@ public class Utils {
     private Locate locate;
     private int inOrOut;
 
-    // 친구 추가된 애들에 대해서 정보 parse하고 반환, 42 및 멤버일 경우 hane까지 조회
+    // 친구 추가된 애들에 대해서 정보 parse하고 반환, 42 및 멤버일 경우 hane까지 조회 // 이거 고쳐야됨...
     public Utils(String token42, String friendName, Member member) {
         Seoul42 seoul42 = api.get42ShortInfo(token42, friendName);
 
@@ -39,34 +39,6 @@ public class Utils {
         } else {
             if (seoul42.getLocation() != null) {
                 this.locate = parseLocate(seoul42.getLocation());
-                this.inOrOut = Define.IN;
-            } else {
-                this.locate = new Locate(null, 0, 0, null);
-                this.inOrOut = Define.NONE;
-            }
-        }
-    }
-
-    // 검색 후 한명 선택 시 member 여부에 따라 하네, 출근, 자리 정보등 다시 parse 후 반환 (42api 이미 정리된 상태)
-    public Utils(Member member, String location) { // hane token 받아야 함
-        if (member != null) {
-            this.msg = member.getMsg();
-            Planet planet = api.getHaneInfo(member.getName());
-            if (planet != null) {// hane 출근 확인 로직
-                if (location != null)
-                    this.locate = parseLocate(location);
-                else {
-                    this.locate = member.getLocate();
-                    if (this.locate.getPlanet() == null)
-                        this.locate.updateLocate(planet, 0, 0, null);
-                }
-                this.inOrOut = Define.IN;
-            } else {
-                this.locate = new Locate(null, 0, 0, null);
-            }
-        } else {
-            if (location != null) {
-                this.locate = parseLocate(location);
                 this.inOrOut = Define.IN;
             } else {
                 this.locate = new Locate(null, 0, 0, null);
