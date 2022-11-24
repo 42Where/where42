@@ -20,8 +20,7 @@ const Profile = (props) => {
     return (
         <div className="Profile">
             <div className="Photo">
-                {/* <img src={info.image_url} alt="user-face"></img> */}
-                <img src="img/erase.png" alt="user-face"></img>
+                 <img src={info.img} alt="user-face"></img>
             </div>
             <div className="Info">
                 <div className="Name">{info.name}</div>

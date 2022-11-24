@@ -115,7 +115,7 @@ public class ApiService {
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
         params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
+        params.add("client_secret", "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");
         params.add("code", code);
         params.add("redirect_uri","http://localhost:8080/auth/login/callback");
         return new HttpEntity<>(params, headers);
@@ -127,7 +127,7 @@ public class ApiService {
         params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
         params.add("client_id", "150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
+        params.add("client_secret", "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");
         params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
