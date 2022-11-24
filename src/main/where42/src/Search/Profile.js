@@ -10,16 +10,19 @@ const Profile = (props) => {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
     
     const info = props.info;
+    // const memberId = props.memberId;
     const [detail, setDetail] = useState(null);
    
     function FriendClick(e){
-        axios.post('v1/groupFriend',null,{params: {friendName : info.login}
+        if (info.friend === true)
+            return ;
+        axios.post('v1/groupFriend',null,{params: {friendName : info.login, image : info.image}
         }).then((response)=>{
             if (response.status === 201) //친구추가 성공
                 console.log(response.data)
         }).catch((Error)=>{
             if (Error.response.status === 401)
-            //세션 없음 401에러 -> 로그인으로 보내서 재 로그인하게하기
+                //세션 없음 401에러 -> 로그인으로 보내서 재 로그인하게하기
                 nav('/Login');
             console.log(Error);
         })
@@ -32,11 +35,15 @@ const Profile = (props) => {
             e.target.style = "background-image: url('img/friend_check.svg')";
         }
         e.target.className = "AddDone";
+        info.friend = true;
     }
 
     let friendOrNot;
+
+    // if (info.login === memberId)
+    //     friendOrNot = null;
     if (isDesktop)
-        friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick} >{info.friend? '친구 추가 완료' : '친구 추가'}</button>)
+        friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}>{info.friend? '친구 추가 완료' : '친구 추가'}</button>)
     else if (isMobile)
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
 
@@ -51,12 +58,12 @@ const Profile = (props) => {
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
         }
-        const body = {login: info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend};
-        axios.post('v1/search/select',{body})
+        const body = {login : info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend};
+        axios.post('v1/search/select', body)
             .then((response)=>{
                 setDetail(response.data);
             }).catch((Error)=>{
-                // console.log(Error)
+                // console.error(Error)
         })
     }
 
