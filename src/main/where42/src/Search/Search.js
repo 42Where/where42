@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-import Profile from './Profile';
+import SearchProfile from './SearchProfile';
 import './Search_Desktop.css';
 import './Search_Mobile.css';
 import axios from "axios";
@@ -70,7 +70,7 @@ function Search() {
             <div id="SearchResults">
                 <div className="ProfileWrapper">
                     {information.map(person=>(
-                        <Profile info={person} memberId={memberId}/>
+                        <SearchProfile info={person} memberId={memberId}/>
                     ))}
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import './Main_Desktop.css';
 import './Main_Mobile.css';
-import Profile from './Profile';
+import MainProfile from './MainProfile';
 import Groups from './Groups';
 import Loading from "../Loading";
 
@@ -32,7 +32,7 @@ function Main() {
                     </div>
                 </Link>
                 <div id="MyProfile">
-                    <Profile key={information.memberInfo.id} info={information.memberInfo} me={1}/>
+                    <MainProfile key={information.memberInfo.id} info={information.memberInfo} me={1}/>
                 </div>
                 <Groups groupInfo={information.groupInfo} friendInfo={information.groupFriendsList}/>
             </div>
