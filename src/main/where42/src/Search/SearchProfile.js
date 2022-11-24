@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import axios from 'axios';
 import {useNavigate} from "react-router";
 
-const Profile = (props) => {
+const SearchProfile = (props) => {
     const nav = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
@@ -132,4 +132,4 @@ function CombineLocate(locate, inOutState){
     return position;
 }
 
-export default Profile;
+export default SearchProfile;
