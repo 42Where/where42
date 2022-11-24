@@ -174,50 +174,6 @@
     font-size: clamp(25px, 2.5vw, 35px);
 }
 
-/*SettingFriend*/
-
-#Setting #Desktop #SettingFriend #Comment {
-    margin-bottom: 2%;
-    font-size: clamp(50px, 5vw, 90px);
-}
-
-#Setting #Desktop #SettingFriend #Comment2 {
-    font-size: clamp(20px, 2vw, 40px);
-}
-
-#Setting #Desktop #SettingFriend form {
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#Setting #Desktop #SettingFriend form #MemberWrapper {
-    width: 100%;
-    margin: 15% 0 15% 0;
-}
-
-#Setting #Desktop #SettingFriend form button {
-    width: 50%;
-    height: 4vw;
-    border: 0;
-    border-radius: 50px;
-    background-color: #EF8E86;
-    color: white;
-    font-family: 'GmarketSansMedium';
-    font-size: clamp(10px, 1.7vw, 50px);
-}
-
-#Setting #Desktop #SettingFriend .User {
-    font-family: 'GmarketSansMedium';
-    font-size: clamp(20px, 2.5vw, 50px);
-    margin-bottom: 5%;
-}
-
-#Setting #Desktop #SettingFriend .User input {
-    margin-right: 10%;
-}
-
 /*SettingGnF*/
 
 #Setting #Desktop #SettingGnF #Comment {
@@ -320,26 +276,32 @@
     background-repeat: no-repeat;
 }
 
-/*SettingGroupAdd, Del*/
+/*SettingFriend*/
 
-#Setting #Desktop #SettingGroupAdd #Comment {
+#Setting #Desktop #SettingFriend #Comment {
     margin: 5% 0 2% 0;
     font-size: clamp(40px, 4vw, 70px);
 }
 
-#Setting #Desktop #SettingGroupAdd form {
+#Setting #Desktop #SettingFriend form {
     width: 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#Setting #Desktop #SettingGroupAdd form #MemberWrapper {
+#Setting #Desktop #SettingFriend form #MemberWrapper {
     width: 100%;
     margin: 15% 0 15% 0;
 }
 
-#Setting #Desktop #SettingGroupAdd form button {
+#Setting #Desktop #SettingFriend form #MemberWrapper #NoFriend {
+    text-align: center;
+    font-family: 'GmarketsansLight';
+    font-size: clamp(10px, 1.5vw, 30px);
+}
+
+#Setting #Desktop #SettingFriend form button {
     width: 60%;
     height: 3.5vw;
     border: 0;
@@ -350,12 +312,12 @@
     font-size: clamp(10px, 1.5vw, 45px);
 }
 
-#Setting #Desktop #SettingGroupAdd .User {
+#Setting #Desktop #SettingFriend .User {
     font-family: 'GmarketSansMedium';
     font-size: clamp(20px, 2.5vw, 50px);
     margin-bottom: 5%;
 }
 
-#Setting #Desktop #SettingGroupAdd .User input {
+#Setting #Desktop #SettingFriend .User input {
     margin-right: 10%;
 }
