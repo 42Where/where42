@@ -72,7 +72,10 @@ public class LoginApiController {
     @Retry(name = "42apiRetry")
     @GetMapping(Define.versionPath + "/auth/login") // 실 어플리케이션 발급 시 오픈소스에는 가리고 올려야 함
     public String authLogin() {
+        /*** 로컬용 ***/
         return "https://api.intra.42.fr/oauth/authorize?client_id=150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code";
+        /*** 서버용 ***/
+//        return "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0&redirect_uri=http%3A%2F%2F54.180.140.84%2Fauth%2Flogin%2Fcallback&response_type=code";
     }
 
     @GetMapping(Define.versionPath + "/auth/code")

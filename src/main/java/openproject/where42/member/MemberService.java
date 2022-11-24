@@ -133,9 +133,10 @@ public class MemberService {
     public List<GroupFriendDto> findAllFriendsInfo(Member member, String token42) {
         List<GroupFriendDto> friendsInfo = new ArrayList<GroupFriendDto>();
         List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(member.getDefaultGroupId());
-
-        for (GroupFriend f : friends)
-            friendsInfo.add(new GroupFriendDto(token42, f, memberRepository.findMember(f.getFriendName())));
+        if (friends != null){
+            for (GroupFriend f : friends)
+                friendsInfo.add(new GroupFriendDto(token42, f, memberRepository.findMember(f.getFriendName())));
+        }
         return friendsInfo;
     }
 }
