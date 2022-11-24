@@ -38,9 +38,7 @@ function Main() {
             </div>
         )
     }
-<<<<<<< HEAD
 
-=======
     const MainContent=()=>{
         return (
             <>
@@ -49,8 +47,7 @@ function Main() {
             </>
         )
     }
-    //null대신 loading컴포넌트 넣기
->>>>>>> 5eb88866c16edb5d20edd5ef37392c3f911dd58f
+
     return (
         <div id="Main">
             {information != null ? <MainContent/> : <Loading/>}
