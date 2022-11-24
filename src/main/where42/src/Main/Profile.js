@@ -6,6 +6,10 @@ const Profile = (props) => {
     const info = props.info;
     const locate = CombineLocate(info.locate, info.inOrOut);
     let meOrNot = null;
+    let msg = "";
+    if (info.msg) {
+        msg = JSON.parse(info.msg).msg;
+    }
 
     if (props.me) {
         meOrNot = ( 
@@ -25,7 +29,7 @@ const Profile = (props) => {
             <div className="Info">
                 <div className="Name">{info.name}</div>
                 <div className="Locate">{locate}</div>
-                <div className="Msg">{info.msg}</div>
+                <div className="Msg">{msg}</div>
             </div>
             {meOrNot}
         </div>
