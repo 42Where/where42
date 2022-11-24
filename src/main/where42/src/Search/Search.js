@@ -6,7 +6,7 @@ import './Search_Desktop.css';
 import './Search_Mobile.css';
 import axios from "axios";
 import {useLocation, useNavigate} from "react-router";
-import Loading from "../Loading";
+import Loading from "../Etc/Loading";
 
 function Search() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
