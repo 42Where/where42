@@ -117,20 +117,25 @@ public class GroupFriendRepository {
     }
 
     public List<GroupFriend> findAllGroupFriendByOwnerId(Long ownerId) {
-        Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
-                .setParameter("groupName", "기본")
-                .setParameter("ownerId", ownerId)
-                .getSingleResult();
-        List<GroupFriend> friends = em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
-                .setParameter("group", group)
-                .getResultList();
-        Collections.sort(friends, new Comparator<GroupFriend>() {
-            @Override
-            public int compare(GroupFriend o1, GroupFriend o2) {
-                return o1.getFriendName().compareTo(o2.getFriendName());
-            }
-        });
-        return friends;
+        Groups groups;
+        try {
+                Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                        .setParameter("groupName", "기본")
+                        .setParameter("ownerId", ownerId)
+                        .getSingleResult();
+                List<GroupFriend> friends = em.createQuery("select gm from GroupFriend gm where gm.group = :group", GroupFriend.class)
+                        .setParameter("group", group)
+                        .getResultList();
+                Collections.sort(friends, new Comparator<GroupFriend>() {
+                    @Override
+                    public int compare(GroupFriend o1, GroupFriend o2) {
+                        return o1.getFriendName().compareTo(o2.getFriendName());
+                    }
+                });
+                return friends;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public void deleteGroupFriends(Long groupId, List<String> friendNames) {
