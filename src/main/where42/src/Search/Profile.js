@@ -16,10 +16,6 @@ const Profile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-<<<<<<< HEAD
-=======
-        // axios.post('v1/groupFriend',null,{params: {friendName : info.login, image : info.image}
->>>>>>> 5eb88866c16edb5d20edd5ef37392c3f911dd58f
         axios.post('v1/groupFriend',null,{params: {friendName : info.login}
         }).then((response)=>{
             if (response.status === 201) //친구추가 성공
