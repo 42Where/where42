@@ -40,10 +40,8 @@ function Login() {
             button.style = "background-image: url('img/login_button.svg')";
             axios.get(  '/v1/login' ).then((response)=>{
                 nav('/Main');
-                console.log(response.data);
             }).catch((Error)=> {
                     const errData = Error.response.data;
-                    console.log(errData);
                     if ('data' in errData) {
                         nav('/Agree', {state : errData.data});
                     }
