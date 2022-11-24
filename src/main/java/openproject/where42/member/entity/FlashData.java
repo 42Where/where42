@@ -14,7 +14,7 @@ import java.util.Date;
 public class FlashData {
 	@Id
 	private String name;
-	private Locate locate;
+	private Locate locate = new Locate(null, 0, 0, null);
 	private int inOrOut;
 
 	private String location;

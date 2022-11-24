@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.api.dto.Define;
 import openproject.where42.api.dto.Image;
 import openproject.where42.api.dto.Utils;
-import openproject.where42.member.entity.FlashMember;
+import openproject.where42.member.entity.FlashData;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,19 +12,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FlashDataService {
-    private final FlashMemberRepository flashMemberRepository;
+    private final FlashDataRepository flashDataRepository;
     @Transactional
-    public void createFlashData(String name, Image image, String Location) {
-        FlashMember flash = new FlashMember(name, image, location);
-        flashMemberRepository.save(flash);
+    public void createFlashData(String name, Image image, String location) {
+        FlashData flash = new FlashData(name, image, location);
+        flashDataRepository.save(flash);
     }
 
-    public FlashMember findByName(String name) {
-        return flashMemberRepository.findByName(name);
+    public FlashData findByName(String name) {
+        return flashDataRepository.findByName(name);
     }
 
     @Transactional
-    public void parseStatus(FlashMember flash) {
+    public void updateLocation(FlashData flash, String location) {
+        flash.updateLocation(location);
+    }
+
+    @Transactional
+    public void parseStatus(FlashData flash) {
         if (flash.getLocation() != null)
             flash.updateStatus(Utils.parseLocate(flash.getLocation()), Define.IN);
         else

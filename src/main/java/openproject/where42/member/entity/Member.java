@@ -41,6 +41,7 @@ public class Member extends User {
         this.img = img;
         this.level = level;
         this.createTime = new Date();
+        this.updateTime = new Date();
     }
     public void updatePersonalMsg(String msg) {
         this.msg = msg;
@@ -51,8 +52,8 @@ public class Member extends User {
         this.starredGroupId = starredGroupId;
     }
 
-    public void updateLocate(String locate) {
-        this.location = locate;
+    public void updateLocation(String location) {
+        this.location = location;
         this.updateTime = new Date();
     }
     public void updateInOrOut(int inOrOut) {
