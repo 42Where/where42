@@ -42,14 +42,11 @@ function Setting() {
                         nav("/Setting/SetCluster", {state: {planet: planet}});
                     }
                 }).catch((error) => {
-                    console.log(error);
-                if (error.response.status === 401) {
-                    nav("/Login");
-                } else if (error.response.status === 403) {
-                    alert("클러스터 외부에 있으므로 수동 자리 정보를 등록할 수 없습니다.");
-                } else if (error.response.status === 409) {
-                    alert("자동 자리 정보가 존재하여 수동 자리 정보를 등록할 수 없습니다.");
-                }
+                    if (error.response.status === 403) {
+                        alert("클러스터 외부에 있으므로 수동 자리 정보를 등록할 수 없습니다.");
+                    } else if (error.response.status === 409) {
+                        alert("자동 자리 정보가 존재하여 수동 자리 정보를 등록할 수 없습니다.");
+                    }
             });
         };
         const Logout = () => {

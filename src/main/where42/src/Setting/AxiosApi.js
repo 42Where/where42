@@ -10,8 +10,10 @@ instance.interceptors.response.use(
             return (res);
         }, (err) => {
             console.clear();
-            /*nav 이동 - 401, 500*/
-            return (err);
+            if (err.response.status === 401 || err.response.status === 500)
+                window.location.replace('/Login');
+            else
+                return Promise.reject(err);
         }
 )
 
