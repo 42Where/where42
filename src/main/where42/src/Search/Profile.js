@@ -19,13 +19,14 @@ const Profile = (props) => {
         // axios.post('v1/groupFriend',null,{params: {friendName : info.login, image : info.image}
         axios.post('v1/groupFriend',null,{params: {friendName : info.login}
         }).then((response)=>{
-            if (response.status === 201) //친구추가 성공
-                console.log(response.data)
+            if (response.status === 201)
+                //친구추가 성공
+                console.debug(response.data)
         }).catch((Error)=>{
             if (Error.response.status === 401)
                 //세션 없음 401에러 -> 로그인으로 보내서 재 로그인하게하기
                 nav('/Login');
-            console.log(Error);
+            // console.log(Error);
         })
         if (isDesktop)
         {
@@ -41,8 +42,6 @@ const Profile = (props) => {
 
     let friendOrNot;
 
-    console.log(info.login);
-    console.log(memberId);
     if (info.login === memberId)
         friendOrNot = <></>
     else if (isDesktop)
