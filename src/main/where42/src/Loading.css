@@ -1,0 +1,31 @@
+#Loading{
+    cursor : not-allowed;
+    margin:0;
+    height: 100vh;
+    display : flex;
+    justify-content: center;
+    flex-direction:  column;
+    align-items: center;
+}
+
+#Loading #LoadingContent{
+    text-shadow: 0.4vw 0.4vh 7px #767676;
+    margin: 5% 0 3% 0;
+    font-family: GmarketSansBold;
+    color: #FF8787;
+    text-align: center;
+    font-size : max(40px, 10vw);
+}
+
+#Loading #LoadingCharacter{
+    width : 50%;
+    min-width: 200px;
+    min-height : 200px;
+    height : 50vh;
+    display : inline-block;
+    background-image: url("../public/img/character_loading.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color: transparent;
+    background-position: center;
+}
