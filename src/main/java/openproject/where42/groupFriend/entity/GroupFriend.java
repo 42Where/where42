@@ -28,6 +28,8 @@ public class GroupFriend {
     @Column(nullable = false)
     private String friendName;
 
+    private String image;
+
     public GroupFriend(String friendName, Groups group) {
         this.friendName = friendName;
         this.group = group;
