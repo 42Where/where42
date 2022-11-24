@@ -10,7 +10,6 @@ import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.api.dto.Hane;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.member.entity.FlashMember;
 import openproject.where42.token.AES;
 import openproject.where42.member.entity.enums.Planet;
 import openproject.where42.api.dto.Define;
@@ -39,11 +38,6 @@ public class ApiService {
     HttpEntity<MultiValueMap<String, String>> req;
     MultiValueMap<String, String> params;
     ResponseEntity<String> res;
-
-    // flash 데이터 검사
-    public FlashMember checkFlash(String name) {
-        FlashMember flash =
-    }
 
     // oAuth 토큰 반환
     @RateLimiter(name = "42apiLimiter")

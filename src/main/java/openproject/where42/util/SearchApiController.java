@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.api.dto.Define;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberService;
-import openproject.where42.member.entity.FlashMember;
+import openproject.where42.member.entity.FlashData;
 import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
@@ -60,23 +60,23 @@ public class SearchApiController {
 
         Member member = memberRepository.findMember(name);
         if (member != null) {
-            if (member.timeDiff() < 4)
+            if (member.timeDiff() < 3)
                 searchCadet = new SearchCadet(member);
             else {
                 searchCadet = api.get42DetailInfo(token42, name);
-                member.updateLocation(searchCadet.getLocation());
-                searchCadet.setMember(true);
+                memberService.updateLocation(member, searchCadet.getLocation());
             }
             searchCadet.setMember(true);
+            System.out.println("======= " + searchCadet.isMember());
             return searchCadet;
         }
 
-        FlashMember flash = flashDataService.findByName(name);
-        if (flash != null && flash.timeDiff() < 4)
+        FlashData flash = flashDataService.findByName(name);
+        if (flash != null && flash.timeDiff() < 3)
             return new SearchCadet(flash);
         searchCadet = api.get42DetailInfo(token42, name);
         if (flash != null)
-            flash.updateLocation(searchCadet.getLocation());
+            flashDataService.updateLocation(flash, searchCadet.getLocation());
         else
             flashDataService.createFlashData(name, searchCadet.getImage(), searchCadet.getLocation());
         return searchCadet;
@@ -95,15 +95,18 @@ public class SearchApiController {
 
     @PostMapping(Define.versionPath + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
-        if (!cadet.isParsed())
+        System.out.println("cadet is member = " + cadet.isMember());
+        System.out.println("name = " + cadet.getLogin());
+        if (!cadet.isParsed()) {
             if (cadet.isMember()) {
                 Member member = memberRepository.findMember(cadet.getLogin());
                 memberService.parseStatus(member);
                 cadet.updateStatus(member.getLocate(), member.getInOrOut());
             } else {
-                FlashMember flash = flashDataService.findByName(cadet.getLogin());
+                FlashData flash = flashDataService.findByName(cadet.getLogin());
                 flashDataService.parseStatus(flash);
                 cadet.updateStatus(flash.getLocate(), flash.getInOrOut());
+            }
         }
         return cadet;
     }

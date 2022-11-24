@@ -30,9 +30,14 @@ public class GroupFriend {
 
     private String img;
 
-    public GroupFriend(String friendName, Groups group, String img) {
+    public GroupFriend(String friendName, String img, Groups group) {
         this.friendName = friendName;
         this.img = img;
+        this.group = group;
+    }
+
+    public GroupFriend(String friendName, Groups group) {
+        this.friendName = friendName;
         this.group = group;
     }
 }

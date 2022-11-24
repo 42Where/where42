@@ -75,15 +75,20 @@ public class MemberService {
             Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
             if (member42.getLocation() != null) {
                 updateLocate(member, Utils.parseLocate(member42.getLocation()));
-                member.updateStatus(Define.IN, null);
+                member.updateInOrOut(Define.IN);
                 throw new TakenSeatException();
             }
-            member.updateStatus(Define.IN, null);
+            member.updateInOrOut(Define.IN);
             return planet.getValue();
         }
         initLocate(member);
-        member.updateStatus(Define.OUT, null);
+        member.updateInOrOut(Define.OUT);
         throw new OutStateException();
+    }
+
+    @Transactional
+    public void updateLocation(Member member, String location) {
+        member.updateLocation(location);
     }
 
     @Transactional

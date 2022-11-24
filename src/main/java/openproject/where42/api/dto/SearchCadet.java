@@ -3,13 +3,15 @@ package openproject.where42.api.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import openproject.where42.member.entity.FlashMember;
+import openproject.where42.member.entity.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 
 @Getter @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NoArgsConstructor
 @AllArgsConstructor
 public class SearchCadet {
     private String login;
@@ -35,7 +37,7 @@ public class SearchCadet {
         }
     }
 
-    public SearchCadet(FlashMember flash) {
+    public SearchCadet(FlashData flash) {
         this.login = flash.getName();
         this.image = flash.getImage();
         this.location = flash.getLocation();
