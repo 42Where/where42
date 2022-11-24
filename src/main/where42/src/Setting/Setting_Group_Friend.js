@@ -179,25 +179,34 @@ function GroupList(props) {
         }
         else {
             inputRef.current.disabled = true;
-            if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
-                alert("사용할 수 없는 그룹명입니다.");
+            modEvent();
+        }
+    }
+    const modEvent = () => {
+        if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
+            alert("사용할 수 없는 그룹명입니다.");
+            window.location.reload();
+        } else {
+            axios.post('/v1/group/' + props.id, null, {params: {changeName: name}})
+                .then(() => {
+                    nav('/Setting/SetGroup');
+                }).catch(() => {
+                alert("중복된 이름의 그룹이 존재합니다.");
                 window.location.reload();
-            } else {
-                axios.post('/v1/group/' + props.id, null, {params: {changeName: name}})
-                    .then(() => {
-                        nav('/Setting/SetGroup');
-                    }).catch(() => {
-                    alert("중복된 이름의 그룹이 존재합니다.");
-                    window.location.reload();
-                });
-            }
+            });
+        }
+    }
+    const keyCheck = (e) => {
+        if (e.key === 'Enter') {
+            modEvent();
+            inputRef.current.disabled = true;
         }
     }
     const handleChange = ({target : {value}}) => setName(value);
 
     return (
         <div className='Group'>
-            <input type="text" maxLength="10" value={name} spellcheck="false" onChange={handleChange} ref={inputRef} disabled/>
+            <input type="text" maxLength="10" value={name} spellcheck="false" onChange={handleChange} onKeyDown={keyCheck} ref={inputRef} disabled/>
             <div className='GroupButtons'>
                 <button onClick={modGroup}></button>
                 <button onClick={delGroup}></button>

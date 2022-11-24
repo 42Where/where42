@@ -20,12 +20,16 @@
     background-color: white;
 }
 
+#Setting #Desktop button {
+    cursor: pointer;
+}
+
 #Setting #Desktop #Comment {
     width: 100%;
     margin-bottom: 3%;
     text-align: center;
     font-family: 'GmarketSansBold';
-    font-size: clamp(60px, 6vw, 100px);
+    font-size: clamp(60px, 5vw, 100px);
 }
 
 #Setting #Desktop #Comment2 {
@@ -58,11 +62,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: clamp(220px, 17vw, 300px);
-    height: clamp(220px, 17vw, 300px);
+    width: clamp(220px, 16.5vw, 300px);
+    height: clamp(220px, 16.5vw, 300px);
     margin: 3% 2% 0 2%;
     border-radius: 50px;
     background-color: #EF8E86;
+    cursor: pointer;
 }
 
 #Setting #Desktop #BoxWrapper .Box .BoxCap {
@@ -161,7 +166,7 @@
 /*SettingCluster*/
 
 #Setting #Desktop #SettingCluster #BoxWrapper .Box .BoxCap {
-    font-size: clamp(35px, 3.5vw, 45px);
+    font-size: clamp(35px, 3vw, 40px);
 }
 
 /*SettingSpot*/
@@ -235,13 +240,18 @@
 }
 
 #Setting #Desktop #SettingGroup #GroupList .Group input {
-    width: 60%;
+    width: 55%;
     border: none;
+    margin-right: 5%;
     font-family: 'GmarketSansMedium';
     font-size: clamp(10px, 2.5vw, 50px);
     line-height: 2;
     color: black;
     background-color: transparent;
+}
+
+#Setting #Desktop #SettingGroup #GroupList .Group input:focus {
+    border-bottom: 1px solid black;
 }
 
 #Setting #Desktop #SettingGroup #GroupList .Group .GroupButtons {

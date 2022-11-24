@@ -6,12 +6,18 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { SettingFloor, SettingCluster, SettingSpot} from "./Setting_Locate";
 import { SettingGnF, SettingFriend, SettingGroup } from "./Setting_Group_Friend";
+import instance from "./AxiosApi";
 import './Setting_Desktop.css';
 import './Setting_Mobile.css';
 
 function Setting() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    let size = "";
+    if (isMobile)
+        size = "Mobile";
+    else if (isDesktop)
+        size = "Desktop";
     const nav = useNavigate();
     const location = useLocation();
     let name = location.state?.name;
@@ -27,7 +33,7 @@ function Setting() {
 
     function SettingChoice() {
         const SetLocateAlert = () => {
-            axios.get('/v1/member/setting/locate')
+            instance.get('member/setting/locate')
                 .then((res) => {
                     const planet = res.data.data;
                     if (res.data.data === 1) {
@@ -36,6 +42,7 @@ function Setting() {
                         nav("/Setting/SetCluster", {state: {planet: planet}});
                     }
                 }).catch((error) => {
+                    console.log(error);
                 if (error.response.status === 401) {
                     nav("/Login");
                 } else if (error.response.status === 403) {
@@ -123,26 +130,16 @@ function Setting() {
     return (
         <div id="Setting">
             <Routes>
-                {isMobile && <Route path={""} element={<div id="Mobile"><SettingChoice/></div>}/>}
-                {isDesktop && <Route path={""} element={<div id="Desktop"><SettingChoice/></div>}/>}
-                {isMobile && <Route path={"SetFloor"} element={<div id="Mobile"><SettingFloor/></div>}/>}
-                {isDesktop && <Route path={"SetFloor"} element={<div id="Desktop"><SettingFloor/></div>}/>}
-                {isMobile && <Route path={"SetCluster"} element={<div id="Mobile"><SettingCluster/></div>}/>}
-                {isDesktop && <Route path={"SetCluster"} element={<div id="Desktop"><SettingCluster/></div>}/>}
-                {isMobile && <Route path={"SetSpot"} element={<div id="Mobile"><SettingSpot/></div>}/>}
-                {isDesktop && <Route path={"SetSpot"} element={<div id="Desktop"><SettingSpot/></div>}/>}
-                {isMobile && <Route path={"SetMsg"} element={<div id="Mobile"><SettingMsg/></div>}/>}
-                {isDesktop && <Route path={"SetMsg"} element={<div id="Desktop"><SettingMsg/></div>}/>}
-                {isMobile && <Route path={"SetGnF"} element={<div id="Mobile"><SettingGnF/></div>}/>}
-                {isDesktop && <Route path={"SetGnF"} element={<div id="Desktop"><SettingGnF/></div>}/>}
-                {isMobile && <Route path={"SetGroup"} element={<div id="Mobile"><SettingGroup/></div>}/>}
-                {isDesktop && <Route path={"SetGroup"} element={<div id="Desktop"><SettingGroup/></div>}/>}
-                {isMobile && <Route path={"SetFriend"} element={<div id="Mobile"><SettingFriend type="fDel"/></div>}/>}
-                {isDesktop && <Route path={"SetFriend"} element={<div id="Desktop"><SettingFriend type="fDel"/></div>}/>}
-                {isMobile && <Route path={"SetGroupAdd"} element={<div id="Mobile"><SettingFriend type="add"/></div>}/>}
-                {isDesktop && <Route path={"SetGroupAdd"} element={<div id="Desktop"><SettingFriend type="add"/></div>}/>}
-                {isMobile && <Route path={"SetGroupDel"} element={<div id="Mobile"><SettingFriend type="del"/></div>}/>}
-                {isDesktop && <Route path={"SetGroupDel"} element={<div id="Desktop"><SettingFriend type="del"/></div>}/>}
+                <Route path={""} element={<div id={size}><SettingChoice/></div>}/>}
+                <Route path={"SetFloor"} element={<div id={size}><SettingFloor/></div>}/>}
+                <Route path={"SetCluster"} element={<div id={size}><SettingCluster/></div>}/>}
+                <Route path={"SetSpot"} element={<div id={size}><SettingSpot/></div>}/>}
+                <Route path={"SetMsg"} element={<div id={size}><SettingMsg/></div>}/>}
+                <Route path={"SetGnF"} element={<div id={size}><SettingGnF/></div>}/>}
+                <Route path={"SetGroup"} element={<div id={size}><SettingGroup/></div>}/>}
+                <Route path={"SetFriend"} element={<div id={size}><SettingFriend type="fDel"/></div>}/>}
+                <Route path={"SetGroupAdd"} element={<div id={size}><SettingFriend type="add"/></div>}/>}
+                <Route path={"SetGroupDel"} element={<div id={size}><SettingFriend type="del"/></div>}/>}
             </Routes>
         </div>
     )

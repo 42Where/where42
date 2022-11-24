@@ -16,12 +16,20 @@
     padding: 2% 0 2% 0;
 }
 
+#Setting #Mobile button {
+    cursor: pointer;
+}
+
 #Setting #Mobile #Comment {
     font-family: 'GmarketSansBold';
 }
 
 #Setting #Mobile #Comment2 {
     font-family: 'GmarketSansLight';
+}
+
+#Setting #Mobile #BoxWrapper .Box {
+    cursor: pointer;
 }
 
 #Setting #Mobile #BoxWrapper .Box .BoxCap {
@@ -233,7 +241,7 @@
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group input {
-    width: 45%;
+    width: 50%;
     margin-right: 3%;
     border: none;
     font-family: 'GmarketSansMedium';
@@ -241,6 +249,11 @@
     line-height: 2;
     color: black;
     background-color: transparent;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group input:focus {
+    padding-left: 1%;
+    background-color: white;
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group div {
@@ -305,7 +318,7 @@
 /*SettingFriend*/
 
 #Setting #Mobile #SettingFriend #Comment {
-    font-size: clamp(20px, 9vw, 50px);
+    font-size: clamp(20px, 9vw, 45px);
     margin-bottom: 3%;
 }
 
