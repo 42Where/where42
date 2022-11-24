@@ -10,12 +10,16 @@ const Profile = (props) => {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
     
     const info = props.info;
-    // const memberId = props.memberId;
+    const memberId = props.memberId;
     const [detail, setDetail] = useState(null);
    
     function FriendClick(e){
         if (info.friend === true)
             return ;
+<<<<<<< HEAD
+=======
+        // axios.post('v1/groupFriend',null,{params: {friendName : info.login, image : info.image}
+>>>>>>> 5eb88866c16edb5d20edd5ef37392c3f911dd58f
         axios.post('v1/groupFriend',null,{params: {friendName : info.login}
         }).then((response)=>{
             if (response.status === 201) //친구추가 성공
@@ -40,9 +44,11 @@ const Profile = (props) => {
 
     let friendOrNot;
 
-    // if (info.login === memberId)
-    //     friendOrNot = null;
-    if (isDesktop)
+    console.log(info.login);
+    console.log(memberId);
+    if (info.login === memberId)
+        friendOrNot = <></>
+    else if (isDesktop)
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}>{info.friend? '친구 추가 완료' : '친구 추가'}</button>)
     else if (isMobile)
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)

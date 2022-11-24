@@ -9,9 +9,9 @@ import Groups from './Groups';
 import Loading from "../Etc/Loading";
 
 function Main() {
-    const [information, setInformation] = useState(null);
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const [information, setInformation] = useState(null);
     useEffect(() => {
         axios.get('v1/member').then((response)=>{
             setInformation(response.data);
@@ -22,7 +22,7 @@ function Main() {
     function Common() {
         return (
             <div id="Wrapper">
-                <Link to="/Search" state={information.memberInfo.id}>
+                <Link to="/Search" state={information.memberInfo.name}>
                     <button id="Search"></button>
                 </Link>
                 <Link to="/Main">
@@ -38,11 +38,22 @@ function Main() {
             </div>
         )
     }
+<<<<<<< HEAD
 
+=======
+    const MainContent=()=>{
+        return (
+            <>
+                {isMobile &&  <div id="Mobile"><Common/></div>}
+                {isDesktop && <div id="Desktop"><Common/></div>}
+            </>
+        )
+    }
+    //null대신 loading컴포넌트 넣기
+>>>>>>> 5eb88866c16edb5d20edd5ef37392c3f911dd58f
     return (
         <div id="Main">
-            {information != null ? isMobile && <div id="Mobile"><Common/></div> : <Loading/>}
-            {information != null ? isDesktop && <div id="Desktop"><Common/></div> : <Loading/>}
+            {information != null ? <MainContent/> : <Loading/>}
         </div>
     )
 }

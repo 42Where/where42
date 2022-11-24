@@ -12,37 +12,25 @@ function Search() {
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
     const location = useLocation();
     const nav = useNavigate();
-
     const [information, setInformation] = useState([]);
     const memberId = location.state;
     function SearchBox()
     {
         const [searchId, setSearch] = useState("");
-        const alphaPattern = new RegExp('^[a-zA-Z]+$');
         const searchChange=(e)=>{
-            const value = e.target.value;
-            //마지막 char가 안지워짐 ㅜㅜ
-            if (!value.match(alphaPattern))
-            {
-                e.target.value = searchId;
-                return ;
-            }
+            const value = e.target.value.replace(/[^a-zA-Z]/gi, '');
             setSearch(value)
-            console.debug(e.target.value);
         }
 
         const SubmitId = (event) => {
             event.preventDefault();
-
-            axios.get('v1/search', {params : {begin : searchId}}).then((response)=>{
+            axios.get('v1/search', {params : {begin : searchId}}).
+            then((response)=>{
                 setInformation(response.data);
-                //여기서 어떻게 data가 비어있는지 확인하는지 모르겠음 null, [null], [] 다안됨
-                // if (response.data === [null])
-                //     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
-                // console.log(response.data);
+                if (response.data.length === 0)
+                    alert('검색 결과가 없습니다. 아이디를 확인해주세요');
             }).catch(()=>{nav('/Login')})
         }
-
         const searchKeyDown = (event) =>{
             let charCode = event.keyCode;
             if (charCode === 'Enter')
@@ -56,13 +44,19 @@ function Search() {
                         <img src="img/character.svg" alt="character"></img>
                     </div>
                     <form onSubmit={SubmitId}>
-                        <input id="SearchInput" type="text" autoComplete={"off"} spellCheck={"false"} placeholder="아이디를 입력해 주세요" value={searchId} onKeyDown={searchKeyDown} onChange={searchChange}/>
+                        <input id="SearchInput" type="text"
+                               maxlength='10' autoComplete={"off"}
+                               spellCheck={"false"} placeholder="아이디를 입력해 주세요"
+                               value={searchId}
+                               onKeyDown={searchKeyDown}
+                               onChange={searchChange} autoFocus/>
                         <button id="SearchButton" type="submit"/>
                     </form>
                 </div>
             </div>
         )
     }
+
     function SearchResults(props)
     {
         const memberId = props.memberId;
