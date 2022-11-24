@@ -1,9 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-
-const Profile = (props) => {
+const MainProfile = (props) => {
     const info = props.info;
+    console.log(info);
     const locate = CombineLocate(info.locate, info.inOrOut);
     let meOrNot = null;
     let msg = "";
@@ -69,4 +69,4 @@ function CombineLocate(locate, inOutState) {
     return position;
 }
 
-export default Profile;
+export default MainProfile;
