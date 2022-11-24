@@ -22,7 +22,7 @@ function Main() {
     function Common() {
         return (
             <div id="Wrapper">
-                <Link to="/Search" state={information.memberInfo.id}>
+                <Link to="/Search" state={information.memberInfo.name}>
                     <button id="Search"></button>
                 </Link>
                 <Link to="/Main">

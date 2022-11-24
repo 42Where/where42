@@ -56,7 +56,7 @@ function Search() {
                         <img src="img/character.svg" alt="character"></img>
                     </div>
                     <form onSubmit={SubmitId}>
-                        <input id="SearchInput" type="text" autoComplete={"off"} spellCheck={"false"} placeholder="아이디를 입력해 주세요" value={searchId} onKeyDown={searchKeyDown} onChange={searchChange}/>
+                        <input id="SearchInput" type="text" autoComplete={"off"} spellCheck={"false"} placeholder="아이디를 입력해 주세요" value={searchId} onKeyDown={searchKeyDown} onChange={searchChange} autoFocus/>
                         <button id="SearchButton" type="submit"/>
                     </form>
                 </div>
