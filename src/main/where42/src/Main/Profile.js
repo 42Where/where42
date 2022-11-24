@@ -6,6 +6,10 @@ const Profile = (props) => {
     const info = props.info;
     const locate = CombineLocate(info.locate, info.inOrOut);
     let meOrNot = null;
+    let msg = "";
+    if (info.msg) {
+        msg = JSON.parse(info.msg).msg;
+    }
 
     if (props.me) {
         meOrNot = ( 
@@ -25,14 +29,14 @@ const Profile = (props) => {
             <div className="Info">
                 <div className="Name">{info.name}</div>
                 <div className="Locate">{locate}</div>
-                <div className="Msg">{info.msg}</div>
+                <div className="Msg">{msg}</div>
             </div>
             {meOrNot}
         </div>
     );
 };
 
-function CombineLocate(locate, inOutState){
+function CombineLocate(locate, inOutState) {
     let position = "";
     if (inOutState === 2)
         position = "자리 정보 없음";
@@ -42,19 +46,25 @@ function CombineLocate(locate, inOutState){
     {
         //inoutstate가 1이고 planet이 0인 경우 없음? : 확인 필요
         if (locate.planet === 1)
-            position = '개포 ';
+            position = "개포 ";
         else if (locate.planet === 2)
-            position = '서초 ';
-        if (locate.floor === 0)
-            position += "클러스터 내";
-        else if (locate.floor > 0)
-            position += locate.floor.toString() + '층 ';
-        else if (locate.floor === -1)
-            position += '지하 1층 ';
-        if (locate.cluster !== 0)
-            position += locate.cluster.toString() + '클 ';
+            position = "서초 ";
+
+        if ((locate.planet === 1 && locate.floor === 0) || (locate.planet === 2 && locate.cluster === 0))
+            position += "클러스터 내 ";
+        else if (locate.floor === 6) {
+            if (locate.spot === "오픈스튜디오")
+                position += "지하 1층 ";
+            else
+                position += "옥상 "
+        }
+        else if (locate.floor > 0 && locate.floor < 6)
+            position += locate.floor.toString() + "층 ";
+        else if (locate.cluster >= 7 && locate.cluster <= 10)
+            position += locate.cluster.toString() + "클 ";
+
         if (locate.spot !== null)
-            position += locate.spot.toString();
+            position += locate.spot;
     }
     return position;
 }

@@ -162,7 +162,7 @@ function Setting() {
         const handleChange = ({target : {value}}) => setMsg(value);
         const handleSubmit = (event) => {
             event.preventDefault(); /*새로고침 방지*/
-            axios.post('/v1/member/setting/msg', {msg: msg})
+            axios.post('/v1/member/setting/msg', {msg})
                 .then(() => {
                     alert("수정 완료!");
                     nav("/setting");
