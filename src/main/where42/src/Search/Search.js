@@ -42,15 +42,15 @@ function Search() {
                 setLoading(false);
                 setInformation(response.data);
             }).catch((Error)=>{
-                console.log(Error);
+                // console.log(Error);
                 nav('/Login')
             })
             inputRef.current.disabled = false;
         }
 
         const searchChange=(e)=>{
-            const value = e.target.value.replace(/[^a-zA-Z]/gi, '');
-            setSearch(value)
+            const value = e.target.value.replace(/[^a-zA-Z2-9]/gi, '');
+            setSearch(value);
         }
 
         const searchKeyDown = (event) =>{

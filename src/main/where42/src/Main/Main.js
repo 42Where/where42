@@ -15,7 +15,7 @@ function Main() {
     useEffect(() => {
         axios.get('v1/member').then((response)=>{
             setInformation(response.data);
-            // console.debug(response.data);
+            console.debug(response.data);
         })
     }, []);
 
