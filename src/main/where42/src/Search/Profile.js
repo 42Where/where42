@@ -16,7 +16,6 @@ const Profile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        // axios.post('v1/groupFriend',null,{params: {friendName : info.login, image : info.image}
         axios.post('v1/groupFriend',null,{params: {friendName : info.login}
         }).then((response)=>{
             if (response.status === 201)

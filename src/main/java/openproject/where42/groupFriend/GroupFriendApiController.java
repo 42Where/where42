@@ -54,7 +54,7 @@ public class GroupFriendApiController {
 	}
 
 	// 해당 그룹에 포함된 친구들 중 선택된 친구들 일괄 삭제
-	@DeleteMapping(Define.versionPath + "/groupFriend/includes/group/{groupId}")
+	@PostMapping(Define.versionPath + "/groupFriend/includes/group/{groupId}")
 	public ResponseEntity removeIncludeGroupFriends(@PathVariable("groupId") Long groupId, @RequestBody List<String> friendNames) {
 		groupFriendService.deleteIncludeGroupFriends(groupId, friendNames);
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_FRIENDS_FROM_GROUP), HttpStatus.OK);
@@ -79,14 +79,14 @@ public class GroupFriendApiController {
 	// 해당 친구가 포함된 그룹 전체 삭제, 아직 안 만듦
 
 	// 기본 그룹 친구 이름 목록 반환
-	@GetMapping(Define.versionPath + "/groupFriend")
+	@GetMapping(Define.versionPath + "/groupFriend/friendList")
 	public List<String> getAllDefaultFriends(HttpServletRequest req) {
 		Member member = memberService.findBySession(req);
 		return groupFriendRepository.findGroupFriendsByGroupId(member.getDefaultGroupId());
 	}
 
 	// 기본 그룹을 포함한 모든 그룹에서 삭제
-	@DeleteMapping(Define.versionPath + "/groupFriend") // 프론트 기본에서 삭제하는 경우와 사용자정의 그룹에서만 삭제하는 경우 필히 구분지어서 매핑 필
+	@PostMapping(Define.versionPath + "/groupFriend/friendList") // 프론트 기본에서 삭제하는 경우와 사용자정의 그룹에서만 삭제하는 경우 필히 구분지어서 매핑 필
 	public ResponseEntity deleteFriends(HttpServletRequest req, @RequestBody List<String> friendNames) {
 		Member member = memberService.findBySession(req);
 		groupFriendService.deleteFriends(member, friendNames);

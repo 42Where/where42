@@ -6,7 +6,7 @@ import './Main_Desktop.css';
 import './Main_Mobile.css';
 import Profile from './Profile';
 import Groups from './Groups';
-import Loading from "../Loading";
+import Loading from "../Etc/Loading";
 
 function Main() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
@@ -38,6 +38,7 @@ function Main() {
             </div>
         )
     }
+
     const MainContent=()=>{
         return (
             <>
@@ -46,7 +47,7 @@ function Main() {
             </>
         )
     }
-    //null대신 loading컴포넌트 넣기
+
     return (
         <div id="Main">
             {information != null ? <MainContent/> : <Loading/>}

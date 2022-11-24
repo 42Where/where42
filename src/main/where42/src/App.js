@@ -1,13 +1,13 @@
 // import './App.css';
 import {Routes, Route} from "react-router-dom";
-import Home from "./Home";
+import Home from "./Etc/Home";
 import Login from "./Login/Login";
 import Agree from "./Agree/Agree";
 import Main from "./Main/Main";
 import Search from "./Search/Search";
 import Setting from "./Setting/Setting";
-import NotFound from "./NotFound";
-import Oauth from "./Oauth";
+import NotFound from "./Etc/NotFound";
+import Oauth from "./Etc/Oauth";
 
 function App() {
     return (
