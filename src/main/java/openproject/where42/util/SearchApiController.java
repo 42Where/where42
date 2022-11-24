@@ -2,9 +2,12 @@ package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.dto.Define;
+import openproject.where42.member.FlashDataService;
+import openproject.where42.member.MemberService;
+import openproject.where42.member.entity.FlashData;
+import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.exception.customException.SessionExpiredException;
@@ -21,7 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchApiController {
 
+    private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final FlashDataService flashDataService;
     private final ApiService api;
     private final TokenService tokenService;
 
@@ -35,22 +40,46 @@ public class SearchApiController {
             throw new SessionExpiredException();
         if (token42 == null)
             tokenService.inspectToken(rep, key);
+        begin = begin.toLowerCase();
         List<Seoul42> searchList = api.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
 
         for (Seoul42 cadet : searchList) {
-            SearchCadet searchCadet = api.get42DetailInfo(token42, cadet.getLogin());
+            SearchCadet searchCadet = searchCadetInfo(cadet.getLogin(), token42);
             if (searchCadet != null) { // json e 처리?!
-                if (memberRepository.checkFriendByMemberIdAndName((Long)session.getAttribute("id"), searchCadet.getLogin()))
+                if (memberRepository.checkFriendByMemberIdAndName((Long) session.getAttribute("id"), searchCadet.getLogin()))
                     searchCadet.setFriend(true);
                 searchCadetList.add(searchCadet);
             }
         }
-
-        for (SearchCadet search : searchCadetList) {
-            System.out.println("my name is = " + search.getLogin() + search.getLocation() + search.getImage().getLink());
-        }
        return searchCadetList;
+    }
+
+    public SearchCadet searchCadetInfo(String name, String token42) {
+        SearchCadet searchCadet;
+
+        Member member = memberRepository.findMember(name);
+        if (member != null) {
+            if (member.timeDiff() < 3)
+                searchCadet = new SearchCadet(member);
+            else {
+                searchCadet = api.get42DetailInfo(token42, name);
+                memberService.updateLocation(member, searchCadet.getLocation());
+            }
+            searchCadet.setMember(true);
+            System.out.println("======= " + searchCadet.isMember());
+            return searchCadet;
+        }
+
+        FlashData flash = flashDataService.findByName(name);
+        if (flash != null && flash.timeDiff() < 3)
+            return new SearchCadet(flash);
+        searchCadet = api.get42DetailInfo(token42, name);
+        if (flash != null)
+            flashDataService.updateLocation(flash, searchCadet.getLocation());
+        else
+            flashDataService.createFlashData(name, searchCadet.getImage(), searchCadet.getLocation());
+        return searchCadet;
     }
 
     private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?
@@ -66,12 +95,19 @@ public class SearchApiController {
 
     @PostMapping(Define.versionPath + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
-        System.out.println("===== member???? ===== " + cadet.getLogin());
-        System.out.println(memberRepository.findMember(cadet.getLogin()));
-        Utils parseInfo = new Utils(memberRepository.findMember(cadet.getLogin()), cadet.getLocation());
-        cadet.setMsg(parseInfo.getMsg());
-        cadet.setLocate(parseInfo.getLocate());
-        cadet.setInOrOut(parseInfo.getInOrOut());
+        System.out.println("cadet is member = " + cadet.isMember());
+        System.out.println("name = " + cadet.getLogin());
+        if (!cadet.isParsed()) {
+            if (cadet.isMember()) {
+                Member member = memberRepository.findMember(cadet.getLogin());
+                memberService.parseStatus(member);
+                cadet.updateStatus(member.getLocate(), member.getInOrOut());
+            } else {
+                FlashData flash = flashDataService.findByName(cadet.getLogin());
+                flashDataService.parseStatus(flash);
+                cadet.updateStatus(flash.getLocate(), flash.getInOrOut());
+            }
+        }
         return cadet;
     }
 }

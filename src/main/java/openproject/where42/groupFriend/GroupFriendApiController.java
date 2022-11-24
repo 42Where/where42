@@ -27,9 +27,9 @@ public class GroupFriendApiController {
 
 	// 검색을 통한 친구 등록, 기본 그룹에 등록
 	@PostMapping(Define.versionPath + "/groupFriend")
-	public ResponseEntity createFriend(HttpServletRequest req, @RequestParam String friendName) {
+	public ResponseEntity createFriend(HttpServletRequest req, @RequestParam String friendName, @RequestParam String img) {
 		Member member = memberService.findBySession(req);
-		Long friendId = groupFriendService.saveFriend(friendName, member.getDefaultGroupId());
+		Long friendId = groupFriendService.saveFriend(friendName, img, member.getDefaultGroupId());
 		return new ResponseEntity(ResponseWithData.res(StatusCode.CREATED, ResponseMsg.CREATE_GROUP_FRIEND, friendId), HttpStatus.CREATED);
 	}
 

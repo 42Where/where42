@@ -1,4 +1,4 @@
-import Profile from './Profile';
+import MainProfile from './MainProfile';
 
 function Groups(props){
     const groupInfo = props.groupInfo;
@@ -17,7 +17,6 @@ function Groups(props){
 function MakeGroupName(props)
 {
     let groupName;
-
     if (props.name === "기본")
         groupName = "친구 목록";
     else
@@ -37,7 +36,7 @@ function GroupProfile(props) {
     const groupInfo = props.groupInfo;
     const friendList = groupInfo.groupFriends.map(friend => {
         const oneFriendInfo = GetFriendInfo(props.friendInfo, friend);
-        return <Profile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
+        return <MainProfile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
     });
 
     return (

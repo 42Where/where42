@@ -88,7 +88,6 @@ public class MemberApiController {
             tokenService.inspectToken(rep, key);
         int inOrOut = memberService.checkLocate(req, token42);
         return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, inOrOut), HttpStatus.OK);
-
     }
 
     @PostMapping(Define.versionPath + "/member/setting/locate") // 위치 설정

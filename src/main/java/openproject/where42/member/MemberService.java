@@ -2,6 +2,7 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
+import openproject.where42.api.dto.Define;
 import openproject.where42.api.dto.Utils;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.exception.customException.OutStateException;
@@ -55,8 +56,6 @@ public class MemberService {
         if (session == null)
             throw new SessionExpiredException();
         session.setMaxInactiveInterval(30 * 60); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
-        System.out.println("member!!!!!!!!" + session.getAttribute("id"));
-        System.out.println("member == " + memberRepository.findById((Long)session.getAttribute("id")) + " member id == " + session.getAttribute("id"));
         return memberRepository.findById((Long)session.getAttribute("id"));
     }
 
@@ -67,6 +66,7 @@ public class MemberService {
         member.updatePersonalMsg(msg);
     }
 
+    @Transactional
     public int checkLocate(HttpServletRequest req, String token42) {
         Member member = findBySession(req);
         Planet planet = api.getHaneInfo(member.getName());
@@ -75,12 +75,36 @@ public class MemberService {
             Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
             if (member42.getLocation() != null) {
                 updateLocate(member, Utils.parseLocate(member42.getLocation()));
+                member.updateInOrOut(Define.IN);
                 throw new TakenSeatException();
             }
+            member.updateInOrOut(Define.IN);
             return planet.getValue();
         }
         initLocate(member);
+        member.updateInOrOut(Define.OUT);
         throw new OutStateException();
+    }
+
+    @Transactional
+    public void updateLocation(Member member, String location) {
+        member.updateLocation(location);
+    }
+
+    @Transactional
+    public void parseStatus(Member member) {
+        Planet planet = api.getHaneInfo(member.getName());
+
+        if (planet != null) {
+            if (member.getLocation() != null)
+                updateLocate(member, Utils.parseLocate(member.getLocation()));
+            else
+                updateLocate(member, new Locate(planet, 0, 0, null));
+            member.updateInOrOut(Define.IN);
+        } else {
+            initLocate(member);
+            member.updateInOrOut(Define.OUT);
+        }
     }
 
     @Transactional
