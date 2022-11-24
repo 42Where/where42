@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://ec2-43-200-6-157.ap-northeast-2.compute.amazonaws.com:5432/where42
-#     url: jdbc:postgresql://localhost:5432/where42
+#    url: jdbc:postgresql://ec2-43-200-6-157.ap-northeast-2.compute.amazonaws.com:5432/where42
+    url: jdbc:postgresql://localhost:5432/where42
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver

@@ -16,12 +16,20 @@
     padding: 2% 0 2% 0;
 }
 
+#Setting #Mobile button {
+    cursor: pointer;
+}
+
 #Setting #Mobile #Comment {
     font-family: 'GmarketSansBold';
 }
 
 #Setting #Mobile #Comment2 {
     font-family: 'GmarketSansLight';
+}
+
+#Setting #Mobile #BoxWrapper .Box {
+    cursor: pointer;
 }
 
 #Setting #Mobile #BoxWrapper .Box .BoxCap {
@@ -185,55 +193,6 @@
     font-size: clamp(10px, 3vw, 20px);
 }
 
-/*SettingFriend*/
-
-#Setting #Mobile #SettingFriend #Comment {
-    font-size: clamp(25px, 9vw, 50px);
-    margin-bottom: 3%;
-}
-
-#Setting #Mobile #SettingFriend #Comment2 {
-    font-size: clamp(80px, 35vw, 180px);
-    zoom: 0.1;
-}
-
-#Setting #Mobile #SettingFriend form {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#Setting #Mobile #SettingFriend form #MemberWrapper {
-    width: 100%;
-    margin: 15% 0 15% 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#Setting #Mobile #SettingFriend form button {
-    width: clamp(50px, 20vw, 100px);
-    height: clamp(25px, 9vw, 40px);
-    border: 0;
-    border-radius: 50px;
-    background-color: #EF8E86;
-    color: white;
-    font-family: 'GmarketSansMedium';
-    font-size: clamp(10px, 4vw, 20px);
-}
-
-#Setting #Mobile #SettingFriend .User {
-    width: 75%;
-    font-family: 'GmarketSansMedium';
-    font-size: clamp(10px, 5vw, 30px);
-    margin-bottom: 5%;
-}
-
-#Setting #Mobile #SettingFriend .User input {
-    margin-right: 10%;
-}
-
 /*SettingGroup*/
 
 #Setting #Mobile #SettingGroup #Comment {
@@ -282,7 +241,7 @@
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group input {
-    width: 45%;
+    width: 50%;
     margin-right: 3%;
     border: none;
     font-family: 'GmarketSansMedium';
@@ -290,6 +249,11 @@
     line-height: 2;
     color: black;
     background-color: transparent;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group input:focus {
+    padding-left: 1%;
+    background-color: white;
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group div {
@@ -351,34 +315,41 @@
     background-image: url("../../public/img/friend_del.svg");
 }
 
-/*SettingGroupAdd, Del*/
+/*SettingFriend*/
 
-#Setting #Mobile #SettingGroupAdd #Comment {
-    font-size: clamp(20px, 9vw, 50px);
+#Setting #Mobile #SettingFriend #Comment {
+    font-size: clamp(20px, 9vw, 45px);
     margin-bottom: 3%;
 }
 
-#Setting #Mobile #SettingGroupAdd #Comment2 {
+#Setting #Mobile #SettingFriend #Comment2 {
     font-size: clamp(80px, 35vw, 180px);
     zoom: 0.1;
 }
 
-#Setting #Mobile #SettingGroupAdd form {
+#Setting #Mobile #SettingFriend form {
     width: 70%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#Setting #Mobile #SettingGroupAdd form #MemberWrapper {
-    width: 100%;
+#Setting #Mobile #SettingFriend form #MemberWrapper {
+    width: 90%;
     margin: 15% 0 15% 0;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#Setting #Mobile #SettingGroupAdd form button {
+#Setting #Mobile #SettingFriend form #MemberWrapper #NoFriend{
+    zoom: 0.1;
+    font-size: clamp(70px, 30vw, 170px);
+    font-family: 'GmarketsansLight';
+}
+
+
+#Setting #Mobile #SettingFriend form button {
     width: clamp(50px, 20vw, 100px);
     height: clamp(25px, 9vw, 40px);
     border: 0;
@@ -389,7 +360,7 @@
     font-size: clamp(10px, 4vw, 20px);
 }
 
-#Setting #Mobile #SettingGroupAdd .User {
+#Setting #Mobile #SettingFriend .User {
     width: 75%;
     font-family: 'GmarketSansMedium';
     font-size: clamp(10px, 5vw, 30px);
