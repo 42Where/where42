@@ -16,10 +16,10 @@ function Agree()
         const nav = useNavigate();
         const info = location.state;
         const AgreeClick=()=>{
-            const body = { login: info.login , image : info.image, location:info.location};
+            const body = { login: info.login , image : info.image, location : info.location};
             axios.post('/v1/member', body)
                 .then((response)=>{
-                nav("/Main")})
+                    nav("/Main")})
                 .catch((Error)=>{
                     // console.log(Error);
             })

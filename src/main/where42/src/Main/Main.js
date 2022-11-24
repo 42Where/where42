@@ -6,22 +6,23 @@ import './Main_Desktop.css';
 import './Main_Mobile.css';
 import Profile from './Profile';
 import Groups from './Groups';
+import Loading from "../Loading";
 
 function Main() {
-    const [information, setInformation] = useState(null);
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const [information, setInformation] = useState(null);
     useEffect(() => {
         axios.get('v1/member').then((response)=>{
-            // console.log(response.data);
             setInformation(response.data);
+            console.debug(response.data);
         })
     }, []);
 
     function Common() {
         return (
             <div id="Wrapper">
-                <Link to="/Search" state={{name :  information.memberInfo.name}}>
+                <Link to="/Search" state={information.memberInfo.id}>
                     <button id="Search"></button>
                 </Link>
                 <Link to="/Main">
@@ -33,16 +34,22 @@ function Main() {
                 <div id="MyProfile">
                     <Profile key={information.memberInfo.id} info={information.memberInfo} me={1}/>
                 </div>
-                <Groups groupInfo={information.groupInfo} friendInfo={information.groupFriendInfo}/>
+                <Groups groupInfo={information.groupInfo} friendInfo={information.groupFriendsList}/>
             </div>
         )
     }
-
+    const MainContent=()=>{
+        return (
+            <>
+                {isMobile &&  <div id="Mobile"><Common/></div>}
+                {isDesktop && <div id="Desktop"><Common/></div>}
+            </>
+        )
+    }
     //null대신 loading컴포넌트 넣기
     return (
         <div id="Main">
-            {information != null ? isMobile && <div id="Mobile"><Common/></div> : null}
-            {information != null ? isDesktop && <div id="Desktop"><Common/></div> : null}
+            {information != null ? <MainContent/> : <Loading/>}
         </div>
     )
 }

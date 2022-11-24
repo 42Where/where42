@@ -1,5 +1,6 @@
 import axios from "axios";
 import {useNavigate} from "react-router";
+import Loading from "./Loading";
 
 function Oauth() {
     const nav = useNavigate();
@@ -13,9 +14,7 @@ function Oauth() {
         });
 
     return (
-        <div>
-            기다려 주세용!
-        </div>
+        <Loading/>
     )
 }
 

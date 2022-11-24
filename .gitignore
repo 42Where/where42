@@ -39,7 +39,9 @@ out/
 .DS_Store
 
 ### node js ###
-/React/where42/node_modules/
 /src/main/where42/node_modules/
 /src/main/where42/build/
-/src/main/resources/
+/src/main/resources/static/
+
+# application.yml
+/src/main/resources/application.yml

@@ -43,7 +43,7 @@ function Login() {
             }).catch((Error)=> {
                     const errData = Error.response.data;
                     if ('data' in errData) {
-                        nav('/Agree');
+                        nav('/Agree', {state : errData.data});
                     }
                     else {
                         window.location.href=serverurl;

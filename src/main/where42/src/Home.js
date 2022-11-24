@@ -1,5 +1,6 @@
 import axios from "axios";
 import {useNavigate} from "react-router";
+import Loading from "./Loading";
 
 function Home() {
     const nav = useNavigate();
@@ -11,11 +12,11 @@ function Home() {
                 nav('/Login');
             }
             else {
-                console.log(err);
+                // console.error(err);
             }
         });
 
-    return (null)
+    return (<Loading/>)
 }
 
 export default Home;
