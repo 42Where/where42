@@ -31,10 +31,14 @@ public class GroupRepository {
             System.out.println(member.getFriendName());
             em.remove(member);
         }
-        Groups group = em.createQuery("select g from Groups g where g.id = :groupId", Groups.class)
-                .setParameter("groupId", groupId)
-                .getSingleResult();
-        em.remove(group);
+        try {
+            Groups group = em.createQuery("select g from Groups g where g.id = :groupId", Groups.class)
+                    .setParameter("groupId", groupId)
+                    .getSingleResult();
+            em.remove(group);
+        } catch (NoResultException e) {
+            System.out.println(e);
+        }
     }
 
     public Groups findById(Long id) {
