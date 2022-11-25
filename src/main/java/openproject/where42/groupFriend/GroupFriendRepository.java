@@ -134,7 +134,7 @@ public class GroupFriendRepository {
                 });
                 return friends;
         } catch (NoResultException e) {
-            return null;
+            return new ArrayList<GroupFriend>();
         }
     }
 
