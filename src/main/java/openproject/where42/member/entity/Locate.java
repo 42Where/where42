@@ -35,4 +35,21 @@ public class Locate {
         this.cluster = cluster;
         this.spot = spot;
     }
+
+    public static Locate parseLocate(String location) {
+        if (location == null) {
+            return new Locate(null, 0, 0, null);
+        }
+        int i = location.charAt(1) - '0';
+        if ((i >= 1 && location.charAt(2) != '0') && i <= 6) {
+            if (i <= 2)
+                return new Locate(Planet.gaepo, 2, 0, location);
+            else if (i <= 4)
+                return new Locate(Planet.gaepo, 4, 0, location);
+            else
+                return new Locate(Planet.gaepo, 5, 0, location);
+        } else if (i >= 7 && i <= 9)
+            return new Locate(Planet.seocho, 0, i, location);
+        return new Locate(Planet.seocho, 0, 10, location);
+    }
 }

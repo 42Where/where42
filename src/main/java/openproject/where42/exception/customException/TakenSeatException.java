@@ -4,7 +4,7 @@ import lombok.Getter;
 import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 @Getter
-public class TakenSeatException extends RuntimeException{
+public class TakenSeatException extends Exception{
     private int errorCode;
 
     public TakenSeatException() {

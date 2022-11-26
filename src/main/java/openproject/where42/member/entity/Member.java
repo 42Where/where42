@@ -3,6 +3,7 @@ package openproject.where42.member.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import openproject.where42.api.Define;
 import openproject.where42.member.entity.enums.MemberLevel;
 
 import javax.persistence.*;
@@ -14,29 +15,21 @@ import java.util.Date;
 public class Member extends User {
     @Enumerated
     private MemberLevel level;
-
     private String msg;
-
     private Long defaultGroupId;
-
     private Long starredGroupId;
-
     private String img;
-
     private int inOrOut;
-    private String location;
-
     @Embedded
     private Locate locate = new Locate(null, 0, 0, null);
-
+    private String location;
     @Temporal(TemporalType.TIMESTAMP)
     Date updateTime;
-
     @Temporal(TemporalType.TIMESTAMP)
     Date createTime;
 
 
-    public Member(String name, String img, MemberLevel level) {
+    public Member(String name, String img, String location, MemberLevel level) {
         this.name = name;
         this.img = img;
         this.level = level;
@@ -56,9 +49,16 @@ public class Member extends User {
         this.location = location;
         this.updateTime = new Date();
     }
-    public void updateInOrOut(int inOrOut) {
+
+    public void updateInOrOut(int inOrOUt) {
+        this.inOrOut = inOrOUt;
+        this.location = Define.PARSED;
+    }
+
+    public void updateStatus(int inOrOut) {
         this.inOrOut = inOrOut;
-        this.location = null;
+        this.location = Define.PARSED;
+        this.updateTime = new Date();
     }
 
     public Long timeDiff() {

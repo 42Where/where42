@@ -5,7 +5,7 @@ import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 
 @Getter
-public class DuplicateGroupNameException extends RuntimeException {
+public class DuplicateGroupNameException extends Exception {
     private int errorCode;
 
     public DuplicateGroupNameException() {
