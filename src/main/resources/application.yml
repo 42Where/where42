@@ -29,23 +29,22 @@ resilience4j:
 
   ratelimiter:
     instances:
-      42apiLimiter:
+      42apiRateLimiter:
         limit-for-period: 2
-        register-health-indicator: true
         limit-refresh-period:
           1s
         timeout-duration:
           1s
+        register-health-indicator: true
+    rate-limiter-aspect-order: 1
 
   retry:
     instances:
       42apiRetry:
         max-attempts: 10
-        retry-exceptions:
-          - org.springframework.web.client.HttpClientErrorException
-          - io.github.resilience4j.ratelimiter.RequestNotPermitted
         wait-duration:
           2s
+    retry-aspect-order: 2
 
 management:
   endpoints:

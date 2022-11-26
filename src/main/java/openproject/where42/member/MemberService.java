@@ -2,9 +2,9 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.Define;
-import openproject.where42.api.dto.Utils;
+import openproject.where42.api.Define;
 import openproject.where42.api.dto.Seoul42;
+import openproject.where42.exception.customException.DefaultGroupNameException;
 import openproject.where42.exception.customException.OutStateException;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.exception.customException.TakenSeatException;
@@ -14,6 +14,7 @@ import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.groupFriend.entity.GroupFriend;
 import openproject.where42.groupFriend.entity.GroupFriendDto;
+import openproject.where42.member.entity.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 import openproject.where42.member.entity.enums.MemberLevel;
@@ -35,23 +36,20 @@ public class MemberService {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
     private final GroupFriendRepository groupFriendRepository;
+    private final FlashDataService flashDataService;
     private final ApiService api;
 
     @Transactional
-    public Long saveMember(String name, String img, String location) { // me 다시 부르지 않기 위해 img, location 정리하기
-        Member member = new Member(name, img, MemberLevel.member); // member img 수정되면 이거 살리기
+    public Long saveMember(String name, String img, String location) throws DefaultGroupNameException {
+        Member member = new Member(name, img, location, MemberLevel.member);
         Long memberId = memberRepository.save(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
         member.setDefaultGroup(defaultGroupId, starredGroupId);
-        if (api.getHaneInfo(name) != null && location != null)
-            updateLocate(member, Utils.parseLocate(location));
-        else
-            initLocate(member);
         return memberId;
     }
 
-    public Member findBySession(HttpServletRequest req) {
+    public Member findBySession(HttpServletRequest req) throws SessionExpiredException {
         HttpSession session = req.getSession(false);
         if (session == null)
             throw new SessionExpiredException();
@@ -60,51 +58,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void updatePersonalMsg(HttpServletRequest req, String msg) {
+    public void updatePersonalMsg(HttpServletRequest req, String msg) throws SessionExpiredException {
         Member member = findBySession(req);
-
         member.updatePersonalMsg(msg);
-    }
-
-    @Transactional
-    public int checkLocate(HttpServletRequest req, String token42) {
-        Member member = findBySession(req);
-        Planet planet = api.getHaneInfo(member.getName());
-
-        if (planet != null) {// hane 출근 확인 로직
-            Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
-            if (member42.getLocation() != null) {
-                updateLocate(member, Utils.parseLocate(member42.getLocation()));
-                member.updateInOrOut(Define.IN);
-                throw new TakenSeatException();
-            }
-            member.updateInOrOut(Define.IN);
-            return planet.getValue();
-        }
-        initLocate(member);
-        member.updateInOrOut(Define.OUT);
-        throw new OutStateException();
-    }
-
-    @Transactional
-    public void updateLocation(Member member, String location) {
-        member.updateLocation(location);
-    }
-
-    @Transactional
-    public void parseStatus(Member member) {
-        Planet planet = api.getHaneInfo(member.getName());
-
-        if (planet != null) {
-            if (member.getLocation() != null)
-                updateLocate(member, Utils.parseLocate(member.getLocation()));
-            else
-                updateLocate(member, new Locate(planet, 0, 0, null));
-            member.updateInOrOut(Define.IN);
-        } else {
-            initLocate(member);
-            member.updateInOrOut(Define.OUT);
-        }
     }
 
     @Transactional
@@ -113,8 +69,69 @@ public class MemberService {
     }
 
     @Transactional
-    public void initLocate(Member member) {
-        member.getLocate().updateLocate(null, 0, 0, null);
+    public void initLocate(Member member, Planet planet) {
+        member.getLocate().updateLocate(planet, 0, 0, null);
+    }
+
+    @Transactional
+    public void updateLocation(Member member, String location) {
+        member.updateLocation(location);
+    }
+
+    // api 호출, [inOrOut 갱신, location(parsed), updateTime 갱신]
+    @Transactional
+    public int checkLocate(HttpServletRequest req, String token42) throws SessionExpiredException, OutStateException, TakenSeatException {
+        Member member = findBySession(req);
+        Planet planet = api.getHaneInfo(member.getName());
+        if (planet == null) {
+            initLocate(member, null);
+            member.updateStatus(Define.OUT);
+            throw new OutStateException();
+        }
+        Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
+        if (member42.getLocation() != null) {
+            updateLocate(member, Locate.parseLocate(member42.getLocation()));
+            throw new TakenSeatException();
+        }
+        member.updateStatus(Define.IN);
+        return planet.getValue();
+    }
+
+    // 멤버 인포 조회용 api 호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
+    @Transactional
+    public void parseStatus(Member member, String token42) {
+        Planet planet = api.getHaneInfo(member.getName());
+        if (planet != null) {
+            Seoul42 seoul42 = api.get42ShortInfo(token42, member.getName());
+            if (seoul42.getLocation() != null)
+                updateLocate(member, Locate.parseLocate(seoul42.getLocation()));
+            else {
+                if (member.getLocate().getPlanet() == null)
+                    initLocate(member, planet);
+            }
+            member.updateStatus(Define.IN);
+        } else {
+           initLocate(member, null);
+           member.updateStatus(Define.OUT);
+        }
+    }
+
+    // api 미호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
+    @Transactional
+    public void parseStatus(Member member) {
+        Planet planet = api.getHaneInfo(member.getName());
+        if (planet != null) {
+            if (member.getLocation() != null)
+                updateLocate(member, Locate.parseLocate(member.getLocation()));
+            else {
+                if (member.getLocate().getPlanet() == null)
+                    initLocate(member, planet);
+            }
+            member.updateInOrOut(Define.IN);
+        } else {
+            initLocate(member, planet);
+            member.updateInOrOut(Define.OUT);
+        }
     }
 
     public List<MemberGroupInfo> findAllGroupFriendsInfo(Member member) {
@@ -130,12 +147,23 @@ public class MemberService {
         return groupsInfo;
     }
 
+    @Transactional
     public List<GroupFriendDto> findAllFriendsInfo(Member member, String token42) {
         List<GroupFriendDto> friendsInfo = new ArrayList<GroupFriendDto>();
         List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(member.getDefaultGroupId());
-        if (friends != null){
-            for (GroupFriend f : friends)
-                friendsInfo.add(new GroupFriendDto(token42, f, memberRepository.findMember(f.getFriendName())));
+        for (GroupFriend f : friends) {
+            Member friend = memberRepository.findMember(f.getFriendName());
+            if (friend != null) {
+                if (friend.timeDiff() < 3) {
+                    if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
+                        parseStatus(friend);
+                } else
+                    parseStatus(friend, token42);
+                friendsInfo.add(new GroupFriendDto(friend, f.getId()));
+            } else {
+                FlashData flash = flashDataService.checkFlashFriend(f.getFriendName(), token42);
+                friendsInfo.add(new GroupFriendDto(flash, f.getId()));
+            }
         }
         return friendsInfo;
     }

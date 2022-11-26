@@ -5,7 +5,7 @@ import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 
 @Getter
-public class OutStateException extends RuntimeException{
+public class OutStateException extends Exception {
     private int errorCode;
 
     public OutStateException() {

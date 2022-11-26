@@ -1,8 +1,8 @@
 package openproject.where42.member;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.dto.Define;
+import openproject.where42.api.Define;
+import openproject.where42.exception.customException.*;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.groupFriend.entity.GroupFriendDto;
@@ -33,7 +33,7 @@ public class MemberApiController {
     private final TokenService tokenService;
 
     @PostMapping(Define.versionPath + "/member")
-    public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
+    public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) throws DefaultGroupNameException {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage().getLink(), seoul42.getLocation());
         session.setAttribute("id", memberId);
         session.setMaxInactiveInterval(30 * 60); // 테스트 위해서 처음에 2분만 유지. 이후 디폴트 30분으로 하기 위해 삭제
@@ -41,57 +41,57 @@ public class MemberApiController {
     }
 
     // 메인 정보 조회
-    @GetMapping(Define.versionPath + "/member")
-    public ResponseMemberInfo memberInformation(HttpServletRequest req, HttpServletResponse rep, @CookieValue(value = "ID", required = false) String key) {
+    @GetMapping(Define.versionPath + "/member/member")
+    public MemberInfo memberInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key)
+            throws CookieExpiredException, SessionExpiredException {
         Member member = memberService.findBySession(req);
         String token42 = tokenService.findAccessToken(key);
         if (token42 == null)
-            tokenService.inspectToken(rep, key);
-        MemberInfo memberInfo = new MemberInfo(member, token42);
-        if (memberInfo.isInitFlag())
-            memberService.initLocate(member);
-        List<MemberGroupInfo> groupList = memberService.findAllGroupFriendsInfo(member); // 그룹별 친구 오름차순 된거
-        List<GroupFriendDto> groupFriendsList = memberService.findAllFriendsInfo(member, token42); // 해당 오너의 기본 그룹에 속한 친구들 정보 DTO로
-        return new ResponseMemberInfo(memberInfo, groupList, groupFriendsList);
+            tokenService.inspectToken(res, key);
+        memberService.parseStatus(member, token42);
+        return new MemberInfo(member);
     }
 
-    @Getter
-    static class ResponseMemberInfo {
-        MemberInfo memberInfo;
-        List<MemberGroupInfo> groupInfo;
-        List<GroupFriendDto> groupFriendsList;
+    @GetMapping(Define.versionPath + "/member/group")
+    public List<MemberGroupInfo> memberGroupInformation(HttpServletRequest req) throws SessionExpiredException {
+        Member member = memberService.findBySession(req);
+        return memberService.findAllGroupFriendsInfo(member);
+    }
 
-        public ResponseMemberInfo(MemberInfo memberInfo, List<MemberGroupInfo> groupInfo, List<GroupFriendDto> groupFriendsList) {
-            this.memberInfo = memberInfo;
-            this.groupInfo = groupInfo;
-            this.groupFriendsList = groupFriendsList;
-        }
+    @GetMapping(Define.versionPath + "/member/friend")
+    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key)
+            throws CookieExpiredException, SessionExpiredException {
+        Member member = memberService.findBySession(req);
+        String token42 = tokenService.findAccessToken(key);
+        if (token42 == null)
+            tokenService.inspectToken(res, key);
+        return memberService.findAllFriendsInfo(member, token42);
     }
 
     @GetMapping(Define.versionPath + "/member/setting/msg") // 상태메시지 조회
-    public String getPersonalMsg(HttpServletRequest req) {
+    public String getPersonalMsg(HttpServletRequest req) throws SessionExpiredException {
         Member member = memberService.findBySession(req);
         return member.getMsg();
     }
 
     @PostMapping(Define.versionPath + "/member/setting/msg") // 상태메시지 설정
-    public ResponseEntity updatePersonalMsg(HttpServletRequest req, @RequestBody String msg) {
+    public ResponseEntity updatePersonalMsg(HttpServletRequest req, @RequestBody String msg) throws SessionExpiredException {
         memberService.updatePersonalMsg(req, msg);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_MSG), HttpStatus.OK);
     }
 
     @GetMapping(Define.versionPath + "/member/setting/locate") // 위치 설정 가능 여부 조회
-    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep,
-                                      @CookieValue(value = "ID", required = false) String key) {
+    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep, @CookieValue(value = "ID", required = false) String key)
+            throws CookieExpiredException, SessionExpiredException, OutStateException, TakenSeatException {
         String token42 = tokenService.findAccessToken(key);
         if (token42 == null)
             tokenService.inspectToken(rep, key);
-        int inOrOut = memberService.checkLocate(req, token42);
-        return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, inOrOut), HttpStatus.OK);
+        int planet = memberService.checkLocate(req, token42);
+        return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, planet), HttpStatus.OK);
     }
 
     @PostMapping(Define.versionPath + "/member/setting/locate") // 위치 설정
-    public ResponseEntity updateLocate(HttpServletRequest req, @RequestBody Locate locate) {
+    public ResponseEntity updateLocate(HttpServletRequest req, @RequestBody Locate locate) throws SessionExpiredException {
         Member member = memberService.findBySession(req);
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);

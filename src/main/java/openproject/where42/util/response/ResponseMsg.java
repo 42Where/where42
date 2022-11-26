@@ -19,6 +19,7 @@ public class ResponseMsg {
     public static final String DUPLICATE_GROUP_NAME = "그룹 이름 중복";
     public static final String DEFAULT_GROUP_NAME = "사용자 설정 불가 이름";
     public static final String CREATE_GROUP_FRIEND = "친구 생성 성공";
+    public static final String REGISTERED_GROUP_FRIEND = "이미 등록된 친구";
     public static final String ADD_FRIENDS_TO_GROUP = "그룹에 친구 추가 성공";
     public static final String DELETE_FRIENDS_FROM_GROUP = "그룹에서 친구 삭제 성공";
     public static final String DELETE_GROUP_FRIENDS = "친구 삭제 성공";

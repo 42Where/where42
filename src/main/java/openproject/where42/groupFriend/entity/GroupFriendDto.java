@@ -1,13 +1,13 @@
 package openproject.where42.groupFriend.entity;
 
-import lombok.Data;
-import openproject.where42.api.dto.Utils;
+import lombok.Getter;
+import lombok.Setter;
+import openproject.where42.member.entity.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 
-@Data
+@Getter @Setter
 public class GroupFriendDto {
-
 	private Long id;
 	private String name;
 	private String img;
@@ -15,13 +15,20 @@ public class GroupFriendDto {
 	private Locate locate;
 	private int inOrOut;
 
-	public GroupFriendDto(String token42, GroupFriend friend, Member member) {
-		Utils parseInfo = new Utils(token42, friend.getFriendName(), member);
-		this.id = friend.getId();
-		this.name = friend.getFriendName();
-		this.img = parseInfo.getImg();
-		this.msg = parseInfo.getMsg();
-		this.locate = parseInfo.getLocate();
-		this.inOrOut = parseInfo.getInOrOut();
+	public GroupFriendDto(Member friend, Long id) {
+		this.id = id;
+		this.name = friend.getName();
+		this.img = friend.getImg();
+		this.msg = friend.getMsg();
+		this.locate = friend.getLocate();
+		this.inOrOut = friend.getInOrOut();
+	}
+
+	public GroupFriendDto(FlashData flash, Long id) {
+		this.id = id;
+		this.name = flash.getName();
+		this.img = flash.getImg();
+		this.locate = flash.getLocate();
+		this.inOrOut = flash.getInOrOut();
 	}
 }

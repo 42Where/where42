@@ -35,7 +35,7 @@ public class TokenService {
 		return seoul42;
 	}
 
-	public void checkRefreshToken(String key) {
+	public void checkRefreshToken(String key) throws CookieExpiredException {
 		if (key == null || !tokenRepository.checkRefreshToken(key))
 			throw new CookieExpiredException();
 	}
@@ -53,7 +53,7 @@ public class TokenService {
 		return aes.encoding(oAuthToken.getAccess_token());
 	}
 
-	public void inspectToken(HttpServletResponse res, String key) {
+	public void inspectToken(HttpServletResponse res, String key) throws CookieExpiredException {
 		checkRefreshToken(key);
 		addCookie(res, key);
 	}
