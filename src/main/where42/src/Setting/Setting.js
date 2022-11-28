@@ -3,7 +3,6 @@ import { useMediaQuery } from 'react-responsive';
 import { useLocation, useNavigate } from 'react-router';
 import { Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { SettingFloor, SettingCluster, SettingSpot} from "./Setting_Locate";
 import { SettingGnF, SettingFriend, SettingGroup } from "./Setting_Group_Friend";
 import instance from "../AxiosApi";
@@ -50,7 +49,7 @@ function Setting() {
             });
         };
         const Logout = () => {
-            axios.get('/v1/logout')
+            instance.get('logout')
                 .then(() => {
                     nav('/Login');
                 });
@@ -93,23 +92,19 @@ function Setting() {
     function SettingMsg() {
         const [msg, setMsg] = useState("");
         useEffect(() => {
-            axios.get('/v1/member/setting/msg')
+            instance.get('member/setting/msg')
                 .then((res) => {
                     setMsg(res.data.msg);
-                }).catch(() => {
-                    nav("/Login");
                 });
         }, []);
         const handleChange = ({target : {value}}) => setMsg(value);
         const handleSubmit = (event) => {
             event.preventDefault(); /*새로고침 방지*/
-            axios.post('/v1/member/setting/msg', {msg})
+            instance.post('member/setting/msg', {msg})
                 .then(() => {
                     alert("수정 완료!");
                     nav("/setting");
-                }).catch(() => {
-                    nav("/Login");
-            });
+                });
         };
 
         return (
