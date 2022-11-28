@@ -57,6 +57,7 @@ function Setting() {
 
         return (
             <div id="SettingChoice">
+                <button id="Home" onClick={()=>{nav('/Main')}}></button>
                 <div id="Comment">반가워요, {name}! 👋</div>
                 <div id="BoxWrapper">
                     <div className='Box' onClick={() => {SetLocateAlert()}}>
@@ -122,16 +123,16 @@ function Setting() {
     return (
         <div id="Setting">
             <Routes>
-                <Route path={""} element={<div id={size}><SettingChoice/></div>}/>}
-                <Route path={"SetFloor"} element={<div id={size}><SettingFloor/></div>}/>}
-                <Route path={"SetCluster"} element={<div id={size}><SettingCluster/></div>}/>}
-                <Route path={"SetSpot"} element={<div id={size}><SettingSpot/></div>}/>}
-                <Route path={"SetMsg"} element={<div id={size}><SettingMsg/></div>}/>}
-                <Route path={"SetGnF"} element={<div id={size}><SettingGnF/></div>}/>}
-                <Route path={"SetGroup"} element={<div id={size}><SettingGroup/></div>}/>}
-                <Route path={"SetFriend"} element={<div id={size}><SettingFriend type="fDel"/></div>}/>}
-                <Route path={"SetGroupAdd"} element={<div id={size}><SettingFriend type="add"/></div>}/>}
-                <Route path={"SetGroupDel"} element={<div id={size}><SettingFriend type="del"/></div>}/>}
+                <Route path={""} element={<div id={size}><SettingChoice/></div>}/>
+                <Route path={"SetFloor"} element={<div id={size}><SettingFloor/></div>}/>
+                <Route path={"SetCluster"} element={<div id={size}><SettingCluster/></div>}/>
+                <Route path={"SetSpot"} element={<div id={size}><SettingSpot/></div>}/>
+                <Route path={"SetMsg"} element={<div id={size}><SettingMsg/></div>}/>
+                <Route path={"SetGnF"} element={<div id={size}><SettingGnF/></div>}/>
+                <Route path={"SetGroup"} element={<div id={size}><SettingGroup/></div>}/>
+                <Route path={"SetFriend"} element={<div id={size}><SettingFriend type="fDel"/></div>}/>
+                <Route path={"SetGroupAdd"} element={<div id={size}><SettingFriend type="add"/></div>}/>
+                <Route path={"SetGroupDel"} element={<div id={size}><SettingFriend type="del"/></div>}/>
             </Routes>
         </div>
     )

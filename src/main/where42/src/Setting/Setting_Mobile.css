@@ -40,7 +40,18 @@
     outline: none;
 }
 
-/*SettingChoice*/
+/*SettingChoice, SettingGnF*/
+
+#Setting #Mobile #SettingChoice > button {
+    width: 7%;
+    padding-bottom: 7%;
+    position: absolute;
+    top: 3%;
+    right: 3%;
+    background-color: transparent;
+    background-image: url("../../public/img/aza.jpeg");
+    border: 0;
+}
 
 #Setting #Mobile :is(#SettingChoice, #SettingGnF) #Comment {
     width: 120%;
