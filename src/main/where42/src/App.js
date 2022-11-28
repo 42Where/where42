@@ -14,7 +14,6 @@ function App() {
         console.log = function no_console() {};
         console.warn = function no_console() {};
         console.error = function no_console() {};
-        console.clear = function no_console() {};
     }
 
     return (
