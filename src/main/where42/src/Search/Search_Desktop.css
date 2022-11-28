@@ -73,6 +73,7 @@
     background-color: transparent;
     width : 85%;
     padding: 0;
+    ime-mode: inactive;
     /*height : 100%;*/
     display: inline-block;
     font-family: GmarketSansMedium;
