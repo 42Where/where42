@@ -53,6 +53,7 @@ export function SettingGroup() {
 
     return (
         <div id="SettingGroup">
+            <button id="Home" onClick={()=>{nav('/Main')}}></button>
             <div id="Comment">그룹 관리</div>
             <form onSubmit={handleSubmit}>
                 <input type="text" maxLength="10" placeholder="그룹명은 10자까지 입력 가능합니다." spellcheck="false" value={name} onChange={handleChange}/>
@@ -97,6 +98,7 @@ export function SettingFriend(props) {
             .then((res) => {
                 setArr(res.data);
             });
+            // eslint-disable-next-line
     }, []);
 
     const [list, setList] = useState(new Set());
