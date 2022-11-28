@@ -19,13 +19,10 @@ const SearchProfile = (props) => {
         instance.post('groupFriend', null, {params: {friendName : info.login, img: info.image.link},
         }).then((response)=>{
             if (response.status === 201)
-                //친구추가 성공
-                console.debug(response.data)
+                console.debug("정보 확인 완료")
         }).catch((Error)=>{
             if (Error.response.status === 401)
-                //세션 없음 401에러 -> 로그인으로 보내서 재 로그인하게하기
                 nav('/Login');
-            // console.log(Error);
         })
         if (isDesktop)
         {
@@ -63,9 +60,7 @@ const SearchProfile = (props) => {
         instance.post('search/select', body)
             .then((response)=>{
                 setDetail(response.data);
-            }).catch((Error)=>{
-                // console.error(Error)
-        })
+            })
     }
 
     let detailCheck;

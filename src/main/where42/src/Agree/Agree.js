@@ -8,13 +8,11 @@ function Agree()
 {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-
     function Common(){
         const location = useLocation();
         const nav = useNavigate();
         const info = location.state;
         const AgreeClick=()=>{
-            console.log(info);
             const body = { login: info.login , image : info.image, location : info.location};
             instance.post('member', body)
                 .then((response)=>{
