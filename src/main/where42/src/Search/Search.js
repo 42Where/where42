@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import SearchProfile from './SearchProfile';
@@ -6,14 +6,13 @@ import './Search.css';
 import './Search_Desktop.css';
 import './Search_Mobile.css';
 import instance from "../AxiosApi";
-import {useLocation, useNavigate} from "react-router";
+import {useLocation} from "react-router";
 import Loading from "../Etc/Loading";
 
 function Search() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
     const location = useLocation();
-    const nav = useNavigate();
     const [information, setInformation] = useState([]);
     const [loading, setLoading] = useState(false);
     const memberId = location.state;
@@ -24,39 +23,30 @@ function Search() {
 
     function SearchBox({loading, setLoading})
     {
-        const inputRef = useRef(null);
         const [searchId, setSearch] = useState("");
-
-        useEffect(()=>{
-            inputRef.current.disabled = false;
-        }, []);
-
         const SubmitId = (event) => {
-            if (searchId === "" || inputRef.current.disabled === true)
+            if (searchId === "" || loading === true)
+            {
+                event.preventDefault();
                 return ;
-            event.preventDefault();
-            inputRef.current.disabled = true;
+            }
             setLoading(true);
-            instance.get('search', {params : {begin : searchId}}).then((response)=>{
+            instance.get('search', {params : {begin : searchId}})
+                .then((response)=>{
                 if (response.data.length === 0)
                     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
                 setLoading(false);
                 setInformation(response.data);
-            }).catch((Error)=>{
-                // console.log(Error);
-                nav('/Login')
-            })
-            inputRef.current.disabled = false;
+            }).catch((Error)=> {alert("api 호출 횟수 초과로 오류가 발생했습니다. 잠시 후 다시 시도해주세요");})
         }
 
         const searchChange=(e)=>{
-            const value = e.target.value.replace(/[^a-zA-Z2-9]/gi, '');
-            setSearch(value);
+            setSearch(e.target.value);
         }
 
         const searchKeyDown = (event) =>{
             let charCode = event.keyCode;
-            if (charCode === 'Enter')
+            if (charCode === 13)
                 SubmitId(event);
         }
 
@@ -66,14 +56,14 @@ function Search() {
                     <div id="SearchMascot">
                         <img src="img/character.svg" alt="character"></img>
                     </div>
-                    <form onSubmit={SubmitId}>
+                    <form>
                         <input id="SearchInput" type="text"
                                maxlength='10' autoComplete={"off"}
                                spellCheck={"false"} placeholder="아이디를 입력해 주세요"
                                value={searchId}
                                onKeyDown={searchKeyDown}
                                onChange={searchChange} autoFocus/>
-                        <button id="SearchButton" type="submit" ref={inputRef} disabled/>
+                        <button id="SearchButton" type="submit" onClick={SubmitId}/>
                     </form>
                 </div>
             </div>
@@ -93,15 +83,6 @@ function Search() {
             </div>
         )
     }
-    //
-    // function SearchLoading(){
-    //     return (
-    //         <div id={"LoadingWrapper"}>
-    //             <div id={"LoadingContent"}>로딩 스피너</div>
-    //             <div id={"LoadingCharacter"}>캐릭터</div>
-    //         </div>
-    //     )
-    // }
 
     function Common() {
         return (
@@ -114,7 +95,6 @@ function Search() {
                 </div>
                 <SearchBox loading={loading} setLoading={setLoadingParent}/>
                 {loading? <Loading/> : null}
-                {/* 데스크탑 버전에서는 땀방울이 안보임 ㅜㅜ*/}
                 {loading === false && information? <SearchResults memberId={memberId}/> : null}
             </div>
         )

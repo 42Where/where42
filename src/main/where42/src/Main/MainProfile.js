@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 
 const MainProfile = (props) => {
     const info = props.info;
-    // console.log(info);
     const locate = CombineLocate(info.locate, info.inOrOut);
     let meOrNot = null;
     let msg = "";
