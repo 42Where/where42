@@ -16,17 +16,17 @@ function Main() {
     const [friendInfo, setFriendInfo] = useState(null);
     useEffect(() => {
         //memberinfo
-        instance.get('v1/member/member').then((response)=>{
+        instance.get('member/member').then((response)=>{
             setMemberInfo(response.data);
             console.debug(response.data);
         })
         //groupinfo
-        instance.get('v1/member/group').then((response)=>{
+        instance.get('member/group').then((response)=>{
             setGroupInfo(response.data);
             console.debug(response.data);
         })
         //groupfriendinfo
-        instance.get('v1/member/friend').then((response)=>{
+        instance.get('member/friend').then((response)=>{
             setFriendInfo(response.data);
             console.debug(response.data);
         })

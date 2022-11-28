@@ -9,7 +9,7 @@ instance.interceptors.response.use(
             return (res);
         }, (err) => {
             console.clear();
-            if (err.response.status === 401 || err.response.status === 500)
+            if (err.response.status === 401 || err.response.status === 500 || err.response.status === 501)
                 window.location.replace('/Login');
             else
                 return Promise.reject(err);

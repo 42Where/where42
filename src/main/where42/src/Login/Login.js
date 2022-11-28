@@ -39,10 +39,10 @@ function Login() {
         function clickUp() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button.svg')";
-            axios.get(  'v1/login' )
-                .then((response)=>{
+            axios.get(  '/v1/login' )
+                .then((res) => {
                     nav('/Main');
-                }).catch((Error)=> {
+                }).catch((Error) => {
                     const errData = Error.response.data;
                     if ('data' in errData) {
                         nav('/Agree', {state : errData.data});
@@ -50,7 +50,7 @@ function Login() {
                     else {
                         window.location.href=serverurl;
                     }
-                })
+                });
         }
 
         return (

@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
-import instance from "./AxiosApi";
+import instance from "../AxiosApi";
 
 export function SettingGnF() {
     return (

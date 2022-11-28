@@ -1,6 +1,6 @@
 import spot from "./spot.json";
 import {useLocation, useNavigate} from "react-router";
-import instance from "./AxiosApi";
+import instance from "../AxiosApi";
 
 export function SettingFloor() {
     const loc = useLocation();
