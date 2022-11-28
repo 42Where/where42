@@ -36,7 +36,7 @@ const MainProfile = (props) => {
     );
 };
 
-function CombineLocate(locate, inOutState) {
+export function CombineLocate(locate, inOutState) {
     let position = "";
     if (inOutState === 2)
         position = "자리 정보 없음";
