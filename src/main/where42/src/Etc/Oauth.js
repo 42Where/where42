@@ -7,11 +7,11 @@ function Oauth() {
     let code = new URL(window.location.href).searchParams.get("code");
     axios.get('/v1/auth/code', {params : {code: code}})
         .then((response) => {
-            nav('/main');
+            nav('/Main');
         }).catch((Error)=> {
             console.clear();
             let data = Error.response.data.data;
-            nav('/agree', {state : data});
+            nav('/Agree', {state : data});
         });
 
     return (
