@@ -14,7 +14,6 @@ function Agree()
         const nav = useNavigate();
         const info = location.state;
         const AgreeClick=()=>{
-            console.log(info);
             const body = { login: info.login , image : info.image, location : info.location};
             instance.post('member', body)
                 .then((response)=>{

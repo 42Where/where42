@@ -19,17 +19,14 @@ function Main() {
         //memberinfo
         instance.get('member/member').then((response)=>{
             setMemberInfo(response.data);
-            console.debug(response.data);
         })
         //groupinfo
         instance.get('member/group').then((response)=>{
             setGroupInfo(response.data);
-            console.debug(response.data);
         })
         //groupfriendinfo
         instance.get('member/friend').then((response)=>{
             setFriendInfo(response.data);
-            console.debug(response.data);
         })
     }, []);
 
