@@ -51,4 +51,14 @@ public class ControllerExceptionHandler {
     protected ResponseEntity handleRegisteredFriendException(RegisteredFriendException e) {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
+
+    @ExceptionHandler(JsonDeserializeException.class)
+    protected ResponseEntity handleJsonDeserializeException(JsonDeserializeException e) {
+        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(TooManyRequestException.class)
+    protected ResponseEntity handleTooManyReqeustException(TooManyRequestException e) {
+        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
 }

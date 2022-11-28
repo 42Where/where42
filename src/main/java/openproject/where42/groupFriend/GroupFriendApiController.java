@@ -31,8 +31,7 @@ public class GroupFriendApiController {
 
 	// 검색을 통한 친구 등록, 기본 그룹에 등록
 	@PostMapping(Define.versionPath + "/groupFriend")
-	public ResponseEntity createFriend(HttpServletRequest req, @RequestParam String friendName, @RequestParam String img)
-	throws SessionExpiredException, RegisteredFriendException {
+	public ResponseEntity createFriend(HttpServletRequest req, @RequestParam String friendName, @RequestParam String img) {
 		Member member = memberService.findBySession(req);
 		if (memberRepository.checkFriendByMemberIdAndName(member.getId(), friendName))
 			throw new RegisteredFriendException();
@@ -42,7 +41,7 @@ public class GroupFriendApiController {
 
 	// 해당 그룹에 포함되지 않는 친구 이름 목록 전체 반환
 	@GetMapping(Define.versionPath + "/groupFriend/notIncludes/group/{groupId}")
-	public List<String> getNotIncludeGroupFriendNames(HttpServletRequest req, @PathVariable("groupId") Long groupId) throws SessionExpiredException {
+	public List<String> getNotIncludeGroupFriendNames(HttpServletRequest req, @PathVariable("groupId") Long groupId) {
 		Member member = memberService.findBySession(req);
 		return groupFriendRepository.notIncludeFriendByGroup(member, groupId); // repo 함수 이름도 통일 할까?
 	}
@@ -69,7 +68,7 @@ public class GroupFriendApiController {
 
 	// 해당 친구가 포함되지 않은 그룹 목록 front 반환, 친구 선택해서 그룹 추가 하게 하는 거, 프론트 아직 구현 안함
 	@GetMapping(Define.versionPath + "/groupFriend/notIncludeGroup")
-	public List<String> notIncludeGroupByFriend(HttpServletRequest req, @RequestParam String friendName) throws SessionExpiredException {
+	public List<String> notIncludeGroupByFriend(HttpServletRequest req, @RequestParam String friendName) {
 		return groupFriendRepository.notIncludeGroupByMemberAndFriendName(memberService.findBySession(req), friendName);
 	}
 
@@ -87,14 +86,14 @@ public class GroupFriendApiController {
 
 	// 기본 그룹 친구 이름 목록 반환
 	@GetMapping(Define.versionPath + "/groupFriend/friendList")
-	public List<String> getAllDefaultFriends(HttpServletRequest req) throws SessionExpiredException {
+	public List<String> getAllDefaultFriends(HttpServletRequest req) {
 		Member member = memberService.findBySession(req);
 		return groupFriendRepository.findGroupFriendsByGroupId(member.getDefaultGroupId());
 	}
 
 	// 기본 그룹을 포함한 모든 그룹에서 삭제
 	@PostMapping(Define.versionPath + "/groupFriend/friendList") // 프론트 기본에서 삭제하는 경우와 사용자정의 그룹에서만 삭제하는 경우 필히 구분지어서 매핑 필
-	public ResponseEntity deleteFriends(HttpServletRequest req, @RequestBody List<String> friendNames) throws SessionExpiredException {
+	public ResponseEntity deleteFriends(HttpServletRequest req, @RequestBody List<String> friendNames) {
 		Member member = memberService.findBySession(req);
 		groupFriendService.deleteFriends(member, friendNames);
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_GROUP_FRIENDS), HttpStatus.OK);

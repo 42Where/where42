@@ -6,7 +6,7 @@ import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 
 @Getter
-public class UnregisteredMemberException extends Exception {
+public class UnregisteredMemberException extends RuntimeException {
     private int errorCode;
     private Seoul42 seoul42;
 

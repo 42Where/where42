@@ -32,7 +32,7 @@ public class SearchApiController {
 
     @GetMapping(Define.versionPath + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep, @RequestParam("begin") String begin,
-                                                  @CookieValue(value = "ID", required = false) String key) throws CookieExpiredException, SessionExpiredException {
+                                                  @CookieValue(value = "ID", required = false) String key) {
         String token42 = tokenService.findAccessToken(key);
         if (token42 == null)
             tokenService.inspectToken(rep, key);

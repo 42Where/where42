@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.Define;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.exception.customException.DefaultGroupNameException;
 import openproject.where42.exception.customException.OutStateException;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.exception.customException.TakenSeatException;
@@ -40,7 +39,7 @@ public class MemberService {
     private final ApiService api;
 
     @Transactional
-    public Long saveMember(String name, String img, String location) throws DefaultGroupNameException {
+    public Long saveMember(String name, String img, String location) {
         Member member = new Member(name, img, location, MemberLevel.member);
         Long memberId = memberRepository.save(member);
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
@@ -49,7 +48,7 @@ public class MemberService {
         return memberId;
     }
 
-    public Member findBySession(HttpServletRequest req) throws SessionExpiredException {
+    public Member findBySession(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         if (session == null)
             throw new SessionExpiredException();
@@ -58,7 +57,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void updatePersonalMsg(HttpServletRequest req, String msg) throws SessionExpiredException {
+    public void updatePersonalMsg(HttpServletRequest req, String msg) {
         Member member = findBySession(req);
         member.updatePersonalMsg(msg);
     }
@@ -80,7 +79,7 @@ public class MemberService {
 
     // api 호출, [inOrOut 갱신, location(parsed), updateTime 갱신]
     @Transactional
-    public int checkLocate(HttpServletRequest req, String token42) throws SessionExpiredException, OutStateException, TakenSeatException {
+    public int checkLocate(HttpServletRequest req, String token42) throws OutStateException, TakenSeatException {
         Member member = findBySession(req);
         Planet planet = api.getHaneInfo(member.getName());
         if (planet == null) {
