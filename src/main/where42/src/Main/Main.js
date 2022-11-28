@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import instance from "../AxiosApi";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import './Main_Desktop.css';
@@ -11,10 +11,23 @@ import Loading from "../Etc/Loading";
 function Main() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-    const [information, setInformation] = useState(null);
+    const [memberInfo, setMemberInfo] = useState(null);
+    const [groupInfo, setGroupInfo] = useState(null);
+    const [friendInfo, setFriendInfo] = useState(null);
     useEffect(() => {
-        axios.get('v1/member').then((response)=>{
-            setInformation(response.data);
+        //memberinfo
+        instance.get('member/member').then((response)=>{
+            setMemberInfo(response.data);
+            console.debug(response.data);
+        })
+        //groupinfo
+        instance.get('member/group').then((response)=>{
+            setGroupInfo(response.data);
+            console.debug(response.data);
+        })
+        //groupfriendinfo
+        instance.get('member/friend').then((response)=>{
+            setFriendInfo(response.data);
             console.debug(response.data);
         })
     }, []);
@@ -22,7 +35,7 @@ function Main() {
     function Common() {
         return (
             <div id="Wrapper">
-                <Link to="/Search" state={information.memberInfo.name}>
+                <Link to="/Search" state={memberInfo.name}>
                     <button id="Search"></button>
                 </Link>
                 <Link to="/Main">
@@ -32,9 +45,9 @@ function Main() {
                     </div>
                 </Link>
                 <div id="MyProfile">
-                    <MainProfile key={information.memberInfo.id} info={information.memberInfo} me={1}/>
+                    <MainProfile key={memberInfo.id} info={memberInfo} me={1}/>
                 </div>
-                <Groups groupInfo={information.groupInfo} friendInfo={information.groupFriendsList}/>
+                <Groups groupInfo={groupInfo} friendInfo={friendInfo}/>
             </div>
         )
     }
@@ -47,10 +60,9 @@ function Main() {
             </>
         )
     }
-
     return (
         <div id="Main">
-            {information != null ? <MainContent/> : <Loading/>}
+            {memberInfo && groupInfo && friendInfo? <MainContent/> : <Loading/>}
         </div>
     )
 }

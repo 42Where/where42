@@ -1,6 +1,6 @@
-import axios from "axios";
 import {useNavigate} from "react-router";
 import Loading from "./Loading";
+import axios from 'axios';
 
 function Oauth() {
     const nav = useNavigate();
@@ -9,6 +9,7 @@ function Oauth() {
         .then((response) => {
             nav('/main');
         }).catch((Error)=> {
+            console.clear();
             let data = Error.response.data.data;
             nav('/agree', {state : data});
         });

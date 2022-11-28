@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 const MainProfile = (props) => {
     const info = props.info;
-    console.log(info);
+    // console.log(info);
     const locate = CombineLocate(info.locate, info.inOrOut);
     let meOrNot = null;
     let msg = "";
@@ -36,7 +36,7 @@ const MainProfile = (props) => {
     );
 };
 
-function CombineLocate(locate, inOutState) {
+export function CombineLocate(locate, inOutState) {
     let position = "";
     if (inOutState === 2)
         position = "자리 정보 없음";

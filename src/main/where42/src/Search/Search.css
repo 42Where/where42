@@ -1,0 +1,19 @@
+#Search #Loading{
+    height : 25vw;
+    flex-direction : row;
+}
+
+#Search #Loading #LoadingContent {
+    text-shadow: none;
+    font-size: max(20px, 5vw);
+    font-family: GmarketSansMedium;
+
+}
+
+#Search #Loading #LoadingCharacter{
+    width : 30%;
+    min-width : 100px;
+    min-height : 100px;
+    height: 25vh;
+
+}

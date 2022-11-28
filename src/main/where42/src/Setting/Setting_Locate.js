@@ -1,6 +1,6 @@
-import axios from "axios";
 import spot from "./spot.json";
 import {useLocation, useNavigate} from "react-router";
+import instance from "../AxiosApi";
 
 export function SettingFloor() {
     const loc = useLocation();
@@ -93,7 +93,7 @@ function Box(props) {
         return (
             <div className='Box' onClick={() => {
                 let locate = JSON.parse(localStorage.getItem('locate'));
-                axios.post('/v1/member/setting/locate', {
+                instance.post('member/setting/locate', {
                     planet: locate.planet,
                     cluster: locate.cluster,
                     floor: locate.floor,
@@ -101,8 +101,6 @@ function Box(props) {
                 }).then(() => {
                     alert("수정 완료!");
                     nav("/Setting");
-                }).catch(() => {
-                    nav("/Login");
                 });
             }}>
                 <div className='BoxCap'>{props.cap}</div>

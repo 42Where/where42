@@ -1,7 +1,8 @@
 import { useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from "react-router";
-import axios from 'axios'
+import instance from "../AxiosApi";
+import axios from "axios";
 import './Login.css'
 import './Login_Mobile.css'
 import './Login_Tablet.css'
@@ -26,7 +27,7 @@ function Login() {
 
     function Common() {
         let serverurl = "";
-        axios.get('/v1/auth/login')
+        instance.get('auth/login')
             .then((res) => {
                 serverurl = res.data;
             });
@@ -38,17 +39,19 @@ function Login() {
         function clickUp() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button.svg')";
-            axios.get(  '/v1/login' ).then((response)=>{
-                nav('/Main');
-            }).catch((Error)=> {
+            axios.get(  '/v1/login' )
+                .then((res) => {
+                    nav('/Main');
+                }).catch((Error) => {
                     const errData = Error.response.data;
+                    console.clear();
                     if ('data' in errData) {
                         nav('/Agree', {state : errData.data});
                     }
                     else {
-                        window.location.href=serverurl;
+                        window.location.href = serverurl;
                     }
-                })
+                });
         }
 
         return (

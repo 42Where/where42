@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
-import axios from "axios";
+import instance from "../AxiosApi";
 
 export function SettingGnF() {
     return (
@@ -27,12 +27,10 @@ export function SettingGroup() {
     const nav = useNavigate();
     const [arr, setArr] = useState(null);
     useEffect(() => {
-        axios.get('/v1/group')
+        instance.get('group')
             .then((res) => {
                 setArr(res.data);
-            }).catch(() => {
-                nav("/Login");
-        });
+            });
     }, []);
     const [name, setName] = useState("");
     const handleChange = ({target : {value}}) => setName(value);
@@ -42,13 +40,11 @@ export function SettingGroup() {
             alert("사용할 수 없는 그룹명입니다.");
         } else {
             try {
-                await axios.post('/v1/group', null, {params: {groupName: name}});
+                await instance.post('group', null, {params: {groupName: name}});
                 alert("그룹을 생성하였습니다.");
                 window.location.reload();
             } catch (err) {
-                if (err.response.status === 401) {
-                    nav('/Login');
-                } else if (err.response.status === 409) {
+                if (err.response.status === 409) {
                     alert("이미 존재하는 그룹명입니다.");
                 }
             }
@@ -82,27 +78,25 @@ export function SettingFriend(props) {
     let doneUrl;
     let comment;
     if (props.type === "add") {
-        apiUrl = '/v1/groupFriend/notIncludes/group/' + groupInfo.id;
+        apiUrl = 'groupFriend/notIncludes/group/' + groupInfo.id;
         comment = "추가";
         doneUrl = "/Setting/SetGroup";
     } else if (props.type === "del") {
-        apiUrl = '/v1/groupFriend/includes/group/' + groupInfo.id;
+        apiUrl = 'groupFriend/includes/group/' + groupInfo.id;
         comment = "삭제";
         doneUrl = "/Setting/SetGroup";
     } else if (props.type === "fDel") {
-        apiUrl = '/v1/groupFriend/friendList';
+        apiUrl = 'groupFriend/friendList';
         comment = "삭제";
         doneUrl = "/Setting";
     }
 
     const [arr, setArr] = useState(null);
     useEffect(() => {
-        axios.get(apiUrl)
+        instance.get(apiUrl)
             .then((res) => {
                 setArr(res.data);
-            }).catch(() => {
-                nav("/Login");
-        });
+            });
     }, []);
 
     const [list, setList] = useState(new Set());
@@ -120,13 +114,11 @@ export function SettingFriend(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (list.size > 0 && window.confirm(comment + " 하시겠습니까?")) {
-            axios.post(apiUrl, Array.from(list))
+            instance.post(apiUrl, Array.from(list))
                 .then(() => {
                     alert(comment + " 완료!");
                     nav(doneUrl);
-                }).catch(() => {
-                nav("/Login");
-            });
+                });
         }
     }
 
@@ -165,7 +157,7 @@ function GroupList(props) {
     const [name, setName] = useState(props.name);
     const delGroup = () => {
         if (window.confirm("정말 삭제하시겠습니까?")) {
-            axios.delete('/v1/group/' + props.id)
+            instance.delete('group/' + props.id)
                 .then(() => {
                     alert("'" + props.name + "' 그룹을 삭제하였습니다.");
                     window.location.reload();
@@ -187,13 +179,13 @@ function GroupList(props) {
             alert("사용할 수 없는 그룹명입니다.");
             window.location.reload();
         } else {
-            axios.post('/v1/group/' + props.id, null, {params: {changeName: name}})
+            instance.post('group/' + props.id, null, {params: {changeName: name}})
                 .then(() => {
                     nav('/Setting/SetGroup');
                 }).catch(() => {
-                alert("중복된 이름의 그룹이 존재합니다.");
-                window.location.reload();
-            });
+                    alert("중복된 이름의 그룹이 존재합니다.");
+                    window.location.reload();
+                });
         }
     }
     const keyCheck = (e) => {
