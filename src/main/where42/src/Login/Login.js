@@ -44,11 +44,12 @@ function Login() {
                     nav('/Main');
                 }).catch((Error) => {
                     const errData = Error.response.data;
+                    console.clear();
                     if ('data' in errData) {
                         nav('/Agree', {state : errData.data});
                     }
                     else {
-                        window.location.href=serverurl;
+                        window.location.href = serverurl;
                     }
                 });
         }

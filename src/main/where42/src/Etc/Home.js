@@ -11,9 +11,6 @@ function Home() {
             if (err.response.status === 401) {
                 nav('/Login');
             }
-            else {
-                // console.error(err);
-            }
         });
 
     return (<Loading/>)

@@ -9,7 +9,7 @@ function Oauth() {
         .then((response) => {
             nav('/main');
         }).catch((Error)=> {
-            console.log(Error);
+            console.clear();
             let data = Error.response.data.data;
             nav('/agree', {state : data});
         });
