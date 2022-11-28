@@ -1,10 +1,10 @@
-import axios from "axios";
+import instance from "../AxiosApi";
 import {useNavigate} from "react-router";
 import Loading from "./Loading";
 
 function Home() {
     const nav = useNavigate();
-    axios.get('/v1/home')
+    instance.get('home')
         .then(() => {
             nav('/Main');
         }).catch((err) => {

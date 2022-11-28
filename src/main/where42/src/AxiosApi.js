@@ -1,4 +1,3 @@
-import {useNavigate} from "react-router";
 import axios from "axios";
 
 const instance = axios.create({
