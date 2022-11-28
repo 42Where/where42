@@ -1,15 +1,13 @@
-// import { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import './Agree_Desktop.css';
 import './Agree_Mobile.css';
 import {useLocation, useNavigate} from "react-router";
-import axios from "axios";
+import instance from "../AxiosApi";
 
 function Agree()
 {
     const isMobile = useMediaQuery({ query: '(max-width: 930px'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
-    //api post : login, location, image_url (메인 호출하면 이정보가 오는데, 그걸 다시 보내줘야함)
 
     function Common(){
         const location = useLocation();
@@ -17,7 +15,7 @@ function Agree()
         const info = location.state;
         const AgreeClick=()=>{
             const body = { login: info.login , image : info.image, location : info.location};
-            axios.post('/v1/member', body)
+            instance.post('member', body)
                 .then((response)=>{
                     nav("/Main")})
                 .catch((Error)=>{

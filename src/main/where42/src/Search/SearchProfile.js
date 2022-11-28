@@ -1,7 +1,6 @@
-import React from 'react';
-import { useState } from 'react';
+import React, {useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
-import axios from 'axios';
+import instance from "../AxiosApi";
 import {useNavigate} from "react-router";
 
 const SearchProfile = (props) => {
@@ -16,7 +15,7 @@ const SearchProfile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        axios.post('v1/groupFriend', null, {params: {friendName : info.login, img: info.image.link},
+        instance.post('groupFriend', null, {params: {friendName : info.login, img: info.image.link},
         }).then((response)=>{
             if (response.status === 201)
                 //친구추가 성공
@@ -59,8 +58,8 @@ const SearchProfile = (props) => {
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
         }
-        const body = {login : info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, location : info.location, friend : info.friend, member : info.member};
-        axios.post('v1/search/select', body)
+        const body = {login : info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, locate : info.locate, location : info.location, friend : info.friend, member : info.member};
+        instance.post('search/select', body)
             .then((response)=>{
                 setDetail(response.data);
             }).catch((Error)=>{

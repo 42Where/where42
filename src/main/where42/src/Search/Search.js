@@ -2,9 +2,10 @@ import React, {useState, useRef, useEffect} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
 import SearchProfile from './SearchProfile';
+import './Search.css';
 import './Search_Desktop.css';
 import './Search_Mobile.css';
-import axios from "axios";
+import instance from "../AxiosApi";
 import {useLocation, useNavigate} from "react-router";
 import Loading from "../Etc/Loading";
 
@@ -36,7 +37,7 @@ function Search() {
             event.preventDefault();
             inputRef.current.disabled = true;
             setLoading(true);
-            axios.get('v1/search', {params : {begin : searchId}}).then((response)=>{
+            instance.get('search', {params : {begin : searchId}}).then((response)=>{
                 if (response.data.length === 0)
                     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
                 setLoading(false);
@@ -92,15 +93,15 @@ function Search() {
             </div>
         )
     }
-
-    function SearchLoading(){
-        return (
-            <div id={"LoadingWrapper"}>
-                <div id={"LoadingContent"}>로딩 스피너</div>
-                <div id={"LoadingCharacter"}>캐릭터</div>
-            </div>
-        )
-    }
+    //
+    // function SearchLoading(){
+    //     return (
+    //         <div id={"LoadingWrapper"}>
+    //             <div id={"LoadingContent"}>로딩 스피너</div>
+    //             <div id={"LoadingCharacter"}>캐릭터</div>
+    //         </div>
+    //     )
+    // }
 
     function Common() {
         return (
@@ -112,8 +113,9 @@ function Search() {
                     {isMobile && <p>42서울 친구 자리 찾기 서비스</p>}
                 </div>
                 <SearchBox loading={loading} setLoading={setLoadingParent}/>
-                {loading === false && information? <SearchResults memberId={memberId}/> : null}
                 {loading? <Loading/> : null}
+                {/* 데스크탑 버전에서는 땀방울이 안보임 ㅜㅜ*/}
+                {loading === false && information? <SearchResults memberId={memberId}/> : null}
             </div>
         )
     }

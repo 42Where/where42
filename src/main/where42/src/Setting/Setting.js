@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { SettingFloor, SettingCluster, SettingSpot} from "./Setting_Locate";
 import { SettingGnF, SettingFriend, SettingGroup } from "./Setting_Group_Friend";
-import instance from "./AxiosApi";
+import instance from "../AxiosApi";
 import './Setting_Desktop.css';
 import './Setting_Mobile.css';
 

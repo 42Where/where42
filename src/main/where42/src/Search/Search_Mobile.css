@@ -74,6 +74,7 @@
     width : 85%;
     padding: 0;
     /*height : 100%;*/
+    ime-mode: inactive;
     display: inline-block;
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 3.5vw, 15px);
