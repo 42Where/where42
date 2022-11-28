@@ -10,8 +10,8 @@ import './Setting_Desktop.css';
 import './Setting_Mobile.css';
 
 function Setting() {
-    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
-    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
     let size = "";
     if (isMobile)
         size = "Mobile";

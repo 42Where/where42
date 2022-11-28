@@ -10,8 +10,8 @@ import {useLocation} from "react-router";
 import Loading from "../Etc/Loading";
 
 function Search() {
-    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
-    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
     const location = useLocation();
     const [information, setInformation] = useState([]);
     const [loading, setLoading] = useState(false);
