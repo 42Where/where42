@@ -1,7 +1,9 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.dto.Define;
+import openproject.where42.api.Define;
+import openproject.where42.exception.customException.DuplicateGroupNameException;
+import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.group.entity.GroupDto;
 import openproject.where42.group.entity.Groups;
 import openproject.where42.member.entity.Member;
@@ -24,7 +26,7 @@ public class GroupApiController {
 
     // 커스텀 그룹 생성
     @PostMapping(Define.versionPath + "/group")
-    public ResponseEntity createCustomGroup(HttpServletRequest req, @RequestParam("groupName") String groupName) {
+    public ResponseEntity createCustomGroup(HttpServletRequest req, @RequestParam("groupName") String groupName) throws SessionExpiredException, DuplicateGroupNameException {
         Member owner = groupService.findOwnerBySession(req);
         Long groupId = groupService.createCustomGroup(groupName, owner);
         return new ResponseEntity(ResponseWithData.res(StatusCode.CREATED, ResponseMsg.CREATE_GROUP, groupId), HttpStatus.CREATED);
@@ -32,7 +34,7 @@ public class GroupApiController {
 
     // 기본 그룹 제외 그룹 목록 반환 (그룹 관리)
     @GetMapping(Define.versionPath + "/group")
-    public List<GroupDto> getGroupsExceptDefault(HttpServletRequest req) {
+    public List<GroupDto> getGroupsExceptDefault(HttpServletRequest req) throws SessionExpiredException {
         Member member = groupService.findOwnerBySession(req);
         List<Groups> groups = groupService.findAllGroupsExceptDefault(member.getId());
         List<GroupDto> result = new ArrayList<>();
@@ -44,7 +46,7 @@ public class GroupApiController {
 
     // 커스텀 그룹 이름 수정 -> 세션 만료되어도 저장 됨
     @PostMapping(Define.versionPath + "/group/{groupId}")
-    public ResponseEntity updateGroupName(@PathVariable("groupId") Long groupId, @RequestParam("changeName") String changeName) {
+    public ResponseEntity updateGroupName(@PathVariable("groupId") Long groupId, @RequestParam("changeName") String changeName) throws DuplicateGroupNameException {
         groupService.updateGroupName(groupId, changeName);
         return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.CHANGE_GROUP_NAME, groupId), HttpStatus.OK);
     }

@@ -119,7 +119,7 @@ public class GroupFriendRepository {
     public List<GroupFriend> findAllGroupFriendByOwnerId(Long ownerId) {
         Groups groups;
         try {
-                Groups group = em.createQuery("select g from Groups g where g.owner.id = :ownerId and g.groupName = :groupName", Groups.class)
+                Groups group = em.createQuery("select g from Groups g where g.id = :ownerId and g.groupName = :groupName", Groups.class)
                         .setParameter("groupName", "기본")
                         .setParameter("ownerId", ownerId)
                         .getSingleResult();
@@ -134,7 +134,7 @@ public class GroupFriendRepository {
                 });
                 return friends;
         } catch (NoResultException e) {
-            return null;
+            return new ArrayList<GroupFriend>();
         }
     }
 

@@ -3,7 +3,7 @@ package openproject.where42.member.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.api.dto.Image;
+import openproject.where42.api.Define;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,19 +14,17 @@ import java.util.Date;
 public class FlashData {
 	@Id
 	private String name;
-	private Locate locate = new Locate(null, 0, 0, null);
+	private String img;
 	private int inOrOut;
-
-	private String location;
-
 	@Embedded
-	private Image image;
+	private Locate locate = new Locate(null, 0, 0, null);
+	private String location;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updateTime;
 
-	public FlashData(String name, Image image, String location) {
+	public FlashData(String name, String img, String location) {
 		this.name = name;
-		this.image = image;
+		this.img = img;
 		this.location = location;
 		this.updateTime = new Date();
 	}
@@ -35,11 +33,14 @@ public class FlashData {
 		this.location = location;
 		this.updateTime = new Date();
 	}
-	public void updateStatus(Locate locate, int inOrOut) {
+
+	public void parseStatus(Locate locate) {
 		this.locate = locate;
-		this.inOrOut = inOrOut;
-		this.location = null;
-		this.updateTime = new Date();
+		if (locate.getPlanet() != null)
+			this.inOrOut = Define.IN;
+		else
+			this.inOrOut = Define.NONE;
+		this.location = Define.PARSED;
 	}
 
 	public Long timeDiff() {

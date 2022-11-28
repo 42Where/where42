@@ -46,4 +46,9 @@ public class ControllerExceptionHandler {
 //        logger.error("handleHttpRequestMethodNotSupportedException", e); // 나중에 로거 남기는 거 해야됨
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
+
+    @ExceptionHandler(RegisteredFriendException.class)
+    protected ResponseEntity handleRegisteredFriendException(RegisteredFriendException e) {
+        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
 }

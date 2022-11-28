@@ -22,14 +22,14 @@ public class GroupService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long createDefaultGroup(Member member, String groupName) {
-        if (!(groupName.equalsIgnoreCase("기본") || groupName.equalsIgnoreCase("즐겨찾기"))) // 기본이나 즐겨찾기 아닌 다른 그룹 혹시 잘못 호출 시 예외 터트릴 건데 어디서 잡을 지 모르겠어서 일단 걍 리턴 나중에 에러처리 필요
+    public Long createDefaultGroup(Member member, String groupName) throws DefaultGroupNameException { // 이건 밖에서 호출 안되는 건데 굳이 익셉션이 필요하나 싶어
+        if (!(groupName.equalsIgnoreCase("기본") || groupName.equalsIgnoreCase("즐겨찾기")))
             throw new DefaultGroupNameException();
         return groupRepository.save(new Groups(groupName, member));
     }
 
     @Transactional
-    public Long createCustomGroup(String groupName, Member owner) {
+    public Long createCustomGroup(String groupName, Member owner) throws DuplicateGroupNameException {
         validateDuplicateGroupName(owner.getId(), groupName);
         return groupRepository.save(new Groups(groupName, owner));
     }
@@ -38,7 +38,7 @@ public class GroupService {
         return groupRepository.findGroupsByOwnerId(ownerId);
     }
 
-    public Member findOwnerBySession(HttpServletRequest req) {
+    public Member findOwnerBySession(HttpServletRequest req) throws SessionExpiredException {
         HttpSession session = req.getSession(false);
         if (session == null)
             throw new SessionExpiredException();
@@ -46,13 +46,13 @@ public class GroupService {
     }
 
     @Transactional
-    public void updateGroupName(Long groupId, String groupName) {
+    public void updateGroupName(Long groupId, String groupName) throws DuplicateGroupNameException {
         Groups group = groupRepository.findById(groupId);
         validateDuplicateGroupName(group.getOwner().getId(), groupName);
         group.updateGroupName(groupName);
     }
 
-    private void validateDuplicateGroupName(Long ownerId, String groupName) {
+    private void validateDuplicateGroupName(Long ownerId, String groupName) throws DuplicateGroupNameException {
         if (groupRepository.isGroupNameInOwner(ownerId, groupName))
             throw new DuplicateGroupNameException();
     }

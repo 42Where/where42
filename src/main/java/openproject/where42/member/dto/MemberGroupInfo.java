@@ -16,10 +16,7 @@ public class MemberGroupInfo {
     public MemberGroupInfo(Groups g, List<String> groupMembers) {
         this.groupId = g.getId();
         this.groupName = g.getGroupName();
-        if (groupMembers == null)
-            this.count = 0;
-        else
-            this.count = groupMembers.size();
+        this.count = groupMembers.size();
         this.groupFriends = groupMembers;
     }
 }
