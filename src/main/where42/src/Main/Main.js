@@ -9,8 +9,9 @@ import Groups from './Groups';
 import Loading from "../Etc/Loading";
 
 function Main() {
-    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
-    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
+
     const [memberInfo, setMemberInfo] = useState(null);
     const [groupInfo, setGroupInfo] = useState(null);
     const [friendInfo, setFriendInfo] = useState(null);

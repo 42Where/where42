@@ -6,8 +6,8 @@ import {CombineLocate} from "../Main/MainProfile";
 
 const SearchProfile = (props) => {
     const nav = useNavigate();
-    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
-    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
     
     const info = props.info;
     const memberId = props.memberId;

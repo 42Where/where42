@@ -6,8 +6,8 @@ import instance from "../AxiosApi";
 
 function Agree()
 {
-    const isMobile = useMediaQuery({ query: '(max-width: 930px'});
-    const isDesktop = useMediaQuery({ query: '(min-width: 931px'});
+    const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
+    const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
 
     function Common(){
         const location = useLocation();
