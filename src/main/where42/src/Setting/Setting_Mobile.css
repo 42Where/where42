@@ -249,6 +249,11 @@
     line-height: 2;
     color: black;
     background-color: transparent;
+    -webkit-appearance: none;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group input:disabled {
+    -webkit-text-fill-color: black;
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group input:focus {
