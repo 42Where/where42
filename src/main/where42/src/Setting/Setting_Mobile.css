@@ -40,7 +40,21 @@
     outline: none;
 }
 
-/*SettingChoice*/
+#Setting #Mobile #Home {
+    width: 8%;
+    max-width: 40px;
+    padding-bottom: 8%;
+    position: absolute;
+    top: 3%;
+    right: 5%;
+    background-color: transparent;
+    background-image: url("../../public/img/home.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 0;
+}
+
+/*SettingChoice, SettingGnF*/
 
 #Setting #Mobile :is(#SettingChoice, #SettingGnF) #Comment {
     width: 120%;
@@ -249,6 +263,11 @@
     line-height: 2;
     color: black;
     background-color: transparent;
+    -webkit-appearance: none;
+}
+
+#Setting #Mobile #SettingGroup #GroupList .Group input:disabled {
+    -webkit-text-fill-color: black;
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group input:focus {
