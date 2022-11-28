@@ -26,7 +26,7 @@ public class GroupApiController {
 
     // 커스텀 그룹 생성
     @PostMapping(Define.versionPath + "/group")
-    public ResponseEntity createCustomGroup(HttpServletRequest req, @RequestParam("groupName") String groupName) throws SessionExpiredException, DuplicateGroupNameException {
+    public ResponseEntity createCustomGroup(HttpServletRequest req, @RequestParam("groupName") String groupName) {
         Member owner = groupService.findOwnerBySession(req);
         Long groupId = groupService.createCustomGroup(groupName, owner);
         return new ResponseEntity(ResponseWithData.res(StatusCode.CREATED, ResponseMsg.CREATE_GROUP, groupId), HttpStatus.CREATED);
@@ -34,7 +34,7 @@ public class GroupApiController {
 
     // 기본 그룹 제외 그룹 목록 반환 (그룹 관리)
     @GetMapping(Define.versionPath + "/group")
-    public List<GroupDto> getGroupsExceptDefault(HttpServletRequest req) throws SessionExpiredException {
+    public List<GroupDto> getGroupsExceptDefault(HttpServletRequest req) {
         Member member = groupService.findOwnerBySession(req);
         List<Groups> groups = groupService.findAllGroupsExceptDefault(member.getId());
         List<GroupDto> result = new ArrayList<>();

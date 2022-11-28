@@ -5,7 +5,7 @@ import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 
 @Getter
-public class SessionExpiredException extends Exception{
+public class SessionExpiredException extends RuntimeException {
     private int errorCode;
 
     public SessionExpiredException() {

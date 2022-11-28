@@ -8,6 +8,8 @@ import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.api.dto.Hane;
 import openproject.where42.api.dto.SearchCadet;
 import openproject.where42.api.dto.Seoul42;
+import openproject.where42.exception.customException.JsonDeserializeException;
+import openproject.where42.exception.customException.TooManyRequestException;
 import openproject.where42.token.AES;
 import openproject.where42.member.entity.enums.Planet;
 import org.springframework.http.HttpEntity;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -104,39 +107,15 @@ public class ApiService {
     }
 
     /*** 로컬용 ***/
-//    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
-//        headers = new HttpHeaders();
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//        params = new LinkedMultiValueMap<>();
-//        params.add("grant_type","authorization_code");
-//        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-//        params.add("client_secret", "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");
-//        params.add("code", code);
-//        params.add("redirect_uri","http://localhost:8080/auth/login/callback");
-//        return new HttpEntity<>(params, headers);
-//    }
-//
-//    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String refreshToken) {
-//        headers = new HttpHeaders();
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//        params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "refresh_token");
-//        params.add("client_id", "150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-//        params.add("client_secret", "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");
-//        params.add("refresh_token", refreshToken);
-//        return new HttpEntity<>(params, headers);
-//    }
-
-    /*** 서버용 ***/
     public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
-        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
+        params.add("client_secret", "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");
         params.add("code", code);
-        params.add("redirect_uri","http://54.180.140.84/auth/login/callback");
+        params.add("redirect_uri","http://localhost:8080/auth/login/callback");
         return new HttpEntity<>(params, headers);
     }
 
@@ -145,11 +124,35 @@ public class ApiService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
-        params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_id", "150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
+        params.add("client_secret", "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");
         params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
+
+    /*** 서버용 ***/
+//    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
+//        headers = new HttpHeaders();
+//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+//        params = new LinkedMultiValueMap<>();
+//        params.add("grant_type","authorization_code");
+//        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+//        params.add("client_secret", "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");
+//        params.add("code", code);
+//        params.add("redirect_uri","http://54.180.140.84/auth/login/callback");
+//        return new HttpEntity<>(params, headers);
+//    }
+//
+//    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String refreshToken) {
+//        headers = new HttpHeaders();
+//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+//        params = new LinkedMultiValueMap<>();
+//        params.add("grant_type", "refresh_token");
+//        params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+//        params.add("client_secret", "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");
+//        params.add("refresh_token", refreshToken);
+//        return new HttpEntity<>(params, headers);
+//    }
 
     // 42api 요청 헤더 생성 메소드
     public HttpEntity<MultiValueMap<String, String>> req42ApiHeader(String token) {
@@ -214,7 +217,7 @@ public class ApiService {
         try {
             oAuthToken = om.readValue(body, OAuthToken.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new JsonDeserializeException();
         }
         return oAuthToken;
     }
@@ -225,7 +228,7 @@ public class ApiService {
         try {
             seoul42 = om.readValue(body, Seoul42.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new JsonDeserializeException();
         }
         return seoul42;
     }
@@ -237,7 +240,7 @@ public class ApiService {
         try {
             seoul42List = Arrays.asList(om.readValue(body, Seoul42[].class));
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new JsonDeserializeException();
         }
         return seoul42List;
     }
@@ -248,7 +251,7 @@ public class ApiService {
         try {
             cadet = om.readValue(body, SearchCadet.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new JsonDeserializeException();
         }
         return cadet;
     }
@@ -258,18 +261,25 @@ public class ApiService {
         try {
             hane = om.readValue(body, Hane.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new JsonDeserializeException();
         }
         return hane;
     }
 
     // api req요청에 대한 응답 반환 메소드
+    @RateLimiter(name = "42apiRateLimiter")
+    @Retry(name = "42apiRetry")
     public ResponseEntity<String> resReqApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
-        return rt.exchange(
-                url.toString(),
-                HttpMethod.GET,
-                req,
-                String.class);
+        try {
+            return rt.exchange(
+                    url.toString(),
+                    HttpMethod.GET,
+                    req,
+                    String.class);
+        }
+        catch (HttpClientErrorException.TooManyRequests e) {
+            throw new TooManyRequestException();
+        }
     }
 
     // api post요청에 대한 응답 반환 메소드

@@ -5,7 +5,7 @@ import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 
 @Getter
-public class DefaultGroupNameException extends Exception {
+public class DefaultGroupNameException extends RuntimeException {
     private int errorCode;
 
     public DefaultGroupNameException() {

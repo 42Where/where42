@@ -5,11 +5,11 @@ import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;
 
 @Getter
-public class RegisteredFriendException extends RuntimeException {
+public class TooManyRequestException extends RuntimeException {
     private int errorCode;
 
-    public RegisteredFriendException() {
-        super(ResponseMsg.REGISTERED_GROUP_FRIEND);
-        this.errorCode = StatusCode.CONFLICT;
+    public TooManyRequestException() {
+        super(ResponseMsg.TOO_MANY_REQUEST);
+        this.errorCode = StatusCode.TOO_MANY_REQUEST;
     }
 }
