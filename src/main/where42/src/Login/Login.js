@@ -26,20 +26,20 @@ function Login() {
     }
 
     function Common() {
-        let serverurl = "";
-        instance.get('auth/login')
-            .then((res) => {
-                serverurl = res.data;
-            });
         function clickDown() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button_click.svg'); background-size: contain";
         }
 
-        function clickUp() {
+        async function clickUp() {
             const button = document.getElementById('LoginButton');
             button.style = "background-image: url('img/login_button.svg')";
-            axios.get(  '/v1/login' )
+            let serverurl = "";
+            await instance.get('auth/login')
+                .then((res) => {
+                    serverurl = res.data;
+                });
+            await axios.get(  '/v1/login' )
                 .then((res) => {
                     nav('/Main');
                 }).catch((Error) => {

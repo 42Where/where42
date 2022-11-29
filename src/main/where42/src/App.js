@@ -13,17 +13,17 @@ import {DecideRoute} from "./DecideRoute";
 
 function App() {
     if (process.env.NODE_ENV === "production") {
-        console.log = function no_console() {};
+        // console.log = function no_console() {};
         console.warn = function no_console() {};
         console.error = function no_console() {};
         console.debug = function no_console() {};
     }
-    const loc = useLocation();
-    const [pastLoc, setPastLoc] = useState("Home");
-    DecideRoute({current: loc.pathname, past: pastLoc})
-    useEffect(() => {
-        setPastLoc(loc.pathname);
-    }, []);
+    // const loc = useLocation();
+    // const [pastLoc, setPastLoc] = useState("Home");
+    // DecideRoute({current: loc.pathname, past: pastLoc});
+    // useEffect(() => {
+    //     setPastLoc(loc.pathname);
+    // }, []);
 
     return (
         <div className={'App'}>

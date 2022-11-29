@@ -12,7 +12,7 @@ export const DecideRoute = async (props) => {
             isLogin = false;
     });
 
-    await console.log(props.past, isLogin);
+    await console.log(props.past, props.current, isLogin);
     await check({current: props.current, past: props.past, isLogin: isLogin});
 }
 
@@ -34,13 +34,7 @@ const check = (props) => {
             window.location.replace("/Main");
         axios.get("/v1/checkAgree")
             .catch(() => {
-                window.location.replace("/Login")
+                window.location.replace("/Login");
             });
-    }
-    else if (props.current === "/auth/login/callback") {
-        if (props.isLogin)
-            window.location.replace("/Main");
-        else if (!(props.past === "Home" || props.past === "/Login"))
-            window.location.replace("/Login");
     }
 }
