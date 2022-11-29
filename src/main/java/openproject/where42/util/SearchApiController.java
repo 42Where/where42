@@ -2,7 +2,6 @@ package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
-import openproject.where42.exception.customException.CookieExpiredException;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.FlashData;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +40,8 @@ public class SearchApiController {
         if (session == null)
             throw new SessionExpiredException();
         begin = begin.toLowerCase();
-        List<Seoul42> searchList = api.get42UsersInfoInRange(token42, begin, getEnd(begin));
+        CompletableFuture<List<Seoul42>> cf = api.get42UsersInfoInRange(token42, begin, getEnd(begin));
+        List<Seoul42> searchList = api.injectInfo(cf);
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
         for (Seoul42 cadet : searchList) {
             SearchCadet searchCadet = searchCadetInfo(cadet.getLogin(), token42);
@@ -58,17 +59,19 @@ public class SearchApiController {
             if (member.timeDiff() < 3)
                 searchCadet = new SearchCadet(member);
             else {
-                searchCadet = api.get42DetailInfo(token42, name);
+                CompletableFuture<SearchCadet> cf = api.get42DetailInfo(token42, name);
+                searchCadet = api.injectInfo(cf);
                 memberService.updateLocation(member, searchCadet.getLocation());
+                searchCadet.setMember(true);
+                return searchCadet;
             }
-            searchCadet.setMember(true);
-            return searchCadet;
         }
 
         FlashData flash = flashDataService.findByName(name);
         if (flash != null && flash.timeDiff() < 3)
             return new SearchCadet(flash);
-        searchCadet = api.get42DetailInfo(token42, name);
+        CompletableFuture<SearchCadet> cf = api.get42DetailInfo(token42, name);
+        searchCadet = api.injectInfo(cf);
         if (flash != null)
             flashDataService.updateLocation(flash, searchCadet.getLocation());
         else

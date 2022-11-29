@@ -2,7 +2,6 @@ package openproject.where42.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.api.dto.Hane;
@@ -16,16 +15,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service // 이컨트롤러 쓴느게 맞나..ㅎ 다시 생각.. 왜 스프링 빈에 등록이 안된다는걸까??
 public class ApiService {
@@ -40,57 +42,67 @@ public class ApiService {
     ResponseEntity<String> res;
 
     // oAuth 토큰 반환
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
-    public OAuthToken getOAuthToken(String code) {
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<OAuthToken> getOAuthToken(String code) {
         req = req42TokenHeader(code);
         res = resPostApi(req, req42TokenUri());
-        return oAuthTokenMapping(res.getBody());
+        return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
     // oAuth 토큰 반환
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
-    public OAuthToken getNewOAuthToken(String token) {
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<OAuthToken> getNewOAuthToken(String token) {
         req = req42RefreshHeader(token);
         res = resPostApi(req, req42TokenUri());
-        return oAuthTokenMapping(res.getBody());
+        return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
     // me 정보 반환
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
-    public Seoul42 getMeInfo(String token) {
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<Seoul42> getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42MeUri());
-        return seoul42Mapping(res.getBody());
+        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
     }
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
     // 검색 시 Location 및 img가 나오지 않아 seoul42 -> searchCadet으로 변환해야함
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
-    public List<Seoul42> get42UsersInfoInRange(String token, String begin, String end) {
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Seoul42>> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
-        return seoul42ListMapping(res.getBody());
+        return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
 
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
-    public Seoul42 get42ShortInfo(String token, String name) {
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<Seoul42> get42ShortInfo(String token, String name) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(name));
-        return seoul42Mapping(res.getBody());
+        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
     }
 
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
-    public SearchCadet get42DetailInfo(String token, String name) {
+    @Retry(name = "backend")
+    @Async("apiThreadPoolTaskExecutor")
+    public CompletableFuture<SearchCadet> get42DetailInfo(String token, String name) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiOneUserUri(name));
-        return searchCadetMapping(res.getBody());
+        return CompletableFuture.completedFuture(searchCadetMapping(res.getBody()));
+    }
+
+    public <T> T injectInfo(CompletableFuture<T> info) {
+        T ret = null;
+        try {
+            ret = info.get();
+        } catch (CancellationException | InterruptedException | ExecutionException e) {
+            throw new TooManyRequestException();
+        }
+        return ret;
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
@@ -267,19 +279,24 @@ public class ApiService {
     }
 
     // api req요청에 대한 응답 반환 메소드
-    @RateLimiter(name = "42apiRateLimiter")
-    @Retry(name = "42apiRetry")
     public ResponseEntity<String> resReqApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
-        try {
-            return rt.exchange(
-                    url.toString(),
-                    HttpMethod.GET,
-                    req,
-                    String.class);
-        }
-        catch (HttpClientErrorException.TooManyRequests e) {
-            throw new TooManyRequestException();
-        }
+//        if(bucket.tryConsume(1)){
+//            System.out.println("index : " + i);
+//        }else{
+//            System.out.println("Token is Empty!");
+//            //Toekn 충전
+//            sleep(10000);
+//        }
+//        try {
+        return rt.exchange(
+                url.toString(),
+                HttpMethod.GET,
+                req,
+                String.class);
+//        }
+//        catch (HttpClientErrorException.TooManyRequests e) {
+//            throw new TooManyRequestException();
+//        }
     }
 
     // api post요청에 대한 응답 반환 메소드
