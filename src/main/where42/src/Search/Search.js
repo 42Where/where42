@@ -37,7 +37,12 @@ function Search() {
                     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
                 setLoading(false);
                 setInformation(response.data);
-            }).catch((Error)=> {alert("api 호출 횟수 초과로 오류가 발생했습니다. 잠시 후 다시 시도해주세요");})
+            }).catch((Error)=> {
+                if (Error.response.status === 429) {
+                    alert("api 호출 횟수 초과로 오류가 발생했습니다. 잠시 후 다시 시도해주세요");
+                    setLoading(false);
+                }
+            })
         }
 
         const searchChange=(e)=>{
