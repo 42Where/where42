@@ -1,0 +1,598 @@
+18:23:10.155 [restartedMain] INFO  o.where42.Where42Application - Starting Where42Application using Java 17.0.4.1 on gimseonghun-ui-MacBookPro.local with PID 14012 (/Users/kimseonghun/Project/where42/build/classes/java/main started by kimseonghun in /Users/kimseonghun/Project/where42)
+18:23:10.156 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+18:23:10.156 [restartedMain] INFO  o.where42.Where42Application - No active profile set, falling back to 1 default profile: "default"
+18:23:10.208 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:23:10.208 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:23:10.963 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:23:10.992 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 0 JPA repository interfaces.
+18:23:11.545 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:23:11.551 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:23:11.551 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:23:11.551 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+18:23:11.596 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:23:11.596 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1387 ms
+18:23:11.717 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:23:11.848 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:23:11.853 [restartedMain] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/where42'
+18:23:11.961 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:23:11.987 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.11.Final
+18:23:12.069 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:23:12.130 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+18:23:12.436 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists group_friend 
+       drop constraint if exists FKmmxeb95pmrpccv02t0w3lu86p
+18:23:12.453 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists groups 
+       drop constraint if exists FKmv3femq80euyn9p9sbrepeuw3
+18:23:12.456 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists flash_data cascade
+18:23:12.462 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists group_friend cascade
+18:23:12.464 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists groups cascade
+18:23:12.466 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists member cascade
+18:23:12.468 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists token cascade
+18:23:12.470 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop sequence if exists group_friend_seq
+18:23:12.472 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop sequence if exists groups_seq
+18:23:12.473 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop sequence if exists members_seq_generator
+18:23:12.476 [restartedMain] DEBUG org.hibernate.SQL - create sequence group_friend_seq start 1 increment 50
+18:23:12.484 [restartedMain] DEBUG org.hibernate.SQL - create sequence groups_seq start 1 increment 50
+18:23:12.485 [restartedMain] DEBUG org.hibernate.SQL - create sequence members_seq_generator start 1 increment 50
+18:23:12.487 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table flash_data (
+       name varchar(255) not null,
+        img varchar(255),
+        in_or_out int4 not null,
+        cluster int4 not null,
+        floor int4 not null,
+        planet int4,
+        spot varchar(255),
+        location varchar(255),
+        update_time timestamp,
+        primary key (name)
+    )
+18:23:12.494 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table group_friend (
+       group_friend_id int8 not null,
+        friend_name varchar(255) not null,
+        img varchar(255),
+        group_id int8,
+        primary key (group_friend_id)
+    )
+18:23:12.500 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table groups (
+       group_id int8 not null,
+        group_name varchar(255) not null,
+        member_id int8,
+        primary key (group_id)
+    )
+18:23:12.503 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table member (
+       member_id int8 not null,
+        member_name varchar(255) not null,
+        create_time timestamp,
+        default_group_id int8,
+        img varchar(255),
+        in_or_out int4 not null,
+        level int4,
+        cluster int4 not null,
+        floor int4 not null,
+        planet int4,
+        spot varchar(255),
+        location varchar(255),
+        msg varchar(255),
+        starred_group_id int8,
+        update_time timestamp,
+        primary key (member_id)
+    )
+18:23:12.509 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table token (
+       token_id int8 generated by default as identity,
+        uuid varchar(255),
+        access_token varchar(255),
+        member_name varchar(255),
+        recent_login varchar(255),
+        refresh_token varchar(255),
+        primary key (token_id)
+    )
+18:23:12.514 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists member 
+       add constraint UK_gwo2bqx6j18klv1e8ql503n61 unique (member_name)
+18:23:12.516 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists group_friend 
+       add constraint FKmmxeb95pmrpccv02t0w3lu86p 
+       foreign key (group_id) 
+       references groups
+18:23:12.519 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists groups 
+       add constraint FKmv3femq80euyn9p9sbrepeuw3 
+       foreign key (member_id) 
+       references member
+18:23:12.522 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:23:12.526 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:23:12.736 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 96d41ef7-efa0-42a8-9131-4819a66edeae
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:23:12.813 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5991438, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@398c7368, org.springframework.security.web.context.SecurityContextPersistenceFilter@5329819, org.springframework.security.web.header.HeaderWriterFilter@cd51a9f, org.springframework.security.web.authentication.logout.LogoutFilter@232b2961, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@301dc3a4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5422b3b8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@316ff834, org.springframework.security.web.session.SessionManagementFilter@48904f15, org.springframework.security.web.access.ExceptionTranslationFilter@610a1dcb, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@52f6d640]
+18:23:12.868 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:23:13.016 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+18:23:13.472 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:23:13.478 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 26 endpoint(s) beneath base path '/actuator'
+18:23:13.504 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:23:13.511 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:23:13.521 [restartedMain] INFO  o.where42.Where42Application - Started Where42Application in 3.89 seconds (JVM running for 4.276)
+18:23:13.602 [RMI TCP Connection(3)-10.18.245.122] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+18:23:13.602 [RMI TCP Connection(3)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+18:23:13.602 [RMI TCP Connection(3)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+18:23:48.578 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:23:48.598 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:23:48.611 [http-nio-8080-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:34:09.368 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:34:09.376 [http-nio-8080-exec-9] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:34:09.381 [http-nio-8080-exec-9] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:34:11.879 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:34:11.889 [http-nio-8080-exec-7] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:34:11.895 [http-nio-8080-exec-7] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:52:30.371 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+18:52:30.376 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+18:52:30.377 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+18:52:43.391 [restartedMain] INFO  o.where42.Where42Application - Starting Where42Application using Java 17.0.4.1 on gimseonghun-ui-MacBookPro.local with PID 15669 (/Users/kimseonghun/Project/where42/build/classes/java/main started by kimseonghun in /Users/kimseonghun/Project/where42)
+18:52:43.392 [restartedMain] INFO  o.where42.Where42Application - No active profile set, falling back to 1 default profile: "default"
+18:52:43.403 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+18:52:43.437 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:52:43.437 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:52:44.354 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:52:44.369 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 JPA repository interfaces.
+18:52:45.306 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:52:45.313 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:52:45.314 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:52:45.314 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+18:52:45.375 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:52:45.375 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1938 ms
+18:52:45.543 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:52:45.696 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:52:45.703 [restartedMain] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/where42'
+18:52:45.863 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:52:45.894 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.11.Final
+18:52:45.979 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:52:46.036 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+18:52:46.413 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists group_friend 
+       drop constraint if exists FKmmxeb95pmrpccv02t0w3lu86p
+18:52:46.421 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists groups 
+       drop constraint if exists FKmv3femq80euyn9p9sbrepeuw3
+18:52:46.428 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists flash_data cascade
+18:52:46.435 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists group_friend cascade
+18:52:46.440 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists groups cascade
+18:52:46.443 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists member cascade
+18:52:46.447 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop table if exists token cascade
+18:52:46.449 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop sequence if exists group_friend_seq
+18:52:46.451 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop sequence if exists groups_seq
+18:52:46.453 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    drop sequence if exists members_seq_generator
+18:52:46.455 [restartedMain] DEBUG org.hibernate.SQL - create sequence group_friend_seq start 1 increment 50
+18:52:46.458 [restartedMain] DEBUG org.hibernate.SQL - create sequence groups_seq start 1 increment 50
+18:52:46.459 [restartedMain] DEBUG org.hibernate.SQL - create sequence members_seq_generator start 1 increment 50
+18:52:46.461 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table flash_data (
+       name varchar(255) not null,
+        img varchar(255),
+        in_or_out int4 not null,
+        cluster int4 not null,
+        floor int4 not null,
+        planet int4,
+        spot varchar(255),
+        location varchar(255),
+        update_time timestamp,
+        primary key (name)
+    )
+18:52:46.467 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table group_friend (
+       group_friend_id int8 not null,
+        friend_name varchar(255) not null,
+        img varchar(255),
+        group_id int8,
+        primary key (group_friend_id)
+    )
+18:52:46.471 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table groups (
+       group_id int8 not null,
+        group_name varchar(255) not null,
+        member_id int8,
+        primary key (group_id)
+    )
+18:52:46.475 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table member (
+       member_id int8 not null,
+        member_name varchar(255) not null,
+        create_time timestamp,
+        default_group_id int8,
+        img varchar(255),
+        in_or_out int4 not null,
+        level int4,
+        cluster int4 not null,
+        floor int4 not null,
+        planet int4,
+        spot varchar(255),
+        location varchar(255),
+        msg varchar(255),
+        starred_group_id int8,
+        update_time timestamp,
+        primary key (member_id)
+    )
+18:52:46.480 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    create table token (
+       token_id int8 generated by default as identity,
+        uuid varchar(255),
+        access_token varchar(255),
+        member_name varchar(255),
+        recent_login varchar(255),
+        refresh_token varchar(255),
+        primary key (token_id)
+    )
+18:52:46.485 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists member 
+       add constraint UK_gwo2bqx6j18klv1e8ql503n61 unique (member_name)
+18:52:46.488 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists group_friend 
+       add constraint FKmmxeb95pmrpccv02t0w3lu86p 
+       foreign key (group_id) 
+       references groups
+18:52:46.490 [restartedMain] DEBUG org.hibernate.SQL - 
+    
+    alter table if exists groups 
+       add constraint FKmv3femq80euyn9p9sbrepeuw3 
+       foreign key (member_id) 
+       references member
+18:52:46.493 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:52:46.496 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:52:46.725 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 65c2cde2-7fe0-4b7b-b9d1-37159f7e4022
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:52:46.799 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@373aafde, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@11e6f221, org.springframework.security.web.context.SecurityContextPersistenceFilter@76e012de, org.springframework.security.web.header.HeaderWriterFilter@10c5e611, org.springframework.security.web.authentication.logout.LogoutFilter@13fc6f54, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3cf16cee, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1d30a40c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7ff8a585, org.springframework.security.web.session.SessionManagementFilter@37e26c08, org.springframework.security.web.access.ExceptionTranslationFilter@34d5e194, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@731ce228]
+18:52:46.857 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:52:47.026 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+18:52:47.644 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:52:47.650 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 26 endpoint(s) beneath base path '/actuator'
+18:52:47.682 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:52:47.690 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:52:47.703 [restartedMain] INFO  o.where42.Where42Application - Started Where42Application in 4.697 seconds (JVM running for 5.1)
+18:52:47.946 [RMI TCP Connection(8)-10.18.245.122] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+18:52:47.946 [RMI TCP Connection(8)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+18:52:47.947 [RMI TCP Connection(8)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+18:52:56.803 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:52:56.821 [http-nio-8080-exec-4] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:52:56.842 [http-nio-8080-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:52:59.150 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:52:59.155 [http-nio-8080-exec-5] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.uuid=?
+18:52:59.165 [http-nio-8080-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:53:02.282 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        token0_.token_id as token_id1_4_,
+        token0_.uuid as uuid2_4_,
+        token0_.access_token as access_t3_4_,
+        token0_.member_name as member_n4_4_,
+        token0_.recent_login as recent_l5_4_,
+        token0_.refresh_token as refresh_6_4_ 
+    from
+        token token0_ 
+    where
+        token0_.member_name=?
+18:53:02.312 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    insert 
+    into
+        token
+        (uuid, access_token, member_name, recent_login, refresh_token) 
+    values
+        (?, ?, ?, ?, ?)
+18:53:02.333 [http-nio-8080-exec-2] DEBUG org.hibernate.SQL - 
+    select
+        member0_.member_id as member_i1_3_,
+        member0_.member_name as member_n2_3_,
+        member0_.create_time as create_t3_3_,
+        member0_.default_group_id as default_4_3_,
+        member0_.img as img5_3_,
+        member0_.in_or_out as in_or_ou6_3_,
+        member0_.level as level7_3_,
+        member0_.cluster as cluster8_3_,
+        member0_.floor as floor9_3_,
+        member0_.planet as planet10_3_,
+        member0_.spot as spot11_3_,
+        member0_.location as locatio12_3_,
+        member0_.msg as msg13_3_,
+        member0_.starred_group_id as starred14_3_,
+        member0_.update_time as update_15_3_ 
+    from
+        member member0_ 
+    where
+        member0_.member_name=?
+18:53:02.341 [http-nio-8080-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.UnregisteredMemberException: 개인정보제공 동의 필요]
+18:57:56.121 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+18:57:56.130 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+18:57:56.133 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+18:58:07.457 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+18:58:07.461 [restartedMain] INFO  o.where42.Where42Application - Starting Where42Application using Java 17.0.4.1 on gimseonghun-ui-MacBookPro.local with PID 16128 (/Users/kimseonghun/Project/where42/build/classes/java/main started by kimseonghun in /Users/kimseonghun/Project/where42)
+18:58:07.462 [restartedMain] INFO  o.where42.Where42Application - No active profile set, falling back to 1 default profile: "default"
+18:58:07.523 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+18:58:07.523 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+18:58:08.215 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+18:58:08.244 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 0 JPA repository interfaces.
+18:58:08.789 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+18:58:08.794 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+18:58:08.795 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+18:58:08.795 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+18:58:08.833 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+18:58:08.833 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1310 ms
+18:58:08.948 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+18:58:09.080 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+18:58:09.085 [restartedMain] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/where42'
+18:58:09.190 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+18:58:09.218 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.11.Final
+18:58:09.300 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+18:58:09.358 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+18:58:09.708 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+18:58:09.713 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+18:58:09.931 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 54cc8602-2a5f-4d85-a531-93962f34fd19
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:58:10.006 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6030334c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@410addc, org.springframework.security.web.context.SecurityContextPersistenceFilter@8fe346d, org.springframework.security.web.header.HeaderWriterFilter@9ba778e, org.springframework.security.web.authentication.logout.LogoutFilter@207ee7a7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74566cb5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5995d99b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@46bb4d23, org.springframework.security.web.session.SessionManagementFilter@71b88732, org.springframework.security.web.access.ExceptionTranslationFilter@5de0eab4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1bfb7dd1]
+18:58:10.070 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:58:10.228 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+18:58:10.709 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+18:58:10.715 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 26 endpoint(s) beneath base path '/actuator'
+18:58:10.742 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+18:58:10.753 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+18:58:10.764 [restartedMain] INFO  o.where42.Where42Application - Started Where42Application in 3.815 seconds (JVM running for 4.191)
+18:58:10.840 [RMI TCP Connection(5)-10.18.245.122] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+18:58:10.840 [RMI TCP Connection(5)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+18:58:10.841 [RMI TCP Connection(5)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+18:59:36.463 [http-nio-8080-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:59:40.439 [http-nio-8080-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.CookieExpiredException: 쿠키 없음]
+18:59:43.514 [http-nio-8080-exec-8] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [openproject.where42.exception.customException.UnregisteredMemberException: 개인정보제공 동의 필요]
+19:01:02.471 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+19:01:02.476 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+19:01:02.478 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+19:01:11.370 [restartedMain] ERROR o.s.boot.SpringApplication - Application run failed
+java.lang.IllegalStateException: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.classic.PatternLayout("null") - Empty or null pattern.
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:344)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initialize(LoggingApplicationListener.java:298)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEnvironmentPreparedEvent(LoggingApplicationListener.java:246)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.onApplicationEvent(LoggingApplicationListener.java:223)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:176)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:169)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:143)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:131)
+	at org.springframework.boot.context.event.EventPublishingRunListener.environmentPrepared(EventPublishingRunListener.java:85)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$environmentPrepared$2(SpringApplicationRunListeners.java:66)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:120)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:114)
+	at org.springframework.boot.SpringApplicationRunListeners.environmentPrepared(SpringApplicationRunListeners.java:65)
+	at org.springframework.boot.SpringApplication.prepareEnvironment(SpringApplication.java:344)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:302)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
+	at openproject.where42.Where42Application.main(Where42Application.java:12)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49)
+Caused by: java.lang.IllegalStateException: Logback configuration error detected: 
+ERROR in ch.qos.logback.classic.PatternLayout("null") - Empty or null pattern.
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.loadConfiguration(LogbackLoggingSystem.java:179)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initializeWithConventions(AbstractLoggingSystem.java:80)
+	at org.springframework.boot.logging.AbstractLoggingSystem.initialize(AbstractLoggingSystem.java:60)
+	at org.springframework.boot.logging.logback.LogbackLoggingSystem.initialize(LogbackLoggingSystem.java:132)
+	at org.springframework.boot.context.logging.LoggingApplicationListener.initializeSystem(LoggingApplicationListener.java:329)
+	... 23 common frames omitted
+19:19:11.803 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.2.5.Final
+19:19:11.808 [restartedMain] INFO  o.where42.Where42Application - Starting Where42Application using Java 17.0.4.1 on gimseonghun-ui-MacBookPro.local with PID 17356 (/Users/kimseonghun/Project/where42/build/classes/java/main started by kimseonghun in /Users/kimseonghun/Project/where42)
+19:19:11.809 [restartedMain] INFO  o.where42.Where42Application - No active profile set, falling back to 1 default profile: "default"
+19:19:11.859 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+19:19:11.860 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+19:19:12.606 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+19:19:12.613 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 JPA repository interfaces.
+19:19:13.038 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+19:19:13.043 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+19:19:13.043 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+19:19:13.043 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.65]
+19:19:13.080 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+19:19:13.080 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1220 ms
+19:19:13.192 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+19:19:13.312 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+19:19:13.317 [restartedMain] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:postgresql://localhost:5432/where42'
+19:19:13.425 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+19:19:13.450 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.11.Final
+19:19:13.530 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+19:19:13.591 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+19:19:13.953 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+19:19:13.958 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+19:19:14.185 [restartedMain] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: c5cc01a2-1fb2-467e-bf22-01fcbe44da56
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+19:19:14.256 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7eea8ce, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1fa9b34f, org.springframework.security.web.context.SecurityContextPersistenceFilter@765de643, org.springframework.security.web.header.HeaderWriterFilter@126202b7, org.springframework.security.web.authentication.logout.LogoutFilter@a3e8d6f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d0d5e35, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@659b34a5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2c091716, org.springframework.security.web.session.SessionManagementFilter@316e557e, org.springframework.security.web.access.ExceptionTranslationFilter@63908c4b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@13812141]
+19:19:14.319 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19:19:14.472 [restartedMain] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [static/index.html]
+19:19:14.934 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+19:19:14.940 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 26 endpoint(s) beneath base path '/actuator'
+19:19:14.966 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+19:19:14.973 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+19:19:14.983 [restartedMain] INFO  o.where42.Where42Application - Started Where42Application in 3.533 seconds (JVM running for 3.989)
+19:19:15.445 [RMI TCP Connection(2)-10.18.245.122] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+19:19:15.445 [RMI TCP Connection(2)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+19:19:15.447 [RMI TCP Connection(2)-10.18.245.122] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+19:37:09.063 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+19:37:09.069 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+19:37:09.072 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
