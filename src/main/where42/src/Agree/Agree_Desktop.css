@@ -69,6 +69,7 @@
 table, td, th {
     padding: 10px;
     border : 1px solid black;
+    -webkit-border-before: 1px;
     border-collapse : collapse;
 }
 

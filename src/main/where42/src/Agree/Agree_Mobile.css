@@ -54,6 +54,7 @@
 }
 table, td, th {
     padding: 10px;
+    -webkit-border-before: 0.5px;
     border : 0.5px solid black;
     border-collapse : collapse;
 }
