@@ -7,7 +7,6 @@ import './Search_Desktop.css';
 import './Search_Mobile.css';
 import instance from "../AxiosApi";
 import {useLocation} from "react-router";
-import Loading from "../Etc/Loading";
 
 function Search() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
@@ -17,11 +16,7 @@ function Search() {
     const [loading, setLoading] = useState(false);
     const memberId = location.state;
 
-    function setLoadingParent(loading){
-        setLoading(loading);
-    }
-
-    function SearchBox({loading, setLoading})
+    function SearchBox()
     {
         const [searchId, setSearch] = useState("");
         const SubmitId = (event) => {
@@ -35,6 +30,7 @@ function Search() {
                 .then((response)=>{
                 if (response.data.length === 0)
                     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
+                console.debug(response.data);
                 setLoading(false);
                 setInformation(response.data);
             }).catch((Error)=> {
@@ -98,8 +94,8 @@ function Search() {
                     </Link>
                     {isMobile && <p>42서울 친구 자리 찾기 서비스</p>}
                 </div>
-                <SearchBox loading={loading} setLoading={setLoadingParent}/>
-                {loading? <Loading/> : null}
+                <SearchBox/>
+                {loading? <img id="LoadingImg" src={"img/spinner.gif"} alt="로딩중"/> : null}
                 {loading === false && information? <SearchResults memberId={memberId}/> : null}
             </div>
         )
