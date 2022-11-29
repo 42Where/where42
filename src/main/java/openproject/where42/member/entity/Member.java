@@ -4,15 +4,21 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import openproject.where42.api.Define;
+import openproject.where42.group.entity.Groups;
 import openproject.where42.member.entity.enums.MemberLevel;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends User {
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Groups> groups = new ArrayList<Groups>();
     @Enumerated
     private MemberLevel level;
     private String msg;
