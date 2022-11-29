@@ -45,12 +45,10 @@ function Login() {
                 }).catch((Error) => {
                     const errData = Error.response.data;
                     console.clear();
-                    if ('data' in errData) {
+                    if ('data' in errData)
                         nav('/Agree', {state : errData.data});
-                    }
-                    else {
+                    else
                         window.location.href = serverurl;
-                    }
                 });
         }
 
