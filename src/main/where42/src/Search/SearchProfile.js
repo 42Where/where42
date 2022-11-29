@@ -16,14 +16,12 @@ const SearchProfile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        instance.post('groupFriend', null, {params: {friendName : info.login, img: info.image.link},
-        }).then((response)=>{
-            if (response.status === 201)
-                console.debug("정보 확인 완료")
-        }).catch((Error)=>{
-            if (Error.response.status === 401)
-                nav('/Login');
-        })
+        if (info.login === memberId)
+        {
+            alert("나는 우주를 여행하는 당신의 영원한 친구입니다.");
+            return ;
+        }
+        instance.post('groupFriend', null, {params: {friendName : info.login, img: info.image.link}})
         if (isDesktop)
         {
             e.target.innerText = '친구 추가 완료';
@@ -38,14 +36,17 @@ const SearchProfile = (props) => {
 
     let friendOrNot;
 
-    if (info.login === memberId)
-        friendOrNot = <></>
-    else if (isDesktop)
+    if (isDesktop)
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}>{info.friend? '친구 추가 완료' : '친구 추가'}</button>)
     else if (isMobile)
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
 
     const DetailClick = (e) => {
+        if (info.login === "WHERE42")
+        {
+            setDetail(info);
+            return ;
+        }
         if (isMobile)
         {
             if (detail != null) {
@@ -55,6 +56,11 @@ const SearchProfile = (props) => {
             }
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
+        }
+        if (info.location === "parsed")
+        {
+            setDetail(info);
+            return ;
         }
         const body = {login : info.login , image : info.image, msg : info.msg, inOrOut : info.inOrOut, locate : info.locate, location : info.location, friend : info.friend, member : info.member};
         instance.post('search/select', body)

@@ -13,7 +13,7 @@ function Login() {
     const isMobile = useMediaQuery({ query: '(max-width: 480px)'});
     const isTablet = useMediaQuery({ query: '(min-width: 481px) and (max-width: 1023px)'});
     const isDesktop = useMediaQuery({ query: '(min-width: 1024px)'});
-    const [modal, setModal] = useState(0);
+    const [modal, setModal] = useState(false);
     const xmlhttp = new XMLHttpRequest();
     let   content = null;
     const nav = useNavigate();
@@ -54,7 +54,7 @@ function Login() {
 
         return (
             <div id="Common">
-                <button id="Wiki" onClick={()=>{setModal(1)}} ></button>
+                <button id="Wiki" onClick={()=>{setModal(true)}} ></button>
                 <div id="Logo">
                     <img src="img/logo.svg" alt="logo"></img>
                 </div>
@@ -75,7 +75,7 @@ function Login() {
                     </div>
                     <div id="ModalContent">{content}</div>
                     <div id="ModalCancel">
-                        <button id="CancelButton" onClick={()=>{setModal(0)}}>닫기</button>
+                        <button id="CancelButton" onClick={()=>{setModal(false)}}>닫기</button>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@ function Login() {
 
     return (
         <div id="Login">
-            {modal === 1 ? <Modal/> : null}
+            {modal === true ? <Modal/> : null}
             {isMobile && <div id="Mobile"><Common/></div>}
             {isTablet && <div id="Tablet"><Common/></div>}
             {isDesktop && <div id="Desktop"><Common/></div>}

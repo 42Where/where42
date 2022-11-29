@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +24,10 @@ public class TokenService {
 	static private MakeCookie oven = new MakeCookie();
 
 	public Seoul42 beginningIssue(HttpServletResponse response, String code) {
-		OAuthToken oAuthToken = apiService.getOAuthToken(code);
-		Seoul42 seoul42 = apiService.getMeInfo(aes.encoding(oAuthToken.getAccess_token()));
+		CompletableFuture<OAuthToken> cf1 = apiService.getOAuthToken(code);;
+		OAuthToken oAuthToken = apiService.injectInfo(cf1);
+		CompletableFuture<Seoul42> cf2 = apiService.getMeInfo(aes.encoding(oAuthToken.getAccess_token()));
+		Seoul42 seoul42 = apiService.injectInfo(cf2);
 		Token token = tokenRepository.findTokenByName(seoul42.getLogin());
 		if (token != null){ // 만약 이미 DB에 Token들이 저장된 흔적이 있으면 업데이트만 해줌
 			tokenRepository.updateRefreshToken(token, oAuthToken.getRefresh_token());
@@ -35,7 +38,7 @@ public class TokenService {
 		return seoul42;
 	}
 
-	public void checkRefreshToken(String key) throws CookieExpiredException {
+	public void checkRefreshToken(String key) {
 		if (key == null || !tokenRepository.checkRefreshToken(key))
 			throw new CookieExpiredException();
 	}
@@ -48,7 +51,8 @@ public class TokenService {
 	/*** Access Token 새로 발급***/
 	public String issueAccessToken(String key) {
 		Token token = tokenRepository.findTokenByKey(key);
-		OAuthToken oAuthToken = apiService.getNewOAuthToken(aes.decoding(token.getRefreshToken()));
+		CompletableFuture<OAuthToken> cf = apiService.getNewOAuthToken(aes.decoding(token.getRefreshToken()));
+		OAuthToken oAuthToken = apiService.injectInfo(cf);
 		tokenRepository.updateRefreshToken(token,oAuthToken.getRefresh_token());
 		return aes.encoding(oAuthToken.getAccess_token());
 	}

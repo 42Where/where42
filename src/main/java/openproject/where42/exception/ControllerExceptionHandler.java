@@ -26,6 +26,11 @@ public class ControllerExceptionHandler {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 
+    @ExceptionHandler(CannotAccessAgreeException.class)
+    protected ResponseEntity handleTooManyReqeustException(CannotAccessAgreeException e) {
+        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
+
     @ExceptionHandler(TakenSeatException.class)
     protected ResponseEntity handleTakenSeatException(TakenSeatException e) {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
