@@ -7,6 +7,9 @@ import './Main_Mobile.css';
 import MainProfile from './MainProfile';
 import Groups from './Groups';
 import Loading from "../Etc/Loading";
+import videomember from "./videomember.json";
+import videogroup from "./videogroup.json";
+import videofriend from "./videofriend.json";
 
 function Main() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
@@ -16,18 +19,24 @@ function Main() {
     const [groupInfo, setGroupInfo] = useState(null);
     const [friendInfo, setFriendInfo] = useState(null);
     useEffect(() => {
-        //memberinfo
-        instance.get('member/member').then((response)=>{
-            setMemberInfo(response.data);
-        })
-        //groupinfo
-        instance.get('member/group').then((response)=>{
-            setGroupInfo(response.data);
-        })
-        //groupfriendinfo
-        instance.get('member/friend').then((response)=>{
-            setFriendInfo(response.data);
-        })
+        setMemberInfo(videomember);
+        setGroupInfo(videogroup);
+        setFriendInfo(videofriend);
+        // //memberinfo
+        // instance.get('member/member').then((response)=>{
+        //     setMemberInfo(response.data);
+        //     console.debug(response.data);
+        // })
+        // //groupinfo
+        // instance.get('member/group').then((response)=>{
+        //     setGroupInfo(response.data);
+        //     console.debug(response.data);
+        // })
+        // //groupfriendinfo
+        // instance.get('member/friend').then((response)=>{
+        //     setFriendInfo(response.data);
+        //     console.debug(response.data);
+        // })
     }, []);
 
     function Common() {

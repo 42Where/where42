@@ -48,7 +48,6 @@ export function CombineLocate(locate, inOutState) {
             position = "개포 ";
         else if (locate.planet === 2)
             position = "서초 ";
-
         if ((locate.planet === 1 && locate.floor === 0) || (locate.planet === 2 && locate.cluster === 0))
             position += "클러스터 내 ";
         else if (locate.floor === 6) {

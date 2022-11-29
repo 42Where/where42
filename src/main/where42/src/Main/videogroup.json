@@ -1,0 +1,14 @@
+[
+  {
+    "count" : 0,
+    "groupFriends" : [],
+    "groupId" : 2,
+    "groupName" : "즐겨찾기"
+  },
+  {
+    "count" : 6,
+    "groupFriends" : ["heeskim", "hyunjcho", "junhyuki", "sojoo", "sunghkim", "wocho"],
+    "groupId" : 1,
+    "groupName" : "기본"
+  }
+]

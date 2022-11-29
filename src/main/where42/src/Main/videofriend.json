@@ -1,0 +1,78 @@
+[
+  {
+    "id" : 5,
+    "name" : "heeskim",
+    "msg" : "{\"msg\":\"안녕하세오\"}",
+    "img" : "https://cdn.intra.42.fr/users/25a3af5327d647837dc21c700a9359b2/heeskim.jpg",
+    "inOrOut" : 0,
+    "locate" : {
+      "cluster" : 0,
+      "floor" : 0,
+      "planet" : null,
+      "spot" : null
+    }
+  },
+  {
+    "id" : 2,
+    "name" : "hyunjcho",
+    "msg" : "{\"msg\":\"where42 많관부\"}",
+    "img" : "https://cdn.intra.42.fr/users/b9ab3e83c791d1cf383621d9b9fb350e/hyunjcho.jpg",
+    "inOrOut" : 0,
+    "locate" : {
+      "cluster" : 0,
+      "floor" : 0,
+      "planet" : null,
+      "spot" : null
+    }
+  },
+  {
+    "id" : 3,
+    "name" : "junhyuki",
+    "msg" : null,
+    "img" : "https://cdn.intra.42.fr/users/6604964f3f0a5c5d90a32854f4ad0c03/junhyuki.jpg",
+    "inOrOut" : 2,
+    "locate" : {
+      "cluster" : 0,
+      "floor" : 0,
+      "planet" : null,
+      "spot" : null
+    }
+  },{
+    "id" : 1,
+    "name" : "sojoo",
+    "msg" : null,
+    "img" : "https://cdn.intra.42.fr/users/17fd9c49672e78f433fd6ed58f9b2afa/sojoo.jpg",
+    "inOrOut" : 1,
+    "locate" : {
+      "cluster" : 0,
+      "floor" : 0,
+      "planet" : 1,
+      "spot" : null
+  }
+},{
+  "id" : 5,
+  "name" : "sunghkim",
+  "msg" : null,
+  "img" : "https://cdn.intra.42.fr/users/04ec6bf783f82ea46c7fe24dbaa65300/sunghkim.jpg",
+  "inOrOut" : 1,
+  "locate" : {
+    "cluster" : 0,
+    "floor" : 6,
+    "planet" : 1,
+    "spot" : "탁구대"
+  }
+},
+  {
+  "id" : 4,
+  "name" : "wocho",
+  "msg" : null,
+  "img" : "https://cdn.intra.42.fr/users/487910b21908f2a2e371fe3cae162dc5/wocho.jpg",
+  "inOrOut" : 2,
+  "locate" : {
+    "cluster" : 0,
+    "floor" : 0,
+    "planet" : null,
+    "spot" : null
+  }
+}
+]

@@ -1,0 +1,13 @@
+{
+  "id" : 1,
+  "img" : "https://cdn.intra.42.fr/users/533dee753ca8db3eab86997aa9181b06/ean.jpg",
+  "inOrOut" : 1,
+  "locate" : {
+    "cluster" : 0,
+    "floor" : 4,
+    "planet" : 1,
+    "spot" : "c4s2r4"
+  },
+  "msg" : "{\"msg\":\"나는 메인남주 이안\"}",
+  "name" : "ean"
+}
