@@ -28,12 +28,15 @@ function Search() {
             }
             if (searchId === "where42")
             {
+                event.preventDefault();
                 setInformation(egg);
                 return ;
             }
             if (searchId === "어디있니")
             {
+                event.preventDefault();
                 alert("어디있니는 당신의 친구랍니다 :)");
+                return ;
             }
             setLoading(true);
             instance.get('search', {params : {begin : searchId}})

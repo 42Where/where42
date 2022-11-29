@@ -42,11 +42,6 @@ const SearchProfile = (props) => {
         friendOrNot = (<button className={info.friend? "AddDone" : "AddFriend"} onClick={FriendClick}></button>)
 
     const DetailClick = (e) => {
-        if (info.login === "WHERE42")
-        {
-            setDetail(info);
-            return ;
-        }
         if (isMobile)
         {
             if (detail != null) {
@@ -56,6 +51,11 @@ const SearchProfile = (props) => {
             }
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
+        }
+        if (info.login === "WHERE42")
+        {
+            setDetail(info);
+            return ;
         }
         if (info.location === "parsed")
         {
