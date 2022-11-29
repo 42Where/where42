@@ -7,7 +7,9 @@ public class ResponseMsg {
     public static final String NO_SESSION = "세션 없음";
     public static final String LOGIN_FAIL = "로그인 실패";
     public static final String UNREGISTERED = "개인정보제공 동의 필요";
+    public static final String CANNOT_ACCESS_AGREE = "개인정보제공 동의 화면 접근 불가";
     public static final String CREATE_MEMBER = "멤버 생성 성공";
+    public static final String DELETE_MEMBER = "멤버 삭제 성공";
     public static final String SET_MSG = "상태메시지 저장 성공";
     public static final String SET_LOCATE = "자리 저장 성공";
     public static final String CREATE_GROUP = "그룹 생성 성공";

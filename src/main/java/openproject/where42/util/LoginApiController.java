@@ -1,10 +1,9 @@
 package openproject.where42.util;
 
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
-import openproject.where42.exception.customException.CookieExpiredException;
+import openproject.where42.exception.customException.CannotAccessAgreeException;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class LoginApiController {
     private String token;
 
     @GetMapping(Define.versionPath + "/home")
-    public ResponseEntity home(@CookieValue(value = "ID", required = false) String key, HttpServletRequest req, HttpServletResponse res) throws CookieExpiredException, SessionExpiredException {
+    public ResponseEntity home(@CookieValue(value = "ID", required = false) String key, HttpServletRequest req, HttpServletResponse res) {
         token = tokenService.findAccessToken(key);
         if (token == null)
             tokenService.inspectToken(res, key);
@@ -47,15 +47,15 @@ public class LoginApiController {
     }
 
     @GetMapping(Define.versionPath + "/login")
-    public ResponseEntity login(@CookieValue(value = "ID", required = false) String key, HttpServletRequest req, HttpServletResponse res)
-                                throws CookieExpiredException, UnregisteredMemberException {
+    public ResponseEntity login(@CookieValue(value = "ID", required = false) String key, HttpServletRequest req, HttpServletResponse res) {
         token = tokenService.findAccessToken(key);
         if (token == null){
             tokenService.checkRefreshToken(key);
             token = tokenService.issueAccessToken(key);
             tokenService.addCookie(res, key);
         }
-        Seoul42 seoul42 = apiService.getMeInfo(token);
+        CompletableFuture<Seoul42> cf = apiService.getMeInfo(token);
+        Seoul42 seoul42 = apiService.injectInfo(cf);
         Member member = memberRepository.findMember(seoul42.getLogin());
         if (member == null)
             throw new UnregisteredMemberException(seoul42);
@@ -65,8 +65,7 @@ public class LoginApiController {
     }
 
     ///**** 중요 **** 오픈소스로 올릴 때 해당 링크 꼭 삭제하고 올려야 함
-    @Retry(name = "42apiRetry")
-    @RateLimiter(name = "42apiRateLimiter")
+    @Retry(name = "backend")
     @GetMapping(Define.versionPath + "/auth/login")
     public String authLogin() {
         /*** 로컬용 ***/
@@ -75,8 +74,30 @@ public class LoginApiController {
         return "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0&redirect_uri=http%3A%2F%2F54.180.140.84%2Fauth%2Flogin%2Fcallback&response_type=code";
     }
 
+    @GetMapping(Define.versionPath + "checkAgree")
+    public ResponseEntity checkAgree(@CookieValue(value = "ID", required = false) String key, HttpServletRequest req, HttpServletResponse res) {
+        token = tokenService.findAccessToken(key);
+        if (token == null){
+            tokenService.checkRefreshToken(key);
+            token = tokenService.issueAccessToken(key);
+            tokenService.addCookie(res, key);
+        }
+        session = req.getSession(false);
+        if (session != null)
+            throw new CannotAccessAgreeException();
+        CompletableFuture<Seoul42> cf = apiService.getMeInfo(token);
+        Seoul42 seoul42 = apiService.injectInfo(cf);
+        Member member = memberRepository.findMember(seoul42.getLogin());
+        if (member != null) {
+            session = req.getSession();
+            session.setAttribute("id", member.getId());
+            throw new CannotAccessAgreeException();
+        }
+        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.UNREGISTERED), HttpStatus.OK);
+    }
+
     @GetMapping(Define.versionPath + "/auth/code")
-    public ResponseEntity makeToken(@RequestParam("code") String code, HttpServletRequest req, HttpServletResponse res) throws UnregisteredMemberException {
+    public ResponseEntity makeToken(@RequestParam("code") String code, HttpServletRequest req, HttpServletResponse res) {
         Seoul42 seoul42 = tokenService.beginningIssue(res, code);
         session = req.getSession(false);
         if (session != null)
