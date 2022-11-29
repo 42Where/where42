@@ -38,5 +38,9 @@ management:
       show-details: always
 
 logging:
+  file:
+    path: /
+  #    path: /home/ec2-user/log
+  #    path: /Users/kimseonghun/Desktop/
   level:
     org.hibernate.SQL: debug

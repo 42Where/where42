@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <!-- yml파일에서 경로 긁어 오는거 -->
+    <springProperty name="filePath" source="logging.file.path"/>
+
+    <!-- console에 띄우는 용 -->
+    <appender name="where42_console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 로그 형식 지정 -->
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %clr(%-5level){blue} %clr(%logger{36}){yellow} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- INFO 메세지 파일로 저장 -->
+    <!-- 근데 굳이 저장할 필요가 있는지는 모르겠음 일단 저장 -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${filePath}/INFO.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${filePath}/INFO.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>1GB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %clr(%-5level %logger{36}){green} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ERROR 메세지 파일로 저장-->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${filePath}/ERROR.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${filePath}/ERROR-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %clr(%-5level){red} %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- appender에 등록해주고 실행 -->
+    <root level="INFO">
+        <appender-ref ref="where42_console"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>
