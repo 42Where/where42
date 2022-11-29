@@ -9,6 +9,8 @@ import openproject.where42.member.entity.Locate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -48,7 +50,8 @@ public class FlashDataService {
                 flash.parseStatus(Locate.parseLocate(flash.getLocation()));
             return flash;
         }
-        Seoul42 seoul42 = apiservice.get42ShortInfo(token42, name);
+        CompletableFuture<Seoul42> cf = apiservice.get42ShortInfo(token42, name);
+        Seoul42 seoul42 = apiservice.injectInfo(cf);
         if (flash != null)
             flash.updateLocation(seoul42.getLocation());
         else

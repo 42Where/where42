@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,7 +37,7 @@ public class MemberService {
     private final GroupRepository groupRepository;
     private final GroupFriendRepository groupFriendRepository;
     private final FlashDataService flashDataService;
-    private final ApiService api;
+    private final ApiService apiService;
 
     @Transactional
     public Long saveMember(String name, String img, String location) {
@@ -52,7 +53,7 @@ public class MemberService {
         HttpSession session = req.getSession(false);
         if (session == null)
             throw new SessionExpiredException();
-        session.setMaxInactiveInterval(30 * 60); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
+        session.setMaxInactiveInterval(30 * 30); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
         return memberRepository.findById((Long)session.getAttribute("id"));
     }
 
@@ -81,13 +82,14 @@ public class MemberService {
     @Transactional
     public int checkLocate(HttpServletRequest req, String token42) throws OutStateException, TakenSeatException {
         Member member = findBySession(req);
-        Planet planet = api.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName());
         if (planet == null) {
             initLocate(member, null);
             member.updateStatus(Define.OUT);
             throw new OutStateException();
         }
-        Seoul42 member42 = api.get42ShortInfo(token42, member.getName());
+        CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
+        Seoul42 member42 = apiService.injectInfo(cf);
         if (member42.getLocation() != null) {
             updateLocate(member, Locate.parseLocate(member42.getLocation()));
             throw new TakenSeatException();
@@ -99,9 +101,10 @@ public class MemberService {
     // 멤버 인포 조회용 api 호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
     @Transactional
     public void parseStatus(Member member, String token42) {
-        Planet planet = api.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName());
         if (planet != null) {
-            Seoul42 seoul42 = api.get42ShortInfo(token42, member.getName());
+            CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
+            Seoul42 seoul42 = apiService.injectInfo(cf);
             if (seoul42.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(seoul42.getLocation()));
             else {
@@ -118,7 +121,7 @@ public class MemberService {
     // api 미호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
     @Transactional
     public void parseStatus(Member member) {
-        Planet planet = api.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName());
         if (planet != null) {
             if (member.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(member.getLocation()));
@@ -165,5 +168,10 @@ public class MemberService {
             }
         }
         return friendsInfo;
+    }
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteMember(memberId);
     }
 }

@@ -3,6 +3,7 @@ package openproject.where42.member;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
 import openproject.where42.exception.customException.*;
+import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.groupFriend.entity.GroupFriendDto;
@@ -31,7 +32,6 @@ public class MemberApiController {
 
     private final MemberService memberService;
     private final TokenService tokenService;
-
     @PostMapping(Define.versionPath + "/member")
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage().getLink(), seoul42.getLocation());
@@ -93,5 +93,13 @@ public class MemberApiController {
         Member member = memberService.findBySession(req);
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);
+    }
+
+    @DeleteMapping(Define.versionPath + "/member/{memberId}")
+    public ResponseEntity deleteMember(@PathVariable(name = "memberId") Long memberId, HttpServletRequest req) {
+        Member admin = memberService.findBySession(req);
+        if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
+            memberService.deleteMember(memberId);
+        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_MEMBER), HttpStatus.OK);
     }
 }
