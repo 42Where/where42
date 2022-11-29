@@ -1,18 +1,27 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.group.GroupRepository;
+import openproject.where42.group.entity.Groups;
+import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.groupFriend.entity.GroupFriend;
 import openproject.where42.member.entity.Member;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {
 
     private final EntityManager em;
+    private final GroupRepository groupRepository;
+    private final GroupFriendRepository groupFriendRepository;
 
     public Long save(Member member) {
         em.persist(member);
@@ -40,6 +49,7 @@ public class MemberRepository {
             return null;
         }
     }
+
 
     public Member findById(Long id) {
         Member member;
@@ -77,5 +87,12 @@ public class MemberRepository {
             return false;
         }
         return true;
+    }
+    @Transactional
+    public void deleteMember(Long id){
+        System.out.println("============== excute delete query =============");
+        em.remove(em.createQuery("select m from Member m where m.id = :id", Member.class)
+                .setParameter("id", id)
+                .getSingleResult());
     }
 }

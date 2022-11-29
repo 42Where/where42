@@ -3,9 +3,12 @@ package openproject.where42.group.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import openproject.where42.groupFriend.entity.GroupFriend;
 import openproject.where42.member.entity.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,6 +22,9 @@ public class Groups {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GROUPS_SEQ")
     @Column(name = "group_id")
     private Long id;
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private List<GroupFriend> groupFriend = new ArrayList<GroupFriend>();
 
     @Column(nullable = false)
     private String groupName;

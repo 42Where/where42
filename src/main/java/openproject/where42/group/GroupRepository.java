@@ -3,7 +3,9 @@ package openproject.where42.group;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.entity.Groups;
 import openproject.where42.groupFriend.entity.GroupFriend;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -24,13 +26,13 @@ public class GroupRepository {
 
     // em.remove는 id로 동작안함
     public void deleteByGroupId(Long groupId) {
-        List<GroupFriend> members = em.createQuery("select ms from GroupFriend ms where ms.group.id = :groupId", GroupFriend.class)
-                .setParameter("groupId", groupId)
-                .getResultList();
-        for (GroupFriend member : members) {
-            System.out.println(member.getFriendName());
-            em.remove(member);
-        }
+//        List<GroupFriend> members = em.createQuery("select ms from GroupFriend ms where ms.group.id = :groupId", GroupFriend.class)
+//                .setParameter("groupId", groupId)
+//                .getResultList();
+//        for (GroupFriend member : members) {
+//            System.out.println(member.getFriendName());
+//            em.remove(member);
+//        }
         try {
             Groups group = em.createQuery("select g from Groups g where g.id = :groupId", Groups.class)
                     .setParameter("groupId", groupId)
