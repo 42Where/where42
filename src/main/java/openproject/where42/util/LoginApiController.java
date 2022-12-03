@@ -101,7 +101,11 @@ public class LoginApiController {
         Seoul42 seoul42 = tokenService.beginningIssue(res, code);
         session = req.getSession(false);
         if (session != null)
-            return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
+            return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
+        if (!Define.ACCESS.contains(seoul42.getLogin())) {
+            System.out.println("정식 배포 기간이 아니므로 로그인 할 수 없습니다.");
+            return new ResponseEntity(Response.res(StatusCode.CONFLICT, ResponseMsg.LOGIN_FAIL), HttpStatus.CONFLICT);
+        }
         Member member = memberRepository.findMember(seoul42.getLogin());
         if (member == null)
             throw new UnregisteredMemberException(seoul42);
