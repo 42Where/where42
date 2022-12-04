@@ -3,6 +3,7 @@ import Loading from "./Loading";
 import axios from 'axios';
 
 function Oauth() {
+    console.log("now");
     const nav = useNavigate();
     let code = new URL(window.location.href).searchParams.get("code");
     axios.get('/v1/auth/code', {params : {code: code}})
@@ -10,8 +11,18 @@ function Oauth() {
             nav('/Main');
         }).catch((Error)=> {
             console.clear();
-            let data = Error.response.data.data;
-            nav('/Agree', {state : data});
+            if (Error.response.status === 401) {
+                let data = Error.response.data.data;
+                nav('/Agree', {state: data});
+            }
+            else if (Error.response.status === 409) {
+                alert("정식 배포 기간이 아니므로 로그인 할 수 없습니다.");
+                nav('/Login');
+            }
+            else {
+                alert("다시 한 번 시도해 주세요.")
+                nav('/Login');
+            }
         });
 
     return (

@@ -17,8 +17,8 @@ function Agree()
             const body = { login: info.login , image : info.image, location : info.location};
             instance.post('member', body)
                 .then((response)=>{
-                    nav("/Main")}
-                );
+                    nav("/Main")
+                });
         }
         return (
             <div id="Wrapper">
