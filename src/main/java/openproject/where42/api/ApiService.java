@@ -151,7 +151,7 @@ public class ApiService {
         params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
         params.add("client_secret", "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");
         params.add("code", code);
-        params.add("redirect_uri","http://54.180.140.84/auth/login/callback");
+        params.add("redirect_uri","http://www.where42.kr/auth/login/callback");
         return new HttpEntity<>(params, headers);
     }
 

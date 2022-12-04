@@ -71,7 +71,7 @@ public class LoginApiController {
         /*** 로컬용 ***/
 //        return "https://api.intra.42.fr/oauth/authorize?client_id=150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Flogin%2Fcallback&response_type=code";
         /*** 서버용 ***/
-        return "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0&redirect_uri=http%3A%2F%2F54.180.140.84%2Fauth%2Flogin%2Fcallback&response_type=code";
+        return "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0&redirect_uri=http%3A%2F%2Fwww.where42.kr%2Fauth%2Flogin%2Fcallback&response_type=code";
     }
 
     @GetMapping(Define.versionPath + "checkAgree")
@@ -101,7 +101,11 @@ public class LoginApiController {
         Seoul42 seoul42 = tokenService.beginningIssue(res, code);
         session = req.getSession(false);
         if (session != null)
-            return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
+            return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
+        if (!Define.ACCESS.contains(seoul42.getLogin())) {
+            System.out.println("정식 배포 기간이 아니므로 로그인 할 수 없습니다.");
+            return new ResponseEntity(Response.res(StatusCode.CONFLICT, ResponseMsg.LOGIN_FAIL), HttpStatus.CONFLICT);
+        }
         Member member = memberRepository.findMember(seoul42.getLogin());
         if (member == null)
             throw new UnregisteredMemberException(seoul42);
