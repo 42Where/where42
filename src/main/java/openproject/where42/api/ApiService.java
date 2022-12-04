@@ -149,7 +149,7 @@ public class ApiService {
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
         params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_secret", "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");
         params.add("code", code);
         params.add("redirect_uri","http://www.where42.kr/auth/login/callback");
         return new HttpEntity<>(params, headers);
@@ -161,7 +161,7 @@ public class ApiService {
         params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
         params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_secret", "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");
         params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
