@@ -17,8 +17,8 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchCadet {
-    private String name;
-    private String img;
+    private String login;
+    private Image image;
     private String msg;
     private Locate locate;
     private int inOrOut;
@@ -27,8 +27,8 @@ public class SearchCadet {
     private boolean isMember;
 
     public SearchCadet(Member member) {
-        this.name = member.getName();
-        this.img = member.getImg();
+        this.login = member.getName();
+        this.image = new Image(member.getImg());
         this.msg = member.getMsg();
         this.location = member.getLocation();
         this.isMember = true;
@@ -39,8 +39,8 @@ public class SearchCadet {
     }
 
     public SearchCadet(FlashData flash) {
-        this.name = flash.getName();
-        this.img = flash.getImg();
+        this.login = flash.getName();
+        this.image = new Image(flash.getImg());
         this.location = flash.getLocation();
         if (Define.PARSED.equalsIgnoreCase(this.location)) {
             this.locate = flash.getLocate();
@@ -49,16 +49,16 @@ public class SearchCadet {
     }
 
     public SearchCadet(String name, String img) {
-        this.name = name;
-        this.img = img; //웨얼이 주소로 변경 필요
+        this.login = name;
+        this.image = new Image(img);
         this.location = Define.PARSED;
         this.locate = new Locate(null, 0, 0, null);
         this.inOrOut = Define.NONE;
     }
 
     public SearchCadet(String name, String imgUrl, String msg, String spot) {
-        this.name = name;
-        this.img = imgUrl; // 이미지 주소
+        this.login = name;
+        this.image = new Image(imgUrl);
         this.msg = msg;
         this.locate = new Locate(null, 0, 0, spot);
         this.inOrOut = Define.IN;

@@ -1,23 +1,18 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.ApiService;
 import openproject.where42.api.Define;
-import openproject.where42.api.dto.Seoul42;
-import openproject.where42.groupFriend.entity.GroupFriendDto;
 import openproject.where42.member.entity.FlashData;
 import openproject.where42.member.entity.Locate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FlashDataService {
     private final FlashDataRepository flashDataRepository;
-    private static final ApiService apiservice = new ApiService();
 
     @Transactional
     public FlashData createFlashData(String name, String img, String location) {

@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 public class LoginApiController {
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
-    private static final ApiService apiService = new ApiService();
+    private final ApiService apiService;
     private HttpSession session;
     private String token;
 

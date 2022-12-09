@@ -82,7 +82,7 @@ public class TokenRepository {
 		Date now = new Date();
 		Long diff = (now.getTime() - token.getRecentLogin().getTime()) / 60000;
 		System.out.println(diff);
-		if (diff < 110){
+		if (diff > 110){
 			req = apiService.req42AdminRefreshHeader(token.getRefreshToken());
 			res = apiService.resPostApi(req, apiService.req42TokenUri());
 			OAuthToken oAuthToken = apiService.oAuthTokenMapping(res.getBody());
@@ -105,9 +105,10 @@ public class TokenRepository {
 
 	public String callHane() {
 		try {
-			return em.createQuery("select m from Token m where m.memberName = :name", String.class)
+			Token token = em.createQuery("select m from Token m where m.memberName = :name", Token.class)
 					.setParameter("name", "hane")
 					.getSingleResult();
+			return token.getAccessToken();
 		} catch (NoResultException e) {
 			return null;
 		}
