@@ -7,10 +7,6 @@ function Home() {
     instance.get('home')
         .then(() => {
             nav('/Main');
-        }).catch((err) => {
-            if (err.response.status === 401) {
-                nav('/Login');
-            }
         });
 
     return (<Loading/>)

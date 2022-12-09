@@ -99,9 +99,9 @@ public class MemberApiController {
 
     @DeleteMapping(Define.WHERE42_VERSION_PATH + "/member/{memberId}")
     public ResponseEntity deleteMember(@PathVariable(name = "memberId") Long memberId, HttpServletRequest req) {
-        Member admin = memberService.findBySession(req);
+//        Member admin = memberService.findBySession(req);
 //        if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
-            memberService.deleteMember(memberId);
+        memberService.deleteMember(memberId);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_MEMBER), HttpStatus.OK);
     }
 }

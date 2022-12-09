@@ -15,4 +15,5 @@ public class Define {
     public static final int IN = 1;
     public static final int NONE = 2;
     public static final String PARSED = "parsed";
+    public static final ArrayList<String> ACCESS = new ArrayList<>(Arrays.asList("sunghkim", "sojoo", "hyunjcho", "heeskim"));
 }
