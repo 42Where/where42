@@ -3,10 +3,7 @@ package openproject.where42.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.retry.annotation.Retry;
-import openproject.where42.api.dto.OAuthToken;
-import openproject.where42.api.dto.Hane;
-import openproject.where42.api.dto.SearchCadet;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.dto.*;
 import openproject.where42.exception.customException.JsonDeserializeException;
 import openproject.where42.exception.customException.TooManyRequestException;
 import openproject.where42.token.AES;
@@ -23,8 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -34,8 +32,10 @@ public class ApiService {
     private static final AES aes = new AES();
     private static final ObjectMapper om = new ObjectMapper();
     private static final RestTemplate rt = new RestTemplate();
-    static final public String tokenHane = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRmdW5jIjoiV2hlcmU0MiIsImlhdCI6MTY2ODM5MTIwMCwiZXhwIjoxNjcwOTgzMjAwfQ.N7N3IqsQFwuz1MU0OHN27f_QIZ1XEwnEAYgp4Iadz18";
-    // open 서비스로 돌릴 때 삭제해야 하는 것
+    // ****** 중요 ******* open 서비스로 돌릴 때 삭제해야 하는 것
+    public static final String tokenHane = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRmdW5jIjoiV2hlcmU0MiIsImlhdCI6MTY2ODM5MTIwMCwiZXhwIjoxNjcwOTgzMjAwfQ.N7N3IqsQFwuz1MU0OHN27f_QIZ1XEwnEAYgp4Iadz18";
+    public static final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC")));
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     HttpHeaders headers;
     HttpEntity<MultiValueMap<String, String>> req;
     MultiValueMap<String, String> params;
@@ -78,6 +78,30 @@ public class ApiService {
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
 
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Cluster>> get42OccupyingInfo(String token, int i) {
+        req = req42ApiHeader(aes.decoding(token));
+        res = resReqApi(req, req42ApiLocationUri(i));
+        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+    }
+
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Cluster>> get42LocationEnd(String token, int i) {
+        req = req42ApiHeader(aes.decoding(token));
+        res = resReqApi(req, req42ApiLocationEndUri(i));
+        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+    }
+
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Cluster>> get42LocationBegin(String token, int i) {
+        req = req42ApiHeader(aes.decoding(token));
+        res = resReqApi(req, req42ApiLocationBeginUri(i));
+        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+    }
+
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
@@ -107,14 +131,14 @@ public class ApiService {
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
     public Planet getHaneInfo(String name) {
-        req = reqHaneApiHeader();
-        res = resReqApi(req, reqHaneApiUri(name));
-        Hane hane = haneMapping(res.getBody());
-        if (hane.getInoutState().equalsIgnoreCase("IN")) {
-            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
-                return Planet.gaepo;
-            return Planet.seocho;
-        }
+//        req = reqHaneApiHeader();
+//        res = resReqApi(req, reqHaneApiUri(name));
+//        Hane hane = haneMapping(res.getBody());
+//        if (hane.getInoutState().equalsIgnoreCase("IN")) {
+//            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
+//                return Planet.gaepo;
+//            return Planet.seocho;
+//        }
         return null;
     }
 
@@ -192,15 +216,54 @@ public class ApiService {
 
     public URI req42MeUri() {
         return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path("/v2/me")
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/me")
                 .build()
                 .toUri();
     }
 
+    public URI req42ApiLocationUri(int i) {
+        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
+                .queryParam("page[size]", 50)
+                .queryParam("page[number]", i)
+                .queryParam("sort", "-end_at")
+//                .queryParam("range[end_at]", null) // 널만 검색하는 게 분명히 있을텐데요./.
+                .build()
+                .toUri();
+    }
+
+    public URI req42ApiLocationEndUri(int i) {
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = new Date();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, -5);
+        System.out.println("now = " + sdf.format(date) + " 3min = " + sdf.format(cal.getTime()));
+        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
+                .queryParam("page[size]", 50)
+                .queryParam("page[number]", i)
+                .queryParam("range[end_at]", sdf.format(cal.getTime()) + "," + sdf.format(date)) // 널만 검색하는 게 분명히 있을텐데요./.
+                .build()
+                .toUri();
+    }
+
+    public URI req42ApiLocationBeginUri(int i) {
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = new Date();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, -5);
+        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
+                .queryParam("page[size]", 50)
+                .queryParam("page[number]", i)
+                .queryParam("range[begin_at]", sdf.format(cal.getTime()) + "," + sdf.format(date)) // 널만 검색하는 게 분명히 있을텐데요./.
+                .build()
+                .toUri();
+    }
     // 유저 범위 설정 검색 요청 uri 생성 메소드
     public URI req42ApiUsersInRangeUri(String begin, String end) {
         return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path("/v2/campus/" + Define.SEOUL + "/users/")
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/users")
                 .queryParam("sort", "login")
                 .queryParam("range[login]", begin + "," + end)
                 .queryParam("page[size]", "10")
@@ -211,7 +274,7 @@ public class ApiService {
     // 한 유저에 대한 me 정보 요청 uri 생성 메소드
     public URI req42ApiOneUserUri(String name) {
         return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path("/v2/users/" + name)
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/users/" + name)
                 .build()
                 .toUri();
     }
@@ -245,8 +308,17 @@ public class ApiService {
         return seoul42;
     }
 
-    // ListSeoul42 객체 json 매핑 메소드
+    public List<Cluster> occupyingMapping(String body) {
+        List<Cluster> clusters = null;
+        try {
+            clusters = Arrays.asList(om.readValue(body, Cluster[].class));
+        } catch (JsonProcessingException e) {
+            throw new JsonDeserializeException();
+        }
+        return clusters;
+    }
 
+    // ListSeoul42 객체 json 매핑 메소드
     public List<Seoul42> seoul42ListMapping(String body) {
         List<Seoul42> seoul42List = null;
         try {

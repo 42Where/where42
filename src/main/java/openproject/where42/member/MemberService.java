@@ -156,11 +156,8 @@ public class MemberService {
         for (GroupFriend f : friends) {
             Member friend = memberRepository.findMember(f.getFriendName());
             if (friend != null) {
-                if (friend.timeDiff() < 3) {
-                    if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
+                if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
                         parseStatus(friend);
-                } else
-                    parseStatus(friend, token42);
                 friendsInfo.add(new GroupFriendDto(friend, f.getId()));
             } else {
                 FlashData flash = flashDataService.checkFlashFriend(f.getFriendName(), token42);
