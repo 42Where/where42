@@ -1,14 +1,19 @@
 package openproject.where42.token;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.token.entity.Token;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.Date;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,6 +22,19 @@ public class TokenRepository {
 
 	static private AES aes = new AES();
 	private final EntityManager em;
+	private final ApiService apiService;
+	HttpEntity<MultiValueMap<String, String>> req;
+	ResponseEntity<String> res;
+
+	@Transactional
+	public String saveAdmin(String name , OAuthToken oAuthToken) {
+		Token token = new Token(
+				name,
+				oAuthToken.getAccess_token(),
+				oAuthToken.getRefresh_token());
+		em.persist(token);
+		return token.getUUID();
+	}
 	@Transactional
 	public String saveRefreshToken(String name , OAuthToken oAuthToken) {
 		Token token = new Token(
@@ -53,6 +71,42 @@ public class TokenRepository {
 		try {
 			return em.createQuery("select m from Token m where m.memberName = :name", Token.class)
 					.setParameter("name", name)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	@Transactional
+	public void checkToken(Token token) {
+		Date now = new Date();
+		Long diff = (now.getTime() - token.getRecentLogin().getTime()) / 60000;
+		System.out.println(diff);
+		if (diff < 110){
+			req = apiService.req42AdminRefreshHeader(token.getRefreshToken());
+			res = apiService.resPostApi(req, apiService.req42TokenUri());
+			OAuthToken oAuthToken = apiService.oAuthTokenMapping(res.getBody());
+			token.updateAccess(oAuthToken.getAccess_token());
+			token.updateRefresh(oAuthToken.getRefresh_token());
+		}
+	}
+	@Transactional
+	public String callAdmin() {
+		try {
+			Token token =  em.createQuery("select m from Token m where m.memberName = :name", Token.class)
+					.setParameter("name", "admin")
+					.getSingleResult();
+			checkToken(token);
+			return token.getAccessToken();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
+	public String callHane() {
+		try {
+			return em.createQuery("select m from Token m where m.memberName = :name", String.class)
+					.setParameter("name", "hane")
 					.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
