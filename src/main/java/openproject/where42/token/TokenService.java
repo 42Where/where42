@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -63,9 +64,14 @@ public class TokenService {
 	}
 
 	public String findAccessToken(String key) {
+		if (key == null)
+			throw new CookieExpiredException();
 		Token token = tokenRepository.findTokenByKey(key);
 		if (token == null || token.getAccessToken() == null)
 			return null;
+		Date now = new Date();
+		if ((now.getTime() - token.getRecentLogin().getTime()) / 60000 > 110)
+			return issueAccessToken(key);
 		return token.getAccessToken();
 	}
 }
