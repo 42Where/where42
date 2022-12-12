@@ -29,6 +29,7 @@ public class SearchApiController {
     private final FlashDataService flashDataService;
     private final TokenService tokenService;
     private final ApiService apiService;
+    private final ImageRepository imageRepository;
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep, @RequestParam("begin") String begin,
@@ -65,12 +66,6 @@ public class SearchApiController {
 //            }
 //            i++;
 //        }
-        System.out.println("campus....");
-        apiService.get42test(token42, 1);
-        int j = 1;
-        while(j < 100)
-            j++;
-        apiService.get42test(token42, 2);
         begin = begin.toLowerCase();
         CompletableFuture<List<Seoul42>> cf = apiService.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<Seoul42> searchList = apiService.injectInfo(cf);
@@ -96,7 +91,7 @@ public class SearchApiController {
         FlashData flash = flashDataService.findByName(name);
         if (flash != null)
             return new SearchCadet(flash);
-        return new SearchCadet(name, "img db에서 찾아서 보내주기");
+        return new SearchCadet(name, imageRepository.findByName(name));
     }
 
     private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?
