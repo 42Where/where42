@@ -29,7 +29,10 @@ public class TokenController {
 
 	@GetMapping("/savecode")
 	public String savecode(@RequestParam("code") String code) {
-		req = apiService.req42LocalAdminHeader(code);
+		/*** 로컬용 ***/
+//		req = apiService.req42LocalAdminHeader(code);
+		/*** 서버용 ***/
+		req = apiService.req42AdminHeader(code);
 		res = apiService.resPostApi(req, apiService.req42TokenUri());
 		OAuthToken oAuthToken = apiService.oAuthTokenMapping(res.getBody());
 		tokenRepository.saveAdmin("admin", oAuthToken);

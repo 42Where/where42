@@ -271,10 +271,10 @@ public class ApiService {
     public URI req42ApiImageUri(int i) {
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/users")
-                .queryParam("sort", "-login")
-                .queryParam("sort", "status")
+                .queryParam("sort", "login")
+//                .queryParam("sort", "status")
                 .queryParam("filter[kind]", "student")
-                .queryParam("page[size]", 10)
+                .queryParam("page[size]", 100)
                 .queryParam("page[number]", i)
                 .build()
                 .toUri();
