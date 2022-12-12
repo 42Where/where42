@@ -2,8 +2,6 @@ package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
-import openproject.where42.api.ClusterService;
-import openproject.where42.api.dto.Cluster;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.FlashData;
@@ -31,12 +29,8 @@ public class SearchApiController {
     private final FlashDataService flashDataService;
     private final TokenService tokenService;
     private final ApiService apiService;
-    private final ClusterService clusterService;
+    private final ImageRepository imageRepository;
 
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/incluster") // 서버 실행 시 자동 실행 방법..? 2주에 한 번 해줘야 하는 것들을 모아놓고 스케쥴러로 돌려도 좋고..
-    public void findAllInClusterCadet() {
-        clusterService.updateAllOccupyingCadet();
-    }
     @GetMapping(Define.WHERE42_VERSION_PATH + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep, @RequestParam("begin") String begin,
                                                   @CookieValue(value = "ID", required = false) String key) {
@@ -97,7 +91,7 @@ public class SearchApiController {
         FlashData flash = flashDataService.findByName(name);
         if (flash != null)
             return new SearchCadet(flash);
-        return new SearchCadet(name, "img db에서 찾아서 보내주기");
+        return new SearchCadet(name, imageRepository.findByName(name));
     }
 
     private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?

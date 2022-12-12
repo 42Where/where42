@@ -1,7 +1,9 @@
-package openproject.where42.api;
+package openproject.where42.background;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Cluster;
+import openproject.where42.api.dto.Seoul42;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;
@@ -21,17 +23,18 @@ import java.util.concurrent.CompletableFuture;
 @EnableScheduling
 @Transactional
 @Service
-public class ClusterService {
+public class BackgroundService {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final FlashDataService flashDataService;
     private final ApiService apiService;
     private final TokenRepository tokenRepository;
+    private final ImageRepository imageRepository;
     public String token42;
 
     // 백그라운드 업데이트
 //    @Scheduled(cron = "0 ") 2주에 한 번.. 은 어떻게 못하겠는 걸... 수동..?
-    public void updateAllOccupyingCadet() { // 낮밤을 바꿀 것인지?
+    public void updateAllInClusterCadet() { // 낮밤을 바꿀 것인지?
         int i = 0;
         token42 = tokenRepository.callAdmin();
         while(true) {
@@ -107,5 +110,20 @@ public class ClusterService {
                 break;
             i++;
         }
+    }
+
+    public boolean getAllCadetImages() {
+        token42 = tokenRepository.callAdmin();
+        int i = 1;
+        while (true) {
+            CompletableFuture<List<Seoul42>> cf = apiService.get42Image(token42, i);
+            List<Seoul42> allCadets = apiService.injectInfo(cf);
+            if (!imageRepositoy.inputImage(allCadets))
+                return false;
+            if (allCadets.size() < 100)
+                break;
+            i++;
+        }
+        return true;
     }
 }
