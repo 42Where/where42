@@ -19,6 +19,7 @@ import openproject.where42.member.entity.Member;
 import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.entity.enums.Planet;
+import openproject.where42.token.TokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ public class MemberService {
     private final GroupFriendRepository groupFriendRepository;
     private final FlashDataService flashDataService;
     private final ApiService apiService;
+    private final TokenRepository tokenRepository;
 
     @Transactional
     public Long saveMember(String name, String img, String location) {
@@ -82,7 +84,7 @@ public class MemberService {
     @Transactional
     public int checkLocate(HttpServletRequest req, String token42) throws OutStateException, TakenSeatException {
         Member member = findBySession(req);
-        Planet planet = apiService.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet == null) {
             initLocate(member, null);
             member.updateStatus(Define.OUT);
@@ -101,7 +103,7 @@ public class MemberService {
     // 멤버 인포 조회용 api 호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
     @Transactional
     public void parseStatus(Member member, String token42) {
-        Planet planet = apiService.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet != null) {
             CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
             Seoul42 seoul42 = apiService.injectInfo(cf);
@@ -121,7 +123,7 @@ public class MemberService {
     // api 미호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
     @Transactional
     public void parseStatus(Member member) {
-        Planet planet = apiService.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet != null) {
             if (member.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(member.getLocation()));
@@ -156,11 +158,8 @@ public class MemberService {
         for (GroupFriend f : friends) {
             Member friend = memberRepository.findMember(f.getFriendName());
             if (friend != null) {
-                if (friend.timeDiff() < 3) {
-                    if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
+                if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
                         parseStatus(friend);
-                } else
-                    parseStatus(friend, token42);
                 friendsInfo.add(new GroupFriendDto(friend, f.getId()));
             } else {
                 FlashData flash = flashDataService.checkFlashFriend(f.getFriendName(), token42);

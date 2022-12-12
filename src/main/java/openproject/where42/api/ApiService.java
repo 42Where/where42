@@ -3,10 +3,8 @@ package openproject.where42.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.retry.annotation.Retry;
-import openproject.where42.api.dto.OAuthToken;
-import openproject.where42.api.dto.Hane;
-import openproject.where42.api.dto.SearchCadet;
-import openproject.where42.api.dto.Seoul42;
+import lombok.RequiredArgsConstructor;
+import openproject.where42.api.dto.*;
 import openproject.where42.exception.customException.JsonDeserializeException;
 import openproject.where42.exception.customException.TooManyRequestException;
 import openproject.where42.token.AES;
@@ -23,19 +21,21 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service // 이컨트롤러 쓴느게 맞나..ㅎ 다시 생각.. 왜 스프링 빈에 등록이 안된다는걸까??
+@RequiredArgsConstructor
 public class ApiService {
     private static final AES aes = new AES();
     private static final ObjectMapper om = new ObjectMapper();
     private static final RestTemplate rt = new RestTemplate();
-    static final public String tokenHane = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHRmdW5jIjoiV2hlcmU0MiIsImlhdCI6MTY2ODM5MTIwMCwiZXhwIjoxNjcwOTgzMjAwfQ.N7N3IqsQFwuz1MU0OHN27f_QIZ1XEwnEAYgp4Iadz18";
-    // open 서비스로 돌릴 때 삭제해야 하는 것
+    public static final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC")));
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     HttpHeaders headers;
     HttpEntity<MultiValueMap<String, String>> req;
     MultiValueMap<String, String> params;
@@ -78,6 +78,39 @@ public class ApiService {
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
 
+    //테스트용
+//    @Retry(name = "backend")
+//    @Async("apiTaskExecutor")
+//    public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
+//        req = req42ApiHeader(aes.decoding(token));
+//        res = resReqApi(req, req42ApiLocationUri(i));
+//        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+//    }
+
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
+        req = req42ApiHeader(token);
+        res = resReqApi(req, req42ApiLocationUri(i));
+        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+    }
+
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Cluster>> get42LocationEnd(String token, int i) {
+        req = req42ApiHeader(token);
+        res = resReqApi(req, req42ApiLocationEndUri(i));
+        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+    }
+
+    @Retry(name = "backend")
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Cluster>> get42LocationBegin(String token, int i) {
+        req = req42ApiHeader(token);
+        res = resReqApi(req, req42ApiLocationBeginUri(i));
+        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+    }
+
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
@@ -106,8 +139,8 @@ public class ApiService {
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
-    public Planet getHaneInfo(String name) {
-        req = reqHaneApiHeader();
+    public Planet getHaneInfo(String name, String token) {
+        req = reqHaneApiHeader(token);
         res = resReqApi(req, reqHaneApiUri(name));
         Hane hane = haneMapping(res.getBody());
         if (hane.getInoutState().equalsIgnoreCase("IN")) {
@@ -143,39 +176,15 @@ public class ApiService {
     }
 
     /*** 로컬용 ***/
-    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
-        headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        params = new LinkedMultiValueMap<>();
-        params.add("grant_type","authorization_code");
-        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
-        params.add("code", code);
-        params.add("redirect_uri","http://localhost:8080/auth/login/callback");
-        return new HttpEntity<>(params, headers);
-    }
-
-    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String refreshToken) {
-        headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "refresh_token");
-        params.add("client_id", "150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
-        params.add("refresh_token", refreshToken);
-        return new HttpEntity<>(params, headers);
-    }
-
-    /*** 서버용 ***/
 //    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
 //        headers = new HttpHeaders();
 //        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 //        params = new LinkedMultiValueMap<>();
 //        params.add("grant_type","authorization_code");
-//        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-//        params.add("client_secret", "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");
+//        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
+//        params.add("client_secret", "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");
 //        params.add("code", code);
-//        params.add("redirect_uri","http://www.where42.kr/auth/login/callback");
+//        params.add("redirect_uri","http://localhost:8080/auth/login/callback");
 //        return new HttpEntity<>(params, headers);
 //    }
 //
@@ -184,11 +193,35 @@ public class ApiService {
 //        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 //        params = new LinkedMultiValueMap<>();
 //        params.add("grant_type", "refresh_token");
-//        params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-//        params.add("client_secret", "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");
+//        params.add("client_id", "150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
+//        params.add("client_secret", "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");
 //        params.add("refresh_token", refreshToken);
 //        return new HttpEntity<>(params, headers);
 //    }
+
+    /*** 서버용 ***/
+    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
+        headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        params = new LinkedMultiValueMap<>();
+        params.add("grant_type","authorization_code");
+        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+        params.add("client_secret", "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");
+        params.add("code", code);
+        params.add("redirect_uri","http://www.where42.kr/auth/login/callback");
+        return new HttpEntity<>(params, headers);
+    }
+
+    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String refreshToken) {
+        headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "refresh_token");
+        params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
+        params.add("client_secret", "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");
+        params.add("refresh_token", refreshToken);
+        return new HttpEntity<>(params, headers);
+    }
 
     // 42api 요청 헤더 생성 메소드
     public HttpEntity<MultiValueMap<String, String>> req42ApiHeader(String token) {
@@ -200,9 +233,9 @@ public class ApiService {
     }
 
     // hane 요청 헤더 생성 메소드
-    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader() {
+    public HttpEntity<MultiValueMap<String, String>> reqHaneApiHeader(String token) {
         headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + tokenHane);
+        headers.add("Authorization", "Bearer " + token);
         headers.add("Content-type", "application/json;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         return new HttpEntity<>(params, headers);
@@ -216,15 +249,53 @@ public class ApiService {
 
     public URI req42MeUri() {
         return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path("/v2/me")
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/me")
                 .build()
                 .toUri();
     }
 
+    public URI req42ApiLocationUri(int i) {
+        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
+                .queryParam("page[size]", 50)
+                .queryParam("page[number]", i)
+                .queryParam("sort", "-end_at")
+//                .queryParam("range[end_at]", null) // 널만 검색하는 게 분명히 있을텐데요./.
+                .build()
+                .toUri();
+    }
+
+    public URI req42ApiLocationEndUri(int i) {
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = new Date();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, -3);
+        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
+                .queryParam("page[size]", 50)
+                .queryParam("page[number]", i)
+                .queryParam("range[end_at]", sdf.format(cal.getTime()) + "," + sdf.format(date)) // 널만 검색하는 게 분명히 있을텐데요./.
+                .build()
+                .toUri();
+    }
+
+    public URI req42ApiLocationBeginUri(int i) {
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date date = new Date();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, -3);
+        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
+                .queryParam("page[size]", 50)
+                .queryParam("page[number]", i)
+                .queryParam("range[begin_at]", sdf.format(cal.getTime()) + "," + sdf.format(date)) // 널만 검색하는 게 분명히 있을텐데요./.
+                .build()
+                .toUri();
+    }
     // 유저 범위 설정 검색 요청 uri 생성 메소드
     public URI req42ApiUsersInRangeUri(String begin, String end) {
         return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path("/v2/campus/" + Define.SEOUL + "/users/")
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/users")
                 .queryParam("sort", "login")
                 .queryParam("range[login]", begin + "," + end)
                 .queryParam("page[size]", "10")
@@ -235,7 +306,7 @@ public class ApiService {
     // 한 유저에 대한 me 정보 요청 uri 생성 메소드
     public URI req42ApiOneUserUri(String name) {
         return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path("/v2/users/" + name)
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/users/" + name)
                 .build()
                 .toUri();
     }
@@ -269,8 +340,17 @@ public class ApiService {
         return seoul42;
     }
 
-    // ListSeoul42 객체 json 매핑 메소드
+    public List<Cluster> occupyingMapping(String body) {
+        List<Cluster> clusters = null;
+        try {
+            clusters = Arrays.asList(om.readValue(body, Cluster[].class));
+        } catch (JsonProcessingException e) {
+            throw new JsonDeserializeException();
+        }
+        return clusters;
+    }
 
+    // ListSeoul42 객체 json 매핑 메소드
     public List<Seoul42> seoul42ListMapping(String body) {
         List<Seoul42> seoul42List = null;
         try {

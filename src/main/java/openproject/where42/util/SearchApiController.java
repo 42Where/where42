@@ -2,6 +2,8 @@ package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
+import openproject.where42.api.ClusterService;
+import openproject.where42.api.dto.Cluster;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.FlashData;
@@ -28,23 +30,54 @@ public class SearchApiController {
     private final MemberRepository memberRepository;
     private final FlashDataService flashDataService;
     private final TokenService tokenService;
-    private static final ApiService api = new ApiService();
+    private final ApiService apiService;
+    private final ClusterService clusterService;
 
-    @GetMapping(Define.versionPath + "/search")
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/incluster") // 서버 실행 시 자동 실행 방법..? 2주에 한 번 해줘야 하는 것들을 모아놓고 스케쥴러로 돌려도 좋고..
+    public void findAllInClusterCadet() {
+        clusterService.updateAllOccupyingCadet();
+    }
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep, @RequestParam("begin") String begin,
                                                   @CookieValue(value = "ID", required = false) String key) {
-        String token42 = tokenService.findAccessToken(key);
+        String token42 = tokenService.findAccessToken(key); // 여기부터 세션까지 한 번에 함수로 어딘가 static으로 만들어서두자
         if (token42 == null)
             tokenService.inspectToken(rep, key);
         HttpSession session = req.getSession(false);
         if (session == null)
             throw new SessionExpiredException();
+//        int i = 0;
+//        while(true) {
+//            CompletableFuture<List<Cluster>> cf = apiService.get42ClusterInfo(token42, i);
+//            System.out.println("i = " + i);
+//            List<Cluster> clusterCadets = apiService.injectInfo(cf);
+//            for (Cluster cadet : clusterCadets) {
+//                Member member = memberRepository.findMember(cadet.getUser().getLogin());
+//                if (member != null)
+//                    memberService.updateLocation(member, cadet.getUser().getLocation());
+//                else {
+//                    FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
+//                    if (flash != null)
+//                        flashDataService.updateLocation(flash, cadet.getUser().getLocation());
+//                    else
+//                        flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
+//                }
+//            }
+//            for (Cluster cluster : clusterCadets) {
+//                System.out.println("** name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at());
+//            }
+//            if (clusterCadets.get(49).getEnd_at() != null) //null로 할 수 있다면! 이거 조건 뺴도 됨!
+//            {
+//                break;
+//            }
+//            i++;
+//        }
         begin = begin.toLowerCase();
-        CompletableFuture<List<Seoul42>> cf = api.get42UsersInfoInRange(token42, begin, getEnd(begin));
-        List<Seoul42> searchList = api.injectInfo(cf);
+        CompletableFuture<List<Seoul42>> cf = apiService.get42UsersInfoInRange(token42, begin, getEnd(begin));
+        List<Seoul42> searchList = apiService.injectInfo(cf);
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
         for (Seoul42 cadet : searchList) {
-            SearchCadet searchCadet = searchCadetInfo(cadet.getLogin(), token42);
+            SearchCadet searchCadet = searchCadetInfo(cadet.getLogin());
             if (memberRepository.checkFriendByMemberIdAndName((Long) session.getAttribute("id"), searchCadet.getLogin()))
                 searchCadet.setFriend(true);
             searchCadetList.add(searchCadet);
@@ -52,31 +85,19 @@ public class SearchApiController {
        return searchCadetList;
     }
 
-    public SearchCadet searchCadetInfo(String name, String token42) {
-        SearchCadet searchCadet;
-        Member member = memberRepository.findMember(name);
-        if (member != null) {
-            if (member.timeDiff() < 3)
-                searchCadet = new SearchCadet(member);
-            else {
-                CompletableFuture<SearchCadet> cf = api.get42DetailInfo(token42, name);
-                searchCadet = api.injectInfo(cf);
-                memberService.updateLocation(member, searchCadet.getLocation());
-                searchCadet.setMember(true);
-                return searchCadet;
-            }
-        }
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/search/where42")
+    public List<SearchCadet> searchWhere42Info() {
+        return SearchCadet.where42();
+    }
 
+    public SearchCadet searchCadetInfo(String name) {
+        Member member = memberRepository.findMember(name);
+        if (member != null)
+            return new SearchCadet(member);
         FlashData flash = flashDataService.findByName(name);
-        if (flash != null && flash.timeDiff() < 3)
-            return new SearchCadet(flash);
-        CompletableFuture<SearchCadet> cf = api.get42DetailInfo(token42, name);
-        searchCadet = api.injectInfo(cf);
         if (flash != null)
-            flashDataService.updateLocation(flash, searchCadet.getLocation());
-        else
-            flashDataService.createFlashData(name, searchCadet.getImage().getLink(), searchCadet.getLocation());
-        return searchCadet;
+            return new SearchCadet(flash);
+        return new SearchCadet(name, "img db에서 찾아서 보내주기");
     }
 
     private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?
@@ -90,7 +111,7 @@ public class SearchApiController {
             return begin.substring(0, begin.length() - 1) + (char)((int) last + 1);
     }
 
-    @PostMapping(Define.versionPath + "/search/select")
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/search/select")
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
         if (!Define.PARSED.equalsIgnoreCase(cadet.getLocation())) {
             if (cadet.isMember()) {

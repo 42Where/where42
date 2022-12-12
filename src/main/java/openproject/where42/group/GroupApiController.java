@@ -25,7 +25,7 @@ public class GroupApiController {
     private final GroupService groupService;
 
     // 커스텀 그룹 생성
-    @PostMapping(Define.versionPath + "/group")
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/group")
     public ResponseEntity createCustomGroup(HttpServletRequest req, @RequestParam("groupName") String groupName) {
         Member owner = groupService.findOwnerBySession(req);
         Long groupId = groupService.createCustomGroup(groupName, owner);
@@ -33,7 +33,7 @@ public class GroupApiController {
     }
 
     // 기본 그룹 제외 그룹 목록 반환 (그룹 관리)
-    @GetMapping(Define.versionPath + "/group")
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/group")
     public List<GroupDto> getGroupsExceptDefault(HttpServletRequest req) {
         Member member = groupService.findOwnerBySession(req);
         List<Groups> groups = groupService.findAllGroupsExceptDefault(member.getId());
@@ -45,14 +45,14 @@ public class GroupApiController {
     }
 
     // 커스텀 그룹 이름 수정 -> 세션 만료되어도 저장 됨
-    @PostMapping(Define.versionPath + "/group/{groupId}")
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/group/{groupId}")
     public ResponseEntity updateGroupName(@PathVariable("groupId") Long groupId, @RequestParam("changeName") String changeName) throws DuplicateGroupNameException {
         groupService.updateGroupName(groupId, changeName);
         return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.CHANGE_GROUP_NAME, groupId), HttpStatus.OK);
     }
 
     // 세션 만료되어도 저장 됨
-    @DeleteMapping(Define.versionPath + "/group/{groupId}")
+    @DeleteMapping(Define.WHERE42_VERSION_PATH + "/group/{groupId}")
     public ResponseEntity deleteGroup(@PathVariable("groupId") Long groupId) {
         groupService.deleteByGroupId(groupId);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_GROUP), HttpStatus.OK);
