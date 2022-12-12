@@ -51,14 +51,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;    
-    width : 20%;
+    width : 12%;
 }
 
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox #SearchMascot img{
     width: 100%;
     height : 100%;
     max-width: 540px;
-    margin-left: 1.5%;
+    margin-left: 5%;
+    margin-bottom: 12%;
     object-fit: cover; 
 }
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox form {
