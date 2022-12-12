@@ -59,6 +59,14 @@ public class ApiService {
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
+//    @Retry(name = "backend")
+//    @Async("apiTaskExecutor")
+//    public CompletableFuture<Seoul42> get42ImageInfo(String token, int i) {
+//        req = req42ApiHeader(aes.decoding(token));
+//        res = resReqApi(req, req42ApiOneUserUri(name));
+//        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
+//    }
+
     // me 정보 반환
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
@@ -92,7 +100,7 @@ public class ApiService {
     public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiLocationUri(i));
-        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+        return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
     }
 
     @Retry(name = "backend")
@@ -100,7 +108,7 @@ public class ApiService {
     public CompletableFuture<List<Cluster>> get42LocationEnd(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiLocationEndUri(i));
-        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+        return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
     }
 
     @Retry(name = "backend")
@@ -108,7 +116,7 @@ public class ApiService {
     public CompletableFuture<List<Cluster>> get42LocationBegin(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiLocationBeginUri(i));
-        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
+        return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
     }
 
     // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
@@ -121,11 +129,11 @@ public class ApiService {
     }
 
     @Retry(name = "backend")
-    @Async("apiThreadPoolTaskExecutor")
-    public CompletableFuture<SearchCadet> get42DetailInfo(String token, String name) {
+    @Async("apiTaskExecutor")
+    public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
         req = req42ApiHeader(aes.decoding(token));
-        res = resReqApi(req, req42ApiOneUserUri(name));
-        return CompletableFuture.completedFuture(searchCadetMapping(res.getBody()));
+        res = resReqApi(req, req42ApiImageUri(i));
+        return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
 
     public <T> T injectInfo(CompletableFuture<T> info) {
@@ -149,6 +157,19 @@ public class ApiService {
             return Planet.seocho;
         }
         return null;
+    }
+
+    /*** 관리자 로컬 ***/
+    public HttpEntity<MultiValueMap<String, String>> req42LocalAdminHeader(String code) {
+        headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        params = new LinkedMultiValueMap<>();
+        params.add("grant_type","authorization_code");
+        params.add("client_id","u-s4t2ud-b62a88b0deb7cdc85c7d9228410c2d1d1ca49a033772c41e26c06c0234674392");
+        params.add("client_secret", "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");
+        params.add("code", code);
+        params.add("redirect_uri","http://localhost:8080/savecode");
+        return new HttpEntity<>(params, headers);
     }
 
     /*** 관리자용 ***/
@@ -247,6 +268,18 @@ public class ApiService {
                 .toUri();
     }
 
+    public URI req42ApiImageUri(int i) {
+        return UriComponentsBuilder.newInstance()
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/users")
+                .queryParam("sort", "-login")
+                .queryParam("sort", "status")
+                .queryParam("filter[kind]", "student")
+                .queryParam("page[size]", 10)
+                .queryParam("page[number]", i)
+                .build()
+                .toUri();
+    }
+
     public URI req42MeUri() {
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/me")
@@ -274,7 +307,7 @@ public class ApiService {
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 50)
                 .queryParam("page[number]", i)
-                .queryParam("range[end_at]", sdf.format(cal.getTime()) + "," + sdf.format(date)) // 널만 검색하는 게 분명히 있을텐데요./.
+                .queryParam("range[end_at]", sdf.format(cal.getTime()) + "," + sdf.format(date))
                 .build()
                 .toUri();
     }
@@ -288,10 +321,11 @@ public class ApiService {
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 50)
                 .queryParam("page[number]", i)
-                .queryParam("range[begin_at]", sdf.format(cal.getTime()) + "," + sdf.format(date)) // 널만 검색하는 게 분명히 있을텐데요./.
+                .queryParam("range[begin_at]", sdf.format(cal.getTime()) + "," + sdf.format(date))
                 .build()
                 .toUri();
     }
+
     // 유저 범위 설정 검색 요청 uri 생성 메소드
     public URI req42ApiUsersInRangeUri(String begin, String end) {
         return UriComponentsBuilder.newInstance()
@@ -340,7 +374,7 @@ public class ApiService {
         return seoul42;
     }
 
-    public List<Cluster> occupyingMapping(String body) {
+    public List<Cluster> clusterMapping(String body) {
         List<Cluster> clusters = null;
         try {
             clusters = Arrays.asList(om.readValue(body, Cluster[].class));

@@ -48,6 +48,7 @@ public class MemberService {
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
         member.setDefaultGroup(defaultGroupId, starredGroupId);
+        parseStatus(member);
         return memberId;
     }
 

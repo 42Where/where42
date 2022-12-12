@@ -10,4 +10,5 @@ public class Seoul42 {
     private String login;
     private String location;
     private Image image;
+    private String active;
 }

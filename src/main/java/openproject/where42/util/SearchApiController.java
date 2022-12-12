@@ -2,8 +2,6 @@ package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
-import openproject.where42.api.ClusterService;
-import openproject.where42.api.dto.Cluster;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.FlashData;
@@ -31,12 +29,7 @@ public class SearchApiController {
     private final FlashDataService flashDataService;
     private final TokenService tokenService;
     private final ApiService apiService;
-    private final ClusterService clusterService;
 
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/incluster") // 서버 실행 시 자동 실행 방법..? 2주에 한 번 해줘야 하는 것들을 모아놓고 스케쥴러로 돌려도 좋고..
-    public void findAllInClusterCadet() {
-        clusterService.updateAllOccupyingCadet();
-    }
     @GetMapping(Define.WHERE42_VERSION_PATH + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep, @RequestParam("begin") String begin,
                                                   @CookieValue(value = "ID", required = false) String key) {
@@ -72,6 +65,12 @@ public class SearchApiController {
 //            }
 //            i++;
 //        }
+        System.out.println("campus....");
+        apiService.get42test(token42, 1);
+        int j = 1;
+        while(j < 100)
+            j++;
+        apiService.get42test(token42, 2);
         begin = begin.toLowerCase();
         CompletableFuture<List<Seoul42>> cf = apiService.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<Seoul42> searchList = apiService.injectInfo(cf);
