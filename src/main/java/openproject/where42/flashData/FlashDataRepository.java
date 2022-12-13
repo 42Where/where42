@@ -1,7 +1,6 @@
-package openproject.where42.member;
+package openproject.where42.flashData;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.member.entity.FlashData;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

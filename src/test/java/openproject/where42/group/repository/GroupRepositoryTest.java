@@ -1,8 +1,8 @@
 //package openproject.where42.group.repository;
 //
 //import openproject.where42.group.GroupRepository;
-//import openproject.where42.group.entity.Groups;
-//import openproject.where42.groupFriend.entity.GroupFriend;
+//import openproject.where42.group.Groups;
+//import openproject.where42.groupFriend.GroupFriend;
 //import openproject.where42.groupFriend.GroupFriendRepository;
 //import openproject.where42.member.entity.Member;
 //import openproject.where42.member.entity.enums.MemberLevel;

@@ -3,8 +3,8 @@ package openproject.where42.member.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.api.Define;
-import openproject.where42.group.entity.Groups;
+import openproject.where42.util.Define;
+import openproject.where42.group.Groups;
 import openproject.where42.member.entity.enums.MemberLevel;
 
 import javax.persistence.*;

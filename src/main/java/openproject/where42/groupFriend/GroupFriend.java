@@ -1,9 +1,9 @@
-package openproject.where42.groupFriend.entity;
+package openproject.where42.groupFriend;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.group.entity.Groups;
+import openproject.where42.group.Groups;
 
 import javax.persistence.*;
 

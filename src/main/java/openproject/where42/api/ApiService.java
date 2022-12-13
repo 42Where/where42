@@ -9,6 +9,7 @@ import openproject.where42.exception.customException.JsonDeserializeException;
 import openproject.where42.exception.customException.TooManyRequestException;
 import openproject.where42.token.AES;
 import openproject.where42.member.entity.enums.Planet;
+import openproject.where42.util.Define;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

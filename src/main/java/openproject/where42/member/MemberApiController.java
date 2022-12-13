@@ -1,12 +1,11 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.util.Define;
 import openproject.where42.exception.customException.*;
-import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.dto.Seoul42;
-import openproject.where42.groupFriend.entity.GroupFriendDto;
+import openproject.where42.groupFriend.GroupFriendDto;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 import openproject.where42.member.dto.MemberGroupInfo;

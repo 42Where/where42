@@ -1,4 +1,4 @@
-package openproject.where42.token.entity;
+package openproject.where42.token;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package openproject.where42.api;
+package openproject.where42.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;

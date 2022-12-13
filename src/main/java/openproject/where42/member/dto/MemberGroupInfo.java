@@ -2,7 +2,7 @@ package openproject.where42.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import openproject.where42.group.entity.Groups;
+import openproject.where42.group.Groups;
 
 import java.util.List;
 

@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import openproject.where42.api.Define;
-import openproject.where42.member.entity.FlashData;
+import openproject.where42.util.Define;
+import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 

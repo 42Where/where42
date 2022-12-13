@@ -1,9 +1,8 @@
 package openproject.where42.groupFriend;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.util.Define;
 import openproject.where42.exception.customException.RegisteredFriendException;
-import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;

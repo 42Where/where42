@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.exception.customException.DefaultGroupNameException;
 import openproject.where42.exception.customException.DuplicateGroupNameException;
 import openproject.where42.exception.customException.SessionExpiredException;
-import openproject.where42.group.entity.Groups;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.entity.Member;
 import org.springframework.stereotype.Service;
