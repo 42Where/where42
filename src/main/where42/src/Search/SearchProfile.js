@@ -16,7 +16,7 @@ const SearchProfile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        if (info.login === memberId)
+        if (info.name === memberId)
         {
             alert("나는 우주를 여행하는 당신의 영원한 친구입니다.");
             return ;
@@ -52,7 +52,7 @@ const SearchProfile = (props) => {
             else
                 e.target.style = "background-image: url('img/detail_on.svg')";
         }
-        if (info.login === "WHERE42")
+        if (info.name === "WHERE42")
         {
             setDetail(info);
             return ;
