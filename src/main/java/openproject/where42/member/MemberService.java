@@ -3,7 +3,7 @@ package openproject.where42.member;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.util.Define;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.OutStateException;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.exception.customException.TakenSeatException;
@@ -92,7 +92,7 @@ public class MemberService {
             member.updateStatus(Define.OUT);
             throw new OutStateException();
         }
-        CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
+        CompletableFuture<Seoul42> cf = apiService.getMeInfo(token42);
         Seoul42 member42 = apiService.injectInfo(cf);
         if (member42.getLocation() != null) {
             updateLocate(member, Locate.parseLocate(member42.getLocation()));
@@ -107,7 +107,7 @@ public class MemberService {
     public void parseStatus(Member member, String token42) {
         Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet != null) {
-            CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
+            CompletableFuture<Seoul42> cf = apiService.getMeInfo(token42);
             Seoul42 seoul42 = apiService.injectInfo(cf);
             if (seoul42.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(seoul42.getLocation()));

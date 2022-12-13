@@ -1,9 +1,7 @@
-package openproject.where42.api.dto;
+package openproject.where42.api.mapper;
 
 import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter
+@Getter
 public class OAuthToken {
     private String access_token;
     private String token_type;

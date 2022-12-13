@@ -2,8 +2,8 @@ package openproject.where42.background;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.Cluster;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.Cluster;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.flashData.FlashDataService;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;
@@ -32,14 +32,11 @@ public class BackgroundService {
     private final ImageRepository imageRepository;
     public String token42;
 
-    // 백그라운드 업데이트
-//    @Scheduled(cron = "0 ") 2주에 한 번.. 은 어떻게 못하겠는 걸... 수동..?
     public void updateAllInClusterCadet() { // 낮밤을 바꿀 것인지?
-        int i = 0;
+        int i = 1;
         token42 = tokenRepository.callAdmin();
         while(true) {
             CompletableFuture<List<Cluster>> cf = apiService.get42ClusterInfo(token42, i);
-            System.out.println("i = " + i);
             List<Cluster> clusterCadets = apiService.injectInfo(cf);
             for (Cluster cadet : clusterCadets) {
                 Member member = memberRepository.findMember(cadet.getUser().getLogin());
@@ -74,15 +71,14 @@ public class BackgroundService {
                     memberService.updateLocation(member, cadet.getUser().getLocation());
                 else {
                     FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
-                    System.out.println("flash == " + flash);
                     if (flash != null)
                         flashDataService.updateLocation(flash, cadet.getUser().getLocation());
                     else
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
-            for (Cluster cluster : clusterCadets)
-                System.out.println("** end name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
+//            for (Cluster cluster : clusterCadets)
+//                System.out.println("** end name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
             if (clusterCadets.size() < 50)
                 break;
             i++;
@@ -97,15 +93,14 @@ public class BackgroundService {
                     memberService.updateLocation(member, cadet.getUser().getLocation());
                 else {
                     FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
-                    System.out.println("flash == " + flash);
                     if (flash != null)
                         flashDataService.updateLocation(flash, cadet.getUser().getLocation());
                     else
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
-            for (Cluster cluster : clusterCadets)
-                System.out.println("** begin name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
+//            for (Cluster cluster : clusterCadets)
+//                System.out.println("** begin name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
             if (clusterCadets.size() < 50)
                 break;
             i++;
@@ -116,20 +111,18 @@ public class BackgroundService {
         imageRepository.deleteMember();
     }
 
-    public boolean getAllCadetImages() {
+    public void getAllCadetImages() {
         token42 = tokenRepository.callAdmin();
         int i = 1;
         while (true) {
             CompletableFuture<List<Seoul42>> cf = apiService.get42Image(token42, i);
             List<Seoul42> allCadets = apiService.injectInfo(cf);
-            if (!imageRepository.inputImage(allCadets))
-                return false;
+            imageRepository.inputImage(allCadets);
             if (allCadets.size() < 100)
                 break;
             System.out.println("DONE");
             i++;
         }
         imageRepository.deduplication();
-        return true;
     }
 }

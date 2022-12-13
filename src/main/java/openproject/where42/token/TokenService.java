@@ -2,8 +2,8 @@ package openproject.where42.token;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.OAuthToken;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.OAuthToken;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.CookieExpiredException;
 import openproject.where42.member.MemberService;
 import org.springframework.stereotype.Service;

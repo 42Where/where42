@@ -8,8 +8,8 @@ import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.SearchCadet;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.SearchCadet;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.member.MemberRepository;
 import org.springframework.web.bind.annotation.*;
@@ -40,48 +40,17 @@ public class SearchApiController {
         HttpSession session = req.getSession(false);
         if (session == null)
             throw new SessionExpiredException();
-//        int i = 0;
-//        while(true) {
-//            CompletableFuture<List<Cluster>> cf = apiService.get42ClusterInfo(token42, i);
-//            System.out.println("i = " + i);
-//            List<Cluster> clusterCadets = apiService.injectInfo(cf);
-//            for (Cluster cadet : clusterCadets) {
-//                Member member = memberRepository.findMember(cadet.getUser().getLogin());
-//                if (member != null)
-//                    memberService.updateLocation(member, cadet.getUser().getLocation());
-//                else {
-//                    FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
-//                    if (flash != null)
-//                        flashDataService.updateLocation(flash, cadet.getUser().getLocation());
-//                    else
-//                        flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
-//                }
-//            }
-//            for (Cluster cluster : clusterCadets) {
-//                System.out.println("** name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at());
-//            }
-//            if (clusterCadets.get(49).getEnd_at() != null) //null로 할 수 있다면! 이거 조건 뺴도 됨!
-//            {
-//                break;
-//            }
-//            i++;
-//        }
         begin = begin.toLowerCase();
         CompletableFuture<List<Seoul42>> cf = apiService.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<Seoul42> searchList = apiService.injectInfo(cf);
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
         for (Seoul42 cadet : searchList) {
             SearchCadet searchCadet = searchCadetInfo(cadet.getLogin());
-            if (memberRepository.checkFriendByMemberIdAndName((Long) session.getAttribute("id"), searchCadet.getLogin()))
+            if (memberRepository.checkFriendByMemberIdAndName((Long) session.getAttribute("id"), searchCadet.getName()))
                 searchCadet.setFriend(true);
             searchCadetList.add(searchCadet);
         }
        return searchCadetList;
-    }
-
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/search/where42")
-    public List<SearchCadet> searchWhere42Info() {
-        return SearchCadet.where42();
     }
 
     public SearchCadet searchCadetInfo(String name) {
@@ -92,6 +61,11 @@ public class SearchApiController {
         if (flash != null)
             return new SearchCadet(flash);
         return new SearchCadet(name, imageRepository.findByName(name));
+    }
+
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/search/where42")
+    public List<SearchCadet> searchWhere42Info() {
+        return SearchCadet.where42();
     }
 
     private String getEnd(String begin) { // z를 여러개 넣는 거.. 뭐가 더 나을까?
@@ -109,11 +83,11 @@ public class SearchApiController {
     public SearchCadet getSelectCadetInfo(@RequestBody SearchCadet cadet) {
         if (!Define.PARSED.equalsIgnoreCase(cadet.getLocation())) {
             if (cadet.isMember()) {
-                Member member = memberRepository.findMember(cadet.getLogin());
+                Member member = memberRepository.findMember(cadet.getName());
                 memberService.parseStatus(member);
                 cadet.updateStatus(member.getLocate(), member.getInOrOut());
             } else {
-                FlashData flash = flashDataService.findByName(cadet.getLogin());
+                FlashData flash = flashDataService.findByName(cadet.getName());
                 flashDataService.parseStatus(flash);
                 cadet.updateStatus(flash.getLocate(), flash.getInOrOut());
             }

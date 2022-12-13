@@ -9,8 +9,8 @@ public class Define {
     public static final String SEOUL = "29";
     public static final ArrayList<String> WHERE42NAME = new ArrayList<>(Arrays.asList("sunghkim", "sojoo", "hyunjcho", "heeskim"));
     public static final ArrayList<String> WHERE42IMG = new ArrayList<>(Arrays.asList("img1", "img2", "무 이미지", "img4"));
-    public static final ArrayList<String> WHERE42MSG = new ArrayList<>(Arrays.asList("msg1", "msg2", "너 내 동료가 돼라!!", "msg4"));
-    public static final ArrayList<String> WHERE42SPOT = new ArrayList<>(Arrays.asList("spot1", "spot2", "제주도 푸른밤", "spot4"));
+    public static final ArrayList<String> WHERE42MSG = new ArrayList<>(Arrays.asList("TO THE MOON", "팀 어디있니에 귀요미 입니다", "너 내 동료가 돼라!!", "블랙홀 D-3"));
+    public static final ArrayList<String> WHERE42SPOT = new ArrayList<>(Arrays.asList("MOON", "여러분의 마음 속", "제주도 푸른밤", "사건의 지평선"));
     public static final int OUT = 0;
     public static final int IN = 1;
     public static final int NONE = 2;

@@ -1,4 +1,4 @@
-package openproject.where42.api.dto;
+package openproject.where42.api.mapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

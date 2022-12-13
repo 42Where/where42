@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.dto.*;
+import openproject.where42.api.mapper.*;
 import openproject.where42.exception.customException.JsonDeserializeException;
 import openproject.where42.exception.customException.TooManyRequestException;
 import openproject.where42.token.AES;
@@ -29,7 +29,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-@Service // 이컨트롤러 쓴느게 맞나..ㅎ 다시 생각.. 왜 스프링 빈에 등록이 안된다는걸까??
+@Service
 @RequiredArgsConstructor
 public class ApiService {
     private static final AES aes = new AES();
@@ -60,41 +60,14 @@ public class ApiService {
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
-//    @Retry(name = "backend")
-//    @Async("apiTaskExecutor")
-//    public CompletableFuture<Seoul42> get42ImageInfo(String token, int i) {
-//        req = req42ApiHeader(aes.decoding(token));
-//        res = resReqApi(req, req42ApiOneUserUri(name));
-//        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
-//    }
-
-    // me 정보 반환
+    // 이미지 호출
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
-    public CompletableFuture<Seoul42> getMeInfo(String token) {
-        req = req42ApiHeader(aes.decoding(token));
-        res = resReqApi(req, req42MeUri());
-        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
-    }
-
-    // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
-    // 검색 시 Location 및 img가 나오지 않아 seoul42 -> searchCadet으로 변환해야함
-    @Retry(name = "backend")
-    @Async("apiTaskExecutor")
-    public CompletableFuture<List<Seoul42>> get42UsersInfoInRange(String token, String begin, String end) {
-        req = req42ApiHeader(aes.decoding(token));
-        res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
+    public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
+        req = req42ApiHeader(token);
+        res = resReqApi(req, req42ApiImageUri(i));
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
-
-    //테스트용
-//    @Retry(name = "backend")
-//    @Async("apiTaskExecutor")
-//    public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
-//        req = req42ApiHeader(aes.decoding(token));
-//        res = resReqApi(req, req42ApiLocationUri(i));
-//        return CompletableFuture.completedFuture(occupyingMapping(res.getBody()));
-//    }
 
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
@@ -120,22 +93,32 @@ public class ApiService {
         return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
     }
 
-    // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
+    // me 정보 반환
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
-    public CompletableFuture<Seoul42> get42ShortInfo(String token, String name) {
+    public CompletableFuture<Seoul42> getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
-        res = resReqApi(req, req42ApiOneUserUri(name));
+        res = resReqApi(req, req42MeUri());
         return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
     }
 
+    // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
-    public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
-        req = req42ApiHeader(token);
-        res = resReqApi(req, req42ApiImageUri(i));
+    public CompletableFuture<List<Seoul42>> get42UsersInfoInRange(String token, String begin, String end) {
+        req = req42ApiHeader(aes.decoding(token));
+        res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
+
+    // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
+//    @Retry(name = "backend")
+//    @Async("apiTaskExecutor")
+//    public CompletableFuture<Seoul42> get42ShortInfo(String token, String name) {
+//        req = req42ApiHeader(aes.decoding(token));
+//        res = resReqApi(req, req42ApiOneUserUri(name));
+//        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
+//    }
 
     public <T> T injectInfo(CompletableFuture<T> info) {
         T ret = null;
@@ -147,7 +130,7 @@ public class ApiService {
         return ret;
     }
 
-    // 한 유저에 대해 하네 정보를 추가해주는 메소드 (hane true/false 로직으로 변경 가능한지 고민, 외출 등을 살릴 경우 hane 매핑하는 객체를 아예 따로 만드는게 나을지도?)
+    // 한 유저에 대해 하네 정보를 추가해주는 메소드
     public Planet getHaneInfo(String name, String token) {
         req = reqHaneApiHeader(token);
         res = resReqApi(req, reqHaneApiUri(name));
@@ -273,17 +256,9 @@ public class ApiService {
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/users")
                 .queryParam("sort", "login")
-//                .queryParam("sort", "status")
                 .queryParam("filter[kind]", "student")
                 .queryParam("page[size]", 100)
                 .queryParam("page[number]", i)
-                .build()
-                .toUri();
-    }
-
-    public URI req42MeUri() {
-        return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/me")
                 .build()
                 .toUri();
     }
@@ -327,6 +302,13 @@ public class ApiService {
                 .toUri();
     }
 
+    public URI req42MeUri() {
+        return UriComponentsBuilder.newInstance()
+                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/me")
+                .build()
+                .toUri();
+    }
+
     // 유저 범위 설정 검색 요청 uri 생성 메소드
     public URI req42ApiUsersInRangeUri(String begin, String end) {
         return UriComponentsBuilder.newInstance()
@@ -339,12 +321,12 @@ public class ApiService {
     }
 
     // 한 유저에 대한 me 정보 요청 uri 생성 메소드
-    public URI req42ApiOneUserUri(String name) {
-        return UriComponentsBuilder.newInstance()
-                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/users/" + name)
-                .build()
-                .toUri();
-    }
+//    public URI req42ApiOneUserUri(String name) {
+//        return UriComponentsBuilder.newInstance()
+//                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/users/" + name)
+//                .build()
+//                .toUri();
+//    }
 
     // 한 유저에 대한 하네 정보 요청 uri 생성 메소드
     public URI reqHaneApiUri(String name) {
@@ -419,14 +401,6 @@ public class ApiService {
 
     // api req요청에 대한 응답 반환 메소드
     public ResponseEntity<String> resReqApi(HttpEntity<MultiValueMap<String, String>> req, URI url) {
-//        if(bucket.tryConsume(1)){
-//            System.out.println("index : " + i);
-//        }else{
-//            System.out.println("Token is Empty!");
-//            //Toekn 충전
-//            sleep(10000);
-//        }
-//        try {
         return rt.exchange(
                 url.toString(),
                 HttpMethod.GET,

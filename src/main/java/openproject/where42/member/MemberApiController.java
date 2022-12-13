@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.util.Define;
 import openproject.where42.exception.customException.*;
 import openproject.where42.token.TokenService;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.groupFriend.GroupFriendDto;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;

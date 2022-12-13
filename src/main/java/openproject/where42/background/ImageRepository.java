@@ -1,7 +1,7 @@
 package openproject.where42.background;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.Seoul42;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
