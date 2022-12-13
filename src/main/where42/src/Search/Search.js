@@ -32,18 +32,22 @@ function Search() {
                 setInformation(egg);
                 return ;
             }
+            setLoading(true);
             if (searchId === "어디있니")
             {
-                event.preventDefault();
+                instance.get('search/where42')
+                    .then((response)=>{
+                    setInformation(response.data);
+                    setLoading(false);
+                })
                 alert("어디있니는 당신의 친구랍니다 :)");
                 return ;
             }
-            setLoading(true);
             instance.get('search', {params : {begin : searchId}})
                 .then((response)=>{
                 if (response.data.length === 0)
                     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
-                console.debug(response.data);
+                // console.debug(response.data);
                 setLoading(false);
                 setInformation(response.data);
             }).catch((Error)=> {

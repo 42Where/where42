@@ -44,8 +44,7 @@ function Login() {
                     nav('/Main');
                 }).catch((Error) => {
                     const errData = Error.response.data;
-                    console.clear();
-                    if ('data' in errData)
+                    if (errData.hasOwnProperty('data'))
                         nav('/Agree', {state : errData.data});
                     else
                         window.location.href = serverurl;

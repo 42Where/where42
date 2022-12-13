@@ -1,5 +1,6 @@
 #Login {
     width: 100%;
+    height : 100vh;
 }
 
 #Login #Common {
@@ -34,4 +35,9 @@
     background-color: transparent;
     border: 0;
     position: relative;
+}
+
+#Login #LoginButton:active{
+    outline:none !important;
+
 }

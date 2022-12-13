@@ -86,6 +86,7 @@
 
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox form input:focus {
     outline:none;
+    font-size : 16px;
 }
 
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox #SearchButton {
