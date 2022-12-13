@@ -1,10 +1,8 @@
-package openproject.where42.member;
+package openproject.where42.flashData;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
-import openproject.where42.group.GroupRepository;
+import openproject.where42.util.Define;
 import openproject.where42.groupFriend.GroupFriendRepository;
-import openproject.where42.member.entity.FlashData;
 import openproject.where42.member.entity.Locate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

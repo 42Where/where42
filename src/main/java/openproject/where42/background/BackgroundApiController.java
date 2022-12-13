@@ -1,7 +1,7 @@
 package openproject.where42.background;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.util.Define;
 import openproject.where42.util.response.Response;
 import openproject.where42.util.response.ResponseMsg;
 import openproject.where42.util.response.StatusCode;

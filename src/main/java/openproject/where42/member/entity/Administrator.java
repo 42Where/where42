@@ -1,6 +1,6 @@
 package openproject.where42.member.entity;
 
-import openproject.where42.group.entity.Groups;
+import openproject.where42.group.Groups;
 import openproject.where42.member.entity.enums.Planet;
 import openproject.where42.member.entity.enums.MemberLevel;
 

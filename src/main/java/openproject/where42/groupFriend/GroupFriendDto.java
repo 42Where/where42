@@ -1,8 +1,8 @@
-package openproject.where42.groupFriend.entity;
+package openproject.where42.groupFriend;
 
 import lombok.Getter;
 import lombok.Setter;
-import openproject.where42.member.entity.FlashData;
+import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 

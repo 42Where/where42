@@ -6,13 +6,10 @@ import openproject.where42.api.dto.OAuthToken;
 import openproject.where42.api.dto.Seoul42;
 import openproject.where42.exception.customException.CookieExpiredException;
 import openproject.where42.member.MemberService;
-import openproject.where42.token.entity.Token;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Service

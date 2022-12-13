@@ -2,18 +2,14 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.group.GroupRepository;
-import openproject.where42.group.entity.Groups;
 import openproject.where42.groupFriend.GroupFriendRepository;
-import openproject.where42.groupFriend.entity.GroupFriend;
+import openproject.where42.groupFriend.GroupFriend;
 import openproject.where42.member.entity.Member;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor

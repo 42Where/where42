@@ -1,11 +1,8 @@
 package openproject.where42.group;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.util.Define;
 import openproject.where42.exception.customException.DuplicateGroupNameException;
-import openproject.where42.exception.customException.SessionExpiredException;
-import openproject.where42.group.entity.GroupDto;
-import openproject.where42.group.entity.Groups;
 import openproject.where42.member.entity.Member;
 import openproject.where42.util.response.Response;
 import openproject.where42.util.response.ResponseWithData;

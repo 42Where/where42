@@ -1,12 +1,12 @@
-package openproject.where42.member.entity;
+package openproject.where42.flashData;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.util.Define;
+import openproject.where42.member.entity.Locate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter

@@ -1,4 +1,4 @@
-package openproject.where42.iamge;
+package openproject.where42.background;
 
 import lombok.Getter;
 

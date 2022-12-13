@@ -2,7 +2,6 @@ package openproject.where42.util;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
 import openproject.where42.exception.customException.CannotAccessAgreeException;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.token.TokenService;
