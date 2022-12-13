@@ -53,10 +53,10 @@ public class SearchCadet {
     // 플래시 데이터에도 없는 경우 디비에 저장하지 않고 location null 셋팅
     public SearchCadet(String name, String img) {
         this.name = name;
-        if (this.img != null)
+        if (img != null)
             this.img = img;
         else
-            this.img = "null";
+            this.img = "img/blackhole.JPG";
         this.locate = new Locate(null, 0, 0, null);
         this.inOrOut = Define.NONE;
         this.location = Define.PARSED;

@@ -1,7 +1,7 @@
 [
   {
     "friend" : true,
-    "image" : {"link" : "img/character_egg.svg"},
+    "img" : "img/character_egg.svg",
     "inOrOut" : 1,
     "locate" : {
       "cluster" : 0,
@@ -9,7 +9,7 @@
       "planet" : null,
       "spot": "우주 어딘가"},
     "location" : "parsed",
-    "login" : "WHERE42",
+    "name" : "WHERE42",
     "member" : true,
     "msg" : "여행하는 히치하이커"
   }
