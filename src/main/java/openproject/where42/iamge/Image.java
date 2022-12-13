@@ -6,12 +6,13 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "iamge")
+@Table(name = "image")
 public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	String name;
 	String img;
-	String active;
+	String location;
+	boolean active;
 }

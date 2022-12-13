@@ -2,6 +2,7 @@ package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.Define;
+import openproject.where42.iamge.ImageRepository;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.FlashData;

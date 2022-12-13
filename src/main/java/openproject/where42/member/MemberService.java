@@ -163,7 +163,7 @@ public class MemberService {
                         parseStatus(friend);
                 friendsInfo.add(new GroupFriendDto(friend, f.getId()));
             } else {
-                FlashData flash = flashDataService.checkFlashFriend(f.getFriendName(), token42);
+                FlashData flash = flashDataService.checkFlashFriend(member.getDefaultGroupId(), f.getFriendName(), token42);
                 friendsInfo.add(new GroupFriendDto(flash, f.getId()));
             }
         }

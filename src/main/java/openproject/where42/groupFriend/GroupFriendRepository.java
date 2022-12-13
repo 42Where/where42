@@ -26,6 +26,17 @@ public class GroupFriendRepository {
         return groupFriend.getId();
     }
 
+    public String findImageById(String name, Long defaultGroupId){
+        try {
+            return em.createQuery("select g.img from GroupFriend g where g.friendName = :name and g.group.id = :id", String.class)
+                    .setParameter("name", name)
+                    .setParameter("id", defaultGroupId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("======= error [findImageById] =======");
+            return null;
+        }
+    }
     // 해당 친구가 포함되지 않은 그룹 목록 front 반환
     public List<String> notIncludeGroupByMemberAndFriendName(Member member, String friendName) {
         List<Groups> groups = em.createQuery("select g from Groups g where g.owner = :member", Groups.class)
