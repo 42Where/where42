@@ -30,10 +30,13 @@ public class ImageRepository {
 	}
 
 	@Transactional
+	public void deleteMember() {
+		jdbcTemplate.update("delete from image A where exists(select * from member B where A.name=B.member_name)");
+	}
+	@Transactional
 	public void deduplication() {
 		jdbcTemplate.update("delete from image where active='false'");
-		jdbcTemplate.update("delete from test_table A where exists(select * from flash_data B where A.name=B.name)");
-		jdbcTemplate.update("delete from test_table A where exists(select * from member B where A.name=B.member_name)");
+		jdbcTemplate.update("delete from image A where exists(select * from member B where A.name=B.member_name)");
 		jdbcTemplate.update("delete from image where id in(" +
 				"select id from (" +
 				"select ROW_NUMBER() over(" +
@@ -45,16 +48,16 @@ public class ImageRepository {
 	@Transactional
 	public boolean inputImage(List<Seoul42> list) {
 		int a = 1;
-		String sql ="INSERT INTO flash_data (name, location) VALUES ";
+		String sql ="INSERT INTO image (name, img, location, active) VALUES ";
 		for (Seoul42 i : list){
-			String tmp = "('" +i.getLogin() + "', '" + i.getImage() + "') ";
+			String tmp = "('" +i.getLogin() + "', '" + i.getImage().getLink() + "', '" +
+					i.getLocation() + "', '" + i.isActive() + "') ";
 			if ( a != list.size())
 				tmp += ",";
 			sql += tmp;
 			a += 1;
 		}
 		jdbcTemplate.update(sql);
-		deduplication();
 		return true;
 	}
 }

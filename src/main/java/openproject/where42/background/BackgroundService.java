@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.dto.Cluster;
 import openproject.where42.api.dto.Seoul42;
+import openproject.where42.iamge.ImageRepository;
 import openproject.where42.member.FlashDataService;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;
@@ -112,18 +113,24 @@ public class BackgroundService {
         }
     }
 
+    public void deleteMemberImage() {
+        imageRepository.deleteMember();
+    }
+
     public boolean getAllCadetImages() {
         token42 = tokenRepository.callAdmin();
         int i = 1;
         while (true) {
             CompletableFuture<List<Seoul42>> cf = apiService.get42Image(token42, i);
             List<Seoul42> allCadets = apiService.injectInfo(cf);
-            if (!imageRepositoy.inputImage(allCadets))
+            if (!imageRepository.inputImage(allCadets))
                 return false;
             if (allCadets.size() < 100)
                 break;
+            System.out.println("DONE");
             i++;
         }
+        imageRepository.deduplication();
         return true;
     }
 }

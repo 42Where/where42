@@ -22,6 +22,11 @@ public class BackgroundApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.IN_CLUSTER), HttpStatus.OK);
     }
 
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/image/member")
+    public ResponseEntity deleteImage() {
+        backgroundService.deleteMemberImage();
+        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.GET_IMAGE_SUCCESS), HttpStatus.OK);
+    }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/image")
     public ResponseEntity getAllCadetImages() {

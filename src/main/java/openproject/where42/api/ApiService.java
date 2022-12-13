@@ -131,7 +131,7 @@ public class ApiService {
     @Retry(name = "backend")
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
-        req = req42ApiHeader(aes.decoding(token));
+        req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiImageUri(i));
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
@@ -181,7 +181,7 @@ public class ApiService {
         params.add("client_id","56448d39501e3f2a4d1c574a72de267e8def4da40b4b98fa29bce33063e1feff");
         params.add("client_secret", "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");
         params.add("code", code);
-        params.add("redirect_uri","http://localhost:8080/admin");
+        params.add("redirect_uri","https://www.where42.kr/savecode");
         return new HttpEntity<>(params, headers);
     }
 
@@ -227,7 +227,7 @@ public class ApiService {
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
         params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_secret", "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");
         params.add("code", code);
         params.add("redirect_uri","http://www.where42.kr/auth/login/callback");
         return new HttpEntity<>(params, headers);
@@ -239,7 +239,7 @@ public class ApiService {
         params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
         params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-        params.add("client_secret", "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");
+        params.add("client_secret", "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");
         params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
