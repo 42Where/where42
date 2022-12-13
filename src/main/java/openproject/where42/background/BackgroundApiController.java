@@ -22,15 +22,16 @@ public class BackgroundApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.IN_CLUSTER), HttpStatus.OK);
     }
 
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/image/member")
-    public ResponseEntity deleteImage() {
-        backgroundService.deleteMemberImage();
-        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.GET_IMAGE_SUCCESS), HttpStatus.OK);
-    }
-
     @GetMapping(Define.WHERE42_VERSION_PATH + "/image")
     public ResponseEntity getAllCadetImages() {
         backgroundService.getAllCadetImages(); // 에러 처리 확인
+        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.GET_IMAGE_SUCCESS), HttpStatus.OK);
+    }
+
+    //delete 혹은 post 인데 관리자용 페이지 생기면 하면 좋을듯.
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/image/member")
+    public ResponseEntity deleteImage() {
+        backgroundService.deleteMemberImage();
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.GET_IMAGE_SUCCESS), HttpStatus.OK);
     }
 }

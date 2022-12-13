@@ -1,13 +1,10 @@
-package openproject.where42.api.dto;
+package openproject.where42.api.mapper;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
-@Data
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Seoul42 {
     private String login;

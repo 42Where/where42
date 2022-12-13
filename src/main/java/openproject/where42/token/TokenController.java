@@ -2,8 +2,7 @@ package openproject.where42.token;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.OAuthToken;
-import openproject.where42.token.TokenRepository;
+import openproject.where42.api.mapper.OAuthToken;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

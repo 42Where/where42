@@ -6,7 +6,7 @@ import openproject.where42.exception.customException.CannotAccessAgreeException;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.exception.customException.UnregisteredMemberException;
 import openproject.where42.member.entity.Member;
