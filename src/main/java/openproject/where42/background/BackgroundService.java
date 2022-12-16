@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.mapper.Cluster;
 import openproject.where42.api.mapper.Seoul42;
+import openproject.where42.exception.customException.TooManyRequestException;
 import openproject.where42.flashData.FlashDataService;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;
 import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenRepository;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -56,6 +60,7 @@ public class BackgroundService {
         }
     }
 
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Scheduled(cron = "0 0/3 * 1/1 * ?")
     public void update3minClusterInfo() {
         token42 = tokenRepository.callAdmin();
@@ -63,9 +68,8 @@ public class BackgroundService {
         System.out.println("3분이 지났어요!!! " + date);
         int i = 1;
         while (true) {
-            CompletableFuture<List<Cluster>> cf = apiService.get42LocationEnd(token42, i);
-            List<Cluster> clusterCadets = apiService.injectInfo(cf);
-            for (Cluster cadet : clusterCadets) {
+            List<Cluster> logoutCadets = apiService.get42LocationEnd(token42, i);
+            for (Cluster cadet : logoutCadets) {
                 Member member = memberRepository.findMember(cadet.getUser().getLogin());
                 if (member != null)
                     memberService.updateLocation(member, cadet.getUser().getLocation());
@@ -77,17 +81,16 @@ public class BackgroundService {
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
-//            for (Cluster cluster : clusterCadets)
+//            for (Cluster cluster : logoutCadets)
 //                System.out.println("** end name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
-            if (clusterCadets.size() < 50)
+            if (logoutCadets.size() < 100)
                 break;
             i++;
         }
         i = 1;
         while(true) {
-            CompletableFuture<List<Cluster>> cf = apiService.get42LocationBegin(token42, i);
-            List<Cluster> clusterCadets = apiService.injectInfo(cf);
-            for (Cluster cadet : clusterCadets) {
+            List<Cluster> loginCadets = apiService.get42LocationBegin(token42, i);
+            for (Cluster cadet : loginCadets) {
                 Member member = memberRepository.findMember(cadet.getUser().getLogin());
                 if (member != null)
                     memberService.updateLocation(member, cadet.getUser().getLocation());
@@ -101,10 +104,17 @@ public class BackgroundService {
             }
 //            for (Cluster cluster : clusterCadets)
 //                System.out.println("** begin name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
-            if (clusterCadets.size() < 50)
+            if (loginCadets.size() < 100)
                 break;
             i++;
         }
+    }
+
+    @Recover
+    public void fallBack(RuntimeException e) {
+        System.out.println("Background is doomed");
+        e.printStackTrace();
+        throw new TooManyRequestException();
     }
 
     public void deleteMemberImage() {

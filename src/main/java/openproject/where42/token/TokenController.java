@@ -18,6 +18,7 @@ public class TokenController {
 	HttpEntity<MultiValueMap<String, String>> req;
 	ResponseEntity<String> res;
 
+	// 오픈소스 전환 시 삭제
 	@GetMapping("/admin")
 	public String TokenAccess() {
 		/*** 로컬용 ***/

@@ -16,6 +16,7 @@ public class BackgroundApiController {
 
     private final BackgroundService backgroundService;
 
+    // 여기에 어드민 멤버 레벨 조건 넣기
     @GetMapping(Define.WHERE42_VERSION_PATH + "/incluster") // 서버 실행 시 자동 실행 방법..? 2주에 한 번 해줘야 하는 것들을 모아놓고 스케쥴러로 돌려도 좋고..
     public ResponseEntity findAllInClusterCadet() {
         backgroundService.updateAllInClusterCadet();
