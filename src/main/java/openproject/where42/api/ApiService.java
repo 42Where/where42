@@ -2,7 +2,6 @@ package openproject.where42.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.mapper.*;
 import openproject.where42.exception.customException.JsonDeserializeException;
@@ -14,6 +13,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -43,7 +45,7 @@ public class ApiService {
     ResponseEntity<String> res;
 
     // oAuth 토큰 반환
-    @Retry(name = "backend")
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<OAuthToken> getOAuthToken(String code) {
         req = req42TokenHeader(code);
@@ -52,7 +54,7 @@ public class ApiService {
     }
 
     // oAuth 토큰 반환
-    @Retry(name = "backend")
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<OAuthToken> getNewOAuthToken(String token) {
         req = req42RefreshHeader(token);
@@ -61,7 +63,7 @@ public class ApiService {
     }
 
     // 이미지 호출
-    @Retry(name = "backend")
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
         req = req42ApiHeader(token);
@@ -69,7 +71,8 @@ public class ApiService {
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
 
-    @Retry(name = "backend")
+    // 현재 클러스터에 있는 카뎃들 호출
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
         req = req42ApiHeader(token);
@@ -77,24 +80,24 @@ public class ApiService {
         return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
     }
 
-    @Retry(name = "backend")
-    @Async("apiTaskExecutor")
-    public CompletableFuture<List<Cluster>> get42LocationEnd(String token, int i) {
+    // 로그아웃한 카뎃들 호출
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    public List<Cluster> get42LocationEnd(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiLocationEndUri(i));
-        return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
+        return clusterMapping(res.getBody());
     }
 
-    @Retry(name = "backend")
-    @Async("apiTaskExecutor")
-    public CompletableFuture<List<Cluster>> get42LocationBegin(String token, int i) {
+    // 로그인한 카뎃들 호출
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    public List<Cluster> get42LocationBegin(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiLocationBeginUri(i));
-        return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
+        return clusterMapping(res.getBody());
     }
 
     // me 정보 반환
-    @Retry(name = "backend")
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<Seoul42> getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
@@ -103,7 +106,7 @@ public class ApiService {
     }
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
-    @Retry(name = "backend")
+    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Seoul42>> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
@@ -111,20 +114,19 @@ public class ApiService {
         return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
     }
 
-    // 유저 한명에 대해 img, location 정보만 반환해주는 메소드
-//    @Retry(name = "backend")
-//    @Async("apiTaskExecutor")
-//    public CompletableFuture<Seoul42> get42ShortInfo(String token, String name) {
-//        req = req42ApiHeader(aes.decoding(token));
-//        res = resReqApi(req, req42ApiOneUserUri(name));
-//        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
-//    }
+    @Recover
+    public CompletableFuture<Seoul42> fallback(RuntimeException e, String token) {
+        e.printStackTrace();
+        throw new TooManyRequestException();
+    }
 
     public <T> T injectInfo(CompletableFuture<T> info) {
         T ret = null;
         try {
             ret = info.get();
         } catch (CancellationException | InterruptedException | ExecutionException e) {
+            System.out.println("====error====");
+            e.printStackTrace();
             throw new TooManyRequestException();
         }
         return ret;
@@ -143,7 +145,7 @@ public class ApiService {
         return null;
     }
 
-    /*** 관리자 로컬 ***/
+    /*** 관리자 로컬 ***/ // 여기부터 refresh header까지 다 삭제
     public HttpEntity<MultiValueMap<String, String>> req42LocalAdminHeader(String code) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -266,7 +268,7 @@ public class ApiService {
     public URI req42ApiLocationUri(int i) {
         return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
-                .queryParam("page[size]", 50)
+                .queryParam("page[size]", 100)
                 .queryParam("page[number]", i)
                 .queryParam("sort", "-end_at")
 //                .queryParam("range[end_at]", null) // 널만 검색하는 게 분명히 있을텐데요./.
@@ -281,7 +283,7 @@ public class ApiService {
         cal.add(Calendar.MINUTE, -3);
         return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
-                .queryParam("page[size]", 50)
+                .queryParam("page[size]", 100)
                 .queryParam("page[number]", i)
                 .queryParam("range[end_at]", sdf.format(cal.getTime()) + "," + sdf.format(date))
                 .build()
@@ -320,15 +322,7 @@ public class ApiService {
                 .toUri();
     }
 
-    // 한 유저에 대한 me 정보 요청 uri 생성 메소드
-//    public URI req42ApiOneUserUri(String name) {
-//        return UriComponentsBuilder.newInstance()
-//                .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/users/" + name)
-//                .build()
-//                .toUri();
-//    }
-
-    // 한 유저에 대한 하네 정보 요청 uri 생성 메소드
+    // 한 유저에 대한 하네 정보 요청 uri 생성 메소드 // 이것도 삭제
     public URI reqHaneApiUri(String name) {
         return UriComponentsBuilder.fromHttpUrl("https://api.24hoursarenotenough.42seoul.kr/ext/where42/where42/" + name)
                 .build()
