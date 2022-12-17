@@ -143,7 +143,6 @@ public class MemberService {
     public List<MemberGroupInfo> findAllGroupFriendsInfo(Member member) {
         List<MemberGroupInfo> groupsInfo = new ArrayList<MemberGroupInfo>();
         List<Groups> customGroupList = groupService.findAllGroupsExceptDefault(member.getId());
-
         groupsInfo.add(new MemberGroupInfo(groupRepository.findById(member.getStarredGroupId()),
                 groupFriendRepository.findGroupFriendsByGroupId(member.getStarredGroupId())));
         for (Groups g : customGroupList)

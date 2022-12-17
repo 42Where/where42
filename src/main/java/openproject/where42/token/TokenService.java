@@ -36,6 +36,13 @@ public class TokenService {
 		return seoul42;
 	}
 
+	public String getToken(HttpServletResponse res, String key) {
+		String token42 = findAccessToken(key);
+		if (token42 == null)
+			inspectToken(res, key);
+		return token42;
+	}
+
 	public void checkRefreshToken(String key) {
 		if (key == null || !tokenRepository.checkRefreshToken(key))
 			throw new CookieExpiredException();

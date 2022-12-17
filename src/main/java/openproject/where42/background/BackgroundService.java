@@ -60,7 +60,7 @@ public class BackgroundService {
         }
     }
 
-    @Retryable(maxAttempts = 1, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Scheduled(cron = "0 0/3 * 1/1 * ?")
     public void update3minClusterInfo() {
         token42 = tokenRepository.callAdmin();
