@@ -4,8 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.mapper.*;
-import openproject.where42.exception.customException.JsonDeserializeException;
-import openproject.where42.exception.customException.TooManyRequestException;
+import openproject.where42.exception.customException.*;
 import openproject.where42.token.AES;
 import openproject.where42.member.entity.enums.Planet;
 import openproject.where42.util.Define;
@@ -128,7 +127,7 @@ public class ApiService {
     public CompletableFuture<Seoul42> fallback(RuntimeException e, String token) {
         System.out.println("==== api error ====");
         e.printStackTrace();
-        throw new TooManyRequestException();
+        throw new RegisteredFriendException();
     }
 
     public <T> T injectInfo(CompletableFuture<T> info) {
@@ -138,22 +137,23 @@ public class ApiService {
         } catch (CancellationException | InterruptedException | ExecutionException e) {
             System.out.println("==== inject error ====");
             e.printStackTrace();
-            throw new TooManyRequestException();
+            throw new DuplicateGroupNameException();
         }
         return ret;
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드
     public Planet getHaneInfo(String name, String token) {
-        req = reqHaneApiHeader(token);
-        res = resReqApi(req, reqHaneApiUri(name));
-        Hane hane = haneMapping(res.getBody());
-        if (hane.getInoutState().equalsIgnoreCase("IN")) {
-            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
-                return Planet.gaepo;
-            return Planet.seocho;
-        }
-        return null;
+//        req = reqHaneApiHeader(token);
+//        res = resReqApi(req, reqHaneApiUri(name));
+//        Hane hane = haneMapping(res.getBody());
+//        if (hane.getInoutState().equalsIgnoreCase("IN")) {
+//            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
+//                return Planet.gaepo;
+//            return Planet.seocho;
+//        }
+//        return null;
+        return Planet.gaepo;
     }
 
     /*** 관리자 로컬 ***/ // 여기부터 refresh header까지 다 삭제

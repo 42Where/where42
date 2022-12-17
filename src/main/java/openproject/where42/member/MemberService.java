@@ -154,7 +154,7 @@ public class MemberService {
     }
 
     @Transactional
-    public List<GroupFriendDto> findAllFriendsInfo(Member member, String token42) {
+    public List<GroupFriendDto> findAllFriendsInfo(Member member) {
         List<GroupFriendDto> friendsInfo = new ArrayList<GroupFriendDto>();
         List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(member.getDefaultGroupId());
         for (GroupFriend f : friends) {
@@ -164,7 +164,7 @@ public class MemberService {
                         parseStatus(friend);
                 friendsInfo.add(new GroupFriendDto(friend, f.getId()));
             } else {
-                FlashData flash = flashDataService.checkFlashFriend(member.getDefaultGroupId(), f.getFriendName(), token42);
+                FlashData flash = flashDataService.checkFlashFriend(member.getDefaultGroupId(), f.getFriendName());
                 friendsInfo.add(new GroupFriendDto(flash, f.getId()));
             }
         }
