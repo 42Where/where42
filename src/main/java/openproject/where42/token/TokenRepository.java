@@ -80,7 +80,7 @@ public class TokenRepository {
 		Date now = new Date();
 		Long diff = (now.getTime() - token.getRecentLogin().getTime()) / 60000;
 		System.out.println(diff);
-		if (diff < 110){
+		if (diff > 110){
 			System.out.println("어드민 토큰을 바꿀 시간");
 			System.out.println("지금 토큰 == " + token.getAccessToken());
 			req = apiService.req42AdminRefreshHeader(token.getRefreshToken());
