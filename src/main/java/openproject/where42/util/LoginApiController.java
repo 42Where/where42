@@ -78,7 +78,7 @@ public class LoginApiController {
 
     @Recover
     public String fallback(RuntimeException e) {
-        System.out.println("Login is doomed");
+        System.out.println("==== Login is doomed ====");
         e.printStackTrace();
         throw new TooManyRequestException();
     }

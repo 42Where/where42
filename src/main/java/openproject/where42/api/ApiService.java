@@ -84,7 +84,12 @@ public class ApiService {
     @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     public List<Cluster> get42LocationEnd(String token, int i) {
         req = req42ApiHeader(token);
-        res = resReqApi(req, req42ApiLocationEndUri(i));
+        try {
+            res = resReqApi(req, req42ApiLocationEndUri(i));
+        } catch (RuntimeException e) {
+            System.out.println("==== end error ====");
+            e.printStackTrace();
+        }
         return clusterMapping(res.getBody());
     }
 
@@ -92,7 +97,12 @@ public class ApiService {
     @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     public List<Cluster> get42LocationBegin(String token, int i) {
         req = req42ApiHeader(token);
-        res = resReqApi(req, req42ApiLocationBeginUri(i));
+        try {
+            res = resReqApi(req, req42ApiLocationBeginUri(i));
+        } catch (RuntimeException e) {
+            System.out.println("==== begin error ====");
+            e.printStackTrace();
+        }
         return clusterMapping(res.getBody());
     }
 
@@ -116,6 +126,7 @@ public class ApiService {
 
     @Recover
     public CompletableFuture<Seoul42> fallback(RuntimeException e, String token) {
+        System.out.println("==== api error ====");
         e.printStackTrace();
         throw new TooManyRequestException();
     }
@@ -125,7 +136,7 @@ public class ApiService {
         try {
             ret = info.get();
         } catch (CancellationException | InterruptedException | ExecutionException e) {
-            System.out.println("====error====");
+            System.out.println("==== inject error ====");
             e.printStackTrace();
             throw new TooManyRequestException();
         }

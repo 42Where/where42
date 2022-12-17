@@ -112,7 +112,7 @@ public class BackgroundService {
 
     @Recover
     public void fallBack(RuntimeException e) {
-        System.out.println("Background is doomed");
+        System.out.println("==== Background is doomed ====");
         e.printStackTrace();
         throw new TooManyRequestException();
     }
