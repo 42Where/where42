@@ -3,6 +3,7 @@ package openproject.where42.token;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.mapper.OAuthToken;
+import openproject.where42.util.Define;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ public class TokenController {
 	ResponseEntity<String> res;
 
 	// 오픈소스 전환 시 삭제
-	@GetMapping("/admin")
+	@GetMapping(Define.WHERE42_VERSION_PATH + "/admin")
 	public String TokenAccess() {
 		/*** 로컬용 ***/
 //		return "redirect:https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-b62a88b0deb7cdc85c7d9228410c2d1d1ca49a033772c41e26c06c0234674392&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fsavecode&response_type=code";

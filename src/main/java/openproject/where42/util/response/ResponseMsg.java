@@ -1,9 +1,10 @@
 package openproject.where42.util.response;
 
 public class ResponseMsg {
+    public static final String HANE_SUCCESS = "하네 토큰 저장 성공";
     public static final String IN_CLUSTER = "클러스터 카뎃 저장 성공";
     public static final String GET_IMAGE_SUCCESS = "이미지 저장 성공";
-    public static final String GET_IMAGE_FAIL = "이미지 저장 실패";
+    public static final String RESET_FLASH = "플래시 디비 리셋 완료";
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGOUT_SUCCESS = "로그아웃 성공";
     public static final String NO_COOKIE = "쿠키 없음";

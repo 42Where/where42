@@ -411,10 +411,6 @@ public class ApiService {
                 HttpMethod.GET,
                 req,
                 String.class);
-//        }
-//        catch (HttpClientErrorException.TooManyRequests e) {
-//            throw new TooManyRequestException();
-//        }
     }
 
     // api post요청에 대한 응답 반환 메소드

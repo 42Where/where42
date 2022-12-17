@@ -1,6 +1,7 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.member.dto.MemberId;
 import openproject.where42.util.Define;
 import openproject.where42.exception.customException.*;
 import openproject.where42.token.TokenService;
@@ -23,14 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
-
     private final MemberService memberService;
     private final TokenService tokenService;
+
     @PostMapping(Define.WHERE42_VERSION_PATH + "/member")
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage().getLink(), seoul42.getLocation());
@@ -43,11 +45,9 @@ public class MemberApiController {
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/member")
     public MemberInfo memberInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
         Member member = memberService.findBySession(req);
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(res, key);
         if (member.timeDiff() < 1)
             return new MemberInfo(member);
+        String token42 = tokenService.getToken(res, key);
         memberService.parseStatus(member, token42);
         return new MemberInfo(member);
     }
@@ -59,7 +59,7 @@ public class MemberApiController {
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/friend")
-    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req, @CookieValue(value = "ID", required = false) String key) {
+    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req) {
         Member member = memberService.findBySession(req);
         return memberService.findAllFriendsInfo(member);
     }
@@ -77,11 +77,9 @@ public class MemberApiController {
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/locate") // 위치 설정 가능 여부 조회
-    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep, @CookieValue(value = "ID", required = false) String key)
+    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key)
             throws OutStateException, TakenSeatException {
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(rep, key);
+        String token42 = tokenService.getToken(res, key);
         int planet = memberService.checkLocate(req, token42);
         return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, planet), HttpStatus.OK);
     }
@@ -92,6 +90,17 @@ public class MemberApiController {
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);
     }
+
+//    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/all")
+//    public List<MemberId> getAllMember(HttpServletRequest req) {
+//        //Member admin = memberService.findBySession(req);
+//        //if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
+//        List<Member> members = memberRepository.getAllMember();
+//        List<MemberId> allMember = new ArrayList<>();
+//        for (Member member : members)
+//            allMember.add(new MemberId(member));
+//        return allMember;
+//    }
 
     @DeleteMapping(Define.WHERE42_VERSION_PATH + "/member/{memberId}")
     public ResponseEntity deleteMember(@PathVariable(name = "memberId") Long memberId, HttpServletRequest req) {
