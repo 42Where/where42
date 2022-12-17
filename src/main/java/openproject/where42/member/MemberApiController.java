@@ -59,12 +59,9 @@ public class MemberApiController {
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/friend")
-    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
+    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req, @CookieValue(value = "ID", required = false) String key) {
         Member member = memberService.findBySession(req);
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(res, key);
-        return memberService.findAllFriendsInfo(member, token42);
+        return memberService.findAllFriendsInfo(member);
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 조회

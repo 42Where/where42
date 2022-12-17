@@ -33,7 +33,6 @@ public class TokenController {
 //		req = apiService.req42LocalAdminHeader(code);
 		/*** 서버용 ***/
 		req = apiService.req42AdminHeader(code);
-
 		res = apiService.resPostApi(req, apiService.req42TokenUri());
 		OAuthToken oAuthToken = apiService.oAuthTokenMapping(res.getBody());
 		tokenRepository.saveAdmin("admin", oAuthToken);
