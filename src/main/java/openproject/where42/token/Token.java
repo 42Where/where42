@@ -39,6 +39,7 @@ public class Token {
 
 	public String updateAccess(String value) {
 		this.accessToken = value;
+		this.recentLogin = new Date();
 		return this.UUID;
 	}
 }
