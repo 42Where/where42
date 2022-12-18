@@ -61,6 +61,24 @@ public class ApiService {
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
+    public OAuthToken getAdminOAuthToken(String code) {
+        /*** 로컬용 ***/
+//        req = req42LocalAdminHeader(code);
+        /*** 서버용 ***/
+		req = req42AdminHeader(code);
+        res = resPostApi(req, req42TokenUri());
+        return oAuthTokenMapping(res.getBody());
+    }
+
+    public OAuthToken getAdminNewOAuthToken(String token) {
+        /*** 로컬용 ***/
+//        req = req42LocalAdminRefreshHeader(token);
+        /*** 서버용 ***/
+		req = req42AdminRefreshHeader(token);
+        res = resPostApi(req, req42TokenUri());
+        return oAuthTokenMapping(res.getBody());
+    }
+
     // 이미지 호출
     @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
@@ -166,6 +184,17 @@ public class ApiService {
         params.add("client_secret", "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");
         params.add("code", code);
         params.add("redirect_uri","http://localhost:8080/savecode");
+        return new HttpEntity<>(params, headers);
+    }
+
+    public HttpEntity<MultiValueMap<String, String>> req42LocalAdminRefreshHeader(String refreshToken) {
+        headers = new HttpHeaders();
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "refresh_token");
+        params.add("client_id", "u-s4t2ud-b62a88b0deb7cdc85c7d9228410c2d1d1ca49a033772c41e26c06c0234674392");
+        params.add("client_secret", "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");
+        params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
 
@@ -381,17 +410,6 @@ public class ApiService {
             throw new JsonDeserializeException();
         }
         return seoul42List;
-    }
-
-    // searchCadet 객체 json 매핑 메소드
-    public SearchCadet searchCadetMapping(String body) {
-        SearchCadet cadet = null;
-        try {
-            cadet = om.readValue(body, SearchCadet.class);
-        } catch (JsonProcessingException e) {
-            throw new JsonDeserializeException();
-        }
-        return cadet;
     }
 
     public Hane haneMapping(String body) {

@@ -79,13 +79,11 @@ public class TokenRepository {
 	public void checkToken(Token token) {
 		Date now = new Date();
 		Long diff = (now.getTime() - token.getRecentLogin().getTime()) / 60000;
-		System.out.println(diff);
-		if (diff > 4){
+		System.out.println("시간이 얼마나 흘렀나요 == " + diff);
+		if (diff > 60){
 			System.out.println("어드민 토큰을 바꿀 시간");
 			System.out.println("지금 토큰 == " + token.getAccessToken());
-			req = apiService.req42AdminRefreshHeader(token.getRefreshToken());
-			res = apiService.resPostApi(req, apiService.req42TokenUri());
-			OAuthToken oAuthToken = apiService.oAuthTokenMapping(res.getBody());
+			OAuthToken oAuthToken = apiService.getAdminNewOAuthToken(token.getRefreshToken());
 			token.updateAccess(oAuthToken.getAccess_token());
 			token.updateRefresh(oAuthToken.getRefresh_token());
 			System.out.println("바뀐 토큰 == " + token.getAccessToken());
