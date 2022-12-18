@@ -183,7 +183,7 @@ public class ApiService {
         params.add("client_id","u-s4t2ud-b62a88b0deb7cdc85c7d9228410c2d1d1ca49a033772c41e26c06c0234674392");
         params.add("client_secret", "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");
         params.add("code", code);
-        params.add("redirect_uri","http://localhost:8080/savecode");
+        params.add("redirect_uri","http://localhost:8080/v1/savecode");
         return new HttpEntity<>(params, headers);
     }
 
@@ -207,7 +207,7 @@ public class ApiService {
         params.add("client_id","56448d39501e3f2a4d1c574a72de267e8def4da40b4b98fa29bce33063e1feff");
         params.add("client_secret", "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");
         params.add("code", code);
-        params.add("redirect_uri","https://www.where42.kr/savecode");
+        params.add("redirect_uri","https://www.where42.kr/v1/savecode");
         return new HttpEntity<>(params, headers);
     }
 
