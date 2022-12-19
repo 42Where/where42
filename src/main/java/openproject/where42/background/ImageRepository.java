@@ -29,10 +29,6 @@ public class ImageRepository {
 	}
 
 	@Transactional
-	public void deleteMember() {
-		jdbcTemplate.update("delete from image A where exists(select * from member B where A.name=B.member_name)");
-	}
-	@Transactional
 	public void deduplication() {
 		jdbcTemplate.update("delete from image where active='false'");
 		jdbcTemplate.update("delete from image A where exists(select * from member B where A.name=B.member_name)");

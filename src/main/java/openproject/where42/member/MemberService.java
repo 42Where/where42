@@ -2,6 +2,8 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
+import openproject.where42.exception.customException.AdminLoginFailException;
+import openproject.where42.member.entity.Administrator;
 import openproject.where42.util.Define;
 import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.OutStateException;
@@ -59,6 +61,14 @@ public class MemberService {
             throw new SessionExpiredException();
         session.setMaxInactiveInterval(30 * 30); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
         return memberRepository.findById((Long)session.getAttribute("id"));
+    }
+
+    public boolean findAdminBySession(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if (session == null)
+            throw new SessionExpiredException();
+        session.setMaxInactiveInterval(30 * 30); // 이걸 따로 설정 안해줘도 되는 거 같은데 일단 시간 지나는거보고 확인해야할듯
+        return memberRepository.findByAdminId((Long)session.getAttribute("id"));
     }
 
     @Transactional
@@ -173,5 +183,12 @@ public class MemberService {
     @Transactional
     public void deleteMember(String name) {
         memberRepository.deleteMember(name);
+    }
+
+    public Long adminLogin(String name, String passwd) {
+        Long id = memberRepository.adminLogin(name, passwd);
+        if (id == 0)
+            throw new AdminLoginFailException();
+        return id;
     }
 }

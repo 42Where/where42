@@ -91,4 +91,27 @@ public class MemberRepository {
                 .setParameter("name", name)
                 .getSingleResult());
     }
+
+    public Long adminLogin(String name, String passwd) {
+        try {
+            return em.createQuery("select a.id from Administrator a where a.name = :name and a.passwd = :passwd", Long.class)
+                    .setParameter("name", name)
+                    .setParameter("passwd", passwd)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("admin 아이디 또는 비밀번호가 일치하지 않습니다.");
+            return Long.valueOf(0);
+        }
+    }
+
+    public boolean findByAdminId(Long id) {
+        try {
+            em.createQuery("select a from Administrator a where a.id = :id", AdminApiController.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
 }
