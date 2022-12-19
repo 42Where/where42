@@ -43,6 +43,15 @@ function Admin(){
 
     function AdminShow(){
         const [memberName, setMemberName] = useState("");
+        const NameChange = (e) => {
+            setMemberName(e.target.value);
+        }
+        function MemberClick(){
+            axios.delete('v1/memeber', {params: {name: memberName}})
+                .then((res)=>{
+                    alert(memberName + "member delete ok");
+                })
+        }
         function AdminTokenClick(){
             axios.get(  'v1/admin')
                 .then((res) => {
@@ -64,26 +73,16 @@ function Admin(){
                 alert("Image DB ok");
             })
         }
-        function LogoutClick() {
-            axios.get('v1/logout').then((res) => {
-                alert("Logout ok");
-                setSign(false);
-            })
-        }
         function FlashClick(){
             axios.delete('v1/flash').then((res)=>{
                 alert("flash DB deleted");
             })
         }
-
-        function MemberClick(){
-            axios.delete('v1/memeber', {params: {name: memberName}})
-                .then((res)=>{
-                alert(memberName + "member delete ok");
+        function LogoutClick() {
+            axios.get('v1/logout').then((res) => {
+                alert("Logout ok");
+                setSign(false);
             })
-        }
-        const NameChange = (e) => {
-            setMemberName(e.target.value);
         }
 
         return (
