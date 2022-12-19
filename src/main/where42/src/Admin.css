@@ -18,8 +18,9 @@
 }
 
 h1 {
+    font-family: GmarketSansBold;
     margin-top: 65px;
-    font-size: 50px;
+    font-size: 45px;
 }
 
 input {
@@ -32,6 +33,7 @@ input {
 }
 
 input::placeholder {
+    font-family: GmarketSansMedium;
     color: black;
     font-size: 15px;
 }
@@ -61,5 +63,6 @@ button {
 }
 
 #login{
+    font-family: GmarketSansMedium;
     border : 3px solid black;
 }

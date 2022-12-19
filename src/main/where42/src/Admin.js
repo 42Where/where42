@@ -8,9 +8,8 @@ function Admin(){
         const [id, setId] = useState("");
         const [password, setPassword] = useState("");
         function SignClick(){
-            axios.post('v1/admin/login', {name : id, password : password})
+            axios.post('v1/admin/login', {name : id, passwd : password})
                 .then((res)=>{
-                    alert("로그인에 성공했습니다");
                     setSign(true);
             }).catch((Error)=>{
                 if (Error.response.status === 401)
