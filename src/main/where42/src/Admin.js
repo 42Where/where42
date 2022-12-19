@@ -8,10 +8,15 @@ function Admin(){
         const [id, setId] = useState("");
         const [password, setPassword] = useState("");
         function SignClick(){
-            axios.post('v1/admin/login', {id:id, password:password})
+            axios.post('v1/admin/login', {name : id, password : password})
                 .then((res)=>{
-                setSign(true);
-                alert("login에 성공했습니다");
+                    alert("로그인에 성공했습니다");
+                    setSign(true);
+            }).catch((Error)=>{
+                if (Error.response.status === 401)
+                    alert("로그인 실패. 아이디와 비밀번호를 확인해주세요");
+                else
+                    console.log(err);
             });
         }
         const IdChange=(e)=>{
@@ -62,6 +67,7 @@ function Admin(){
         function LogoutClick() {
             axios.get('v1/logout').then((res) => {
                 alert("Logout ok");
+                setSign(false);
             })
         }
         function FlashClick(){
