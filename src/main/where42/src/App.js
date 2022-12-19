@@ -7,6 +7,7 @@ import Search from "./Search/Search";
 import Setting from "./Setting/Setting";
 import NotFound from "./Etc/NotFound";
 import Oauth from "./Etc/Oauth";
+import Admin from "./Admin";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router";
 import {DecideRoute} from "./DecideRoute";
@@ -34,6 +35,7 @@ function App() {
                 <Route path={"/Search"} element={<Search/>}/>
                 <Route path={"/Setting/*"} element={<Setting/>}/>
                 <Route path={"/Agree"} element={<Agree/>}/>
+                <Route path={"/Admin"} element={<Admin/>}/>
                 <Route path={"/auth/login/callback"} element={<Oauth/>}/>
                 <Route path={"/*"} element={<NotFound/>}/>
             </Routes>

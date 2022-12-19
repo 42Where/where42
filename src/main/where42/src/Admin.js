@@ -16,7 +16,7 @@ function Admin(){
                 if (Error.response.status === 401)
                     alert("로그인 실패. 아이디와 비밀번호를 확인해주세요");
                 else
-                    console.log(err);
+                    console.log(Error);
             });
         }
         const IdChange=(e)=>{
@@ -35,7 +35,7 @@ function Admin(){
                     <input type={"password"} id="password" placeholder="Password" value={password} onChange={PasswordChange}/><br/>
                 </div>
                 <div className="div_button">
-                    <button className="button" type="button" onClick={SignClick}>Log In</button>
+                    <button className="button" id="login" type="button" onClick={SignClick}>Log In</button>
                 </div>
             </div>
         )
@@ -115,7 +115,7 @@ function Admin(){
     }
     return (
         <div id="Admin">
-            {sign? <AdminSign/> : <AdminShow/>}
+            {sign? <AdminShow/> : <AdminSign/>}
         </div>)
 }
 
