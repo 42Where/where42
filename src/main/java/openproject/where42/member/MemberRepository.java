@@ -85,10 +85,10 @@ public class MemberRepository {
         return true;
     }
     @Transactional
-    public void deleteMember(Long id){
+    public void deleteMember(String name){
         System.out.println("============== excute delete query =============");
-        em.remove(em.createQuery("select m from Member m where m.id = :id", Member.class)
-                .setParameter("id", id)
+        em.remove(em.createQuery("select m from Member m where m.name = :name", Member.class)
+                .setParameter("name", name)
                 .getSingleResult());
     }
 }

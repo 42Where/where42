@@ -46,6 +46,7 @@ public class ImageRepository {
 
 	@Transactional
 	public boolean inputImage(List<Seoul42> list) {
+		em.createQuery("delete from Image i");
 		int a = 1;
 		String sql ="INSERT INTO image (name, img, location, active) VALUES ";
 		for (Seoul42 i : list){

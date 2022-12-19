@@ -171,7 +171,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(Long memberId) {
-        memberRepository.deleteMember(memberId);
+    public void deleteMember(String name) {
+        memberRepository.deleteMember(name);
     }
 }

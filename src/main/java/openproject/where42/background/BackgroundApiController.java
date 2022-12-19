@@ -22,11 +22,11 @@ public class BackgroundApiController {
     private final FlashDataRepository flashDataRepository;
     private final TokenRepository tokenRepository;
 
-//    @PostMapping(Define.WHERE42_VERSION_PATH + "/hane")
-//    public ResponseEntity insertHane() {
-//        tokenRepository.insertHane();
-//        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.HANE_SUCCESS), HttpStatus.OK);
-//    }
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/hane")
+    public ResponseEntity insertHane() {
+        tokenRepository.insertHane();
+        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.HANE_SUCCESS), HttpStatus.OK);
+    }
 
     @DeleteMapping(Define.WHERE42_VERSION_PATH + "/image/member") // 이미지 디비 날리면 굳이 싶긴 하다?
     public ResponseEntity deleteImage() {
@@ -47,9 +47,9 @@ public class BackgroundApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.GET_IMAGE_SUCCESS), HttpStatus.OK);
     }
 
-//    @DeleteMapping(Define.WHERE42_VERSION_PATH + "/flash")
-//    public ResponseEntity resetFlash() {
-//        flashDataRepository.resetFlash();
-//        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.RESET_FLASH), HttpStatus.OK);
-//    }
+    @DeleteMapping(Define.WHERE42_VERSION_PATH + "/flash")
+    public ResponseEntity resetFlash() {
+        flashDataRepository.resetFlash();
+        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.RESET_FLASH), HttpStatus.OK);
+    }
 }
