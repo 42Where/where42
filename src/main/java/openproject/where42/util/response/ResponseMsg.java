@@ -1,6 +1,10 @@
 package openproject.where42.util.response;
 
 public class ResponseMsg {
+    public static final String HANE_SUCCESS = "하네 토큰 저장 성공";
+    public static final String IN_CLUSTER = "클러스터 카뎃 저장 성공";
+    public static final String GET_IMAGE_SUCCESS = "이미지 저장 성공";
+    public static final String RESET_FLASH = "플래시 디비 리셋 완료";
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGOUT_SUCCESS = "로그아웃 성공";
     public static final String NO_COOKIE = "쿠키 없음";
@@ -26,7 +30,7 @@ public class ResponseMsg {
     public static final String DELETE_FRIENDS_FROM_GROUP = "그룹에서 친구 삭제 성공";
     public static final String DELETE_GROUP_FRIENDS = "친구 삭제 성공";
     public static final String JSON_DESERIALIZE_FAILED = "Json 매핑 실패";
-    public static final String TOO_MANY_REQUEST = "Api 요청 횟수 추가";
+    public static final String TOO_MANY_REQUEST = "Api 요청 횟수 초과";
     public static final String ADD_GROUPS_TO_FRIEND = "친구 그룹 추가 성공";
     public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";

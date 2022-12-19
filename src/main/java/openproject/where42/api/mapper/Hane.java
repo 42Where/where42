@@ -1,9 +1,7 @@
-package openproject.where42.api.dto;
+package openproject.where42.api.mapper;
 
 import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter
+@Getter
 public class Hane {
     private String login;
     private String inoutState;

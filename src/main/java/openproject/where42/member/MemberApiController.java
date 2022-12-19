@@ -1,12 +1,12 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.member.dto.MemberId;
+import openproject.where42.util.Define;
 import openproject.where42.exception.customException.*;
-import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.token.TokenService;
-import openproject.where42.api.dto.Seoul42;
-import openproject.where42.groupFriend.entity.GroupFriendDto;
+import openproject.where42.api.mapper.Seoul42;
+import openproject.where42.groupFriend.GroupFriendDto;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 import openproject.where42.member.dto.MemberGroupInfo;
@@ -24,15 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
-
     private final MemberService memberService;
     private final TokenService tokenService;
-    @PostMapping(Define.versionPath + "/member")
+
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/member")
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage().getLink(), seoul42.getLocation());
         session.setAttribute("id", memberId);
@@ -41,65 +42,71 @@ public class MemberApiController {
     }
 
     // 메인 정보 조회
-    @GetMapping(Define.versionPath + "/member/member")
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/member")
     public MemberInfo memberInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
         Member member = memberService.findBySession(req);
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(res, key);
+        if (member.timeDiff() < 1)
+            return new MemberInfo(member);
+        String token42 = tokenService.getToken(res, key);
         memberService.parseStatus(member, token42);
         return new MemberInfo(member);
     }
 
-    @GetMapping(Define.versionPath + "/member/group")
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/group")
     public List<MemberGroupInfo> memberGroupInformation(HttpServletRequest req) {
         Member member = memberService.findBySession(req);
         return memberService.findAllGroupFriendsInfo(member);
     }
 
-    @GetMapping(Define.versionPath + "/member/friend")
-    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/friend")
+    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req) {
         Member member = memberService.findBySession(req);
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(res, key);
-        return memberService.findAllFriendsInfo(member, token42);
+        return memberService.findAllFriendsInfo(member);
     }
 
-    @GetMapping(Define.versionPath + "/member/setting/msg") // 상태메시지 조회
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 조회
     public String getPersonalMsg(HttpServletRequest req) {
         Member member = memberService.findBySession(req);
         return member.getMsg();
     }
 
-    @PostMapping(Define.versionPath + "/member/setting/msg") // 상태메시지 설정
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 설정
     public ResponseEntity updatePersonalMsg(HttpServletRequest req, @RequestBody String msg) {
         memberService.updatePersonalMsg(req, msg);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_MSG), HttpStatus.OK);
     }
 
-    @GetMapping(Define.versionPath + "/member/setting/locate") // 위치 설정 가능 여부 조회
-    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse rep, @CookieValue(value = "ID", required = false) String key)
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/locate") // 위치 설정 가능 여부 조회
+    public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key)
             throws OutStateException, TakenSeatException {
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(rep, key);
+        String token42 = tokenService.getToken(res, key);
         int planet = memberService.checkLocate(req, token42);
         return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, planet), HttpStatus.OK);
     }
 
-    @PostMapping(Define.versionPath + "/member/setting/locate") // 위치 설정
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/member/setting/locate") // 위치 설정
     public ResponseEntity updateLocate(HttpServletRequest req, @RequestBody Locate locate) {
         Member member = memberService.findBySession(req);
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);
     }
 
-    @DeleteMapping(Define.versionPath + "/member/{memberId}")
+//    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/all")
+//    public List<MemberId> getAllMember(HttpServletRequest req) {
+//        //Member admin = memberService.findBySession(req);
+//        //if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
+//        List<Member> members = memberRepository.getAllMember();
+//        List<MemberId> allMember = new ArrayList<>();
+//        for (Member member : members)
+//            allMember.add(new MemberId(member));
+//        return allMember;
+//    }
+
+    @DeleteMapping(Define.WHERE42_VERSION_PATH + "/member/{memberId}")
     public ResponseEntity deleteMember(@PathVariable(name = "memberId") Long memberId, HttpServletRequest req) {
-        Member admin = memberService.findBySession(req);
-        if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
-            memberService.deleteMember(memberId);
+//        Member admin = memberService.findBySession(req);
+//        if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
+        memberService.deleteMember(memberId);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_MEMBER), HttpStatus.OK);
     }
 }

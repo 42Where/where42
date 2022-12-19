@@ -1,6 +1,6 @@
 package openproject.where42.member.entity;
 
-import openproject.where42.group.entity.Groups;
+import openproject.where42.group.Groups;
 import openproject.where42.member.entity.enums.Planet;
 import openproject.where42.member.entity.enums.MemberLevel;
 
@@ -26,9 +26,7 @@ public class Administrator extends User {
     private MemberLevel level = MemberLevel.administrator;
 
     @Enumerated
-    private Planet planet;
+    private Locate locate;
 
-    private int floor;
-
-    private int cluster;
+    private String img;
 }

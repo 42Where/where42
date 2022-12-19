@@ -1,12 +1,12 @@
-package openproject.where42.member.entity;
+package openproject.where42.flashData;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import openproject.where42.api.Define;
+import openproject.where42.util.Define;
+import openproject.where42.member.entity.Locate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -19,19 +19,15 @@ public class FlashData {
 	@Embedded
 	private Locate locate = new Locate(null, 0, 0, null);
 	private String location;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateTime;
 
 	public FlashData(String name, String img, String location) {
 		this.name = name;
 		this.img = img;
 		this.location = location;
-		this.updateTime = new Date();
 	}
 
 	public void updateLocation(String location) {
 		this.location = location;
-		this.updateTime = new Date();
 	}
 
 	public void parseStatus(Locate locate) {
@@ -41,10 +37,5 @@ public class FlashData {
 		else
 			this.inOrOut = Define.NONE;
 		this.location = Define.PARSED;
-	}
-
-	public Long timeDiff() {
-		Date now = new Date();
-		return ((now.getTime() - updateTime.getTime()) / 60000);
 	}
 }

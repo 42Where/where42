@@ -2,23 +2,25 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.Define;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.util.Define;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.OutStateException;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.exception.customException.TakenSeatException;
+import openproject.where42.flashData.FlashDataService;
 import openproject.where42.group.GroupService;
-import openproject.where42.group.entity.Groups;
+import openproject.where42.group.Groups;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendRepository;
-import openproject.where42.groupFriend.entity.GroupFriend;
-import openproject.where42.groupFriend.entity.GroupFriendDto;
-import openproject.where42.member.entity.FlashData;
+import openproject.where42.groupFriend.GroupFriend;
+import openproject.where42.groupFriend.GroupFriendDto;
+import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;
 import openproject.where42.member.entity.enums.MemberLevel;
 import openproject.where42.member.dto.MemberGroupInfo;
 import openproject.where42.member.entity.enums.Planet;
+import openproject.where42.token.TokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +40,7 @@ public class MemberService {
     private final GroupFriendRepository groupFriendRepository;
     private final FlashDataService flashDataService;
     private final ApiService apiService;
+    private final TokenRepository tokenRepository;
 
     @Transactional
     public Long saveMember(String name, String img, String location) {
@@ -46,6 +49,7 @@ public class MemberService {
         Long defaultGroupId = groupService.createDefaultGroup(member, "기본");
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
         member.setDefaultGroup(defaultGroupId, starredGroupId);
+        parseStatus(member);
         return memberId;
     }
 
@@ -82,13 +86,13 @@ public class MemberService {
     @Transactional
     public int checkLocate(HttpServletRequest req, String token42) throws OutStateException, TakenSeatException {
         Member member = findBySession(req);
-        Planet planet = apiService.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet == null) {
             initLocate(member, null);
             member.updateStatus(Define.OUT);
             throw new OutStateException();
         }
-        CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
+        CompletableFuture<Seoul42> cf = apiService.getMeInfo(token42);
         Seoul42 member42 = apiService.injectInfo(cf);
         if (member42.getLocation() != null) {
             updateLocate(member, Locate.parseLocate(member42.getLocation()));
@@ -101,9 +105,9 @@ public class MemberService {
     // 멤버 인포 조회용 api 호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
     @Transactional
     public void parseStatus(Member member, String token42) {
-        Planet planet = apiService.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet != null) {
-            CompletableFuture<Seoul42> cf = apiService.get42ShortInfo(token42, member.getName());
+            CompletableFuture<Seoul42> cf = apiService.getMeInfo(token42);
             Seoul42 seoul42 = apiService.injectInfo(cf);
             if (seoul42.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(seoul42.getLocation()));
@@ -121,7 +125,7 @@ public class MemberService {
     // api 미호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
     @Transactional
     public void parseStatus(Member member) {
-        Planet planet = apiService.getHaneInfo(member.getName());
+        Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet != null) {
             if (member.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(member.getLocation()));
@@ -139,7 +143,6 @@ public class MemberService {
     public List<MemberGroupInfo> findAllGroupFriendsInfo(Member member) {
         List<MemberGroupInfo> groupsInfo = new ArrayList<MemberGroupInfo>();
         List<Groups> customGroupList = groupService.findAllGroupsExceptDefault(member.getId());
-
         groupsInfo.add(new MemberGroupInfo(groupRepository.findById(member.getStarredGroupId()),
                 groupFriendRepository.findGroupFriendsByGroupId(member.getStarredGroupId())));
         for (Groups g : customGroupList)
@@ -150,20 +153,17 @@ public class MemberService {
     }
 
     @Transactional
-    public List<GroupFriendDto> findAllFriendsInfo(Member member, String token42) {
+    public List<GroupFriendDto> findAllFriendsInfo(Member member) {
         List<GroupFriendDto> friendsInfo = new ArrayList<GroupFriendDto>();
         List<GroupFriend> friends = groupFriendRepository.findAllGroupFriendByOwnerId(member.getDefaultGroupId());
         for (GroupFriend f : friends) {
             Member friend = memberRepository.findMember(f.getFriendName());
             if (friend != null) {
-                if (friend.timeDiff() < 3) {
-                    if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
+                if (!Define.PARSED.equalsIgnoreCase(friend.getLocation()))
                         parseStatus(friend);
-                } else
-                    parseStatus(friend, token42);
                 friendsInfo.add(new GroupFriendDto(friend, f.getId()));
             } else {
-                FlashData flash = flashDataService.checkFlashFriend(f.getFriendName(), token42);
+                FlashData flash = flashDataService.checkFlashFriend(member.getDefaultGroupId(), f.getFriendName());
                 friendsInfo.add(new GroupFriendDto(flash, f.getId()));
             }
         }

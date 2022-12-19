@@ -1,7 +1,5 @@
 package openproject.where42.groupFriend;
 
-import openproject.where42.groupFriend.entity.GroupFriend;
-
 import java.util.Comparator;
 
 public class StringComparator implements Comparator<GroupFriend> {

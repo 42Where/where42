@@ -47,7 +47,7 @@ function Search() {
                 .then((response)=>{
                 if (response.data.length === 0)
                     alert('검색 결과가 없습니다. 아이디를 확인해주세요');
-                // console.debug(response.data);
+                console.log(response.data);
                 setLoading(false);
                 setInformation(response.data);
             })

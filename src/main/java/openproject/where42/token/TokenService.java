@@ -2,16 +2,14 @@ package openproject.where42.token;
 
 import lombok.RequiredArgsConstructor;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.dto.OAuthToken;
-import openproject.where42.api.dto.Seoul42;
+import openproject.where42.api.mapper.OAuthToken;
+import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.CookieExpiredException;
 import openproject.where42.member.MemberService;
-import openproject.where42.token.entity.Token;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -36,6 +34,13 @@ public class TokenService {
 		}
 		addCookie(response, tokenRepository.saveRefreshToken(seoul42.getLogin(), oAuthToken));
 		return seoul42;
+	}
+
+	public String getToken(HttpServletResponse res, String key) {
+		String token42 = findAccessToken(key);
+		if (token42 == null)
+			inspectToken(res, key);
+		return token42;
 	}
 
 	public void checkRefreshToken(String key) {
@@ -63,9 +68,14 @@ public class TokenService {
 	}
 
 	public String findAccessToken(String key) {
+		if (key == null)
+			throw new CookieExpiredException();
 		Token token = tokenRepository.findTokenByKey(key);
 		if (token == null || token.getAccessToken() == null)
 			return null;
+		Date now = new Date();
+		if ((now.getTime() - token.getRecentLogin().getTime()) / 60000 > 110)
+			return issueAccessToken(key);
 		return token.getAccessToken();
 	}
 }

@@ -1,22 +1,19 @@
-package openproject.where42.member;
+package openproject.where42.flashData;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.api.ApiService;
-import openproject.where42.api.Define;
-import openproject.where42.api.dto.Seoul42;
-import openproject.where42.member.entity.FlashData;
+import openproject.where42.util.Define;
+import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.member.entity.Locate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FlashDataService {
     private final FlashDataRepository flashDataRepository;
-    private static final ApiService apiservice = new ApiService();
+    private final GroupFriendRepository groupFriendRepository;
 
     @Transactional
     public FlashData createFlashData(String name, String img, String location) {
@@ -43,19 +40,14 @@ public class FlashDataService {
 
     // 친구로 등록 된 flashdata 조회, parse가 필요한 경우 parse, 생성해야 하는 경우 생성
     @Transactional
-    public FlashData checkFlashFriend(String name, String token42) {
+    public FlashData checkFlashFriend(Long defaultGroupId, String name) {
         FlashData flash = findByName(name);
-        if (flash != null && flash.timeDiff() < 3) {
+        if (flash != null) {
             if (!Define.PARSED.equalsIgnoreCase(flash.getLocation()))
                 flash.parseStatus(Locate.parseLocate(flash.getLocation()));
             return flash;
         }
-        CompletableFuture<Seoul42> cf = apiservice.get42ShortInfo(token42, name);
-        Seoul42 seoul42 = apiservice.injectInfo(cf);
-        if (flash != null)
-            flash.updateLocation(seoul42.getLocation());
-        else
-            flash = createFlashData(name, seoul42.getImage().getLink(), seoul42.getLocation());
+        flash = new FlashData(name, groupFriendRepository.findImageById(name, defaultGroupId), null);
         flash.parseStatus(Locate.parseLocate(flash.getLocation()));
         return flash;
     }

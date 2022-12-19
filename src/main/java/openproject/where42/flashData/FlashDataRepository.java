@@ -1,7 +1,8 @@
-package openproject.where42.member;
+package openproject.where42.flashData;
 
 import lombok.RequiredArgsConstructor;
-import openproject.where42.member.entity.FlashData;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,5 +31,8 @@ public class FlashDataRepository {
 			return null;
 		}
 	}
+
+	@Transactional
+	public void resetFlash() {};
 
 }

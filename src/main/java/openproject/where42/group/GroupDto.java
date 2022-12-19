@@ -1,4 +1,4 @@
-package openproject.where42.group.entity;
+package openproject.where42.group;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

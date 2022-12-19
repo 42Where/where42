@@ -1,4 +1,4 @@
-package openproject.where42.token.entity;
+package openproject.where42.token;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,19 +14,14 @@ import java.util.*;
 public class Token {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "token_id")
 	private Long id;
-
-	@JoinColumn(name = "intra_id")
+	@Column(name = "member_name", nullable = false, unique = true)
 	private String memberName;
-	@JoinColumn(name = "UUID")
 	private String UUID;
-	@JoinColumn(name = "refresh_token")
 	private String refreshToken;
-
-	@JoinColumn(name = "access_token")
 	private String accessToken;
-	private String recentLogin;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date recentLogin;
 
 	public Token(String name, String access ,String refresh) {
 
@@ -35,10 +30,7 @@ public class Token {
 		this.refreshToken = refresh;
 		this.memberName = name;
 		/*** update 시간 기록***/
-		Long systemTime = System.currentTimeMillis();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss:Z'Z'",Locale.KOREA);
-		String time = format.format(systemTime);
-		this.recentLogin = time;
+		this.recentLogin = new Date();
 	}
 
 	public void updateRefresh(String value) {
@@ -47,6 +39,7 @@ public class Token {
 
 	public String updateAccess(String value) {
 		this.accessToken = value;
+		this.recentLogin = new Date();
 		return this.UUID;
 	}
 }
