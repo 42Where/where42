@@ -7,6 +7,9 @@ public class ResponseMsg {
     public static final String RESET_FLASH = "플래시 디비 리셋 완료";
     public static final String LOGIN_SUCCESS = "로그인 성공";
     public static final String LOGOUT_SUCCESS = "로그아웃 성공";
+    public static final String ADMIN_LOGIN_SUCCESS = "관리자 로그인 성공";
+    public static final String ADMIN_LOGOUT_SUCCESS = "관리자 로그아웃 성공";
+    public static final String ADMIN_FAIL = "관리자 로그인 실패";
     public static final String NO_COOKIE = "쿠키 없음";
     public static final String NO_SESSION = "세션 없음";
     public static final String LOGIN_FAIL = "로그인 실패";

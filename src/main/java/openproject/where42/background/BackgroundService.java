@@ -117,10 +117,6 @@ public class BackgroundService {
         throw new TooManyRequestException();
     }
 
-    public void deleteMemberImage() {
-        imageRepository.deleteMember();
-    }
-
     public void getAllCadetImages() {
         token42 = tokenRepository.callAdmin();
         int i = 1;

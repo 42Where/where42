@@ -33,6 +33,8 @@ public class FlashDataRepository {
 	}
 
 	@Transactional
-	public void resetFlash() {};
+	public void resetFlash() {
+		em.createQuery("delete from FlashData f");
+	};
 
 }

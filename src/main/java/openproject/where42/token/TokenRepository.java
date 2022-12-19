@@ -121,4 +121,12 @@ public class TokenRepository {
 
 	@Transactional
 	public String updateAccessToken(Token token, String value) { return token.updateAccess(aes.encoding(value)); }
+
+	@Transactional
+	public void insertHane() {
+//		Token hane = new Token("hane",
+//				"하네 토큰 자리",
+//				null);
+//		em.persist(hane);
+	}
 }

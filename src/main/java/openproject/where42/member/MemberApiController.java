@@ -1,6 +1,7 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.member.dto.AdminInfo;
 import openproject.where42.member.dto.MemberId;
 import openproject.where42.util.Define;
 import openproject.where42.exception.customException.*;
@@ -89,24 +90,5 @@ public class MemberApiController {
         Member member = memberService.findBySession(req);
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);
-    }
-
-//    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/all")
-//    public List<MemberId> getAllMember(HttpServletRequest req) {
-//        //Member admin = memberService.findBySession(req);
-//        //if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
-//        List<Member> members = memberRepository.getAllMember();
-//        List<MemberId> allMember = new ArrayList<>();
-//        for (Member member : members)
-//            allMember.add(new MemberId(member));
-//        return allMember;
-//    }
-
-    @DeleteMapping(Define.WHERE42_VERSION_PATH + "/member/{memberId}")
-    public ResponseEntity deleteMember(@PathVariable(name = "memberId") Long memberId, HttpServletRequest req) {
-//        Member admin = memberService.findBySession(req);
-//        if (admin == null || admin.getLevel() != MemberLevel.administrator) // 관리자 계정 필요, 시큐리티에서 할 수 있는 방법은?
-        memberService.deleteMember(memberId);
-        return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_MEMBER), HttpStatus.OK);
     }
 }
