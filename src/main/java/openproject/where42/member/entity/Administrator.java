@@ -26,9 +26,7 @@ public class Administrator extends User {
     private MemberLevel level = MemberLevel.administrator;
 
     @Enumerated
-    private Planet planet;
+    private Locate locate;
 
-    private int floor;
-
-    private int cluster;
+    private String img;
 }
