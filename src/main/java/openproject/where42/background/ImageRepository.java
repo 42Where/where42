@@ -29,10 +29,6 @@ public class ImageRepository {
 	}
 
 	@Transactional
-	public void deleteMember() {
-		jdbcTemplate.update("delete from image A where exists(select * from member B where A.name=B.member_name)");
-	}
-	@Transactional
 	public void deduplication() {
 		jdbcTemplate.update("delete from image where active='false'");
 		jdbcTemplate.update("delete from image A where exists(select * from member B where A.name=B.member_name)");
@@ -46,6 +42,7 @@ public class ImageRepository {
 
 	@Transactional
 	public boolean inputImage(List<Seoul42> list) {
+		em.createQuery("delete from Image i");
 		int a = 1;
 		String sql ="INSERT INTO image (name, img, location, active) VALUES ";
 		for (Seoul42 i : list){

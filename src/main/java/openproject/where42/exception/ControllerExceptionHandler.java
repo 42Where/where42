@@ -66,4 +66,9 @@ public class ControllerExceptionHandler {
     protected ResponseEntity handleTooManyReqeustException(TooManyRequestException e) {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
+
+    @ExceptionHandler(AdminLoginFailException.class)
+    protected ResponseEntity AdminLoginFailException(AdminLoginFailException e) {
+        return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
+    }
 }
