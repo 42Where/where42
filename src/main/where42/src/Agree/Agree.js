@@ -13,6 +13,8 @@ function Agree()
         const location = useLocation();
         const nav = useNavigate();
         const info = location.state;
+        if (info.login === null)
+            nav("/Login");
         const AgreeClick=()=>{
             const body = { login: info.login , image : info.image, location : info.location};
             instance.post('member', body)

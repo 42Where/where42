@@ -1,11 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://ec2-43-200-6-157.ap-northeast-2.compute.amazonaws.com:5432/where42
-#    url: jdbc:postgresql://localhost:5432/where42
+#    url: jdbc:postgresql://ec2-43-200-6-157.ap-northeast-2.compute.amazonaws.com:5432/where42
+    url: jdbc:postgresql://localhost:5432/where42
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
-# 오픈소스 전환 시 이 부분 꼭꼭 삭제!!
 
   jpa:
     hibernate:
@@ -14,6 +13,18 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
+resilience4j:
+  retry:
+    instances:
+      backend:
+        max-attempts: 10
+        wait-duration:
+          2s
+        retry-exceptions:
+          - openproject.where42.exception.customException.TooManyRequestException
+          - org.springframework.web.client.HttpClientErrorException.TooManyRequests
+    retry-aspect-order: 2
 
 management:
   endpoints:
