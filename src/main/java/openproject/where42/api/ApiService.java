@@ -193,7 +193,6 @@ public class ApiService {
         return new HttpEntity<>(params, headers);
     }
 
-    /*** 서버용 ***/
     public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");

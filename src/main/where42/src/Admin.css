@@ -1,0 +1,88 @@
+#AdminSign {
+    text-align: center;
+    margin : auto;
+    margin-top : 20%;
+    width: 420px;
+    height: 450px;
+    border:solid 3px;
+    border-radius: 10%;
+    background: white;
+}
+
+#AdminShow {
+    text-align : center;
+    margin: auto;
+    margin-top : 100px;
+    padding: 20px;
+    background: #F6C4B7;
+}
+
+h1 {
+    font-family: GmarketSansBold;
+    margin-top: 65px;
+    font-size: 45px;
+}
+.MemberDelete{
+    display: inline-flex;
+    align-items: center;
+}
+
+input {
+    text-align: center;
+    width:225px;
+    height:30px;
+    border: solid 3px black;
+    font-size :20px;
+    background: #F6C4B7;
+}
+
+input::placeholder {
+    font-family: GmarketSansMedium;
+    color: black;
+    font-size: 15px;
+}
+
+.id {
+    padding-top: 19px;
+}
+
+.password {
+    padding-bottom: 32px;
+    padding-top: 22px;
+}
+
+.swal2-title {
+    font-family:GmarketSansMedium;
+    font-size : 20px!important;
+}
+
+.swal2-styled.swal2-confirm {
+    background-color: grey!important;
+    height: 40px;
+    width: 100px;
+}
+
+.swal2-popup{
+    border-radius: 20px;
+    padding: 1em 1em 1.25em 0!important;
+}
+button {
+    border : 0;
+    padding : 0;
+    width: 225px;
+    height: 50px;
+    margin : 10px;
+    font-size: 18px;
+    font-weight: bold;
+    background: white;
+    font-family : GmarketSansMedium;
+}
+
+#MemberInput{
+    background: white;
+}
+
+#login{
+    font-family: GmarketSansMedium;
+    border : 3px solid black;
+}

@@ -18,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +59,7 @@ public class LoginApiController {
         if (member == null)
             throw new UnregisteredMemberException(seoul42);
         session = req.getSession();
-        session.setAttribute("id", member.getId()); // 원래 있던거에 이렇게 넣어도 되나?
+        session.setAttribute("id", member.getId());
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
     }
 
@@ -101,7 +98,7 @@ public class LoginApiController {
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.UNREGISTERED), HttpStatus.OK);
     }
 
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/auth/code")
+    @PostMapping(Define.WHERE42_VERSION_PATH + "/auth/token")
     public ResponseEntity makeToken(@RequestParam("code") String code, HttpServletRequest req, HttpServletResponse res) {
         Seoul42 seoul42 = tokenService.beginningIssue(res, code);
         session = req.getSession(false);
