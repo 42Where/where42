@@ -29,7 +29,6 @@ function App() {
 
     return (
         <div className={'App'}>
-            <div id={"AlertBox"} ></div>
             <Routes>
                 <Route path={"/"} element={<Home/>}/>
                 <Route path={"/Login"} element={<Login/>}/>
