@@ -8,7 +8,6 @@ import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenService;
 import openproject.where42.api.ApiService;
-import openproject.where42.api.mapper.SearchCadet;
 import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.member.MemberRepository;

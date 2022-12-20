@@ -1,6 +1,8 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import openproject.where42.api.ApiService;
+import openproject.where42.api.mapper.OAuthToken;
 import openproject.where42.background.BackgroundService;
 import openproject.where42.exception.customException.SessionExpiredException;
 import openproject.where42.flashData.FlashDataRepository;
@@ -24,8 +26,8 @@ public class AdminApiController {
 	private final FlashDataRepository flashDataRepository;
 	private final TokenRepository tokenRepository;
 	private final MemberService memberService;
+	private final ApiService apiService;
 
-	// 관리자 로그인
 	@PostMapping(Define.WHERE42_VERSION_PATH + "/admin/login")
 	public ResponseEntity adminLogin(HttpSession session, @RequestBody AdminInfo admin) {
 		Long id = memberService.adminLogin(admin.getName(), admin.getPasswd());
@@ -34,16 +36,28 @@ public class AdminApiController {
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.ADMIN_LOGIN_SUCCESS), HttpStatus.OK);
 	}
 
-	@PostMapping(Define.WHERE42_VERSION_PATH + "/hane")
+	@GetMapping(Define.WHERE42_VERSION_PATH + "/auth/admin")
+	public String adminAuthLogin() {
+		return "";
+	}
+
+	@PostMapping(Define.WHERE42_VERSION_PATH + "/auth/admin/token")
+	public ResponseEntity insertAdminToken(@RequestParam("code") String code) {
+		OAuthToken oAuthToken = apiService.getAdminOAuthToken(code);
+		tokenRepository.saveAdmin("admin", oAuthToken);
+		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
+	}
+
+	@PostMapping(Define.WHERE42_VERSION_PATH + "/admin/hane")
 	public ResponseEntity insertHane(HttpServletRequest req) {
 		if (!memberService.findAdminBySession(req))
 			throw new SessionExpiredException();
 		tokenRepository.insertHane();
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.HANE_SUCCESS), HttpStatus.OK);
 	}
-	// 여기에 어드민 멤버 레벨 조건 넣기
 
-	@GetMapping(Define.WHERE42_VERSION_PATH + "/incluster") // 서버 실행 시 자동 실행 방법..?
+	// 여기에 어드민 멤버 레벨 조건 넣기
+	@GetMapping(Define.WHERE42_VERSION_PATH + "/admin/incluster")
 	public ResponseEntity findAllInClusterCadet(HttpServletRequest req) {
 		if (!memberService.findAdminBySession(req))
 			throw new SessionExpiredException();
@@ -51,7 +65,7 @@ public class AdminApiController {
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.IN_CLUSTER), HttpStatus.OK);
 	}
 
-	@GetMapping(Define.WHERE42_VERSION_PATH + "/image")
+	@GetMapping(Define.WHERE42_VERSION_PATH + "/admin/image")
 	public ResponseEntity getAllCadetImages(HttpServletRequest req) {
 		if (!memberService.findAdminBySession(req))
 			throw new SessionExpiredException();
@@ -59,7 +73,7 @@ public class AdminApiController {
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.GET_IMAGE_SUCCESS), HttpStatus.OK);
 	}
 
-	@DeleteMapping(Define.WHERE42_VERSION_PATH + "/flash")
+	@DeleteMapping(Define.WHERE42_VERSION_PATH + "/admin/flash")
 	public ResponseEntity resetFlash(HttpServletRequest req) {
 		if (!memberService.findAdminBySession(req))
 			throw new SessionExpiredException();
@@ -68,7 +82,7 @@ public class AdminApiController {
 	}
 
 	// 멤버 삭제
-	@DeleteMapping(Define.WHERE42_VERSION_PATH + "/member/{name}")
+	@DeleteMapping(Define.WHERE42_VERSION_PATH + "/admin/member/{name}")
 	public ResponseEntity deleteMember(@PathVariable(name = "name") String name, HttpServletRequest req) {
 		if (!memberService.findAdminBySession(req))
 			throw new SessionExpiredException();
