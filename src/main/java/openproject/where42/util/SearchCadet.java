@@ -1,11 +1,10 @@
-package openproject.where42.api.mapper;
+package openproject.where42.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import openproject.where42.util.Define;
 import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Locate;
 import openproject.where42.member.entity.Member;

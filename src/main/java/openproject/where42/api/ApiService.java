@@ -52,7 +52,7 @@ public class ApiService {
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
-    // oAuth 토큰 반환
+    // new oAuth 토큰 반환
     @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<OAuthToken> getNewOAuthToken(String token) {
@@ -61,20 +61,16 @@ public class ApiService {
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
+    // 관리자 oAuth 토큰 반환
     public OAuthToken getAdminOAuthToken(String code) {
-        /*** 로컬용 ***/
-        req = req42LocalAdminHeader(code);
-        /*** 서버용 ***/
-//		req = req42AdminHeader(code);
+		req = req42AdminHeader(code);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
 
+    // 관리자 new oAuth 토큰 반환
     public OAuthToken getAdminNewOAuthToken(String token) {
-        /*** 로컬용 ***/
-        req = req42LocalAdminRefreshHeader(token);
-        /*** 서버용 ***/
-//		req = req42AdminRefreshHeader(token);
+		req = req42AdminRefreshHeader(token);
         res = resPostApi(req, req42TokenUri());
         return oAuthTokenMapping(res.getBody());
     }
@@ -162,76 +158,50 @@ public class ApiService {
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드
     public Planet getHaneInfo(String name, String token) {
-//        req = reqHaneApiHeader(token);
-//        res = resReqApi(req, reqHaneApiUri(name));
-//        Hane hane = haneMapping(res.getBody());
-//        if (hane.getInoutState().equalsIgnoreCase("IN")) {
-//            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
-//                return Planet.gaepo;
-//            return Planet.seocho;
-//        }
-//        return null;
-        return Planet.gaepo;
+        req = reqHaneApiHeader(token);
+        res = resReqApi(req, reqHaneApiUri(name));
+        Hane hane = haneMapping(res.getBody());
+        if (hane.getInoutState().equalsIgnoreCase("IN")) {
+            if (hane.getCluster().equalsIgnoreCase("GAEPO"))
+                return Planet.gaepo;
+            return Planet.seocho;
+        }
+        return null;
     }
 
-    /*** 관리자 로컬 ***/ // 여기부터 refresh header까지 다 삭제
-    public HttpEntity<MultiValueMap<String, String>> req42LocalAdminHeader(String code) {
+    // 관리자 헤더
+    public HttpEntity<MultiValueMap<String, String>> req42AdminHeader(String code) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
-        params.add("client_id","u-s4t2ud-b62a88b0deb7cdc85c7d9228410c2d1d1ca49a033772c41e26c06c0234674392");
-        params.add("client_secret", "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");
+        params.add("client_id","");
+        params.add("client_secret", "");
         params.add("code", code);
-        params.add("redirect_uri","http://localhost:8080/v1/savecode");
+        params.add("redirect_uri","");
         return new HttpEntity<>(params, headers);
     }
 
-    public HttpEntity<MultiValueMap<String, String>> req42LocalAdminRefreshHeader(String refreshToken) {
+    public HttpEntity<MultiValueMap<String, String>> req42AdminRefreshHeader(String refreshToken) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
-        params.add("client_id", "u-s4t2ud-b62a88b0deb7cdc85c7d9228410c2d1d1ca49a033772c41e26c06c0234674392");
-        params.add("client_secret", "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");
+        params.add("client_id", "");
+        params.add("client_secret", "");
         params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
 
-    /*** 관리자용 ***/
-//    public HttpEntity<MultiValueMap<String, String>> req42AdminHeader(String code) {
-//        headers = new HttpHeaders();
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//        params = new LinkedMultiValueMap<>();
-//        params.add("grant_type","authorization_code");
-//        params.add("client_id","56448d39501e3f2a4d1c574a72de267e8def4da40b4b98fa29bce33063e1feff");
-//        params.add("client_secret", "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");
-//        params.add("code", code);
-//        params.add("redirect_uri","https://www.where42.kr/v1/savecode");
-//        return new HttpEntity<>(params, headers);
-//    }
-//
-//    public HttpEntity<MultiValueMap<String, String>> req42AdminRefreshHeader(String refreshToken) {
-//        headers = new HttpHeaders();
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//        params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "refresh_token");
-//        params.add("client_id", "56448d39501e3f2a4d1c574a72de267e8def4da40b4b98fa29bce33063e1feff");
-//        params.add("client_secret", "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");
-//        params.add("refresh_token", refreshToken);
-//        return new HttpEntity<>(params, headers);
-//    }
-
-    /*** 로컬용 ***/
     public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
-        params.add("client_id","150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
+        params.add("client_id","");
+        params.add("client_secret", "");
         params.add("code", code);
-        params.add("redirect_uri","http://localhost:8080/auth/login/callback");
+        params.add("redirect_uri","");
         return new HttpEntity<>(params, headers);
     }
 
@@ -240,43 +210,19 @@ public class ApiService {
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
         params.add("grant_type", "refresh_token");
-        params.add("client_id", "150e45a44fb1c8b17fe04470bdf8fabd56c1b9841d2fa951aadb4345f03008fe");
-        params.add("client_secret", "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");
+        params.add("client_id", "");
+        params.add("client_secret", "");
         params.add("refresh_token", refreshToken);
         return new HttpEntity<>(params, headers);
     }
 
-    /*** 서버용 ***/
-//    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
-//        headers = new HttpHeaders();
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//        params = new LinkedMultiValueMap<>();
-//        params.add("grant_type","authorization_code");
-//        params.add("client_id","u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-//        params.add("client_secret", "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");
-//        params.add("code", code);
-//        params.add("redirect_uri","http://www.where42.kr/auth/login/callback");
-//        return new HttpEntity<>(params, headers);
-//    }
-//
-//    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String refreshToken) {
-//        headers = new HttpHeaders();
-//        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//        params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "refresh_token");
-//        params.add("client_id", "u-s4t2ud-6d1e73793782a2c15be3c0d2d507e679adeed16e50deafcdb85af92e91c30bd0");
-//        params.add("client_secret", "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");
-//        params.add("refresh_token", refreshToken);
-//        return new HttpEntity<>(params, headers);
-//    }
-
     // 42api 요청 헤더 생성 메소드
     public HttpEntity<MultiValueMap<String, String>> req42ApiHeader(String token) {
-        headers = new HttpHeaders(); // 새 헤더를 만들지 않으면 429에러가 바로 난다.
+        headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + token);
         headers.add("Content-type", "application/json;charset=utf-8");
-        params = new LinkedMultiValueMap<>(); // 얘네는 new 처리 하는게 맞겠지..?
-        return new HttpEntity<>(params, headers); // 헤더 공통으로 쓸 수 있는 방법
+        params = new LinkedMultiValueMap<>();
+        return new HttpEntity<>(params, headers);
     }
 
     // hane 요청 헤더 생성 메소드
@@ -306,12 +252,11 @@ public class ApiService {
     }
 
     public URI req42ApiLocationUri(int i) {
-        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+        return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 100)
                 .queryParam("page[number]", i)
                 .queryParam("sort", "-end_at")
-//                .queryParam("range[end_at]", null) // 널만 검색하는 게 분명히 있을텐데요./.
                 .build()
                 .toUri();
     }
@@ -321,7 +266,7 @@ public class ApiService {
         Date date = new Date();
         cal.setTime(date);
         cal.add(Calendar.MINUTE, -3);
-        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+        return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 100)
                 .queryParam("page[number]", i)
@@ -335,7 +280,7 @@ public class ApiService {
         Date date = new Date();
         cal.setTime(date);
         cal.add(Calendar.MINUTE, -3);
-        return UriComponentsBuilder.newInstance() // /v2/campus/:campus_id/locations
+        return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 50)
                 .queryParam("page[number]", i)
@@ -362,14 +307,13 @@ public class ApiService {
                 .toUri();
     }
 
-    // 한 유저에 대한 하네 정보 요청 uri 생성 메소드 // 이것도 삭제
+    // 한 유저에 대한 하네 정보 요청 uri 생성 메소드
     public URI reqHaneApiUri(String name) {
-        return UriComponentsBuilder.fromHttpUrl("https://api.24hoursarenotenough.42seoul.kr/ext/where42/where42/" + name)
+        return UriComponentsBuilder.fromHttpUrl("" + name)
                 .build()
                 .toUri();
     }
 
-    // oAuth 객체 json 매핑 메소드
     public OAuthToken oAuthTokenMapping(String body) {
         OAuthToken oAuthToken = null;
         try {
@@ -380,7 +324,6 @@ public class ApiService {
         return oAuthToken;
     }
 
-    // seoul42 객체 json 매핑 메소드
     public Seoul42 seoul42Mapping(String body) {
         Seoul42 seoul42 = null;
         try {
@@ -401,7 +344,6 @@ public class ApiService {
         return clusters;
     }
 
-    // ListSeoul42 객체 json 매핑 메소드
     public List<Seoul42> seoul42ListMapping(String body) {
         List<Seoul42> seoul42List = null;
         try {

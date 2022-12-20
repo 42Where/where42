@@ -81,8 +81,6 @@ public class BackgroundService {
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
-//            for (Cluster cluster : logoutCadets)
-//                System.out.println("** end name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
             if (logoutCadets.size() < 100)
                 break;
             i++;
@@ -102,8 +100,6 @@ public class BackgroundService {
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
-//            for (Cluster cluster : clusterCadets)
-//                System.out.println("** begin name = " + cluster.getUser().getLogin() + " Image = " + cluster.getUser().getImage().getLink() + " location = " + cluster.getUser().getLocation() + " end_at = " + cluster.getEnd_at() + " begin at = " + cluster.getBegin_at());
             if (loginCadets.size() < 100)
                 break;
             i++;

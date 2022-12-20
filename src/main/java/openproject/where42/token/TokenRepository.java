@@ -21,8 +21,6 @@ public class TokenRepository {
 	static private AES aes = new AES();
 	private final EntityManager em;
 	private final ApiService apiService;
-	HttpEntity<MultiValueMap<String, String>> req;
-	ResponseEntity<String> res;
 
 	@Transactional
 	public String saveAdmin(String name , OAuthToken oAuthToken) {
@@ -124,9 +122,9 @@ public class TokenRepository {
 
 	@Transactional
 	public void insertHane() {
-//		Token hane = new Token("hane",
-//				"하네 토큰 자리",
-//				null);
-//		em.persist(hane);
+		Token hane = new Token("hane",
+				"",
+				null);
+		em.persist(hane);
 	}
 }
