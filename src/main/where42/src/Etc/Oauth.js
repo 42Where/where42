@@ -3,10 +3,9 @@ import Loading from "./Loading";
 import axios from 'axios';
 
 function Oauth() {
-    console.log("now");
     const nav = useNavigate();
     let code = new URL(window.location.href).searchParams.get("code");
-    axios.get('/v1/auth/code', {params : {code: code}})
+    axios.post('/v1/auth/token', null, {params : {code: code}})
         .then((response) => {
             nav('/Main');
         }).catch((Error)=> {

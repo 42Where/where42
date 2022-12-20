@@ -1,6 +1,7 @@
 import axios from "axios";
 import {useState} from "react";
 import './Admin.css';
+import Swal from 'sweetalert2'
 
 function Admin(){
     const [sign, setSign] = useState(false);
@@ -13,7 +14,7 @@ function Admin(){
                     setSign(true);
             }).catch((Error)=>{
                 if (Error.response.status === 401)
-                    alert("로그인 실패. 아이디와 비밀번호를 확인해주세요");
+                    Swal.fire("로그인 실패.\n 아이디와 비밀번호를 확인해주세요");
                 else
                     console.log(Error);
             });
@@ -24,6 +25,11 @@ function Admin(){
         const PasswordChange=(e)=>{
             setPassword(e.target.value);
         }
+        const PasswordKeyDown=(event)=>{
+            let charCode = event.keyCode;
+            if (charCode === 13)
+                SignClick();
+        }
         return (
             <div id="AdminSign">
                 <h1>Admin Log In</h1>
@@ -31,7 +37,7 @@ function Admin(){
                     <input placeholder={"id"} value={id} onChange={IdChange} type={"text"}/><br/>
                 </div>
                 <div className="password">
-                    <input type={"password"} id="password" placeholder="Password" value={password} onChange={PasswordChange}/><br/>
+                    <input type={"password"} id="password" placeholder="Password" value={password} onKeyDown={PasswordKeyDown} onChange={PasswordChange}/><br/>
                 </div>
                 <div className="div_button">
                     <button className="button" id="login" type="button" onClick={SignClick}>Log In</button>
@@ -46,40 +52,41 @@ function Admin(){
             setMemberName(e.target.value);
         }
         function MemberClick(){
-            axios.delete('v1/memeber', {params: {name: memberName}})
+            axios.delete('v1/admin/member', {params: {name: memberName}})
                 .then((res)=>{
-                    alert(memberName + "member delete ok");
+                    Swal.fire(memberName + "member delete ok");
                 })
         }
         function AdminTokenClick(){
-            axios.get(  'v1/admin')
+            axios.get(  'v1/auth/admin')
                 .then((res) => {
-                    alert("admin token ok");
+                    window.location.href = res.data;
+                    // alert("admin token ok");
                 });
         }
         function InClusterClick(){
-            axios.get('v1/incluster').then((res)=>{
-                alert("incluster ok");
+            axios.get('v1/admin/incluster').then((res)=>{
+                Swal.fire("incluster ok");
             })
         }
         function HaneClick(){
-            axios.get('v1/hane').then((res)=>{
-                alert("24Hane Token ok");
+            axios.get('v1/admin/hane').then((res)=>{
+                Swal.fire("24Hane Token ok");
             })
         }
         function ImageClick(){
-            axios.get('v1/image').then((res)=>{
-                alert("Image DB ok");
+            axios.get('v1/admin/image').then((res)=>{
+                Swal.fire("Image DB ok");
             })
         }
         function FlashClick(){
-            axios.delete('v1/flash').then((res)=>{
-                alert("flash DB deleted");
+            axios.delete('v1/admin/flash').then((res)=>{
+                Swal.fire("flash DB deleted");
             })
         }
         function LogoutClick() {
-            axios.get('v1/logout').then((res) => {
-                alert("Logout ok");
+            axios.get('v1/admin/logout').then((res) => {
+                Swal.fire("logout ok");
                 setSign(false);
             })
         }
