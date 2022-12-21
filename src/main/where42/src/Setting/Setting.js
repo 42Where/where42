@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { SettingFloor, SettingCluster, SettingSpot} from "./Setting_Locate";
@@ -18,12 +18,7 @@ function Setting() {
     else if (isDesktop)
         size = "Desktop";
     const nav = useNavigate();
-    const location = useLocation();
-    let name = location.state?.name;
-    if (name)
-        localStorage.setItem('userName', name);
-    else
-        name = localStorage.getItem('userName');
+    const name = localStorage.getItem('name');
     useEffect(() => {
         localStorage.setItem('locate', JSON.stringify({
             planet: 0, floor: 0, cluster: 0

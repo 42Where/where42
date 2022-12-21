@@ -31,6 +31,7 @@ function Main() {
     }, []);
 
     function Common() {
+        localStorage.setItem('name', memberInfo.name);
         return (
             <div id="Wrapper">
                 <Link to="/Search" state={memberInfo.name}>
