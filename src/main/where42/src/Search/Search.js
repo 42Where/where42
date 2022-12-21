@@ -7,7 +7,6 @@ import './Search_Desktop.css';
 import './Search_Mobile.css';
 import instance from "../AxiosApi";
 import {useLocation} from "react-router";
-import egg from './egg.json'
 
 function Search() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
@@ -26,23 +25,7 @@ function Search() {
                 event.preventDefault();
                 return ;
             }
-            if (searchId === "where42")
-            {
-                event.preventDefault();
-                setInformation(egg);
-                return ;
-            }
             setLoading(true);
-            if (searchId === "어디있니")
-            {
-                instance.get('search/where42')
-                    .then((response)=>{
-                    setInformation(response.data);
-                    setLoading(false);
-                })
-                alert("어디있니는 당신의 친구랍니다 :)");
-                return ;
-            }
             instance.get('search', {params : {begin : searchId}})
                 .then((response)=>{
                 if (response.data.length === 0)
