@@ -16,11 +16,6 @@ const SearchProfile = (props) => {
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        if (info.name === memberId)
-        {
-            alert("나는 우주를 여행하는 당신의 영원한 친구입니다.");
-            return ;
-        }
         instance.post('groupFriend', null, {params: {friendName : info.name, img: info.img}})
         if (isDesktop)
         {
