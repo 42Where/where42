@@ -13,7 +13,7 @@ const MainProfile = (props) => {
     if (props.me) {
         meOrNot = ( 
         <div id="SettingWrapper">
-            <Link to="/Setting" state={{name : info.name}}>
+            <Link to="/Setting">
                 <button id="Setting"> </button>
             </Link>
         </div>

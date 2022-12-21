@@ -9,37 +9,31 @@ import NotFound from "./Etc/NotFound";
 import Oauth from "./Etc/Oauth";
 import Admin from "./Admin";
 import AdminOauth from "./AdminOauth";
-import {useEffect, useState} from "react";
-import {useLocation} from "react-router";
-import {DecideRoute} from "./DecideRoute";
+import PublicRoute from "./PublicRoute";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
     if (process.env.NODE_ENV === "production") {
-        // console.log = function no_console() {};
+        console.log = function no_console() {};
         console.warn = function no_console() {};
         console.error = function no_console() {};
         console.debug = function no_console() {};
     }
-    // const loc = useLocation();
-    // const [pastLoc, setPastLoc] = useState("Home");
-    // DecideRoute({current: loc.pathname, past: pastLoc});
-    // useEffect(() => {
-    //     setPastLoc(loc.pathname);
-    // }, []);
 
     return (
         <div className={'App'}>
             <Routes>
                 <Route path={"/"} element={<Home/>}/>
                 <Route path={"/Login"} element={<Login/>}/>
-                <Route path={"/Main"} element={<Main/>}/>
-                <Route path={"/Search"} element={<Search/>}/>
-                <Route path={"/Setting/*"} element={<Setting/>}/>
-                <Route path={"/Agree"} element={<Agree/>}/>
-                <Route path={"/Admin"} element={<Admin/>}/>
                 <Route path={"/v1/auth/callback"} element={<Oauth/>}/>
-                <Route path={"/v1/auth/admin/callback"} element={<AdminOauth/>}/>
                 <Route path={"/*"} element={<NotFound/>}/>
+                <Route path={"/Main"} element={<PrivateRoute><Main/></PrivateRoute>}/>
+                <Route path={"/Search"} element={<PrivateRoute><Search/></PrivateRoute>}/>
+                <Route path={"/Setting/*"} element={<PrivateRoute><Setting/></PrivateRoute>}/>
+                <Route path={"/Agree"} element={<PublicRoute><Agree/></PublicRoute>}/>
+
+                <Route path={"/Admin"} element={<Admin/>}/>
+                <Route path={"/v1/auth/admin/callback"} element={<AdminOauth/>}/>
             </Routes>
         </div>
     );
