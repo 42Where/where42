@@ -1,7 +1,7 @@
 # 어디있니, where42
 
 ## Making web_project in OpenProject( 09 / 27 / 2022 ~ )
-made by [hyunjcho](https://github.com/highjcho) && [heeskim](https://github.com/lampolar) && [jaebae](https://github.com/mulloc1) && [sojoo](https://github.com/zoovely) && [sunghkim](https://github.com/K-SeongHun)
+made by [hyunjcho](https://github.com/highjcho) && [heeskim](https://github.com/lampolar) && [sojoo](https://github.com/zoovely) && [sunghkim](https://github.com/K-SeongHun)
 
 ## History
 
