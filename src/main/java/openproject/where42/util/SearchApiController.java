@@ -32,9 +32,7 @@ public class SearchApiController {
     @GetMapping(Define.WHERE42_VERSION_PATH + "/search")
     public List<SearchCadet> search42UserResponse(HttpServletRequest req, HttpServletResponse rep, @RequestParam("begin") String begin,
                                                   @CookieValue(value = "ID", required = false) String key) {
-        String token42 = tokenService.findAccessToken(key);
-        if (token42 == null)
-            tokenService.inspectToken(rep, key);
+        String token42 = tokenService.findAccessToken(rep, key);
         Member member = memberService.findBySessionWithToken(req, token42);
         begin = begin.toLowerCase();
         CompletableFuture<List<Seoul42>> cf = apiService.get42UsersInfoInRange(token42, begin, getEnd(begin));
@@ -46,7 +44,7 @@ public class SearchApiController {
                 searchCadet.setFriend(true);
             searchCadetList.add(searchCadet);
         }
-        return searchCadetList;
+       return searchCadetList;
     }
 
     public SearchCadet searchCadetInfo(String name) {
@@ -57,6 +55,11 @@ public class SearchApiController {
         if (flash != null)
             return new SearchCadet(flash);
         return new SearchCadet(name, imageRepository.findByName(name));
+    }
+
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/search/where42")
+    public ArrayList<SearchCadet> searchWhere42Info() {
+        return SearchCadet.where42(memberRepository.findAllAdmin());
     }
 
     private String getEnd(String begin) {

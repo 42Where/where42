@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import openproject.where42.token.TokenService;
 import openproject.where42.util.Define;
 import openproject.where42.exception.customException.RegisteredFriendException;
-import openproject.where42.group.GroupRepository;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.Member;
@@ -33,7 +32,7 @@ public class GroupFriendApiController {
 	// 검색을 통한 친구 등록, 기본 그룹에 등록
 	@PostMapping(Define.WHERE42_VERSION_PATH + "/groupFriend")
 	public ResponseEntity createFriend(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @RequestParam String friendName, @RequestParam String img) {
-		String token42 = tokenService.getToken(res, key);
+		String token42 = tokenService.findAccessToken(res, key);
 		Member member = memberService.findBySessionWithToken(req, token42);
 		if (memberRepository.checkFriendByMemberIdAndName(member.getId(), friendName))
 			throw new RegisteredFriendException();
@@ -44,7 +43,7 @@ public class GroupFriendApiController {
 	// 해당 그룹에 포함되지 않는 친구 이름 목록 전체 반환
 	@GetMapping(Define.WHERE42_VERSION_PATH + "/groupFriend/notIncludes/group/{groupId}")
 	public List<String> getNotIncludeGroupFriendNames(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @PathVariable("groupId") Long groupId) {
-		String token42 = tokenService.getToken(res, key);
+		String token42 = tokenService.findAccessToken(res, key);
 		Member member = memberService.findBySessionWithToken(req, token42);
 		return groupFriendRepository.notIncludeFriendByGroup(member, groupId);
 	}
@@ -72,7 +71,7 @@ public class GroupFriendApiController {
 	// 기본 그룹 친구 이름 목록 반환
 	@GetMapping(Define.WHERE42_VERSION_PATH + "/groupFriend/friendList")
 	public List<String> getAllDefaultFriends(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-		String token42 = tokenService.getToken(res, key);
+		String token42 = tokenService.findAccessToken(res, key);
 		Member member = memberService.findBySessionWithToken(req, token42);
 		return groupFriendRepository.findGroupFriendsByGroupId(member.getDefaultGroupId());
 	}
@@ -80,7 +79,7 @@ public class GroupFriendApiController {
 	// 기본 그룹을 포함한 모든 그룹에서 삭제
 	@PostMapping(Define.WHERE42_VERSION_PATH + "/groupFriend/friendList") // 프론트 기본에서 삭제하는 경우와 사용자정의 그룹에서만 삭제하는 경우 필히 구분지어서 매핑 필
 	public ResponseEntity deleteFriends(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @RequestBody List<String> friendNames) {
-		String token42 = tokenService.getToken(res, key);
+		String token42 = tokenService.findAccessToken(res, key);
 		Member member = memberService.findBySessionWithToken(req, token42);
 		groupFriendService.deleteFriends(member, friendNames);
 		return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.DELETE_GROUP_FRIENDS), HttpStatus.OK);

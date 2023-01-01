@@ -5,7 +5,6 @@ import openproject.where42.api.ApiService;
 import openproject.where42.api.mapper.OAuthToken;
 import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.TokenExpiredException;
-import openproject.where42.member.MemberService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -35,47 +34,36 @@ public class TokenService {
 		return seoul42;
 	}
 
-	public String getToken(HttpServletResponse res, String key) {
-		String token42 = findAccessToken(key);
-		if (token42 == null)
-			inspectToken(res, key);
-		return token42;
-	}
-
-	public void checkRefreshToken(String key) {
-		if (key == null || !tokenRepository.checkRefreshToken(key))
-			throw new TokenExpiredException();
-	}
-
 	public void addCookie(HttpServletResponse rep,String key) {
 		rep.addCookie(oven.bakingMaxAge("1209600", 1209600));
 		rep.addCookie(oven.bakingCookie("ID", key, 1209600));
 	}
 
 	/*** Access Token 새로 발급***/
-	public String issueAccessToken(String key) {
+	public String issueAccessToken(HttpServletResponse rep ,String key) {
 		Token token = tokenRepository.findTokenByKey(key);
 		CompletableFuture<OAuthToken> cf = apiService.getNewOAuthToken(tokenRepository.callSecret(), aes.decoding(token.getRefreshToken()));
 		OAuthToken oAuthToken = apiService.injectInfo(cf);
 		tokenRepository.updateRefreshToken(token,oAuthToken.getRefresh_token());
 		tokenRepository.updateAccessToken(token,oAuthToken.getAccess_token());
+		addCookie(rep, key);
 		return aes.encoding(oAuthToken.getAccess_token());
 	}
 
-	public void inspectToken(HttpServletResponse res, String key) throws TokenExpiredException {
-		checkRefreshToken(key);
-		addCookie(res, key);
-	}
-
-	public String findAccessToken(String key) {
+	public String findAccessToken(HttpServletResponse rep, String key) {
 		if (key == null)
 			throw new TokenExpiredException();
 		Token token = tokenRepository.findTokenByKey(key);
-		if (token == null || token.getAccessToken() == null)
-			return null;
+		if (token == null){
+			rep.addCookie(oven.burnCookie("ID"));
+			rep.addCookie(oven.bakingMaxAge("0", 0));
+			throw new TokenExpiredException();
+		}
 		Date now = new Date();
-		if ((now.getTime() - token.getRecentLogin().getTime()) / 60000 > 110)
-			return issueAccessToken(key);
+		if ((now.getTime() - token.getRecentLogin().getTime()) / 60000 > 110){
+			addCookie(rep, key);
+			return issueAccessToken(rep, key);
+		}
 		return token.getAccessToken();
 	}
 }

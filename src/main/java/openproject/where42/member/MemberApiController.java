@@ -2,8 +2,6 @@ package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import openproject.where42.member.dto.AdminInfo;
-import openproject.where42.member.dto.MemberId;
 import openproject.where42.util.Define;
 import openproject.where42.exception.customException.*;
 import openproject.where42.token.TokenService;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +45,7 @@ public class MemberApiController {
     // 메인 정보 조회
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/member")
     public MemberInfo memberInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-        String token42 = tokenService.getToken(res, key);
+        String token42 = tokenService.findAccessToken(res, key);
         Member member = memberService.findBySessionWithToken(req, token42);
         log.info("[member] \"{}\"님이 메인화면을 불렀습니다.", member.getName());
         if (member.timeDiff() < 1) {
@@ -75,14 +72,14 @@ public class MemberApiController {
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 조회
     public String getPersonalMsg(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-        String token42 = tokenService.getToken(res, key);
+        String token42 = tokenService.findAccessToken(res, key);
         Member member = memberService.findBySessionWithToken(req, token42);
         return member.getMsg();
     }
 
     @PostMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 설정
     public ResponseEntity updatePersonalMsg(HttpServletRequest req,  HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @RequestBody Map<String, String> msg) {
-        String token42 = tokenService.getToken(res, key);
+        String token42 = tokenService.findAccessToken(res, key);
         memberService.updatePersonalMsg(req, token42, msg.get("msg"));
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_MSG), HttpStatus.OK);
     }
@@ -90,14 +87,14 @@ public class MemberApiController {
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/locate") // 위치 설정 가능 여부 조회
     public ResponseEntity checkLocate(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key)
             throws OutStateException, TakenSeatException {
-        String token42 = tokenService.getToken(res, key);
+        String token42 = tokenService.findAccessToken(res, key);
         int planet = memberService.checkLocate(req, token42);
         return new ResponseEntity(ResponseWithData.res(StatusCode.OK, ResponseMsg.NOT_TAKEN_SEAT, planet), HttpStatus.OK);
     }
 
     @PostMapping(Define.WHERE42_VERSION_PATH + "/member/setting/locate") // 위치 설정
     public ResponseEntity updateLocate(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @RequestBody Locate locate) {
-        String token42 = tokenService.getToken(res, key);
+        String token42 = tokenService.findAccessToken(res, key);
         Member member = memberService.findBySessionWithToken(req, token42);
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);

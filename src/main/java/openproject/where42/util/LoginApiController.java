@@ -40,21 +40,14 @@ public class LoginApiController {
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/home")
     public ResponseEntity home(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-        token = tokenService.findAccessToken(key);
-        if (token == null)
-            tokenService.inspectToken(res, key);
+        token = tokenService.findAccessToken(res, key);
         memberService.findBySessionWithToken(req, token);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.LOGIN_SUCCESS), HttpStatus.OK);
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/login")
     public ResponseEntity login(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-        token = tokenService.findAccessToken(key);
-        if (token == null){
-            tokenService.checkRefreshToken(key);
-            token = tokenService.issueAccessToken(key);
-            tokenService.addCookie(res, key);
-        }
+        token = tokenService.findAccessToken(res, key);
         CompletableFuture<Seoul42> cf = apiService.getMeInfo(token);
         Seoul42 seoul42 = apiService.injectInfo(cf);
         Member member = memberRepository.findByName(seoul42.getLogin());
@@ -79,12 +72,7 @@ public class LoginApiController {
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/checkAgree")
     public ResponseEntity checkAgree(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-        token = tokenService.findAccessToken(key);
-        if (token == null){
-            tokenService.checkRefreshToken(key);
-            token = tokenService.issueAccessToken(key);
-            tokenService.addCookie(res, key);
-        }
+        token = tokenService.findAccessToken(res, key);
         session = req.getSession(false);
         if (session != null)
             throw new CannotAccessAgreeException();

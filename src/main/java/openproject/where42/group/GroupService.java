@@ -3,8 +3,8 @@ package openproject.where42.group;
 import lombok.RequiredArgsConstructor;
 import openproject.where42.exception.customException.DefaultGroupNameException;
 import openproject.where42.exception.customException.DuplicateGroupNameException;
+import openproject.where42.exception.customException.UnregisteredMemberException;
 import openproject.where42.member.MemberRepository;
-import openproject.where42.member.MemberService;
 import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenService;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -19,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
 
@@ -40,9 +40,18 @@ public class GroupService {
         return groupRepository.findGroupsByOwnerId(ownerId);
     }
 
-    public Member findOwnerBySession(HttpServletRequest req, HttpServletResponse res, String key) {
-        String token42 = tokenService.getToken(res, key);
-        return memberService.findBySessionWithToken(req, token42);
+    public Member findOwnerBySessionWithToken(HttpServletRequest req, HttpServletResponse res, String key) {
+        String token42 = tokenService.findAccessToken(res, key);
+        HttpSession session = req.getSession(false);
+        if (session == null) {
+            Long memberId = memberRepository.findIdByToken(token42);
+            if (memberId == 0)
+                throw new UnregisteredMemberException();
+            req.getSession();
+            session.setAttribute("id", memberId);
+        }
+        session.setMaxInactiveInterval(60 * 60);
+        return memberRepository.findById((Long)session.getAttribute("id"));
     }
 
     @Transactional
