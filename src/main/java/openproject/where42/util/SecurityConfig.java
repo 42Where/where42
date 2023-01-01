@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
-                .invalidateHttpSession(true) // 그 함수랑 이어질지. 나중에 씨큐리티 config 다 정리하자..
+                .invalidateHttpSession(true)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.NEVER);

@@ -33,10 +33,10 @@ import java.util.concurrent.ExecutionException;
 @Service
 @RequiredArgsConstructor
 public class ApiService {
-    private static final AES aes = new AES();
-    private static final ObjectMapper om = new ObjectMapper();
-    private static final RestTemplate rt = new RestTemplate();
-    public static final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC")));
+    private final AES aes = new AES();
+    private final ObjectMapper om = new ObjectMapper();
+    private final RestTemplate rt = new RestTemplate();
+    public final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC")));
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     HttpHeaders headers;
     HttpEntity<MultiValueMap<String, String>> req;
@@ -44,39 +44,25 @@ public class ApiService {
     ResponseEntity<String> res;
 
     // oAuth 토큰 반환
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
-    public CompletableFuture<OAuthToken> getOAuthToken(String code) {
-        req = req42TokenHeader(code);
+    public CompletableFuture<OAuthToken> getOAuthToken(String secret, String code) {
+        req = req42TokenHeader(secret, code);
         res = resPostApi(req, req42TokenUri());
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
     }
 
-    // new oAuth 토큰 반환
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    // oAuth 토큰 반환
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
-    public CompletableFuture<OAuthToken> getNewOAuthToken(String token) {
-        req = req42RefreshHeader(token);
+    public CompletableFuture<OAuthToken> getNewOAuthToken(String secret, String token) {
+        req = req42RefreshHeader(secret, token);
         res = resPostApi(req, req42TokenUri());
         return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
-    }
-
-    // 관리자 oAuth 토큰 반환
-    public OAuthToken getAdminOAuthToken(String code) {
-		req = req42AdminHeader(code);
-        res = resPostApi(req, req42TokenUri());
-        return oAuthTokenMapping(res.getBody());
-    }
-
-    // 관리자 new oAuth 토큰 반환
-    public OAuthToken getAdminNewOAuthToken(String token) {
-		req = req42AdminRefreshHeader(token);
-        res = resPostApi(req, req42TokenUri());
-        return oAuthTokenMapping(res.getBody());
     }
 
     // 이미지 호출
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
         req = req42ApiHeader(token);
@@ -85,7 +71,7 @@ public class ApiService {
     }
 
     // 현재 클러스터에 있는 카뎃들 호출
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
         req = req42ApiHeader(token);
@@ -94,33 +80,31 @@ public class ApiService {
     }
 
     // 로그아웃한 카뎃들 호출
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     public List<Cluster> get42LocationEnd(String token, int i) {
         req = req42ApiHeader(token);
         try {
             res = resReqApi(req, req42ApiLocationEndUri(i));
         } catch (RuntimeException e) {
-            System.out.println("==== end error ====");
-            e.printStackTrace();
+            e.printStackTrace(); // log 자리
         }
         return clusterMapping(res.getBody());
     }
 
     // 로그인한 카뎃들 호출
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     public List<Cluster> get42LocationBegin(String token, int i) {
         req = req42ApiHeader(token);
         try {
             res = resReqApi(req, req42ApiLocationBeginUri(i));
         } catch (RuntimeException e) {
-            System.out.println("==== begin error ====");
-            e.printStackTrace();
+            e.printStackTrace(); // log 자리
         }
         return clusterMapping(res.getBody());
     }
 
     // me 정보 반환
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<Seoul42> getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
@@ -129,7 +113,7 @@ public class ApiService {
     }
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
-    @Retryable(maxAttempts = 10, backoff = @Backoff(1000))
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
     public CompletableFuture<List<Seoul42>> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
@@ -139,9 +123,7 @@ public class ApiService {
 
     @Recover
     public CompletableFuture<Seoul42> fallback(RuntimeException e, String token) {
-        System.out.println("==== api error ====");
-        e.printStackTrace();
-        throw new RegisteredFriendException();
+        throw new TooManyRequestException();
     }
 
     public <T> T injectInfo(CompletableFuture<T> info) {
@@ -149,9 +131,7 @@ public class ApiService {
         try {
             ret = info.get();
         } catch (CancellationException | InterruptedException | ExecutionException e) {
-            System.out.println("==== inject error ====");
-            e.printStackTrace();
-            throw new DuplicateGroupNameException();
+            throw new TooManyRequestException();
         }
         return ret;
     }
@@ -169,8 +149,8 @@ public class ApiService {
         return null;
     }
 
-    // 관리자 헤더
-    public HttpEntity<MultiValueMap<String, String>> req42AdminHeader(String code) {
+    // 헤더
+    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String secret, String code) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
@@ -182,30 +162,7 @@ public class ApiService {
         return new HttpEntity<>(params, headers);
     }
 
-    public HttpEntity<MultiValueMap<String, String>> req42AdminRefreshHeader(String refreshToken) {
-        headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "refresh_token");
-        params.add("client_id", "");
-        params.add("client_secret", "");
-        params.add("refresh_token", refreshToken);
-        return new HttpEntity<>(params, headers);
-    }
-
-    public HttpEntity<MultiValueMap<String, String>> req42TokenHeader(String code) {
-        headers = new HttpHeaders();
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-        params = new LinkedMultiValueMap<>();
-        params.add("grant_type","authorization_code");
-        params.add("client_id","");
-        params.add("client_secret", "");
-        params.add("code", code);
-        params.add("redirect_uri","");
-        return new HttpEntity<>(params, headers);
-    }
-
-    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String refreshToken) {
+    public HttpEntity<MultiValueMap<String, String>> req42RefreshHeader(String secret, String refreshToken) {
         headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         params = new LinkedMultiValueMap<>();
@@ -265,7 +222,7 @@ public class ApiService {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date();
         cal.setTime(date);
-        cal.add(Calendar.MINUTE, -3);
+        cal.add(Calendar.MINUTE, -5);
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 100)
@@ -279,7 +236,7 @@ public class ApiService {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date();
         cal.setTime(date);
-        cal.add(Calendar.MINUTE, -3);
+        cal.add(Calendar.MINUTE, -5);
         return UriComponentsBuilder.newInstance()
                 .scheme("https").host("api.intra.42.fr").path(Define.INTRA_VERSION_PATH + "/campus/" + Define.SEOUL + "/locations")
                 .queryParam("page[size]", 50)

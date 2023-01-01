@@ -20,15 +20,7 @@ public class GroupRepository {
         return groups.getId();
     }
 
-    // em.remove는 id로 동작안함
     public void deleteByGroupId(Long groupId) {
-//        List<GroupFriend> members = em.createQuery("select ms from GroupFriend ms where ms.group.id = :groupId", GroupFriend.class)
-//                .setParameter("groupId", groupId)
-//                .getResultList();
-//        for (GroupFriend member : members) {
-//            System.out.println(member.getFriendName());
-//            em.remove(member);
-//        }
         try {
             Groups group = em.createQuery("select g from Groups g where g.id = :groupId", Groups.class)
                     .setParameter("groupId", groupId)

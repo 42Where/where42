@@ -1,18 +1,22 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import openproject.where42.group.GroupRepository;
 import openproject.where42.groupFriend.GroupFriendRepository;
 import openproject.where42.groupFriend.GroupFriend;
+import openproject.where42.member.entity.Administrator;
 import openproject.where42.member.entity.Member;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class MemberRepository {
 
     private final EntityManager em;
@@ -24,7 +28,20 @@ public class MemberRepository {
         return member.getId();
     }
 
-    public Member findMember(String name) {
+    public Long findIdByToken(String token42) {
+        try {
+            String name = em.createQuery("select t.memberName from Token t where t.accessToken = :token", String.class)
+                    .setParameter("token", token42)
+                    .getSingleResult();
+            return em.createQuery("select m.id from Member m where m.name = :name", Long.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return Long.valueOf(0);
+        }
+    }
+
+    public Member findByName(String name) {
         try {
             Member member = em.createQuery("SELECT m FROM Member m WHERE m.name = :name", Member.class)
                     .setParameter("name", name)
@@ -84,6 +101,7 @@ public class MemberRepository {
         }
         return true;
     }
+
     @Transactional
     public void deleteMember(String name){
         System.out.println("============== excute delete query =============");
@@ -92,26 +110,8 @@ public class MemberRepository {
                 .getSingleResult());
     }
 
-    public Long adminLogin(String name, String passwd) {
-        try {
-            return em.createQuery("select a.id from Administrator a where a.name = :name and a.passwd = :passwd", Long.class)
-                    .setParameter("name", name)
-                    .setParameter("passwd", passwd)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            System.out.println("admin 아이디 또는 비밀번호가 일치하지 않습니다.");
-            return Long.valueOf(0);
-        }
-    }
-
-    public boolean findByAdminId(Long id) {
-        try {
-            em.createQuery("select a from Administrator a where a.id = :id", AdminApiController.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
-            return true;
-        } catch (NoResultException e) {
-            return false;
-        }
+    public List<Member> allMember() {
+        return em.createQuery("select m from Member m", Member.class)
+                .getResultList();
     }
 }

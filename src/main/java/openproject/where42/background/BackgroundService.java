@@ -1,6 +1,7 @@
 package openproject.where42.background;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.mapper.Cluster;
 import openproject.where42.api.mapper.Seoul42;
@@ -27,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 @EnableScheduling
 @Transactional
 @Service
+@Slf4j
 public class BackgroundService {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
@@ -38,12 +40,13 @@ public class BackgroundService {
 
     public void updateAllInClusterCadet() { // 낮밤을 바꿀 것인지?
         int i = 1;
-        token42 = tokenRepository.callAdmin();
+        log.info("[updateAllInClusterCadet] Cluster에 있는 cadet의 정보를 업데이트합니다.");
+        token42 = tokenRepository.call();
         while(true) {
             CompletableFuture<List<Cluster>> cf = apiService.get42ClusterInfo(token42, i);
             List<Cluster> clusterCadets = apiService.injectInfo(cf);
             for (Cluster cadet : clusterCadets) {
-                Member member = memberRepository.findMember(cadet.getUser().getLogin());
+                Member member = memberRepository.findByName(cadet.getUser().getLogin());
                 if (member != null)
                     memberService.updateLocation(member, cadet.getUser().getLocation());
                 else {
@@ -58,19 +61,24 @@ public class BackgroundService {
                 break;
             i++;
         }
+        List<Member> members = memberRepository.allMember();
+        for (Member member : members) {
+            if (member.timeDiff() > 2 && member.getLocate().getSpot() != null && member.getLocate().getSpot().charAt(0) == 'c')
+                memberService.updateLocation(member, null);
+        }
     }
 
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Scheduled(cron = "0 0/3 * 1/1 * ?")
     public void update3minClusterInfo() {
-        token42 = tokenRepository.callAdmin();
+        log.info("[Background] 3분이 지났습니다");
+        token42 = tokenRepository.call();
         Date date = new Date();
-        System.out.println("3분이 지났어요!!! " + date);
         int i = 1;
         while (true) {
             List<Cluster> logoutCadets = apiService.get42LocationEnd(token42, i);
             for (Cluster cadet : logoutCadets) {
-                Member member = memberRepository.findMember(cadet.getUser().getLogin());
+                Member member = memberRepository.findByName(cadet.getUser().getLogin());
                 if (member != null)
                     memberService.updateLocation(member, cadet.getUser().getLocation());
                 else {
@@ -81,6 +89,13 @@ public class BackgroundService {
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
+            for (Cluster cluster : logoutCadets)
+                log.info("[update3minClusterInfo] begin name = {} location = {} end_at = {} begin at = {}",
+                        cluster.getUser().getLogin(),
+                        cluster.getBegin_at(),
+                        cluster.getUser().getLocation(),
+                        cluster.getEnd_at()
+                );
             if (logoutCadets.size() < 100)
                 break;
             i++;
@@ -89,7 +104,7 @@ public class BackgroundService {
         while(true) {
             List<Cluster> loginCadets = apiService.get42LocationBegin(token42, i);
             for (Cluster cadet : loginCadets) {
-                Member member = memberRepository.findMember(cadet.getUser().getLogin());
+                Member member = memberRepository.findByName(cadet.getUser().getLogin());
                 if (member != null)
                     memberService.updateLocation(member, cadet.getUser().getLocation());
                 else {
@@ -100,6 +115,13 @@ public class BackgroundService {
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
             }
+            for (Cluster cluster : loginCadets)
+                log.info("[update3minClusterInfo] begin name = {} location = {} end_at = {} begin at = {}",
+                        cluster.getUser().getLogin(),
+                        cluster.getBegin_at(),
+                        cluster.getUser().getLocation(),
+                        cluster.getEnd_at()
+                );
             if (loginCadets.size() < 100)
                 break;
             i++;
@@ -108,13 +130,13 @@ public class BackgroundService {
 
     @Recover
     public void fallBack(RuntimeException e) {
-        System.out.println("==== Background is doomed ====");
+        log.info("[Background] is doomed ");
         e.printStackTrace();
         throw new TooManyRequestException();
     }
 
     public void getAllCadetImages() {
-        token42 = tokenRepository.callAdmin();
+        token42 = tokenRepository.call();
         int i = 1;
         while (true) {
             CompletableFuture<List<Seoul42>> cf = apiService.get42Image(token42, i);
@@ -122,9 +144,10 @@ public class BackgroundService {
             imageRepository.inputImage(allCadets);
             if (allCadets.size() < 100)
                 break;
-            System.out.println("DONE");
+            log.info("[Background] Image =={}== 페이지를 부르고 있습니다.", i);
             i++;
         }
+        log.info("[Background] 모든 Image 페이지를 불렀습니다.");
         imageRepository.deduplication();
     }
 }

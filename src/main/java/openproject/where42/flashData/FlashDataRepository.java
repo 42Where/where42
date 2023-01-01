@@ -1,8 +1,7 @@
 package openproject.where42.flashData;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +13,7 @@ import javax.persistence.NoResultException;
 @Transactional(readOnly = true)
 public class FlashDataRepository {
 	private final EntityManager em;
+	private final JdbcTemplate jdbcTemplate;
 
 
 	/*** DB 저장 ***/
@@ -34,7 +34,6 @@ public class FlashDataRepository {
 
 	@Transactional
 	public void resetFlash() {
-		em.createQuery("delete from FlashData f");
+		jdbcTemplate.update("delete from flash_data");
 	};
-
 }

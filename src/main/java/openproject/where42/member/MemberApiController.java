@@ -1,6 +1,7 @@
 package openproject.where42.member;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import openproject.where42.member.dto.AdminInfo;
 import openproject.where42.member.dto.MemberId;
 import openproject.where42.util.Define;
@@ -27,9 +28,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class MemberApiController {
     private final MemberService memberService;
     private final TokenService tokenService;
@@ -38,22 +41,27 @@ public class MemberApiController {
     public ResponseEntity createMember(HttpSession session, @RequestBody Seoul42 seoul42) {
         Long memberId = memberService.saveMember(seoul42.getLogin(), seoul42.getImage().getLink(), seoul42.getLocation());
         session.setAttribute("id", memberId);
-        session.setMaxInactiveInterval(30 * 60); // 테스트 위해서 처음에 2분만 유지. 이후 디폴트 30분으로 하기 위해 삭제
+        session.setMaxInactiveInterval(60 * 60);
         return new ResponseEntity(ResponseWithData.res(StatusCode.CREATED, ResponseMsg.CREATE_MEMBER, memberId), HttpStatus.CREATED);
     }
 
     // 메인 정보 조회
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/member")
     public MemberInfo memberInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
-        Member member = memberService.findBySession(req);
-        if (member.timeDiff() < 1)
-            return new MemberInfo(member);
         String token42 = tokenService.getToken(res, key);
+        Member member = memberService.findBySessionWithToken(req, token42);
+        log.info("[member] \"{}\"님이 메인화면을 불렀습니다.", member.getName());
+        if (member.timeDiff() < 1) {
+            if (!Define.PARSED.equalsIgnoreCase(member.getLocation()))
+                memberService.parseStatus(member, member.getLocate().getPlanet());
+            return new MemberInfo(member);
+        }
         memberService.parseStatus(member, token42);
         return new MemberInfo(member);
     }
 
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/group")
+    /*** 프론트랑 논의 필요 ***/
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/group") // 이 부분 프론트랑 논의 멤버 아이디를 보내주면 굳이 안찾아도 되니까
     public List<MemberGroupInfo> memberGroupInformation(HttpServletRequest req) {
         Member member = memberService.findBySession(req);
         return memberService.findAllGroupFriendsInfo(member);
@@ -66,14 +74,16 @@ public class MemberApiController {
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 조회
-    public String getPersonalMsg(HttpServletRequest req) {
-        Member member = memberService.findBySession(req);
+    public String getPersonalMsg(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
+        String token42 = tokenService.getToken(res, key);
+        Member member = memberService.findBySessionWithToken(req, token42);
         return member.getMsg();
     }
 
     @PostMapping(Define.WHERE42_VERSION_PATH + "/member/setting/msg") // 상태메시지 설정
-    public ResponseEntity updatePersonalMsg(HttpServletRequest req, @RequestBody String msg) {
-        memberService.updatePersonalMsg(req, msg);
+    public ResponseEntity updatePersonalMsg(HttpServletRequest req,  HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @RequestBody Map<String, String> msg) {
+        String token42 = tokenService.getToken(res, key);
+        memberService.updatePersonalMsg(req, token42, msg.get("msg"));
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_MSG), HttpStatus.OK);
     }
 
@@ -86,8 +96,9 @@ public class MemberApiController {
     }
 
     @PostMapping(Define.WHERE42_VERSION_PATH + "/member/setting/locate") // 위치 설정
-    public ResponseEntity updateLocate(HttpServletRequest req, @RequestBody Locate locate) {
-        Member member = memberService.findBySession(req);
+    public ResponseEntity updateLocate(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key, @RequestBody Locate locate) {
+        String token42 = tokenService.getToken(res, key);
+        Member member = memberService.findBySessionWithToken(req, token42);
         memberService.updateLocate(member, locate);
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);
     }

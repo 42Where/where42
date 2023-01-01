@@ -1,13 +1,11 @@
 package openproject.where42.token;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import openproject.where42.api.ApiService;
 import openproject.where42.api.mapper.OAuthToken;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -16,21 +14,13 @@ import java.util.Date;
 @Repository
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class TokenRepository {
 
 	static private AES aes = new AES();
 	private final EntityManager em;
 	private final ApiService apiService;
 
-	@Transactional
-	public String saveAdmin(String name , OAuthToken oAuthToken) {
-		Token token = new Token(
-				name,
-				oAuthToken.getAccess_token(),
-				oAuthToken.getRefresh_token());
-		em.persist(token);
-		return token.getUUID();
-	}
 	@Transactional
 	public String saveRefreshToken(String name , OAuthToken oAuthToken) {
 		Token token = new Token(
@@ -52,6 +42,7 @@ public class TokenRepository {
 			return false;
 		}
 	}
+
 	/*** token을 찾아서 반환 ***/
 	public Token findTokenByKey(String key) {
 		try {
@@ -77,21 +68,30 @@ public class TokenRepository {
 	public void checkToken(Token token) {
 		Date now = new Date();
 		Long diff = (now.getTime() - token.getRecentLogin().getTime()) / 60000;
-		System.out.println("시간이 얼마나 흘렀나요 == " + diff);
+		log.info("[checkToken] Token을 발급받은지 {}시간 지났습니다.", diff);
 		if (diff > 60){
-			System.out.println("어드민 토큰을 바꿀 시간");
-			System.out.println("지금 토큰 == " + token.getAccessToken());
-			OAuthToken oAuthToken = apiService.getAdminNewOAuthToken(token.getRefreshToken());
+			log.info("[checkToken] 시간이 경과하여 새로운 Token을 발급받습니다\n ========= 기존 토큰 =========\n{}", token.getAccessToken());
+			OAuthToken oAuthToken = apiService.getNewOAuthToken();
 			token.updateAccess(oAuthToken.getAccess_token());
 			token.updateRefresh(oAuthToken.getRefresh_token());
-			System.out.println("바뀐 토큰 == " + token.getAccessToken());
+			log.info("[checkToken] ========= 발급받은 토큰 =========\n{}", token.getAccessToken());
 		}
 	}
-	@Transactional
-	public String callAdmin() {
+
+	public String callSecret(){
 		try {
 			Token token =  em.createQuery("select m from Token m where m.memberName = :name", Token.class)
-					.setParameter("name", "admin")
+					.setParameter("name", "secret")
+					.getSingleResult();
+			return token.getAccessToken();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+	public String call() {
+		try {
+			Token token =  em.createQuery("select m from Token m where m.memberName = :name", Token.class)
+					.setParameter("name", "")
 					.getSingleResult();
 			checkToken(token);
 			return token.getAccessToken();
@@ -121,10 +121,28 @@ public class TokenRepository {
 	public String updateAccessToken(Token token, String value) { return token.updateAccess(aes.encoding(value)); }
 
 	@Transactional
-	public void insertHane() {
-		Token hane = new Token("hane",
-				"",
-				null);
-		em.persist(hane);
+	public void insertHane(String token) {
+		try {
+			Token hane = em.createQuery("select t from Token t where t.memberName= :name", Token.class)
+					.setParameter("name", "hane")
+					.getSingleResult();
+			hane.updateAccess(token);
+		} catch (NoResultException e) {
+			Token hane = new Token("hane", token, "null");
+			em.persist(hane);
+		}
+	}
+
+	@Transactional
+	public void insertSecret(String secret) {
+		try {
+			Token tmp = em.createQuery("select t from Token t where t.memberName= :name", Token.class)
+					.setParameter("name", "secret")
+					.getSingleResult();
+			tmp.updateAccess(secret);
+		} catch (NoResultException e) {
+			Token tmp = new Token("secret", secret, "null");
+			em.persist(tmp);
+		}
 	}
 }

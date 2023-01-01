@@ -21,8 +21,8 @@ public class ControllerExceptionHandler {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 
-    @ExceptionHandler(CookieExpiredException.class)
-    protected ResponseEntity handelCookieExpiredException(CookieExpiredException e) {
+    @ExceptionHandler(TokenExpiredException.class)
+    protected ResponseEntity handelTokenExpiredException(TokenExpiredException e) {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 

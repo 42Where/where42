@@ -12,6 +12,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+package openproject.where42.member.entity;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import openproject.where42.util.Define;
+import openproject.where42.group.Groups;
+import openproject.where42.member.entity.enums.MemberLevel;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -64,6 +78,10 @@ public class Member extends User {
     public void updateStatus(int inOrOut) {
         this.inOrOut = inOrOut;
         this.location = Define.PARSED;
+        this.updateTime = new Date();
+    }
+
+    public void changeTime() {
         this.updateTime = new Date();
     }
 
