@@ -7,8 +7,6 @@ import Search from "./Search/Search";
 import Setting from "./Setting/Setting";
 import NotFound from "./Etc/NotFound";
 import Oauth from "./Etc/Oauth";
-import Admin from "./Admin";
-import AdminOauth from "./AdminOauth";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
 
@@ -32,8 +30,6 @@ function App() {
                 <Route path={"/Setting/*"} element={<PrivateRoute><Setting/></PrivateRoute>}/>
                 <Route path={"/Agree"} element={<PublicRoute><Agree/></PublicRoute>}/>
 
-                <Route path={"/Admin"} element={<Admin/>}/>
-                <Route path={"/v1/auth/admin/callback"} element={<AdminOauth/>}/>
             </Routes>
         </div>
     );
