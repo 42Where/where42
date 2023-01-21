@@ -47,7 +47,7 @@ public class MemberApiController {
     public MemberInfo memberInformation(HttpServletRequest req, HttpServletResponse res, @CookieValue(value = "ID", required = false) String key) {
         String token42 = tokenService.findAccessToken(res, key);
         Member member = memberService.findBySessionWithToken(req, token42);
-        log.info("[member] \"{}\"님이 메인화면을 불렀습니다.", member.getName());
+        log.info("[main] \"{}\"님이 메인화면을 조회하였습니다.", member.getName());
         if (member.timeDiff() < 1) {
             if (!Define.PARSED.equalsIgnoreCase(member.getLocation()))
                 memberService.parseStatus(member, member.getLocate().getPlanet());
@@ -57,16 +57,15 @@ public class MemberApiController {
         return new MemberInfo(member);
     }
 
-    /*** 프론트랑 논의 필요 ***/
-    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/group") // 이 부분 프론트랑 논의 멤버 아이디를 보내주면 굳이 안찾아도 되니까
-    public List<MemberGroupInfo> memberGroupInformation(HttpServletRequest req) {
-        Member member = memberService.findBySession(req);
+    @GetMapping(Define.WHERE42_VERSION_PATH + "/member/group")
+    public List<MemberGroupInfo> memberGroupInformation(@RequestParam Long id) {
+        Member member = memberService.findById(id);
         return memberService.findAllGroupFriendsInfo(member);
     }
 
     @GetMapping(Define.WHERE42_VERSION_PATH + "/member/friend")
-    public List<GroupFriendDto> groupFriendsInformation(HttpServletRequest req) {
-        Member member = memberService.findBySession(req);
+    public List<GroupFriendDto> groupFriendsInformation(@RequestParam Long id) {
+        Member member = memberService.findById(id);
         return memberService.findAllFriendsInfo(member);
     }
 
@@ -97,6 +96,8 @@ public class MemberApiController {
         String token42 = tokenService.findAccessToken(res, key);
         Member member = memberService.findBySessionWithToken(req, token42);
         memberService.updateLocate(member, locate);
+        log.info("[setting] \"{}\"님이 \"p:{}, f:{}, c:{}, s:{}\" (으)로 위치를 수동 변경하였습니다.", member.getName(),
+                locate.getPlanet(), locate.getFloor(), locate.getCluster(), locate.getSpot());
         return new ResponseEntity(Response.res(StatusCode.OK, ResponseMsg.SET_LOCATE), HttpStatus.OK);
     }
 }

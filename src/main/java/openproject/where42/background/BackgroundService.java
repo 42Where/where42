@@ -6,10 +6,10 @@ import openproject.where42.api.ApiService;
 import openproject.where42.api.mapper.Cluster;
 import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.exception.customException.TooManyRequestException;
+import openproject.where42.flashData.FlashData;
 import openproject.where42.flashData.FlashDataService;
 import openproject.where42.member.MemberRepository;
 import openproject.where42.member.MemberService;
-import openproject.where42.flashData.FlashData;
 import openproject.where42.member.entity.Member;
 import openproject.where42.token.TokenRepository;
 import org.springframework.retry.annotation.Backoff;
@@ -20,7 +20,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -37,18 +36,20 @@ public class BackgroundService {
     private final TokenRepository tokenRepository;
     private final ImageRepository imageRepository;
     public String token42;
+    public String tokenHane;
 
     public void updateAllInClusterCadet() { // 낮밤을 바꿀 것인지?
         int i = 1;
         log.info("[updateAllInClusterCadet] Cluster에 있는 cadet의 정보를 업데이트합니다.");
-        token42 = tokenRepository.call();
+        token42 = tokenRepository.callAdmin();
+        tokenHane = tokenRepository.callHane();
         while(true) {
             CompletableFuture<List<Cluster>> cf = apiService.get42ClusterInfo(token42, i);
             List<Cluster> clusterCadets = apiService.injectInfo(cf);
             for (Cluster cadet : clusterCadets) {
                 Member member = memberRepository.findByName(cadet.getUser().getLogin());
                 if (member != null)
-                    memberService.updateLocation(member, cadet.getUser().getLocation());
+                    memberService.updateBackInfo(member, apiService.getHaneInfo(member.getName(), tokenHane), cadet.getUser().getLocation());
                 else {
                     FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
                     if (flash != null)
@@ -61,26 +62,21 @@ public class BackgroundService {
                 break;
             i++;
         }
-        List<Member> members = memberRepository.allMember();
-        for (Member member : members) {
-            if (member.timeDiff() > 2 && member.getLocate().getSpot() != null && member.getLocate().getSpot().charAt(0) == 'c')
-                memberService.updateLocation(member, null);
-        }
     }
 
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Scheduled(cron = "0 0/3 * 1/1 * ?")
     public void update3minClusterInfo() {
-        log.info("[Background] 3분이 지났습니다");
-        token42 = tokenRepository.call();
-        Date date = new Date();
+        log.info("[Background] 자리 업데이트를 시작합니다");
+        token42 = tokenRepository.callAdmin();
+        tokenHane = tokenRepository.callHane();
         int i = 1;
         while (true) {
             List<Cluster> logoutCadets = apiService.get42LocationEnd(token42, i);
             for (Cluster cadet : logoutCadets) {
                 Member member = memberRepository.findByName(cadet.getUser().getLogin());
                 if (member != null)
-                    memberService.updateLocation(member, cadet.getUser().getLocation());
+                    memberService.updateBackInfo(member, apiService.getHaneInfo(member.getName(), tokenHane), cadet.getUser().getLocation());
                 else {
                     FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
                     if (flash != null)
@@ -88,14 +84,11 @@ public class BackgroundService {
                     else
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
-            }
-            for (Cluster cluster : logoutCadets)
-                log.info("[update3minClusterInfo] begin name = {} location = {} end_at = {} begin at = {}",
-                        cluster.getUser().getLogin(),
-                        cluster.getBegin_at(),
-                        cluster.getUser().getLocation(),
-                        cluster.getEnd_at()
+                log.info("[Background] logout name = {} location = {}",
+                        cadet.getUser().getLogin(),
+                        cadet.getUser().getLocation()
                 );
+            }
             if (logoutCadets.size() < 100)
                 break;
             i++;
@@ -106,7 +99,7 @@ public class BackgroundService {
             for (Cluster cadet : loginCadets) {
                 Member member = memberRepository.findByName(cadet.getUser().getLogin());
                 if (member != null)
-                    memberService.updateLocation(member, cadet.getUser().getLocation());
+                    memberService.updateBackInfo(member, apiService.getHaneInfo(member.getName(), tokenHane), cadet.getUser().getLocation());
                 else {
                     FlashData flash = flashDataService.findByName(cadet.getUser().getLogin());
                     if (flash != null)
@@ -114,37 +107,35 @@ public class BackgroundService {
                     else
                         flashDataService.createFlashData(cadet.getUser().getLogin(), cadet.getUser().getImage().getLink(), cadet.getUser().getLocation());
                 }
-            }
-            for (Cluster cluster : loginCadets)
-                log.info("[update3minClusterInfo] begin name = {} location = {} end_at = {} begin at = {}",
-                        cluster.getUser().getLogin(),
-                        cluster.getBegin_at(),
-                        cluster.getUser().getLocation(),
-                        cluster.getEnd_at()
+                log.info("[Background] login name = {} location = {}",
+                        cadet.getUser().getLogin(),
+                        cadet.getUser().getLocation()
                 );
+            }
             if (loginCadets.size() < 100)
                 break;
             i++;
         }
+        log.info("[Background] 업데이트를 완료하였습니다.");
     }
 
     @Recover
     public void fallBack(RuntimeException e) {
-        log.info("[Background] is doomed ");
+        log.info("[Background] {}", e.getMessage());
         e.printStackTrace();
         throw new TooManyRequestException();
     }
 
     public void getAllCadetImages() {
-        token42 = tokenRepository.call();
+        token42 = tokenRepository.callAdmin();
         int i = 1;
         while (true) {
+            log.info("[Background] Image =={}== 페이지를 부르고 있습니다.", i);
             CompletableFuture<List<Seoul42>> cf = apiService.get42Image(token42, i);
             List<Seoul42> allCadets = apiService.injectInfo(cf);
             imageRepository.inputImage(allCadets);
             if (allCadets.size() < 100)
                 break;
-            log.info("[Background] Image =={}== 페이지를 부르고 있습니다.", i);
             i++;
         }
         log.info("[Background] 모든 Image 페이지를 불렀습니다.");

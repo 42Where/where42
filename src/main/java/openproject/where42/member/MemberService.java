@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import openproject.where42.api.ApiService;
 import openproject.where42.exception.customException.*;
-import openproject.where42.member.entity.Administrator;
 import openproject.where42.util.Define;
 import openproject.where42.api.mapper.Seoul42;
 import openproject.where42.flashData.FlashDataService;
@@ -51,6 +50,7 @@ public class MemberService {
         Long starredGroupId = groupService.createDefaultGroup(member, "즐겨찾기");
         member.setDefaultGroup(defaultGroupId, starredGroupId);
         parseStatus(member, apiService.getHaneInfo(name, tokenRepository.callHane()));
+        log.info("[member-create] \"{}\"님이 멤버로 등록되었습니다.", name);
         return memberId;
     }
 
@@ -60,7 +60,7 @@ public class MemberService {
             Long memberId = memberRepository.findIdByToken(token42);
             if (memberId == 0)
                 throw new UnregisteredMemberException();
-            req.getSession();
+            session = req.getSession();
             session.setAttribute("id", memberId);
         }
         session.setMaxInactiveInterval(60 * 60);
@@ -88,25 +88,28 @@ public class MemberService {
     @Transactional
     public void updatePersonalMsg(HttpServletRequest req, String token42, String msg) {
         Member member = findBySessionWithToken(req, token42);
-        log.info("[member-update] \"{}\"님이 상태메세지를 변경하셨습니다.", member.getName());
+        log.info("[setting] \"{}\"님이 상태메세지를 [{}] (으)로 변경하였습니다.", member.getName(), msg);
         member.updatePersonalMsg(msg);
     }
 
     @Transactional
     public void updateLocate(Member member, Locate locate) {
-        log.info("[member-update] \"{}\"님의 위치가 변경되었습니다.", member.getName());
+        log.info("[setting] \"{}\"님의 Locate가 \"P: {}, F: {}, C: {}, S: {}\" 에서 \"P: {}, F: {}, C: {}, S: {}\" (으)로 바뀌었습니다.", member.getName()
+                ,member.getLocate().getPlanet(), member.getLocate().getFloor(), member.getLocate().getCluster(), member.getLocate().getSpot()
+                ,locate.getPlanet(),locate.getFloor(), locate.getCluster(), locate.getSpot());
         member.getLocate().updateLocate(locate.getPlanet(), locate.getFloor(), locate.getCluster(), locate.getSpot());
     }
 
     @Transactional
     public void initLocate(Member member, Planet planet) {
-        log.info("[member-update] \"{}\"님의 \"Locate\" 가 업데이트 되었습니다.", member.getName());
+        log.info("[setting] \"{}\"님의 Locate가  \"P: {}, F: 0, C: 0, S: null\"로 바뀌었습니다.", member.getName(), planet);
         member.getLocate().updateLocate(planet, 0, 0, null);
     }
 
     @Transactional
-    public void updateLocation(Member member, String location) {
-        log.info("[member-update] \"{}\"님의 \"Location\" 이 업데이트 되었습니다.", member.getName());
+    public void updateBackInfo(Member member, Planet planet, String location) {
+        if (member.getLocate().getPlanet() != planet)
+            member.updatePlanet(planet);
         member.updateLocation(location);
     }
 
@@ -116,6 +119,7 @@ public class MemberService {
         Member member = findBySessionWithToken(req, token42);
         Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
         if (planet == null) {
+            log.info("[member-check-locate] \"{}\"님이 퇴근 상태로 수동 자리 설정을 할 수 없습니다.", member.getName());
             initLocate(member, null);
             member.updateStatus(Define.OUT);
             throw new OutStateException();
@@ -123,14 +127,18 @@ public class MemberService {
         CompletableFuture<Seoul42> cf = apiService.getMeInfo(token42);
         Seoul42 member42 = apiService.injectInfo(cf);
         if (member42.getLocation() != null) {
+            log.info("[member-check-locate] \"{}\"님의 아이맥 자리 정보가 있기 떄문에 수동 자리 설정을 할 수 없습니다.", member.getName());
             updateLocate(member, Locate.parseLocate(member42.getLocation()));
+            member.updateStatus(Define.IN);
             throw new TakenSeatException();
         }
+        if (member.getLocate().getPlanet() != planet || (member.getLocate().getSpot() != null && member.getLocate().getSpot().charAt(0) == 'c'))
+            initLocate(member, planet);
         member.updateStatus(Define.IN);
         return planet.getValue();
     }
 
-    // 멤버 인포 조회용 api 호출, [inOrOut, location(parsed) 갱신], updateTime 미갱신
+    // 멤버 인포 조회용 api 호출, [inOrOut, location(parsed) 갱신], updateTime 갱신
     @Transactional
     public void parseStatus(Member member, String token42) {
         Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
@@ -140,7 +148,7 @@ public class MemberService {
             if (seoul42.getLocation() != null)
                 updateLocate(member, Locate.parseLocate(seoul42.getLocation()));
             else {
-                if (member.getLocate().getPlanet() == null || member.getLocate().getSpot() != null && member.getLocate().getSpot().charAt(0) == 'c')
+                if (member.getLocate().getPlanet() != planet || (member.getLocate().getSpot() != null && member.getLocate().getSpot().charAt(0) == 'c'))
                     initLocate(member, planet);
             }
             member.updateStatus(Define.IN);
@@ -156,14 +164,20 @@ public class MemberService {
         if (planet != null) {
             if (member.getLocation() != null && !Define.PARSED.equalsIgnoreCase(member.getLocation()))
                 updateLocate(member, Locate.parseLocate(member.getLocation()));
-            else {
-                if (member.getLocate().getPlanet() == null || member.getLocate().getSpot() != null && member.getLocate().getSpot().charAt(0) == 'c')
+            else if (member.getLocate().getPlanet() != planet)
+                initLocate(member, planet);
+            else if (member.getLocation() == null && member.getLocate().getSpot() != null) {
+                if (member.getLocate().getSpot().charAt(0) == 'c')
                     initLocate(member, planet);
+                else
+                    member.updateLocation(Define.PARSED);
             }
             member.updateInOrOut(Define.IN);
         } else {
-            initLocate(member, null);
-            member.updateStatus(Define.OUT);
+            if (member.getInOrOut() == Define.IN) {
+                initLocate(member, null);
+                member.updateInOrOut(Define.OUT);
+            }
         }
     }
 
@@ -192,29 +206,23 @@ public class MemberService {
                 friendsInfo.add(new GroupFriendDto(friend, f.getId()));
             } else {
                 FlashData flash = flashDataService.checkFlashFriend(member.getDefaultGroupId(), f.getFriendName());
-                friendsInfo.add(new GroupFriendDto(flash, f.getId()));
+                friendsInfo.add(new GroupFriendDto(flash, f.getId(), f.getImg()));
             }
         }
         return friendsInfo;
     }
 
     @Transactional
-    public void deleteMember(String name) {
-        log.info("[member-delete] \"{}\"님이 멤버에서 삭제되었습니다.", name);
-        memberRepository.deleteMember(name);
-    }
-
-    @Transactional
     public Planet checkMemberStatus(Member member) {
-        if (member.timeDiff() > 4) {
+        if (member.timeDiff() > 3) {
             Planet planet = apiService.getHaneInfo(member.getName(), tokenRepository.callHane());
-            if (member.getInOrOut() == Define.IN && planet == null) { // 백그나 본인 접속 없는 상태에서 퇴근한 경우
-                initLocate(member, null);
-                member.updateStatus(Define.OUT);
-            } else if (member.getLocate().getPlanet() != planet) { // 백그나, 본인 접속 없는 상태에서 플래닛이 바뀐경우
+            if (member.getLocate().getPlanet() != planet) {
                 initLocate(member, planet);
-                member.updateStatus(Define.IN);
-            } else // 백그나 본인 접속 없는 상태에서 계속 정보가 바뀌지 않고 유지되고 있는 경우 하네 확인 시간만 남겨줌
+                if (planet != null)
+                    member.updateStatus(Define.IN);
+                else
+                    member.updateStatus(Define.OUT);
+            } else
                 member.changeTime();
             return planet;
         }

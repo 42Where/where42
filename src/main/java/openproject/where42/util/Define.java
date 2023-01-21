@@ -1,8 +1,5 @@
 package openproject.where42.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Define {
     public static final String WHERE42_VERSION_PATH = "/v1";
     public static final String INTRA_VERSION_PATH = "/v2";

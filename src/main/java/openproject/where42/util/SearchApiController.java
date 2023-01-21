@@ -1,6 +1,7 @@
 package openproject.where42.util;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import openproject.where42.background.ImageRepository;
 import openproject.where42.flashData.FlashDataService;
 import openproject.where42.member.MemberService;
@@ -21,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class SearchApiController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
@@ -35,6 +37,7 @@ public class SearchApiController {
         String token42 = tokenService.findAccessToken(rep, key);
         Member member = memberService.findBySessionWithToken(req, token42);
         begin = begin.toLowerCase();
+        log.info("[search] \"{}\" 님이 '{}'을 검색하였습니다.", member.getName(), begin);
         CompletableFuture<List<Seoul42>> cf = apiService.get42UsersInfoInRange(token42, begin, getEnd(begin));
         List<Seoul42> searchList = apiService.injectInfo(cf);
         List<SearchCadet> searchCadetList = new ArrayList<SearchCadet>();
@@ -44,7 +47,7 @@ public class SearchApiController {
                 searchCadet.setFriend(true);
             searchCadetList.add(searchCadet);
         }
-       return searchCadetList;
+        return searchCadetList;
     }
 
     public SearchCadet searchCadetInfo(String name) {
@@ -85,7 +88,8 @@ public class SearchApiController {
         else {
             if (!Define.PARSED.equalsIgnoreCase(cadet.getLocation())) {
                 FlashData flash = flashDataService.findByName(cadet.getName());
-                flashDataService.parseStatus(flash);
+                if (!Define.PARSED.equalsIgnoreCase(flash.getLocation()))
+                    flashDataService.parseStatus(flash);
                 cadet.updateStatus(flash.getLocate(), flash.getInOrOut());
             }
         }
