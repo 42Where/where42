@@ -79,9 +79,9 @@ public class ControllerExceptionHandler {
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 
-    @ExceptionHandler(AdminLoginFailException.class)
-    protected ResponseEntity AdminLoginFailException(AdminLoginFailException e) {
-        log.info("************** [AdminLoginFailException]이 발생하였습니다. **************");
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity handleNotFoundException(NotFoundException e) {
+        log.info("************** [handleNotFoundException]이 발생하였습니다. **************");
         return new ResponseEntity(Response.res(e.getErrorCode(), e.getMessage()), HttpStatus.valueOf(e.getErrorCode()));
     }
 }
