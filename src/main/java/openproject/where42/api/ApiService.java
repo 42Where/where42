@@ -45,38 +45,58 @@ public class ApiService {
 
     // oAuth 토큰 반환
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
-    @Async("apiTaskExecutor")
-    public CompletableFuture<OAuthToken> getOAuthToken(String secret, String code) {
+    public OAuthToken getOAuthToken(String secret, String code) {
         req = req42TokenHeader(secret, code);
-        res = resPostApi(req, req42TokenUri());
-        return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
+        try {
+            res = resPostApi(req, req42TokenUri());
+        } catch (RuntimeException e) {
+            e.getMessage();
+        }
+        return oAuthTokenMapping(res.getBody());
     }
 
     // oAuth 토큰 반환
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
-    @Async("apiTaskExecutor")
-    public CompletableFuture<OAuthToken> getNewOAuthToken(String secret, String token) {
+    public OAuthToken getNewOAuthToken(String secret, String token) {
         req = req42RefreshHeader(secret, token);
+        try {
+            res = resPostApi(req, req42TokenUri());
+        } catch (RuntimeException e) {
+            e.getMessage();
+        }
+        return oAuthTokenMapping(res.getBody());
+    }
+
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
+    public OAuthToken getAdminOAuthToken(String secret, String code) {
+        req = req42AdminHeader(secret, code);
+        System.out.println("getAdmin 111111111111111");
         res = resPostApi(req, req42TokenUri());
-        return CompletableFuture.completedFuture(oAuthTokenMapping(res.getBody()));
+        System.out.println("getAdmin 222222222222222");
+        return oAuthTokenMapping(res.getBody());
+    }
+
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
+    public OAuthToken getAdminNewOAuthToken(String secret, String token) {
+        req = req42AdminRefreshHeader(secret, token);
+        res = resPostApi(req, req42TokenUri());
+        return oAuthTokenMapping(res.getBody());
     }
 
     // 이미지 호출
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
-    @Async("apiTaskExecutor")
-    public CompletableFuture<List<Seoul42>> get42Image(String token, int i) {
+    public List<Seoul42> get42Image(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiImageUri(i));
-        return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
+        return seoul42ListMapping(res.getBody());
     }
 
     // 현재 클러스터에 있는 카뎃들 호출
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
-    @Async("apiTaskExecutor")
-    public CompletableFuture<List<Cluster>> get42ClusterInfo(String token, int i) {
+    public List<Cluster> get42ClusterInfo(String token, int i) {
         req = req42ApiHeader(token);
         res = resReqApi(req, req42ApiLocationUri(i));
-        return CompletableFuture.completedFuture(clusterMapping(res.getBody()));
+        return clusterMapping(res.getBody());
     }
 
     // 로그아웃한 카뎃들 호출
@@ -86,7 +106,7 @@ public class ApiService {
         try {
             res = resReqApi(req, req42ApiLocationEndUri(i));
         } catch (RuntimeException e) {
-            e.printStackTrace(); // log 자리
+            e.getMessage(); // log 자리
         }
         return clusterMapping(res.getBody());
     }
@@ -98,7 +118,7 @@ public class ApiService {
         try {
             res = resReqApi(req, req42ApiLocationBeginUri(i));
         } catch (RuntimeException e) {
-            e.printStackTrace(); // log 자리
+            e.getMessage(); // log 자리
         }
         return clusterMapping(res.getBody());
     }
@@ -106,34 +126,33 @@ public class ApiService {
     // me 정보 반환
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
-    public CompletableFuture<Seoul42> getMeInfo(String token) {
+    public Seoul42 getMeInfo(String token) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42MeUri());
-        return CompletableFuture.completedFuture(seoul42Mapping(res.getBody()));
+        return seoul42Mapping(res.getBody());
+    }
+
+    @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
+    @Async("apiTaskExecutor")
+    public Seoul42 getUserInfo(String name, String token) {
+        req = req42ApiHeader(token);
+        res = resReqApi(req, req42UserUri(name));
+        return seoul42Mapping(res.getBody());
     }
 
     // 검색 시 10명 단위의 Seoul42를 반환해주는 메소드
     @Retryable(maxAttempts = 3, backoff = @Backoff(1000))
     @Async("apiTaskExecutor")
-    public CompletableFuture<List<Seoul42>> get42UsersInfoInRange(String token, String begin, String end) {
+    public List<Seoul42> get42UsersInfoInRange(String token, String begin, String end) {
         req = req42ApiHeader(aes.decoding(token));
         res = resReqApi(req, req42ApiUsersInRangeUri(begin, end));
-        return CompletableFuture.completedFuture(seoul42ListMapping(res.getBody()));
+        return seoul42ListMapping(res.getBody());
     }
 
     @Recover
-    public CompletableFuture<Seoul42> fallback(RuntimeException e, String token) {
+    public Seoul42 fallback(RuntimeException e, String token) {
+        e.getMessage(); // log 자리
         throw new TooManyRequestException();
-    }
-
-    public <T> T injectInfo(CompletableFuture<T> info) {
-        T ret = null;
-        try {
-            ret = info.get();
-        } catch (CancellationException | InterruptedException | ExecutionException e) {
-            throw new TooManyRequestException();
-        }
-        return ret;
     }
 
     // 한 유저에 대해 하네 정보를 추가해주는 메소드

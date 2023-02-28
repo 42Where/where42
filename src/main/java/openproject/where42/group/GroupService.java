@@ -59,7 +59,7 @@ public class GroupService {
     public void updateGroupName(Long groupId, String groupName) {
         Groups group = groupRepository.findById(groupId);
         if (group == null)
-            throw new NotFoundException();
+            throw new BadRequestException();
         validateDuplicateGroupName(group.getOwner().getId(), groupName);
         group.updateGroupName(groupName);
     }
@@ -72,6 +72,6 @@ public class GroupService {
     @Transactional
     public void deleteByGroupId(Long groupId) {
         if (!groupRepository.deleteByGroupId(groupId))
-            throw new NotFoundException();
+            throw new BadRequestException();
     }
 }

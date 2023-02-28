@@ -51,7 +51,7 @@ public class GroupFriendApiController {
 		Member member = memberService.findBySessionWithToken(req, token42);
 		List<String> ret = groupFriendRepository.notIncludeFriendByGroup(member, groupId);
 		if (ret == null)
-			throw new NotFoundException();
+			throw new BadRequestException();
 		return ret;
 	}
 

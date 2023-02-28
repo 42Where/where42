@@ -38,7 +38,7 @@ public class GroupFriendService {
 	public void addFriendsToGroup(List<String> friendNames, Long groupId) {
 		Groups group = groupRepository.findById(groupId);
 		if (group == null)
-			throw new NotFoundException();
+			throw new BadRequestException();
 		for (String friendName : friendNames)
 			saveGroupFriend(friendName, group);
 	}
@@ -52,16 +52,13 @@ public class GroupFriendService {
 	// 해당 그룹에 포함된 친구들 중 선택된 친구들 일괄 삭제
 	@Transactional
 	public void deleteIncludeGroupFriends(Long groupId, List<String> friendNames) {
-		if (!groupFriendRepository.deleteGroupFriends(groupId, friendNames))
-			throw new NotFoundException();
+		groupFriendRepository.deleteGroupFriends(groupId, friendNames);
 	}
 
 	// 기본 그룹을 포함한 같은 친구에 대해 정보 일괄 삭제
 	@Transactional
 	public void deleteFriends(Member member, List<String> friendNames) {
-		for (String friendName : friendNames) {
-			if (!groupFriendRepository.deleteFriendByFriendName(member, friendName))
-				throw new NotFoundException();
-		}
+		for (String friendName : friendNames)
+			groupFriendRepository.deleteFriendByFriendName(member, friendName);
 	}
 }
