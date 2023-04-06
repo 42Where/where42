@@ -22,7 +22,10 @@ made by [hyunjcho](https://github.com/highjcho) && [heeskim](https://github.com/
 - 베타테스트 진행
 
 ### 1/2
-- 1차 정식 배포
+- 정식 배포
+
+### 3/10
+- ver2 배포
 
 
 ## Rule
