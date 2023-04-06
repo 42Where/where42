@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router';
 import { Routes, Route } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { SettingFloor, SettingCluster, SettingSpot} from "./Setting_Locate";
 import { SettingGnF, SettingFriend, SettingGroup } from "./Setting_Group_Friend";
-import instance from "../AxiosApi";
+import {instance} from "../AxiosApi";
 import './Setting_Desktop.css';
 import './Setting_Mobile.css';
+import * as Util from '../Util';
 
 function Setting() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
@@ -26,27 +26,35 @@ function Setting() {
     }, []);
 
     function SettingChoice() {
+        const [disButton, setDisBuutton] = useState(false);
         const SetLocateAlert = () => {
+            setDisBuutton(true);
             instance.get('member/setting/locate')
-                .then((res) => {
-                    const planet = res.data.data;
-                    if (res.data.data === 1) {
-                        nav("/Setting/SetFloor", {state: {planet: planet}});
-                    } else if (res.data.data === 2) {
-                        nav("/Setting/SetCluster", {state: {planet: planet}});
-                    }
-                }).catch((error) => {
-                    if (error.response.status === 403) {
-                        alert("클러스터 외부에 있으므로 수동 자리 정보를 등록할 수 없습니다.");
-                    } else if (error.response.status === 409) {
-                        alert("자동 자리 정보가 존재하여 수동 자리 정보를 등록할 수 없습니다.");
-                    }
+            .then((res) => {
+                const planet = res.data.data;
+                if (res.data.data === 1) {
+                    nav("/Setting/SetFloor", {state: {planet: planet}});
+                } else if (res.data.data === 2) {
+                    nav("/Setting/SetCluster", {state: {planet: planet}});
+                }
+                setDisBuutton(false);
+            }).catch((error) => {
+                if (error.response.status === 403) {
+                    Util.Alert("클러스터 외부에 있으므로 수동 자리 정보를 등록할 수 없습니다.");
+                } else if (error.response.status === 409) {
+                    Util.Alert("자동 자리 정보가 존재하여 수동 자리 정보를 등록할 수 없습니다.");
+                } else if (error.response.status === 503) {
+                    Util.Alert("출퇴근 확인 중 일시적인 오류로 인하여 수동 자리 정보를 등록할 수 없습니다.");
+                }
+                setDisBuutton(false);
             });
         };
-        const Logout = () => {
-            instance.get('logout')
+        const Logout = async () => {
+            setDisBuutton(true);
+            await instance.get('logout')
                 .then(() => {
                     nav('/Login');
+                    setDisBuutton(false);
                 });
         }
 
@@ -55,31 +63,27 @@ function Setting() {
                 <button id="Home" onClick={()=>{nav('/Main')}}></button>
                 <div id="Comment">반가워요, {name}! 👋</div>
                 <div id="BoxWrapper">
-                    <div className='Box' onClick={() => {SetLocateAlert()}}>
+                    <button className='Box' disabled={disButton} onClick={() => {SetLocateAlert()}}>
                         <div className='BoxCap'>
                             {isMobile && <>수동 위치 설정</>}
                             {isDesktop && <>수동<br/>위치 설정</>}
                         </div>
-                    </div>
-                    <Link to="SetMsg">
-                        <div className='Box'>
-                            <div className='BoxCap'>
-                                {isMobile && <>상태 메시지 설정</>}
-                                {isDesktop && <>상태 메시지<br/>설정</>}
-                            </div>
+                    </button>
+                    <button className='Box' disabled={disButton} onClick={() => {nav('/Setting/SetMsg')}}>
+                        <div className='BoxCap'>
+                            {isMobile && <>상태 메시지 설정</>}
+                            {isDesktop && <>상태 메시지<br/>설정</>}
                         </div>
-                    </Link>
-                    <Link to="SetGnF">
-                        <div className='Box'>
-                            <div className='BoxCap'>
-                                {isMobile && <>그룹/친구 관리</>}
-                                {isDesktop && <>그룹/친구<br/>관리</>}
-                            </div>
+                    </button>
+                    <button className='Box' disabled={disButton} onClick={() => {nav('/Setting/SetGnF')}}>
+                        <div className='BoxCap'>
+                            {isMobile && <>그룹/친구 관리</>}
+                            {isDesktop && <>그룹/친구<br/>관리</>}
                         </div>
-                    </Link>
-                    <div className='Box' onClick={() => {Logout()}}>
+                    </button>
+                    <button className='Box' disabled={disButton} onClick={() => {Logout()}}>
                         <div className='BoxCap'>로그아웃</div>
-                    </div>
+                    </button>
                 </div>
             </div>
         )
@@ -90,7 +94,7 @@ function Setting() {
         useEffect(() => {
             instance.get('member/setting/msg')
                 .then((res) => {
-                    setMsg(res.data.msg);
+                    setMsg(res.data);
                 });
         }, []);
         const handleChange = ({target : {value}}) => setMsg(value);
@@ -98,13 +102,15 @@ function Setting() {
             event.preventDefault(); /*새로고침 방지*/
             instance.post('member/setting/msg', {msg})
                 .then(() => {
-                    alert("수정 완료!");
+                    Util.Alert("수정 완료!");
                     nav("/setting");
                 });
         };
 
         return (
             <div id="SettingMsg">
+                <button id="Back" onClick={()=>{nav('/Setting')}}></button>
+                <button id="Home" onClick={()=>{nav('/Main')}}></button>
                 <div id="Comment">상태 메시지를 입력해 주세요.</div>
                 <div id="Comment2">상태 메시지는 최대 15자까지 입력 가능합니다.</div>
                 <form onSubmit={handleSubmit}>

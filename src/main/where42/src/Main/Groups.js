@@ -1,28 +1,40 @@
 import MainProfile from './MainProfile';
+import {useState} from "react";
 
 function Groups(props){
     const groupInfo = props.groupInfo;
+    const toggle = props.toggle;
+
     return (
         <>
         {groupInfo.map(group=>(
             <div key={group.groupName}>
-                <MakeGroupName name={group.groupName} count={group.count}/>
-                <GroupProfile groupInfo={group} friendInfo={props.friendInfo}/>
+                <OneGroup group={group} friendInfo={props.friendInfo} toggle={toggle}/>
             </div>
         ))}
         </>
     )
 }
 
-function MakeGroupName(props)
-{
+function OneGroup(props) {
+    const group = props.group;
+    const [show, setShow] = useState(true);
+    const [commuteCount, setCommuteCount] = useState(0);
+
     let groupName;
-    if (props.name === "기본")
+    if (group.groupName === "기본")
         groupName = "친구 목록";
     else
-        groupName = props.name;
+        groupName = group.groupName;
+
     return (
-        <div className="GroupName">{groupName} ({props.count})</div>
+        <>
+            <div className="GroupName">{groupName} ( {commuteCount} / {group.count} )&nbsp;
+                <img src="img/toggle_down.svg" alt="groupToggle" className={show? "GroupToggle" : "GroupToggle rotate90" }
+                     onClick={()=>setShow(!show)} ></img>
+            </div>
+            {show && <GroupProfile groupInfo={group} friendInfo={props.friendInfo} toggle={props.toggle} setCountFunction={setCommuteCount}/>}
+        </>
     )
 }
 
@@ -34,10 +46,19 @@ function GetFriendInfo(friendInfo, name){
 
 function GroupProfile(props) {
     const groupInfo = props.groupInfo;
+    const toggle = props.toggle;
+    let count = 0;
+
     const friendList = groupInfo.groupFriends.map(friend => {
         const oneFriendInfo = GetFriendInfo(props.friendInfo, friend);
-        return <MainProfile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
+        if (oneFriendInfo[0].inOrOut === 1)
+            count += 1;
+        if (toggle && oneFriendInfo[0].inOrOut !== 1)
+            return (null);
+        else
+            return <MainProfile key={groupInfo.groupName + friend} info={oneFriendInfo[0]} me={0}/>
     });
+    props.setCountFunction(count);
 
     return (
         <div className="ProfileWrapper">

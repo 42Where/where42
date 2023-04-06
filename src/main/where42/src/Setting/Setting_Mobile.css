@@ -12,6 +12,7 @@
     width: 80%;
     max-width: 440px;
     min-height: 100vh;
+    /* min-height: -webkit-fill-available; */
     box-sizing: border-box;
     padding: 2% 0 2% 0;
 }
@@ -30,6 +31,7 @@
 
 #Setting #Mobile #BoxWrapper .Box {
     cursor: pointer;
+    border: 0;
 }
 
 #Setting #Mobile #BoxWrapper .Box .BoxCap {
@@ -47,11 +49,31 @@
     position: absolute;
     top: 3%;
     right: 5%;
-    background-color: transparent;
+    background-color: transparent!important;
     background-image: url("../../public/img/home.svg");
     background-size: contain;
     background-repeat: no-repeat;
     border: 0;
+    border-radius: 0!important;
+}
+
+#Setting #Mobile #Back {
+    width: 8%;
+    max-width: 40px;
+    padding-bottom: 8%;
+    position: absolute;
+    top: 3%;
+    left: 5%;
+    background-color: transparent!important;
+    background-image: url("../../public/img/back.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 0;
+    border-radius: 0!important;
+}
+
+#Setting #Mobile .User label {
+    cursor: pointer;
 }
 
 /*SettingChoice, SettingGnF*/
@@ -194,6 +216,7 @@
     line-height: 1.5;
     margin-bottom: 5%;
     font-size: clamp(15px, 5vw, 30px);
+    -webkit-border-radius: 0;
 }
 
 #Setting #Mobile #SettingMsg button {
@@ -268,11 +291,7 @@
 
 #Setting #Mobile #SettingGroup #GroupList .Group input:disabled {
     -webkit-text-fill-color: black;
-}
-
-#Setting #Mobile #SettingGroup #GroupList .Group input:focus {
-    padding-left: 1%;
-    background-color: white;
+    opacity: 1;
 }
 
 #Setting #Mobile #SettingGroup #GroupList .Group div {

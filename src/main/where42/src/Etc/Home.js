@@ -1,4 +1,4 @@
-import instance from "../AxiosApi";
+import {instance} from "../AxiosApi";
 import {useNavigate} from "react-router";
 import Loading from "./Loading";
 

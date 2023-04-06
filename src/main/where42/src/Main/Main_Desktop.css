@@ -31,13 +31,16 @@
 
 #Main #Desktop #Wrapper #Logo {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin: 5% 0 5% 0;
 }
 
-#Main #Desktop #Wrapper #Logo img {
+#Main #Desktop #Wrapper #Logo a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#Main #Desktop #Wrapper #Logo a img {
     width: 40%;
 }
 
@@ -72,7 +75,7 @@
     display: flex;
     height: 7vw;
     max-height: 125px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border: 1.5px solid grey;
     border-radius: 20px;
     z-index: 1;
@@ -89,6 +92,7 @@
 #Main #Desktop #Wrapper #MyProfile .Profile .Photo img {
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 #Main #Desktop #Wrapper #MyProfile .Profile .Info {
@@ -109,9 +113,11 @@
 }
 
 #Main #Desktop #Wrapper #MyProfile .Profile .Info .Locate {
+    display : inline-block;
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 1.3vw, 25px);
     width: max-content;
+/*    수동자리 설정 가능함을 알리느 네임택같은거 ..? 추가해줄까?*/
 }
 
 #Main #Desktop #Wrapper #MyProfile .Profile .Info .Msg {
@@ -119,10 +125,55 @@
     font-size: clamp(6px, 1.1vw, 23px);
 }
 
+/* Toggle */
+
+#Main #Desktop #Wrapper #Toggle {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-family: 'GmarketSansMedium';
+    margin-bottom: 20px;
+}
+
+#Main #Desktop #Wrapper #Toggle div {
+    width: 42%;
+    height: 1.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: clamp(8px, 1.3vw, 25px);
+}
+
+#Main #Desktop #Wrapper #Toggle .ToggleButton {
+    width: 8.2%;
+    height: 100%;
+    background-color: transparent;
+    background-image: url('../../public/img/detail_off.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: 0;
+    margin-left: 0.7vw;
+    cursor: pointer;
+}
+
+#Main #Desktop #Wrapper #Toggle .Active {
+    background-image: url('../../public/img/detail_on.svg');
+}
+
+#Main #Desktop #Wrapper #Groups {
+    margin-bottom: 65px;
+}
+
 #Main #Desktop #Wrapper .GroupName {
     font-family: GmarketSansLight;
-    font-size: max(12px, 0.7vw);
+    font-size: clamp(12px, 1.2vw, 20px);
     margin: 10px 0 10px 9%;
+}
+
+#Main #Desktop #Wrapper .GroupName .rotate90{
+    -webkit-transform: rotate(-90deg);
+    -webkit-transform-origin: 50% 50% 0;
 }
 
 #Main #Desktop #Wrapper .ProfileWrapper {
@@ -162,6 +213,7 @@
 #Main #Desktop #Wrapper .ProfileWrapper .Profile .Photo img {
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 #Main #Desktop #Wrapper .ProfileWrapper .Profile .Info {
@@ -181,7 +233,24 @@
     font-size: clamp(8px, 1.5vw, 25px);
 }
 
+#Main #Desktop #Wrapper .Profile .Info .LocateWrapper {
+    display : flex;
+    align-items: flex-end;
+}
+
+#Main #Desktop #Wrapper .Profile .Info .ErrLocate{
+    font-family : GmarketSansLight;
+    font-size: clamp(6px, 0.9vw, 20px);
+    display : inline-block;
+    float : left;
+}
+
+#Main #Desktop #Wrapper .Profile .Info .hidden{
+    display : none;
+}
+
 #Main #Desktop #Wrapper .ProfileWrapper .Profile .Info .Locate {
+    display: inline-block;
     font-family: GmarketSansMedium;
     font-size: clamp(8px, 1.3vw, 25px);
 }
@@ -189,6 +258,31 @@
 #Main #Desktop #Wrapper .ProfileWrapper .Profile .Info .Msg {
     font-family: GmarketSansLight;
     font-size: clamp(6px, 1.1vw, 23px);
+}
+
+#Main #Desktop #Wrapper #Footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin: 20px 0 20px 0;
+    font-family: GmarketSansLight;
+    font-size: max(10px, 0.5vw);
+}
+
+#Main #Desktop #Wrapper #Footer div {
+    display: flex;
+    justify-content: center;
+}
+
+#Main #Desktop #Wrapper #Footer #Link {
+    width: 100%;
+    margin-bottom: 0.5%;
+}
+
+#Main #Desktop #Wrapper #Footer #Link a {
+    margin: 0 0.5% 0 0.5%;
+    text-decoration: none;
+    color: black;
 }
 
 #Desktop .Locate {
@@ -212,4 +306,8 @@
 
 #Desktop .Locate:hover:before {
     width: 100%;
+}
+
+#Main #Desktop #Wrapper .Profile .Error {
+    border: 1px solid coral;
 }

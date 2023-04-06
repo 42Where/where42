@@ -26,3 +26,19 @@ body {
 #root {
   width: 100%;
 }
+
+.swal2-title {
+  font-family:GmarketSansMedium;
+  font-size : 20px!important;
+}
+
+.swal2-styled.swal2-confirm {
+  background-color: grey!important;
+  height: 40px;
+  width: 100px;
+}
+
+.swal2-popup{
+  border-radius: 20px;
+  padding: 1em 1em 1.25em 0!important;
+}

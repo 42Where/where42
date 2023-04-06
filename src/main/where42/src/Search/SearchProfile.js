@@ -1,32 +1,43 @@
 import React, {useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
-import instance from "../AxiosApi";
-import {useNavigate} from "react-router";
+import {instance} from "../AxiosApi";
 import {CombineLocate} from "../Main/MainProfile";
+import * as Util from '../Util';
 
 const SearchProfile = (props) => {
-    const nav = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
     const isDesktop = useMediaQuery({ query: '(min-width: 931px)'});
     
     const info = props.info;
-    const memberId = props.memberId;
+    if (info.img === "null" || info.img === null)
+        info.img = 'img/character.svg';
+    const memberId = localStorage.getItem('name');
     const [detail, setDetail] = useState(null);
    
     function FriendClick(e){
         if (info.friend === true)
             return ;
-        instance.post('groupFriend', null, {params: {friendName : info.name, img: info.img}})
-        if (isDesktop)
+        if (info.name === memberId)
         {
-            e.target.innerText = '친구 추가 완료';
+            Util.Alert("나는 우주를 여행하는 당신의 영원한 친구입니다.");
+            return ;
         }
-        else if (isMobile)
-        {
-            e.target.style = "background-image: url('img/friend_check.svg')";
-        }
-        e.target.className = "AddDone";
-        info.friend = true;
+        Util.Confirm("친구로 등록하시겠습니까?", "등록").then((res)=>{
+            if (res && (res.isConfirmed !== false))
+            {
+                instance.post('groupFriend', null, {params: {friendName : info.name, img: info.img}});
+                if (isDesktop)
+                {
+                    e.target.innerText = '친구 추가 완료';
+                }
+                else if (isMobile)
+                {
+                    e.target.style = "background-image: url('img/friend_check.svg')";
+                }
+                e.target.className = "AddDone";
+                info.friend = true;
+            }
+        })
     }
 
     let friendOrNot;
@@ -57,7 +68,7 @@ const SearchProfile = (props) => {
             setDetail(info);
             return ;
         }
-        const body = {name : info.name , img : info.img, msg : info.msg, inOrOut : info.inOrOut, locate : info.locate, location : info.location, friend : info.friend, member : info.member};
+        const body = info;
         instance.post('search/select', body)
             .then((response)=>{
                 setDetail(response.data);
@@ -92,7 +103,8 @@ const SearchProfile = (props) => {
 
 const Detail = (props) => {
     const info = props.info;
-    const locate = CombineLocate(info.locate, info.inOrOut);
+    const locate = CombineLocate(info.locate, info.inOrOut, info.eval);
+
     return (
         <>
             <div className="Locate">{locate}</div>

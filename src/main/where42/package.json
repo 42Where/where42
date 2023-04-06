@@ -1,6 +1,6 @@
 {
   "name": "where42",
-  "version": "v1",
+  "version": "v2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",

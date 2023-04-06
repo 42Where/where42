@@ -1,6 +1,7 @@
 #NotFound{
     margin:0;
     height: 100vh;
+    /* min-height: -webkit-fill-available; */
     display : flex;
     justify-content: center;
     flex-direction:  column;
@@ -9,18 +10,26 @@
 
 #NotFound #NotFoundContent{
     text-shadow: 0.4vw 0.4vh 1px #767676;
-    margin: 5% 0 5% 0;
+    margin: 5% 0 3vh 0;
     font-family: GmarketSansBold;
     color: #FF8787;
     text-align: center;
     font-size : max(30px, 7vw);
 }
 
+#NotFound #Comment {
+    margin: 0 5% 3% 5%;
+    font-family: GmarketSansMedium;
+    color: white;
+    text-align: center;
+    font-size : clamp(15px, 5vw, 30px);
+}
+
 #NotFound #NotFoundCharacter{
     width : 50%;
     min-width: 200px;
     min-height : 200px;
-    height : 50vh;
+    height : 40vh;
     display : inline-block;
     background-image: url("../../public/img/character_notfound.svg");
     background-repeat: no-repeat;

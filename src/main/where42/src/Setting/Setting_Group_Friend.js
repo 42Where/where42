@@ -1,11 +1,15 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
-import instance from "../AxiosApi";
+import {instance} from "../AxiosApi";
+import * as Util from '../Util';
 
 export function SettingGnF() {
+    const nav = useNavigate();
     return (
         <div id="SettingGnF">
+            <button id="Back" onClick={()=>{nav('/Setting')}}></button>
+            <button id="Home" onClick={()=>{nav('/Main')}}></button>
             <div id="Comment">그룹/친구 관리</div>
             <div id="BoxWrapper">
                 <Link to="/Setting/SetGroup">
@@ -36,16 +40,16 @@ export function SettingGroup() {
     const handleChange = ({target : {value}}) => setName(value);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
-            alert("사용할 수 없는 그룹명입니다.");
+        if (name === "즐겨찾기" || name === "기본" || name === "친구 목록" || name === "" ||
+            name.split(' ').length - 1 === name.length) {
+            Util.Alert("사용할 수 없는 그룹명입니다.");
         } else {
             try {
                 await instance.post('group', null, {params: {groupName: name}});
-                alert("그룹을 생성하였습니다.");
-                window.location.reload();
+                Util.AlertReload("그룹을 생성하였습니다.");
             } catch (err) {
                 if (err.response.status === 409) {
-                    alert("이미 존재하는 그룹명입니다.");
+                    Util.Alert("이미 존재하는 그룹명입니다.");
                 }
             }
         }
@@ -53,6 +57,7 @@ export function SettingGroup() {
 
     return (
         <div id="SettingGroup">
+            <button id="Back" onClick={()=>{nav('/Setting/SetGnF')}}></button>
             <button id="Home" onClick={()=>{nav('/Main')}}></button>
             <div id="Comment">그룹 관리</div>
             <form onSubmit={handleSubmit}>
@@ -97,8 +102,12 @@ export function SettingFriend(props) {
         instance.get(apiUrl)
             .then((res) => {
                 setArr(res.data);
-            });
-            // eslint-disable-next-line
+            }).catch((err)=>{
+                if (err?.response?.status === 400)
+                    Util.Alert("잘못된 접근입니다. 잠시 후 다시 시도해주세요.").then((res)=>{
+                        nav("/Setting/SetGroup");
+                    });
+        });
     }, []);
 
     const [list, setList] = useState(new Set());
@@ -115,17 +124,38 @@ export function SettingFriend(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (list.size > 0 && window.confirm(comment + " 하시겠습니까?")) {
-            instance.post(apiUrl, Array.from(list))
-                .then(() => {
-                    alert(comment + " 완료!");
-                    nav(doneUrl);
-                });
+        if (list.size > 0)
+        {
+            Util.Confirm(comment + ' 하시겠습니까?', comment).then((res) => {
+                if (res && (res.isConfirmed !== false))
+                {
+                    instance.post(apiUrl, Array.from(list))
+                        .then(() => {
+                            Util.Alert(comment + " 완료!");
+                            nav(doneUrl);
+                        }).catch((err)=>{
+                            if (err?.response?.status === 400)
+                                Util.Alert("잘못된 접근입니다. 잠시후 다시 시도해주세요");
+                    });
+                }
+            });
         }
     }
 
     return (
         <div id="SettingFriend">
+            {
+                props.type === "fDel" ? (
+                    <>
+                        <button id="Back" onClick={()=>{nav('/Setting/SetGnF')}}></button>
+                    </>
+                ) : (
+                    <>
+                        <button id="Back" onClick={()=>{nav('/Setting/SetGroup')}}></button>
+                    </>
+                )
+            }
+            <button id="Home" onClick={()=>{nav('/Main')}}></button>
             {
                 props.type === "fDel" ? (
                     <>
@@ -144,7 +174,7 @@ export function SettingFriend(props) {
                     {
                         (arr && arr.length !== 0) ? arr.map((value, index) => (
                             <MemberList user={value} addList={addList} key={index}/>
-                        )) : <div id="NoFriend">{comment}할 친구가 없습니다.</div>
+                        )) : <div id="NoFriend">{comment} 가능한 친구가 없습니다.</div>
                     }
                 </div>
                 <button type="submit">{comment}</button>
@@ -154,53 +184,50 @@ export function SettingFriend(props) {
 }
 
 function GroupList(props) {
-    const nav = useNavigate();
-    const inputRef = useRef(null);
-    const [name, setName] = useState(props.name);
     const delGroup = () => {
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-            instance.delete('group/' + props.id)
-                .then(() => {
-                    alert("'" + props.name + "' 그룹을 삭제하였습니다.");
-                    window.location.reload();
+        Util.Confirm('정말 삭제하시겠습니까?', '삭제').then((res) => {
+            if (res && (res.isConfirmed !== false))
+            {
+                instance.delete('group/' + props.id)
+                    .then(() => {
+                        Util.AlertReload("'" + props.name + "' 그룹을 삭제하였습니다.");
+                    }).catch((err)=>{
+                        if (err?.response?.status === 400)
+                            Util.AlertReload("잘못된 접근입니다. 잠식후 다시 시도해주세요.");
                 });
-        }
+            }
+        });
     }
     const modGroup = () => {
-        if (inputRef.current.disabled === true) {
-            inputRef.current.disabled = false;
-            inputRef.current.focus();
-        }
-        else {
-            inputRef.current.disabled = true;
-            modEvent();
-        }
-    }
-    const modEvent = () => {
-        if (name === "즐겨찾기" || name === "기본" || name === "친구 목록") {
-            alert("사용할 수 없는 그룹명입니다.");
-            window.location.reload();
-        } else {
-            instance.post('group/' + props.id, null, {params: {changeName: name}})
-                .then(() => {
-                    nav('/Setting/SetGroup');
-                }).catch(() => {
-                    alert("중복된 이름의 그룹이 존재합니다.");
-                    window.location.reload();
+        Util.AlertInput("그룹명을 입력해 주세요.", props.name).then((res) => {
+            let gName = res.value;
+            if (gName === "즐겨찾기" || gName === "기본" || gName === "친구 목록" || gName === "" ||
+            gName.split(' ').length - 1 === gName.length) {
+                Util.Alert("사용할 수 없는 그룹명입니다.").then(() => {
+                    setTimeout(modGroup, 100);
                 });
-        }
+            } else if (gName.length > 10) {
+                Util.Alert("그룹명은 10자까지 입력 가능합니다.").then(() => {
+                    setTimeout(modGroup, 100);
+                });
+            } else {
+                instance.post('group/' + props.id, null, {params: {changeName: gName}})
+                    .then(() => {
+                        Util.AlertReload("그룹명이 변경되었습니다.");
+                    }).catch((err) => {
+                        if (err?.response?.status === 400)
+                            Util.AlertReload("잘못된 접근입니다. 잠시 후 다시 시도해주세요.");
+                        else
+                            Util.AlertReload("중복된 이름의 그룹이 존재합니다.");
+                    });
+            }
+        })
+        
     }
-    const keyCheck = (e) => {
-        if (e.key === 'Enter') {
-            modEvent();
-            inputRef.current.disabled = true;
-        }
-    }
-    const handleChange = ({target : {value}}) => setName(value);
-
+    
     return (
         <div className='Group'>
-            <input type="text" maxLength="10" value={name} spellcheck="false" onChange={handleChange} onKeyDown={keyCheck} ref={inputRef} disabled/>
+            <input type="text" value={props.name} disabled/>
             <div className='GroupButtons'>
                 <button onClick={modGroup}></button>
                 <button onClick={delGroup}></button>

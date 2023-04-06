@@ -1,0 +1,63 @@
+#direct {
+    display: flex;
+    justify-content: center;
+}
+
+#direct #wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    max-width: 480px;
+}
+
+#direct #wrapper #content p:first-child {
+    font-family: 'GmarketSansBold';
+    font-size: min(8vw, 38px);
+    text-align: center;
+    color: black;
+    margin-bottom: 0px;
+}
+
+#direct #wrapper #content p:last-child {
+    font-family: 'GmarketSansMedium';
+    font-size: min(6vw, 25px);
+    text-align: center;
+    color: rgb(76, 76, 76);
+    margin: 15px 0 10px 0;
+}
+
+#direct #wrapper img {
+    width: 50%;
+}
+
+#direct #wrapper #buttons {
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#direct #wrapper #buttons .button {
+    width: 25%;
+    height: clamp(15px, 9vw, 40px);
+    margin: 0 10px 0 10px;
+    font-family: 'GmarketSansMedium';
+    font-size: min(5vw, 20px);
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#direct #wrapper #buttons .button:first-child {
+    background-color : lightcoral;
+    color: white;
+}
+
+#direct #wrapper #buttons .loading {
+    background-image: url("../../public/img/loadingdot2.gif");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: transparent !important;
+}

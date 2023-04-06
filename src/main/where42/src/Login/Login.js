@@ -1,13 +1,14 @@
 import { useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from "react-router";
-import instance from "../AxiosApi";
+import {instance} from "../AxiosApi";
 import axios from "axios";
 import './Login.css'
 import './Login_Mobile.css'
 import './Login_Tablet.css'
 import './Login_Desktop.css'
 import './Login_Modal.css'
+import * as Util from "../Util";
 
 function Login() {
     const isMobile = useMediaQuery({ query: '(max-width: 480px)'});
@@ -39,12 +40,12 @@ function Login() {
                 .then((res) => {
                     serverurl = res.data;
                 });
-            await axios.get(  '/v1/login' )
+            await axios.get('/v2/login')
                 .then((res) => {
                     nav('/Main');
                 }).catch((Error) => {
-                    const errData = Error.response.data;
-                    if (errData.hasOwnProperty('data'))
+                    const errData = Error?.response?.data;
+                    if (errData?.hasOwnProperty('data'))
                         nav('/Agree', {state : errData.data});
                     else
                         window.location.href = serverurl;

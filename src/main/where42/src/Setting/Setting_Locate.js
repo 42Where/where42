@@ -1,13 +1,17 @@
 import spot from "./spot.json";
 import {useLocation, useNavigate} from "react-router";
-import instance from "../AxiosApi";
+import {instance} from "../AxiosApi";
+import * as Util from '../Util';
 
 export function SettingFloor() {
     const loc = useLocation();
+    const nav = useNavigate();
     const planet = loc.state?.planet;
 
     return (
         <div id="SettingFloor">
+            <button id="Back" onClick={()=>{nav('/Setting')}}></button>
+            <button id="Home" onClick={()=>{nav('/Main')}}></button>
             <div id="Comment">층 수 선택</div>
             <div id="BoxWrapper">
                 <Box cap="1층" floor={1} planet={planet}/>
@@ -23,10 +27,13 @@ export function SettingFloor() {
 
 export function SettingCluster() {
     const loc = useLocation();
+    const nav = useNavigate();
     const planet = loc.state?.planet;
 
     return (
         <div id="SettingCluster">
+            <button id="Back" onClick={()=>{nav('/Setting')}}></button>
+            <button id="Home" onClick={()=>{nav('/Main')}}></button>
             <div id="Comment">클러스터 선택</div>
             <div id="BoxWrapper">
                 <Box cap="7 클러스터" cluster={7} planet={planet}/>
@@ -40,10 +47,23 @@ export function SettingCluster() {
 
 export function SettingSpot() {
     const loc = useLocation();
+    const nav = useNavigate();
     const spotNum = loc.state?.locate;
 
     return (
         <div id="SettingSpot">
+            {
+                spotNum < 7 ? (
+                    <>
+                        <button id="Back" onClick={()=>{nav('/Setting/SetFloor', {state: {planet:1}})}}></button>
+                    </>
+                ) : (
+                    <>
+                        <button id="Back" onClick={()=>{nav('/Setting/SetCluster', {state: {planet:2}})}}></button>
+                    </>
+                )
+            }
+            <button id="Home" onClick={()=>{nav('/Main')}}></button>
             <div id="Comment">장소 선택</div>
             <div id="BoxWrapper">
                 {
@@ -62,16 +82,10 @@ function Box(props) {
     if (props.floor) {
         return (
             <div className='Box' onClick={(e) => {
-                if (props.floor === 3) {
-                    e.preventDefault();
-                    alert("현재 3층은 공사중이므로 선택할 수 없습니다.");
-                }
-                else {
-                    localStorage.setItem('locate', JSON.stringify({
-                        planet: props.planet, floor: props.floor, cluster: 0
-                    }));
-                    nav("/Setting/SetSpot", {state: {locate: props.floor}});
-                }
+                localStorage.setItem('locate', JSON.stringify({
+                    planet: props.planet, floor: props.floor, cluster: 0
+                }));
+                nav("/Setting/SetSpot", {state: {locate: props.floor}});
             }}>
                 <div className='BoxCap'>{props.cap}</div>
             </div>
@@ -93,13 +107,14 @@ function Box(props) {
         return (
             <div className='Box' onClick={() => {
                 let locate = JSON.parse(localStorage.getItem('locate'));
+                console.log(locate.planet, locate.cluster, locate.floor, props.cap);
                 instance.post('member/setting/locate', {
                     planet: locate.planet,
                     cluster: locate.cluster,
                     floor: locate.floor,
                     spot: props.cap
                 }).then(() => {
-                    alert("수정 완료!");
+                    Util.Alert("수정 완료!");
                     nav("/Setting");
                 });
             }}>

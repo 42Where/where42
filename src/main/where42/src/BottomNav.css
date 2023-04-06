@@ -1,0 +1,77 @@
+.BottomNavWrapper {
+    z-index: 1;
+    overflow: hidden;
+    background-color: white;
+    position: fixed;
+    bottom : 0;
+    left : 0;
+    right : 0;
+    height: 75px;
+    border-radius: 10px 10px 0 0 ;
+}
+
+.BottomNavWrapper .NavLink {
+    display: flex;
+    position : relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    float : left;
+    width : calc(100% / 3);
+    height : 100%;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.BottomNavWrapper .NavActive:after {
+    content : "";
+    position : absolute;
+    left : 10%;
+    bottom: 0;
+    height : 5px;
+    width : 80%;
+    border-radius : 3px 3px 0 0;
+    background : #EE8F84;
+}
+
+.BottomNavWrapper .active {
+    color : #EE8F84;
+    font-family: GmarketSansMedium;
+}
+
+.BottomNavWrapper a div {
+    width : 30%;
+    height : 30%;
+    margin : 5px 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-size: contain;
+}
+
+.BottomNavWrapper .SearchIcon {
+    background-image: url("../public/img/SearchLine.svg");
+}
+
+.BottomNavWrapper .SearchIconActive {
+    background-image: url("../public/img/SearchLine_Focus.svg");
+}
+
+.BottomNavWrapper .HomeIcon {
+    background-image: url("../public/img/HomeLine.svg");
+}
+
+.BottomNavWrapper .HomeIconActive {
+    background-image: url("../public/img/HomeLine_focus.svg");
+}
+
+.BottomNavWrapper .SettingIcon {
+    background-image: url("../public/img/SettingLine.svg");
+}
+
+.BottomNavWrapper span {
+    font-family: GmarketSansLight;
+    font-size: 15px;
+    color : black;
+}

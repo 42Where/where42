@@ -2,7 +2,7 @@ import { useMediaQuery } from 'react-responsive';
 import './Agree_Desktop.css';
 import './Agree_Mobile.css';
 import {useLocation, useNavigate} from "react-router";
-import instance from "../AxiosApi";
+import {instance} from "../AxiosApi";
 
 function Agree()
 {
@@ -16,10 +16,18 @@ function Agree()
         if (info.login === null)
             nav("/Login");
         const AgreeClick=()=>{
-            const body = { login: info.login , image : info.image, location : info.location};
+            if (info.image === "null" || info.image === null)
+                info.image = 'img/character.svg';
+            const body = { login: info.login , image : info.image, location : info.location, created_at : info.created_at};
             instance.post('member', body)
-                .then((response)=>{
-                    nav("/Main")
+                .then(()=>{
+                    const directUrl = localStorage.getItem('direct');
+                    if (directUrl) {
+                        localStorage.removeItem('direct');
+                        window.location.href = directUrl;
+                    }
+                    else
+                        nav("/Main")
                 });
         }
         return (

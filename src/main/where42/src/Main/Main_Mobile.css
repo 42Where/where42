@@ -1,38 +1,35 @@
 #Main #Mobile {
     width: 100%;
+    height: 100vh;
+}
+
+#Main #Mobile #Wrapper {
+    padding-bottom: 75px;
+    position: relative;
+    /*height: calc(100% - 75px);*/
+    overflow: auto;
+    /* min-height: -webkit-fill-available; */
 }
 
 #Main #Mobile #Wrapper #Search {
-    position: absolute;
-    right: 5%;
-    top: 3%;
-    width: 5vw;
-    max-width: 35px;
-    min-width: 18px;
-    height: 5vw;
-    max-height: 35px;
-    min-height: 18px;
-    /*max, min -> clamp로 변경하기*/
-    padding: 0;
-    cursor: pointer;
-    border: 0;
-    background-color: transparent;
-    background-image: url("../../public/img/search-white.svg");
-    background-size: cover;
+    visibility: hidden;
 }
 
 #Main #Mobile #Wrapper #Logo {
+    box-sizing: border-box;
+    padding: 30px 0 30px 0;
+}
+
+#Main #Mobile #Wrapper #Logo a{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin: 7vh 0 4vh 0;
-}
-#Main #Mobile #Wrapper a{
     text-decoration: none;
-
 }
-#Main #Mobile #Wrapper #Logo img {
-    width: 60%;
+
+#Main #Mobile #Wrapper #Logo a img {
+    width : 60%;
     max-width: 300px;
 }
 
@@ -49,29 +46,71 @@
     position: relative;
 }
 
-#Main #Mobile #Wrapper #MyProfile #SettingWrapper {
-    width: 20%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+#Main #Mobile #Wrapper #MyProfile #Setting {
+    visibility: hidden;
 }
 
-#Main #Mobile #Wrapper #MyProfile #Setting {
-    width: 5vw;
-    max-width: 35px;
-    min-width: 15px;
-    height: 5vw;
-    max-height: 35px;
-    min-height: 15px;
-    /*이것도 clamp로 수정*/
-    padding: 0;
-    cursor: pointer;
-    border: 0;
+/* Toggle */
+
+#Main #Mobile #Wrapper #Toggle {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -7px;
+    margin-bottom: 20px;
+}
+
+#Main #Mobile #Wrapper #Toggle div {
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FCF4D9;
+}
+
+#Main #Mobile #Wrapper #Toggle #ToggleFriend {
+    padding: 7px 0 2px 0;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: -0.2px;
+}
+
+#Main #Mobile #Wrapper #Toggle #ToggleEval {
+    padding: 2px 0 7px 0;
+    border-radius: 0 0 10px 10px;
+    margin-top: -0.2px;
+}
+
+#Main #Mobile #Wrapper #Toggle div span {
+    font-size: clamp(8px, 3.5vw, 15px);
+    font-family: 'GmarketSansLight';
+    margin-left: 11px;
+}
+
+#Main #Mobile #Wrapper #Toggle div .ToggleButton {
+    width: min(7.9vw, 40px);
+    height: min(5vw, 25.25px);
+    margin-right: 11px;
     background-color: transparent;
-    background-image: url("../../public/img/setting-grey.svg");
-    background-size: cover;
-    z-index: 2;
+    background-image: url('../../public/img/detail_off.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: 0;
+    cursor: pointer;
+}
+
+#Main #Mobile #Wrapper #Toggle div .Active {
+    background-image: url('../../public/img/detail_on.svg');
+}
+
+#Main #Mobile #Wrapper #Groups {
+    box-sizing: border-box;
+    /*padding-bottom: 60px;*/
+}
+
+#Main #Mobile #Wrapper .GroupName .rotate90{
+    -webkit-transform: rotate(-90deg);
+    -webkit-transform-origin: 50% 50% 0;
 }
 
 #Main #Mobile #Wrapper .Profile {
@@ -97,9 +136,14 @@
     overflow: hidden;
 }
 
+#Main #Mobile #Wrapper .Profile .Error {
+    border: 1px solid coral;
+}
+
 #Main #Mobile #Wrapper .Profile .Photo img {
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 #Main #Mobile #Wrapper .Profile .Info {
@@ -118,6 +162,22 @@
 #Main #Mobile #Wrapper .Profile .Info .Name {
     font-family: GmarketSansBold;
     font-size: clamp(8px, 3.5vw, 15px);
+}
+
+#Main #Mobile #Wrapper .Profile .Info .LocateWrapper {
+    display : flex;
+    align-items: flex-end;
+}
+
+#Main #Mobile #Wrapper .Profile .Info .ErrLocate{
+    font-family : GmarketSansLight;
+    font-size: clamp(5px, 2vw, 11px);
+    display : inline-block;
+    float : left;
+}
+
+#Main #Mobile #Wrapper .Profile .Info .hidden{
+    display : none;
 }
 
 #Main #Mobile #Wrapper .Profile .Info .Locate {
@@ -143,8 +203,33 @@
 
 #Main #Mobile #Wrapper .GroupName {
     font-family: GmarketSansLight;
-    font-size: max(12px, 1.5vw);
+    font-size: clamp(10px, 3.5vw, 15px);
     margin: 10px 0 10px 10%;
+}
+
+#Main #Mobile #Wrapper #Footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin: 15px 0 20px 0;
+    font-family: GmarketSansLight;
+    font-size: max(10px, 1.2vw);
+}
+
+#Main #Mobile #Wrapper #Footer div {
+    display: flex;
+    justify-content: center;
+}
+
+#Main #Mobile #Wrapper #Footer #Link {
+    width: 100%;
+    margin-bottom: 0.5%;
+}
+
+#Main #Mobile #Wrapper #Footer #Link a {
+    margin: 0 0.5% 0 0.5%;
+    text-decoration: none;
+    color: black;
 }
 
 #Mobile .Locate::before {

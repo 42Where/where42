@@ -43,7 +43,7 @@
     display : flex;
     align-items: center;
     border : 3px solid #F6C4B7;;
-    border-radius: 20px;
+    border-radius: clamp(20px, 3vw, 40px);
     max-height: 85px;
 }
 
@@ -51,15 +51,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;    
-    width : 12%;
+    width : 14%;
 }
 
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox #SearchMascot img{
     width: 100%;
     height : 100%;
     max-width: 540px;
-    margin-left: 5%;
-    margin-bottom: 12%;
+    margin-left: 50%;
+    margin-bottom: 15%;
     object-fit: cover; 
 }
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox form {
@@ -73,12 +73,12 @@
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox form input {
     background-color: transparent;
     width : 85%;
+    margin-left : 5%;
     padding: 0;
     ime-mode: inactive;
-    /*height : 100%;*/
     display: inline-block;
     font-family: GmarketSansMedium;
-    font-size: clamp(10px, 1.5vw, 24px);
+    font-size: clamp(10px, 1.7vw, 30px);
     line-height : 2;
     text-align: left;
     border :0;
@@ -86,7 +86,6 @@
 
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox form input:focus {
     outline:none;
-    font-size : 16px;
 }
 
 #Search #Desktop #Wrapper #SearchWrapper #SearchBox #SearchButton {

@@ -1,0 +1,41 @@
+.swal2-title {
+    font-family:GmarketSansMedium!important;
+    font-size : 20px!important;
+}
+
+.swal2-styled.swal2-confirm {
+    font-family: GmarketSansMedium!important;
+    background-color: grey!important;
+    height: 40px;
+    width: 100px;
+    outline: none !important;
+}
+
+.swal2-popup{
+    border-radius: 20px;
+    padding: 1em 1em 1.25em 0!important;
+}
+
+.swal2-confirm.btn-success{
+    font-family: GmarketSansMedium;
+    background-color : lightcoral!important;
+    color : white;
+}
+
+.swal2-styled.swal2-cancel{
+    font-family: GmarketSansMedium!important;
+    background-color : white!important;
+    color : black!important;
+}
+
+.swal2-input {
+    font-family: GmarketSansLight;
+}
+
+.swal2-validation-message {
+    font-family: GmarketSansLight;
+}
+
+.swal2-html-container {
+    font-family: GmarketSansLight;
+}

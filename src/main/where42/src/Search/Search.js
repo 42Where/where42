@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
+import {useLocation} from "react-router";
 import { Link } from 'react-router-dom';
+
 import SearchProfile from './SearchProfile';
 import './Search.css';
 import './Search_Desktop.css';
 import './Search_Mobile.css';
-import instance from "../AxiosApi";
-import {useLocation} from "react-router";
+import {instance} from "../AxiosApi";
+import egg from './egg.json';
+import * as Util from '../Util';
+import BottomNav from "../BottomNav";
 
 function Search() {
     const isMobile = useMediaQuery({ query: '(max-width: 930px)'});
@@ -25,27 +29,39 @@ function Search() {
                 event.preventDefault();
                 return ;
             }
+            if (searchId === "where42")
+            {
+                event.preventDefault();
+                setInformation(egg);
+                return ;
+            }
             setLoading(true);
+            if (searchId === "어디있니")
+            {
+                instance.get('search/where42')
+                    .then((response)=>{
+                    setInformation(response.data);
+                    setLoading(false);
+                })
+                Util.Alert("어디있니는 당신의 친구랍니다 :)");
+                return ;
+            }
             instance.get('search', {params : {begin : searchId}})
                 .then((response)=>{
                 if (response.data.length === 0)
-                    alert('검색 결과가 없습니다. 아이디를 확인해주세요');
-                console.log(response.data);
+                    Util.Alert("검색 결과가 없습니다. 아이디를 확인해주세요");
                 setLoading(false);
                 setInformation(response.data);
             })
         }
-
         const searchChange=(e)=>{
             setSearch(e.target.value);
         }
-
         const searchKeyDown = (event) =>{
             let charCode = event.keyCode;
             if (charCode === 13)
                 SubmitId(event);
         }
-
         return (
             <div id="SearchWrapper">
                 <div id="SearchBox">
@@ -66,9 +82,8 @@ function Search() {
         )
     }
 
-    function SearchResults(props)
+    function SearchResults()
     {
-        const memberId = props.memberId;
         return (
             <div id="SearchResults">
                 <div className="ProfileWrapper">
@@ -91,14 +106,17 @@ function Search() {
                 </div>
                 <SearchBox/>
                 {loading? <img id="LoadingImg" src={"img/spinner.gif"} alt="로딩중"/> : null}
-                {loading === false && information? <SearchResults memberId={memberId}/> : null}
+                {loading === false && information? <SearchResults/> : null}
             </div>
         )
     }
 
     return (
         <div id="Search">
-            {isMobile && <div id="Mobile"><Common/></div>}
+            {isMobile && <div id="Mobile">
+                <BottomNav/>
+                <Common/>
+            </div>}
             {isDesktop && <div id="Desktop"><Common/></div>}
         </div>
     )
