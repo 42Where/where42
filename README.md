@@ -1,3 +1,4 @@
+<br/>
 <div align="center">
   <img src="https://user-images.githubusercontent.com/84768491/230267247-a4776209-bf07-461c-8ddf-039ab294c02d.png" width=500px/><br/>
   
@@ -21,6 +22,8 @@
 - 친구로 등록한 여러 카뎃의 위치 정보와 상태 메시지를 메인 화면에서 한 눈에 확인할 수 있습니다.
 - 그룹을 생성하여 친구 목록을 편리하게 관리할 수 있습니다.
 - 클러스터 내 아이맥 자리를 제외한 장소를 내 위치 정보로 설정할 수 있습니다.
+
+<br/>
 
 ## ✏️ 팀원 소개 및 기술 스택
 <div align="center">
@@ -46,6 +49,8 @@
     <img src="https://img.shields.io/badge/Confluence-172B4D?style=for-the-badge&logo=Confluence&logoColor=white">
   </div>
 </div>
+
+<br/>
 
 ## 📚 프로젝트 내력
 
