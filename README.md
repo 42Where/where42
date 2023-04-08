@@ -47,6 +47,7 @@
     <img src="https://img.shields.io/badge/GitBook-3884FF?style=for-the-badge&logo=GitBook&logoColor=white">
     <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
     <img src="https://img.shields.io/badge/Confluence-172B4D?style=for-the-badge&logo=Confluence&logoColor=white">
+    <img src="https://img.shields.io/badge/GoogleAnalytics-E37400?style=for-the-badge&logo=GoogleAnalytics&logoColor=white">
   </div>
 </div>
 
