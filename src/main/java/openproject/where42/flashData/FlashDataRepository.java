@@ -36,4 +36,5 @@ public class FlashDataRepository {
 	public void resetFlash() {
 		jdbcTemplate.update("delete from flash_data");
 	};
+
 }

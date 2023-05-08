@@ -1,7 +1,7 @@
 package openproject.where42.member.entity;
 
+import lombok.Getter;
 import openproject.where42.group.Groups;
-import openproject.where42.member.entity.enums.Planet;
 import openproject.where42.member.entity.enums.MemberLevel;
 
 import javax.persistence.*;
@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 public class Administrator extends User {
     @Id
@@ -30,8 +31,7 @@ public class Administrator extends User {
     @Enumerated
     private MemberLevel level = MemberLevel.administrator;
 
-    @Enumerated
-    private Locate locate;
+    private String spot;
 
     private String img;
 }

@@ -15,6 +15,6 @@ public class Response {
                 .statusCode(statusCode)
                 .responseMsg(responseMsg)
                 .build();
-    } // 객체가 아니라 builder를 사용하는 이유 찾아보기
+    }
 }
 
