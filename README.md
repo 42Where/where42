@@ -1,11 +1,3 @@
-![ver1_1 register](https://github.com/42Where/where42/assets/91729403/54b3768a-28c3-49ba-a0e2-227f0aaf8e1e)
-![ver1_2 search](https://github.com/42Where/where42/assets/91729403/832e3012-ee79-41a4-ba25-603ceef0b6b9)
-![ver1_3 group](https://github.com/42Where/where42/assets/91729403/73b29e77-d4f2-409e-ad42-071c9c967566)
-![ver1_3-1 group_create](https://github.com/42Where/where42/assets/91729403/739274a6-f633-4042-aae1-cd4515596730)
-![ver1_3-2 group-modify](https://github.com/42Where/where42/assets/91729403/6e3f06e6-e885-4dad-a7cb-3a386c517df9)
-![ver1_4 profile_msg](https://github.com/42Where/where42/assets/91729403/d7b4a55e-cfb5-485b-b666-4f1a77cda022)
-![ver1_5 location_setting](https://github.com/42Where/where42/assets/91729403/7a81ec18-8310-40db-b687-16a86ddbbb82)
-
 <br/>
 <div align="center">
   <img src="https://user-images.githubusercontent.com/84768491/230267247-a4776209-bf07-461c-8ddf-039ab294c02d.png" width=500px/><br/>
@@ -77,3 +69,26 @@
   |**23.03.10**|어디 있니 ver2 배포|
 
 </div>
+
+<br/>
+
+## 🔍 웹사이트 미리보기
+|![ver1_1 register](https://github.com/42Where/where42/assets/91729403/54b3768a-28c3-49ba-a0e2-227f0aaf8e1e)|
+|:--:|
+|처음 방문 시 로그인 후 개인 정보 수집 동의를 통한 사용자 등록 과정|
+
+|![ver1_2 search](https://github.com/42Where/where42/assets/91729403/832e3012-ee79-41a4-ba25-603ceef0b6b9)|
+|:--:|
+|친구 검색 결과에서 자리 정보 확인 및 친구 등록|
+
+|![ver1_3 group](https://github.com/42Where/where42/assets/91729403/73b29e77-d4f2-409e-ad42-071c9c967566)|
+|:--:|
+|그룹 생성과 그룹에 친구 추가, 그룹명 수정 과정|
+
+|![ver1_4 profile_msg](https://github.com/42Where/where42/assets/91729403/d7b4a55e-cfb5-485b-b666-4f1a77cda022)|
+|:--:|
+|상태 메시지 설정|
+
+|![ver1_5 location_setting](https://github.com/42Where/where42/assets/91729403/7a81ec18-8310-40db-b687-16a86ddbbb82)|
+|:--:|
+|수동 위치 설정|
