@@ -104,6 +104,11 @@
 |:--:|
 |위치 정보 클릭 시 수동 위치 설정으로 이동, 프로필 사진 클릭 시 인트라 프로필로 이동 (ver 2)|
 
+|![group](https://github.com/42Where/where42/assets/84768491/c0bc0dd4-6598-45d3-8ed4-799a94acf448)|
+|:--:|
+|그룹별 토글 기능 (ver 2)|
+
+
 |<img src="https://github.com/42Where/where42/assets/84768491/92513b14-0c9d-4240-b802-efbaae9d978b" alt="postingpage-mobile" width="400"/>|
 |:--:|
 |QR 코드를 통한 수동 위치 설정 (ver 2)|
