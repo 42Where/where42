@@ -75,7 +75,9 @@
 ## 🔍 웹사이트 미리보기
 
 <div align="center">
-  
+
+### _VERSION 1️_
+
 |![ver1_1 register](https://github.com/42Where/where42/assets/91729403/54b3768a-28c3-49ba-a0e2-227f0aaf8e1e)|
 |:--:|
 |처음 방문 시 로그인 후 개인 정보 수집 동의를 통한 사용자 등록 과정|
@@ -96,21 +98,25 @@
 |:--:|
 |수동 위치 설정|
 
+<br/>
+
+### _VERSION 2_
+
 |![255840191-96e69561-67b4-4376-b165-b87efd40d08e](https://github.com/42Where/where42/assets/84768491/8eca56fa-799c-4e97-b53a-ebea0b509329)|
 |:--:|
-|출근한 친구만 보기 기능과 동료 평가 상태로 변경 기능 (ver 2)|
+|출근한 친구만 보기 기능과 동료 평가 상태로 변경 기능|
 
 |![자리설정인트라](https://github.com/42Where/where42/assets/84768491/ae8cc3e1-cbf2-41a0-917b-62fe63654c85)|
 |:--:|
-|위치 정보 클릭 시 수동 위치 설정으로 이동, 프로필 사진 클릭 시 인트라 프로필로 이동 (ver 2)|
+|위치 정보 클릭 시 수동 위치 설정으로 이동, 프로필 사진 클릭 시 인트라 프로필로 이동|
 
 |![group](https://github.com/42Where/where42/assets/84768491/c0bc0dd4-6598-45d3-8ed4-799a94acf448)|
 |:--:|
-|그룹별 토글 기능 (ver 2)|
+|그룹별 토글 기능|
 
 
 |<img src="https://github.com/42Where/where42/assets/84768491/92513b14-0c9d-4240-b802-efbaae9d978b" alt="postingpage-mobile" width="400"/>|
 |:--:|
-|QR 코드를 통한 수동 위치 설정 (ver 2)|
+|QR 코드를 통한 수동 위치 설정|
 
 </div>
